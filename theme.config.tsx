@@ -27,6 +27,9 @@ const config: DocsThemeConfig = {
 		if (router?.pathname.startsWith("/kant")) {
 			section = "Kant";
 		}
+		if (router?.pathname.startsWith("/spinoza")) {
+			section = "Spinoza";
+		}
 
 		const defaultTitle = frontMatter.overrideTitle || section;
 

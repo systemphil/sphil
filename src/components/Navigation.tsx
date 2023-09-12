@@ -25,7 +25,6 @@ const Navigation = (props: NavigationProps) => {
                 name: "guides",
                 route: `/${site}/guides`,
                 type: "page",
-                firstChildRoute: "/hegel/guides"
               },
               {
                 title: "Reference",
@@ -33,7 +32,6 @@ const Navigation = (props: NavigationProps) => {
                 name: "reference",
                 route: `/${site}/reference`,
                 type: "page",
-                firstChildRoute: "/kant/guides"
               },
         );
     }
@@ -41,7 +39,11 @@ const Navigation = (props: NavigationProps) => {
     // otherwise, remove subdirectories from the root page
     // the idea is that these appear (with their relevant routes) once a user has selected a subdirectory
     const headerItems = props.items.filter((item: { name: string; }) => {
-        return item.name !== "hegel" && item.name !== "kant";
+        return(
+            item.name !== "hegel" && 
+            item.name !== "kant" && 
+            item.name !== "spinoza"
+        );
     })
 
     // items={headerItems}
