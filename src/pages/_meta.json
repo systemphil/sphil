@@ -1,15 +1,43 @@
 {
-  "index": "Introduction",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
-  "about": {
-    "title": "About",
-    "type": "page"
-  },
-  "contact": {
-    "title": "Contact ↗",
-    "type": "page",
-    "href": "https://twitter.com/shuding_",
-    "newWindow": true
-  }
+	"*": {
+		"type": "page"
+	},
+	"index": {
+		"display": "hidden",
+		"theme": {
+		"layout": "raw",
+		"sidebar": false,
+		"toc": true
+		}
+	},
+	"hegel": {
+		"title": "Hegel",
+		"type": "menu",
+		"items": {
+			"guides": {
+				"title": "Guides",
+				"href": "/hegel/guides"
+			},
+			"reference": {
+				"title": "Reference",
+				"href": "/hegel/reference"
+			}
+		}
+	},
+	"kant": "Kant",
+	"about": "About",
+	"contact": {
+		"title": "Contact ↗",
+		"type": "page",
+		"href": "https://twitter.com/shuding_",
+		"newWindow": true
+	},
+	"terms": {
+		"title": "Terms of Service",
+		"display": "hidden"
+	},
+	"privacy": {
+		"title": "Privacy Policy",
+		"display": "hidden"
+	}
 }
