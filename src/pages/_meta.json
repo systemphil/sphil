@@ -10,20 +10,7 @@
 		"toc": true
 		}
 	},
-	"hegel": {
-		"title": "Hegel",
-		"type": "menu",
-		"items": {
-			"guides": {
-				"title": "Guides",
-				"href": "/hegel/guides"
-			},
-			"reference": {
-				"title": "Reference",
-				"href": "/hegel/reference"
-			}
-		}
-	},
+	"hegel": "Hegel",
 	"kant": "Kant",
 	"about": "About",
 	"contact": {

@@ -10,10 +10,10 @@
     },
     "guides": {
         "title": "Guides",
-        "display": "children"
+        "type": "page"
     },
     "reference": {
         "title": "Reference",
-        "display": "children"
+        "type": "page"
     }
 }

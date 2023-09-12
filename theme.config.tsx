@@ -1,8 +1,14 @@
+import NavbarLogo from "@/components/NavbarHeader";
+import Navigation from "@/components/Navigation";
 import { useRouter } from "next/router";
 import { type DocsThemeConfig, useConfig } from "nextra-theme-docs";
 
 const config: DocsThemeConfig = {
-    logo: <span>sPhil Nextra</span>,
+    logo: NavbarLogo,
+	logoLink: false,
+	navbar: {
+		component: Navigation,
+	},
     project: {
       	link: 'https://github.com/shuding/nextra'
     },
