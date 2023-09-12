@@ -9,6 +9,10 @@ const config: DocsThemeConfig = {
 	navbar: {
 		component: Navigation,
 	},
+	primaryHue: {
+		dark: 155,
+		light: 215
+	},
     project: {
       	link: 'https://github.com/shuding/nextra'
     },

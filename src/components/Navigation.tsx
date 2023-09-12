@@ -1,48 +1,40 @@
 import { Navbar } from "nextra-theme-docs";
-import { PageItem, MenuItem } from 'nextra/normalize-pages';
 import { useSphilSite } from "./SiteSwitcher";
 
 type NavbarArgs = Parameters<typeof Navbar>;
-type NewRouteItem = {
-    route: string;
-    title: string;
-    type: string;
-    id: string;
-    key: string;
-};
 type NavigationProps = {
     flatDirectories: NavbarArgs[0]['flatDirectories'];
-    items: (PageItem | MenuItem | NewRouteItem)[];
+    items: NavbarArgs[0]['items'];
 }
-// TODO fix types. how to match the return of this function with the original navbar function above?
-
 /**
- * Navigation control for routes. 
+ * Navigation control for routes. Removes the initial directories when user is on root and dynamically adds back their subdirectories
+ * based on what the user selects from the SiteSwitcher component.
  */
-const Navigation = (props: any) => {
+const Navigation = (props: NavigationProps) => {
     // get the first subdirectory of the url if it exists
     const site = useSphilSite();
 
-    // run through the items currently in the navbar
     const leadingItem = props.items[0];
 
-    // if user is on the first subdirectory and it is not listed in the navbar, proceed to add to the navbar
-    if (leadingItem?.id !== "contextual-guides" && site) {
+    // if user is on the first subdirectory and its routes are not listed in the navbar, proceed to add to the navbar array
+    if (site && leadingItem?.name !== "guides") {
         props.items.unshift(
             {
                 title: "Guides",
-                type: "page",
+                kind: "Folder",
+                name: "guides",
                 route: `/${site}/guides`,
-                id: "contextual-guides",
-                key: "contextual-guides",
-            }, 
-            {
-                title: "Reference",
                 type: "page",
+                firstChildRoute: "/hegel/guides"
+              },
+              {
+                title: "Reference",
+                kind: "Folder",
+                name: "reference",
                 route: `/${site}/reference`,
-                id: "contextual-reference",
-                key: "contextual-reference",
-            }
+                type: "page",
+                firstChildRoute: "/kant/guides"
+              },
         );
     }
     
@@ -52,7 +44,8 @@ const Navigation = (props: any) => {
         return item.name !== "hegel" && item.name !== "kant";
     })
 
-    return <Navbar {...props} items={headerItems} />
+    // items={headerItems}
+    return <Navbar {...props} items={headerItems}/>
 }
 
 export default Navigation;
