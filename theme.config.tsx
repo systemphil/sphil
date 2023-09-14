@@ -1,10 +1,10 @@
-import NavbarLogo from "@/components/NavbarHeader";
+import NavbarHeader from "@/components/NavbarHeader";
 import Navigation from "@/components/Navigation";
 import { useRouter } from "next/router";
 import { type DocsThemeConfig, useConfig } from "nextra-theme-docs";
 
 const config: DocsThemeConfig = {
-    logo: NavbarLogo,
+    logo: NavbarHeader,
 	logoLink: false,
 	navbar: {
 		component: Navigation,

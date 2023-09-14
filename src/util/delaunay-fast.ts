@@ -203,7 +203,7 @@ const Delaunay = {
     /* Yay, we're done! */
     return open;
     },
-    contains: function(tri: any, p: any) {
+    contains: function(tri: number[][], p: number[]) {
         /* Bounding box test first, for quick rejections. */
         if((p[0] < tri[0][0] && p[0] < tri[1][0] && p[0] < tri[2][0]) ||
             (p[0] > tri[0][0] && p[0] > tri[1][0] && p[0] > tri[2][0]) ||
