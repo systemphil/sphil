@@ -1,5 +1,21 @@
 "use client";
 
+/**
+ * Copyright (c) 2023 by Cory Hughart (https://codepen.io/cr0ybot/pen/zNyYeW)
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, 
+ * distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to 
+ * the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 import Delaunay from "@/util/delaunay-fast";
 import { useEffect } from "react";
 
@@ -9,7 +25,7 @@ type StarsProps = {
 /**
  * Renders Stars animation to the UI. Requires theme.
  * 
- * @description Created by Cory Hughart and permission granted to use and modify. Inspired by Steve Courtney's poster art for Celsius GS's Drifter - http://celsiusgs.com/drifter/posters.php
+ * @description Created by Cory Hughart and permission has been granted to use and modify. Inspired by Steve Courtney's poster art for Celsius GS's Drifter - http://celsiusgs.com/drifter/posters.php
  * by Cory Hughart - http://coryhughart.com.
  * 
  * @modifications made by Firgrep to adapt Cory's code to TypeScript:
@@ -607,7 +623,7 @@ const Stars = ({ theme }: StarsProps) => {
     }, [theme])
 
     return(
-        <canvas id="stars" className="block relative w-full h-64 md:h-screen -z-10"></canvas>
+        <canvas id="stars" className="block relative w-full h-full -z-10"></canvas>
     )
 }
 
