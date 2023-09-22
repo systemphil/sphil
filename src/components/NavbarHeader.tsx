@@ -13,7 +13,7 @@ const NavbarHeader = () => {
                 <SiteSwitcher />
             </div>
         </>
-    )
+    );
 }
 
 export default NavbarHeader;

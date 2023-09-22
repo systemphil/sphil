@@ -623,7 +623,7 @@ const Stars = ({ theme }: StarsProps) => {
     }, [theme])
 
     return(
-        <canvas id="stars" className="block relative w-full h-full -z-10"></canvas>
+        <canvas id="stars" className="block absolute w-full h-full -z-10"></canvas>
     )
 }
 
