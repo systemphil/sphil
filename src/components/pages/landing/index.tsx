@@ -2,6 +2,7 @@ import Card from "@/components/Card";
 import HeroBackground from "./HeroBackground";
 import Link from "next/link";
 import { cinzel } from "@/util/fonts";
+import Button from "@/components/Button";
 
 const LandingPage = () => {
 
@@ -19,16 +20,32 @@ const LandingPage = () => {
                     </p>
                     <div className="mt-16 mb-36 flex justify-center items-center flex-wrap gap-16">
                         <Card>
-                            <p className="text-5xl text-center">HEGEL</p>
-                            <p>Get in on the action here!</p>
-                            <Link href="/hegel"><button>Guides</button></Link>
+                            <Link href="/hegel">
+                                <p className="text-5xl font-bold text-center hover:text-slate-600 duration-300">HEGEL</p>
+                                <p className="w-[300px] text-center mt-2 text-lg text-stone-500">Discover the power of dialectical thought and immanent critique!</p>
+                            </Link>
+                            <div className="flex gap-4 mt-2">
+                                <Link href="/hegel/guides">
+                                    <Button>Guides</Button>
+                                </Link>
+                                <Link href="/hegel/reference">
+                                    <Button>Reference</Button>
+                                </Link>
+                            </div>
                         </Card>
-                        <Link href="/kant">
-                            <Card>
-                                <p className="text-5xl text-center">KANT</p>
-                                <p>Here we go! Here we go!</p>
-                            </Card>
-                        </Link>
+                        
+                        <Card>
+                            <p className="text-5xl font-bold text-center">KANT</p>
+                            <p className="w-[300px] text-center mt-2">Learn why Kant is the philosopher of enlightenment bar none!</p>
+                            <div className="flex gap-4 mt-2">
+                                <Link href="/kant/guides">
+                                    <Button>Guides</Button>
+                                </Link>
+                                <Link href="/kant/reference">
+                                    <Button>Reference</Button>
+                                </Link>
+                            </div>
+                        </Card>
                     </div>
                 </div>
             </main>
