@@ -13,7 +13,7 @@
 .card-magic::after {
     content: "";
     position: absolute;
-    inset: -.15rem;
+    inset: -.10rem;
     z-index: -1;
     border-radius: inherit;
     background: conic-gradient(

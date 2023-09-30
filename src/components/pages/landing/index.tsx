@@ -15,16 +15,14 @@ const LandingPage = () => {
                         Open Source Philosophy
                     </h1>
                     <p className="mx-6 z-10 text-xl max-h-[112px] md:max-h-[96px] w-[315px] md:w-[600px] md:text-2xl font-space-grotesk text-center text-[#666666] dark:text-[#888888]">
-                        sPhil is a collaborative platform for developing philosophy through open-source principles, 
-                        emphasizing the collective nature of thinking.
+                        sPhil is a collaborative platform for developing philosophy through open-source principles, emphasizing the collective nature of thinking.
                     </p>
                     <div className="mt-16 mb-36 flex justify-center items-center flex-wrap gap-16">
-                        <Link href="/hegel">
-                            <Card>
-                                <p className="text-5xl text-center">HEGEL</p>
-                                <p>Get in on the action here!</p>
-                            </Card>
-                        </Link>
+                        <Card>
+                            <p className="text-5xl text-center">HEGEL</p>
+                            <p>Get in on the action here!</p>
+                            <Link href="/hegel"><button>Guides</button></Link>
+                        </Card>
                         <Link href="/kant">
                             <Card>
                                 <p className="text-5xl text-center">KANT</p>

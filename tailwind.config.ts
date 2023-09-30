@@ -15,7 +15,10 @@ const config: Config = {
       // },
       fontFamily: {
         serif: ['var(--font-cinzel)'],
-      }
+      },
+      colors: {
+        'dark-green-hsl': 'hsl(155, 100%, 66%, 0.17)',
+      },
     },
   },
   darkMode: 'class',

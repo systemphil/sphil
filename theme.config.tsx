@@ -15,7 +15,7 @@ const config: DocsThemeConfig = {
 		light: 215
 	},
     project: {
-      	link: 'https://github.com/shuding/nextra'
+      	link: 'https://github.com/'
     },
     useNextSeoProps: function SEO() {
 		const router = useRouter();
@@ -45,6 +45,9 @@ const config: DocsThemeConfig = {
 	  },
 	footer: {
 		component: Footer,
+	},
+	editLink: {
+		text: "Edit this page on GitHub",
 	},
 }
 

@@ -6,6 +6,7 @@ import LogoAnimated from "./LogoAnimated";
 const NavbarHeader = () => {
     return(
         <>
+            <h2 id="navbar-heading" className="sr-only">Navbar heading</h2>
             <Link href="/" title="Home" className="">
                 <LogoAnimated />
             </Link>
