@@ -1,5 +1,6 @@
 import NavbarHeader from "@/components/NavbarHeader";
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { useRouter } from "next/router";
 import { type DocsThemeConfig, useConfig } from "nextra-theme-docs";
 
@@ -38,7 +39,13 @@ const config: DocsThemeConfig = {
 			defaultTitle,
 			titleTemplate: `%s – ${section}`,
 		}
-	}
+	},
+	search: {
+		placeholder: "Search encyclopaedia…",
+	  },
+	footer: {
+		component: Footer,
+	},
 }
 
 export default config;
