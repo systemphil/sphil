@@ -13,11 +13,11 @@
 	"hegel": "Hegel",
 	"kant": "Kant",
 	"spinoza": "Spinoza",
-	"about": "About",
+	"contributing": "Contributing",
 	"contact": {
-		"title": "Contact ↗",
+		"title": "Symposia ↗",
 		"type": "page",
-		"href": "https://twitter.com/shuding_",
+		"href": "https://twitter.com/",
 		"newWindow": true
 	},
 	"terms": {
@@ -26,6 +26,10 @@
 	},
 	"privacy": {
 		"title": "Privacy Policy",
+		"display": "hidden"
+	},
+	"code-of-conduct": {
+		"title": "Code of Conduct",
 		"display": "hidden"
 	}
 }
