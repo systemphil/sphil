@@ -1,8 +1,6 @@
-import Card from "@/components/Card";
 import HeroBackground from "./HeroBackground";
-import Link from "next/link";
 import { cinzel } from "@/util/fonts";
-import Button from "@/components/Button";
+import CardFancy from "@/components/CardFancy";
 
 const LandingPage = () => {
 
@@ -19,38 +17,29 @@ const LandingPage = () => {
                         sPhil is a collaborative platform for developing philosophy through open-source principles, emphasizing the collective nature of thinking.
                     </p>
                     <div className="mt-16 mb-36 flex justify-center items-center flex-wrap gap-16">
-                        <Card>
-                            <Link href="/hegel">
-                                <p className="text-5xl font-bold text-center hover:text-slate-600 duration-300">HEGEL</p>
-                                <p className="w-[300px] text-center mt-2 text-lg text-stone-500">Discover the power of dialectical thought and immanent critique!</p>
-                            </Link>
-                            <div className="flex gap-4 mt-2">
-                                <Link href="/hegel/guides">
-                                    <Button>Guides</Button>
-                                </Link>
-                                <Link href="/hegel/reference">
-                                    <Button>Reference</Button>
-                                </Link>
-                            </div>
-                        </Card>
-                        
-                        <Card>
-                            <p className="text-5xl font-bold text-center">KANT</p>
-                            <p className="w-[300px] text-center mt-2">Learn why Kant is the philosopher of enlightenment bar none!</p>
-                            <div className="flex gap-4 mt-2">
-                                <Link href="/kant/guides">
-                                    <Button>Guides</Button>
-                                </Link>
-                                <Link href="/kant/reference">
-                                    <Button>Reference</Button>
-                                </Link>
-                            </div>
-                        </Card>
+                        <CardFancy 
+                            title={"HEGEL"}
+                            tagline={"Discover the power of dialectical thought and immanent critique!"}
+                            href={"/hegel"}
+                            buttons={[
+                                { title: "Guides", href: "/hegel/guides" },
+                                { title: "Reference", href: "/hegel/reference" }
+                            ]}
+                        />
+                        <CardFancy 
+                            title={"KANT"}
+                            tagline={"Learn why Kant is the philosopher of the enlightenment bar none!"}
+                            href={"/kant"}
+                            buttons={[
+                                { title: "Guides", href: "/kant/guides" },
+                                { title: "Reference", href: "/kant/reference" }
+                            ]}
+                        />
                     </div>
                 </div>
             </main>
         </>
-    )
+    );
 }
 
 export default LandingPage;

@@ -5,6 +5,13 @@ import { useRouter } from "next/router";
 import { type DocsThemeConfig, useConfig } from "nextra-theme-docs";
 
 const config: DocsThemeConfig = {
+	docsRepositoryBase: "https://github.com/Firgrep", // root for every edit link
+	editLink: {
+		text: "Edit this page on GitHub",
+	},
+	footer: {
+		component: Footer,
+	},
     logo: NavbarHeader,
 	logoLink: false,
 	navbar: {
@@ -15,8 +22,15 @@ const config: DocsThemeConfig = {
 		light: 215
 	},
     project: {
-      	link: 'https://github.com/'
+      	link: 'https://github.com/' // linked icon in the navbar top-right
     },
+	search: {
+		placeholder: "Search encyclopaedia…",
+	},
+	toc: {
+		backToTop: true,
+		// extraContent: extraContentHere,
+	},
     useNextSeoProps: function SEO() {
 		const router = useRouter();
 		const { frontMatter } = useConfig();
@@ -39,15 +53,6 @@ const config: DocsThemeConfig = {
 			defaultTitle,
 			titleTemplate: `%s – ${section}`,
 		}
-	},
-	search: {
-		placeholder: "Search encyclopaedia…",
-	  },
-	footer: {
-		component: Footer,
-	},
-	editLink: {
-		text: "Edit this page on GitHub",
 	},
 }
 
