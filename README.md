@@ -1,38 +1,32 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🚧 This is a work in progress
 
-## Getting Started
+If you'd like to be part of the development of sPhil, kindly follow the instructions below. If you have any further questions or would like to get involved, [get in touch with Firgrep here](https://www.filipniklas.com/#/contact).
 
-First, run the development server:
+## Setting up your local environment and branch
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+0.0. Once you have access to the repo on github, fork and/or clone it into a folder where you keep your projects.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+0.1. Then `cd sphil` to get into the project directory.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+0.2. Make your own development branch `git branch dev-<your-name>` (example: `git branch dev-tim`).
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+0.3. Set the newly made development branch as the current active branch, run `git checkout <your-branch-name>`.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+0.4. In future, when getting the latest changes from the main development branch, run `git merge dev` whilst on your development branch to incorporate the changes into your branch.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Packages Installation
 
-## Learn More
+1.0. Once inside, run `npm i` (alias `npm install`) to install all the packages. This will create the `/node_modules` folder.
 
-To learn more about Next.js, take a look at the following resources:
+### Environmental Variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2.0. There are no environmental variables! This is a static website.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Running the Server
 
-## Deploy on Vercel
+9.9. Finally, to start a local development server, run `npm run dev` and open up `http://localhost:3000` on your favorite browser.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Whenever you make any edits to the source files while the server is running, the server will pick up those changes and output them immediately. This is extremely handy during development, as you can input code and hit `ctrl` + `k` then `s` (save-all) and view directly your latest changes.
+- To terminate the server, hit `ctrl` + `c` on your keyboard whilst in the terminal where the server runs, input `y` when prompted to terminate batch job.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+> ❗ You may get an error (e.g. `useRef` is `null`) as your development server refreshes. This is likely due to how `nextra` processes the `mdx` files. Perform a hard refresh (hit `F5`) to resolve this.

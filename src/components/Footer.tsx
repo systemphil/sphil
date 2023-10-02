@@ -1,12 +1,11 @@
-import { useRouter } from "next/router";
 import Link from "next/link";
-import { useState, ReactNode, ReactElement } from "react";
+import { ReactNode, ReactElement } from "react";
 import cn from "classnames";
 import { ThemeSwitch } from "nextra-theme-docs";
 import LogoAnimated from "./LogoAnimated";
 
 function FooterLink({ href, children }: { href: string; children: ReactNode }) {
-    const classes = "text-sm text-[#666666] dark:text-[#888888] no-underline betterhover:hover:text-gray-700 betterhover:hover:dark:text-white transition";
+    const classes = "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 hover:dark:text-gray-200 transition";
     if (href.startsWith("http")) {
         return (
             <a href={href} className={classes}>
