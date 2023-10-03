@@ -6,6 +6,7 @@ searchable: false
 
 import { FileTree } from 'nextra/components'
 import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
 
 # Contributing to sPhil 
 
@@ -34,7 +35,7 @@ We use [GitHub](https://github.com/) to coordinate and edit both the philosophy 
 
 Next you'll need to make your way to the [sPhil code repository](https://github.com/).
 
-### Understanding the File Structure
+### Understanding the Relevant File Structure
 
 In the repository, you should see a several directories (folders) and a dozen files. The file structure is important not only in organizing the contents conceptually, but *also in determining the routing behaviour* of the website. Essentially, the HTTP address of an article will mirror the location of a file under certain directories. For example, the location an article `/pages/hegel/reference/being.mdx` will translate to `https://systemphil.com/hegel/reference/being`. Below is a quick rundown of the relevant file structure for philosophical contributions (the actual pages and articles may be subject to change). 
 
@@ -151,16 +152,33 @@ To view the source code of articles on GitHub is a straightforward process and d
 
 ### Editing Articles
 
-Editing files on GitHub is a relatively straightforward process, but there are a few steps required before you can make changes to any file. See the section above for navigating through the file structure. Assuming you have found an article you would want to edit, continue with the steps below.
+Editing files on GitHub is a relatively easy procedure, but there are a few steps required before you can make changes to any file. See the section above for navigating through the file structure. Assuming you have found an article you would want to edit, continue with the steps below.
 
 1. Provided you are viewing an article and you are logged in to GitHub, you can click the pencil icon to the right in the navigation bar just above the code display. Alternatively, hit `e` on your keyboard. 
 1. You should be in live editing mode where you can freely write and make changes. 
 1. Optionally, you can click the `Preview` button towards to the top left of the navigation bar just above the code to view the changes.
 1. When you are satisfied with the changes you have made to the file, hit the green `Commit changes...` button towards the top right.
+1. If this is the first time committing changes to this repository, you will be asked to *fork it*. Forking a repository means that you make a copy of someone else's repository (a project's codebase) into your own GitHub account. In order to contribute to another repository, you must first fork it. The default branch should be selected, but it not, please select it and `Create fork`. 
 
 <Callout emoji="🔱">
-    On forking
+    When you fork a repository, you create a separate and independent copy of the original repository. This copy is stored in your GitHub account and is under your control. Forking is commonly used for collaborative and open-source development. It allows you to contribute to someone else's project without having write access to their original repository. See [forking repositories](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
 </Callout>
+
+6. After the fork has been created, you will need to make a new `branch`. Either a prompt will appear after you've forked the repository in the previous step or you can click on the `main ▼` branch button and type into the input box the name of the new branch you will create. If you type in a branch name that does not yet exist, you should have an option `Create new branch: <your-new-branch-name>`.
+6. Finally, make a `pull request` to the main codebase with your changes. This is a formal request whereby you ask the owners and collaborators in charge of a codebase to review and accept your changes. If accepted, your changes are integrated to the main codebase and should appear on the next deployment of the website. However, it is not uncommon for there to be additional comments and feedback during a pull request, whereby further details or changes may be required before the pull request is accepted - but this is all part of the collaborative process!
+
+### Creating New Articles
+
+Creating a new file in a repository on GitHub is nearly identical to the the editing procedure above, except that instead of working from an existing file, you navigate to a specific folder and from there create a new file.
+
+1. Assuming you are in the directory where you want to create a new article, say `/pages/hegel/reference` (see steps in Viewing Articles), click the `Add file` button to the top right. This will open a menu. Select `Create a new file`.
+1. The interface for creating a new file is nearly identical to that of editing one, except you also specify the filename. You should see above the top of the main editing body that there is a small input field where you can type in the filename. Make sure to add the correct extensions, namely, `.mdx`. Let's say you're creating a new article concerning the category `ground` (assuming it doesn't already exist), the new name for this file should be `ground.mdx`.
+1. In the main editing body, you can use the standard Markdown formatting as well as some additional extensions provided by the website. 
+1. Once you are satisfied with your contribution, hit the `Commit changes...` button (and from here follow steps 4-7 from the Editing Articles section above).
+
+### Summary of Article Handling
+
+Text
 
 ## Contributing Code
 
