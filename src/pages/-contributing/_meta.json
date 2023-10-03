@@ -1,0 +1,14 @@
+{
+    "*": {
+        "theme": {
+            "breadcrumb": false,
+            "pagination": false
+        }
+    },
+    "index": {
+        "title": "Contributing"
+    },
+    "code-of-conduct": {
+        "title": "Code of Conduct"
+    }
+}

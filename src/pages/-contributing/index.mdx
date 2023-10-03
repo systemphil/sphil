@@ -1,0 +1,66 @@
+---
+overridingTitle: "Contributing"
+description: "sPhil is open-source philosophy."
+searchable: false
+---
+
+# Contributing to sPhil 
+
+Welcome! Thank you for considering contributing to sPhil. We're grateful for all contributions, whether it's helping us with typos, issues with our articles, issues with our code, highlighting features or ideas that are missing, contributing content or just joining the discussion. As you have landed on this page, you'll soon be ready to join in the fun of building the future of philosophy with us - and we're excited to have you with us on this journey!
+
+Whether or not you have prior experience with philosophy or with coding, we've created an easy overview of the essential things you need in order to get started contributing ideas or code to sPhil as well as a [Code of Conduct](/code-of-conduct) for contributing to the development of sPhil.
+
+We warmly encourage you to join our community on the [discussion boards]().
+
+## Contributing Philosophy
+
+We use [GitHub](https://github.com/) to coordinate and edit both the philosophy and the code on sPhil. In fact, the contents of philosophy are directly written into the source code. To get started, you need a GitHub account. You can sign up [here](https://github.com/signup).
+
+Next you'll need to make your way to the [sPhil code repository](https://github.com/).
+
+### Understanding the File Structure
+
+In the repository, you should see a several directories (folders) and a dozen files. Below is a quick rundown of the relevant file structure for philosophical contributions (the actual pages and articles may be subject to change). 
+
+```
+/
+├───src
+|   ├───pages
+|   |   ├───hegel
+|   |   |   ├───guides
+|   |   |   |   |   _meta.json
+|   |   |   |   |   index.mdx
+|   |   |   |   |   presuppositionless-thinking.mdx
+|   |   |   |   |   beginning-philosophy.mdx
+|   |   |   |
+|   |   |   ├───reference
+|   |   |   |   |   _meta.json
+|   |   |   |   |   index.mdx
+|   |   |   |   |   being.mdx
+|   |   |   |   |   nothing.mdx
+|   |   |   |
+|   |   |   |   _meta.json
+|   |   |   |   index.mdx
+|   |   |   
+|   |   ├───kant
+|   |   |   ├───guides
+|   |   |   |   |   _meta.json
+|   |   |   |   |   index.mdx
+|   |   |   |   |   root-of-knowledge.mdx
+|   |   |   |   |   copernican-turn.mdx
+|   |   |   |
+|   |   |   ├───reference
+|   |   |   |   |   _meta.json
+|   |   |   |   |   index.mdx
+|   |   |   |   |   intuitions.mdx
+|   |   |   |   |   categories-of-the-understanding.mdx
+|   |   |   |
+|   |   |   |   _meta.json
+|   |   |   |   index.mdx
+```
+
+All the actual contents of the encyclopaedia are in `.mdx` files--including what you are reading right now--which are like regular markdown (`.md`) files but enhanced with JSX (which means it basically allows us to inject and run programmatic code within these files, in contrast to regular markdown which are simple read-only text files). If you're not familiar with markdown, here is a [guide](https://www.markdownguide.org/getting-started/) and a [cheatsheet](https://www.markdownguide.org/cheat-sheet/). Markdown is great because of its easy and simplicity, yet it can be extended with powerful functionality and elaborate syntax when needed. The core idea  with markdown is that we concern ourselves with the contents of the text, while the outwards form (font, style, etc.) is handled by other parts of the site.
+
+## Contributing Code
+
+Talk about how to code etc

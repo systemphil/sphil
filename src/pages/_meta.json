@@ -5,15 +5,17 @@
 	"index": {
 		"display": "hidden",
 		"theme": {
-		"layout": "raw",
-		"sidebar": false,
-		"toc": true
+			"layout": "raw",
+			"sidebar": false,
+			"toc": true
 		}
 	},
 	"hegel": "Hegel",
 	"kant": "Kant",
 	"spinoza": "Spinoza",
-	"contributing": "Contributing",
+	"-contributing": {
+		"title": "Contributing"
+	},
 	"contact": {
 		"title": "Symposia ↗",
 		"type": "page",
