@@ -4,13 +4,29 @@ description: "sPhil is open-source philosophy."
 searchable: false
 ---
 
+import { FileTree } from 'nextra/components'
+import { Callout } from 'nextra/components'
+
 # Contributing to sPhil 
+
+## Welcome
 
 Welcome! Thank you for considering contributing to sPhil. We're grateful for all contributions, whether it's helping us with typos, issues with our articles, issues with our code, highlighting features or ideas that are missing, contributing content or just joining the discussion. As you have landed on this page, you'll soon be ready to join in the fun of building the future of philosophy with us - and we're excited to have you with us on this journey!
 
-Whether or not you have prior experience with philosophy or with coding, we've created an easy overview of the essential things you need in order to get started contributing ideas or code to sPhil as well as a [Code of Conduct](/code-of-conduct) for contributing to the development of sPhil.
+Whether or not you have prior experience with philosophy or with coding, we've created an easy overview of the essential things you need in order to get started contributing ideas or code to sPhil as well as a [Code of Conduct](/-contributing/code-of-conduct) for contributing to the development of sPhil.
 
 We warmly encourage you to join our community on the [discussion boards]().
+
+### General Division of the Encyclopaedia
+
+In designing our encyclopedia, we first seperate each system of philosophy (or the philosophy of a particular philosopher) into its own subdirectory. Then, within each philosophical system, we have adopted a division into 'Guides' and 'Reference' inspired by industry practices in software documentation. We believe this division will enhance the accessibility and comprehensiveness of our content.
+
+- **Guides**: These are designed to facilitate easy onboarding and provide a user-friendly introduction to complex topics. They aim to offer a clear and pedagogical approach for users who are new to the subject.
+- **Reference**: In this section, we delve deep into specific concepts, providing exhaustive details and comprehensive explanations. It serves as a resource for those seeking in-depth knowledge and understanding.
+
+In the Guides section to Hegel, for example, you'll find introductory articles such as 'Presuppositionless Thinking' and 'Beginning Philosophy'. These articles are designed to help beginners grasp the fundamental concepts quickly. In the Reference section, by contrast, you can explore detailed articles on logical categories like *being*, *nothing*, *becoming*, *existence*, *finitude*, *infinity* and many others. These articles provide extensive insights into specific philosophical concepts.
+
+Whether you're a newcomer to philosophy or an experienced philosopher, our encyclopedia aims to provide valuable insights. We invite you to explore both the Guides and Reference sections to tailor your learning experience to your needs. Together, they offer a comprehensive resource for anyone interested in the world of philosophy.
 
 ## Contributing Philosophy
 
@@ -20,8 +36,56 @@ Next you'll need to make your way to the [sPhil code repository](https://github.
 
 ### Understanding the File Structure
 
-In the repository, you should see a several directories (folders) and a dozen files. Below is a quick rundown of the relevant file structure for philosophical contributions (the actual pages and articles may be subject to change). 
+In the repository, you should see a several directories (folders) and a dozen files. The file structure is important not only in organizing the contents conceptually, but *also in determining the routing behaviour* of the website. Essentially, the HTTP address of an article will mirror the location of a file under certain directories. For example, the location an article `/pages/hegel/reference/being.mdx` will translate to `https://systemphil.com/hegel/reference/being`. Below is a quick rundown of the relevant file structure for philosophical contributions (the actual pages and articles may be subject to change). 
 
+<Callout emoji="🕹️">
+    You can close and open the directories in the panel below
+</Callout>
+
+<FileTree>
+    <FileTree.Folder name="src" defaultOpen>
+        <FileTree.Folder name="pages" defaultOpen>
+
+            <FileTree.Folder name="hegel" defaultOpen>
+                <FileTree.Folder name="guides" defaultOpen>
+                    <FileTree.File name="_meta.json" />
+                    <FileTree.File name="index.mdx" />
+                    <FileTree.File name="presuppositionless-thinking.mdx" />
+                    <FileTree.File name="beginning-philosophy.mdx" />
+                </FileTree.Folder>
+                <FileTree.Folder name="reference" defaultOpen>
+                    <FileTree.File name="_meta.json" />
+                    <FileTree.File name="index.mdx" />
+                    <FileTree.File name="being.mdx" />
+                    <FileTree.File name="nothing.mdx" />
+                </FileTree.Folder>
+                <FileTree.File name="_meta.json" />
+                <FileTree.File name="index.mdx" />
+            </FileTree.Folder>
+
+            <FileTree.Folder name="kant" defaultOpen>
+                <FileTree.Folder name="guides" defaultOpen>
+                    <FileTree.File name="_meta.json" />
+                    <FileTree.File name="index.mdx" />
+                    <FileTree.File name="root-of-knowledge.mdx" />
+                    <FileTree.File name="copernican-turn.mdx" />
+                </FileTree.Folder>
+                <FileTree.Folder name="reference" defaultOpen>
+                    <FileTree.File name="_meta.json" />
+                    <FileTree.File name="index.mdx" />
+                    <FileTree.File name="intuitions.mdx" />
+                    <FileTree.File name="categories-of-the-understanding.mdx" />
+                </FileTree.Folder>
+                <FileTree.File name="_meta.json" />
+                <FileTree.File name="index.mdx" />
+            </FileTree.Folder>
+
+        </FileTree.Folder>
+    </FileTree.Folder>
+</FileTree>
+
+<details>
+    <summary>Alternative view</summary>
 ```
 /
 ├───src
@@ -58,8 +122,45 @@ In the repository, you should see a several directories (folders) and a dozen fi
 |   |   |   |   _meta.json
 |   |   |   |   index.mdx
 ```
+</details>
 
-All the actual contents of the encyclopaedia are in `.mdx` files--including what you are reading right now--which are like regular markdown (`.md`) files but enhanced with JSX (which means it basically allows us to inject and run programmatic code within these files, in contrast to regular markdown which are simple read-only text files). If you're not familiar with markdown, here is a [guide](https://www.markdownguide.org/getting-started/) and a [cheatsheet](https://www.markdownguide.org/cheat-sheet/). Markdown is great because of its easy and simplicity, yet it can be extended with powerful functionality and elaborate syntax when needed. The core idea  with markdown is that we concern ourselves with the contents of the text, while the outwards form (font, style, etc.) is handled by other parts of the site.
+All the actual contents of the encyclopaedia are in `.mdx` files–including what you are reading right now–which are like regular Markdown (`.md`) files but enhanced with JSX (which means it basically allows us to inject and run programmatic code within these files, in contrast to regular markdown which are simple read-only text files). If you're not familiar with Markdown, here is a [guide](https://www.markdownguide.org/getting-started/) and a [cheatsheet](https://www.markdownguide.org/cheat-sheet/). Markdown is great because of its easy and simplicity, yet it can be extended with powerful functionality and elaborate syntax when needed. The core idea  with Markdown is that we concern ourselves with the contents of the text, while the outwards form (font, style, etc.) is handled by other parts of the site.
+
+<Callout type="info" emoji="🗃️">
+    The website router uses a file-based system to create routes, this means that the location of files under `/pages` will determine the address after the domain (after the `.com/`). 
+</Callout>
+
+In our file structure, alongside the `.mdx` files, you'll also notice the presence of special `_meta.json` files. These files play a crucial role in customizing the appearance and behaviour of pages. Normally, if you mainly work on existing articles, you should not need to attend to these `.json` files. However, more information about them can be found [here](https://nextra.site/docs/guide/organize-files#_metajson).
+
+<Callout emoji="⚙️">
+    All `.mdx` filenames should be lower-case and where there are multiple words, these should be seperated by a hyphen "-". *Unless further specified*, the website builder will automatically capitalize each individual word and replace the hyphen with a space in the actual output. For example, a file named `beginning-philosophy.mdx` will appear as `Beginning Philosophy` in the navigation menu. Note, however, that the HTTP address will still be `/beginning-philosophy`. 
+</Callout>
+
+Further and more detailed information and the file structure and files will be provided elsewhere.
+
+### Viewing Articles (Source Code)
+
+To view the source code of articles on GitHub is a straightforward process and doesn't actually require a GitHub account! Below we've outlined how you might navigate to view the source code of a particular article. 
+
+1. Assuming you are in the [sPhil repository](https://github.com/Firgrep/sphil) landing page, click on the `src` directory. (When you click on a directory from the initial repository landing page, you will be taken to a different interface that allows you to view individual files as well as a map of the directories and files on your left). 
+1. You should now be in a more work-convenient interface and there should be a menu with directories (`components`, `pages`, `styles`, `util`, etc.) in the main body of your page as well as an expanded tree of directories to your left. Use either one to navigate. Click on the `pages` directory.
+1. You are now in the file structure outlined above. Everything in `/pages` directory concerns routing and content, and in this directory we find the miscellaneous pages. From here, you would to navigate to the philosophical system (or philosopher) of interest. Let's go to `hegel`.
+1. You are now in the directory for a specific philosophical system (or philosopher) and will usually find the two `/guides` and `/reference` directories as well as a `_meta.json` and an `index.mdx` file that acts as a particular landing page. Let's continue to `reference`. 
+1. You should now be in the Reference directory of Hegel's philosophical system. From here you can view any existing file. Click on `being.mdx`.
+1. The web editor on GitHub should now open the file `sphil/src/pages/hegel/reference/being.mdx` and you should be able to view the contents.
+
+### Editing Articles
+
+Editing files on GitHub is a relatively straightforward process, but there are a few steps required before you can make changes to any file. See the section above for navigating through the file structure. Assuming you have found an article you would want to edit, continue with the steps below.
+
+1. Provided you are viewing an article and you are logged in to GitHub, you can click the pencil icon to the right in the navigation bar just above the code display. Alternatively, hit `e` on your keyboard. 
+1. You should be in live editing mode where you can freely write and make changes. 
+1. Optionally, you can click the `Preview` button towards to the top left of the navigation bar just above the code to view the changes.
+1. When you are satisfied with the changes you have made to the file, hit the green `Commit changes...` button towards the top right.
+
+<Callout emoji="🔱">
+    On forking
+</Callout>
 
 ## Contributing Code
 

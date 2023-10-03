@@ -4,8 +4,10 @@ import Footer from "@/components/Footer";
 import { useRouter } from "next/router";
 import { type DocsThemeConfig, useConfig } from "nextra-theme-docs";
 
+const projectHref = "https://github.com/Firgrep"
+
 const config: DocsThemeConfig = {
-	docsRepositoryBase: "https://github.com/Firgrep", // root for every edit link
+	docsRepositoryBase: projectHref, // root for every edit link
 	editLink: {
 		text: "Edit this page on GitHub",
 	},
@@ -22,7 +24,7 @@ const config: DocsThemeConfig = {
 		light: 215
 	},
     project: {
-      	link: 'https://github.com/' // linked icon in the navbar top-right
+      	link: projectHref // linked icon in the navbar top-right
     },
 	search: {
 		placeholder: "Search encyclopaedia…",
