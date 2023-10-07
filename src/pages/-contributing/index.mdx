@@ -28,11 +28,15 @@ In the Guides section to Hegel, for example, you'll find introductory articles s
 
 Whether you're a newcomer to philosophy or an experienced philosopher, our encyclopedia aims to provide valuable insights. We invite you to explore both the Guides and Reference sections to tailor your learning experience to your needs. Together, they offer a comprehensive resource for anyone interested in the world of philosophy.
 
-## Contributing Philosophy
+## Contributing Philosophy (Quickstart)
 
 We use [GitHub](https://github.com/) to coordinate and edit both the philosophy and the code on sPhil. In fact, the contents of philosophy are directly written into the source code. To get started, you need a GitHub account. You can sign up [here](https://github.com/signup).
 
 Next you'll need to make your way to the [sPhil code repository](https://github.com/Firgrep/sphil).
+
+<Callout type="info">
+The contents of this particular guide is intended to get you ready to contribute as quickly as possible to the codebase on GitHub and will therefore have omitted explaining many concepts about that platform. If you feel like you need an overview of just what GitHub is and how it works, see our [conceptual overview]().
+</Callout>
 
 ### Understanding the Relevant File Structure
 
@@ -153,18 +157,20 @@ To view the source code of articles on GitHub is a straightforward process and d
 
 Editing files on GitHub is a relatively easy procedure, but there are a few steps required before you can make changes to any file. See the section above for navigating through the file structure. Assuming you have found an article you would want to edit, continue with the steps below.
 
-1. Provided you are viewing an article and you are logged in to GitHub, you can click the pencil icon to the right in the navigation bar just above the code display. Alternatively, hit `e` on your keyboard. 
-1. You should be in live editing mode where you can freely write and make changes. 
-1. Optionally, you can click the `Preview` button towards to the top left of the navigation bar just above the code to view the changes.
-1. When you are satisfied with the changes you have made to the file, hit the green `Commit changes...` button towards the top right.
-1. If this is the first time committing changes to this repository, you will be asked to *fork it*. Forking a repository means that you make a copy of someone else's repository (a project's codebase) into your own GitHub account. In order to contribute to another repository, you must first fork it. The default branch should be selected, but it not, please select it and `Create fork`. 
+1. Provided you are viewing an article and you are logged in to GitHub, you can click the pencil icon to the right in the navigation bar just above the code display. Alternatively, hit `e` on your keyboard.
+1. If this is the first time committing changes to this repository, you will be asked to *fork it*. Forking a repository means that you make a copy of someone else's repository (a project's codebase) into your own GitHub account. In order to contribute to another repository, you must first fork it. The default branch should be selected, but it not, please select it and `Create fork`.
 
 <Callout emoji="🔱">
     When you fork a repository, you create a separate and independent copy of the original repository. This copy is stored in your GitHub account and is under your control. Forking is commonly used for collaborative and open-source development. It allows you to contribute to someone else's project without having write access to their original repository. See [forking repositories](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
 </Callout>
 
-6. After the fork has been created, you will need to make a new `branch`. Either a prompt will appear after you've forked the repository in the previous step or you can click on the `main ▼` branch button and type into the input box the name of the new branch you will create. If you type in a branch name that does not yet exist, you should have an option `Create new branch: <your-new-branch-name>`.
-6. Finally, make a `pull request` to the main codebase with your changes. This is a formal request whereby you ask the owners and collaborators in charge of a codebase to review and accept your changes. If accepted, your changes are integrated to the main codebase and should appear on the next deployment of the website. However, it is not uncommon for there to be additional comments and feedback during a pull request, whereby further details or changes may be required before the pull request is accepted - but this is all part of the collaborative process!
+3. After the fork has been created, a `branch` should automatically be made for you. A `branch` is like a seperate path on a project's journey - and in your case the project is on a journey with you! If you need to make a new `branch`, you can click on the `main ▼` branch button and type into the input box the name of the new branch you will create. If you type in a branch name that does not yet exist, you should have an option `Create new branch: <your-new-branch-name>`.
+3. Once the branch is set, you should be in live editing mode where you can freely write and make changes. 
+3. When you are satisfied with the changes you have made to the file, hit the green `Commit changes...` button towards the top right.
+3. You should now be at the `pull request` interface where you have the opportunity to give a description to the changes you propose in a comment box (it is encouraged to make use of it for lengthy or complex commits). This is your chance to speak with other collaborators to let you know of your thought process. 
+3. Finally, initiate the `pull request` to the main codebase with your changes. This is a formal request whereby you ask the owners and collaborators in charge of a codebase to review and accept your changes. If accepted, your changes are integrated to the main codebase and should appear on the next deployment of the website. However, it is not uncommon for there to be additional comments and feedback during a pull request, whereby further details or changes may be required before the pull request is accepted - but this is all part of the collaborative process!
+
+A few other things to notice. When you are editing a file, you can click the `Preview` button towards to the top left of the navigation bar just above the code to view a comparison of the changes you are making to the file. During a `pull request` it is common to receive feedback from collaborators and this may include requests to further develop your changes, such that you may need to edit your own changes before they are accepted. Here you do not need to make a new `pull request` but simply return to the file you have been editing (from the `pull request` menu) and make the necesary changes. Once you `Commit changes...` again, these will update your `pull request` and the collaborators will be notified. If the latest changes are accepted, the `pull request` becomes `merged` and you will be given the option to `delete your branch`. This is recommended as this particular "path" of the project's journey has effectively ended and when you want to make further contributions you would make a new `branch`. 
 
 ### Creating New Articles
 
