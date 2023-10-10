@@ -3,6 +3,7 @@ import { ReactNode, ReactElement } from "react";
 import cn from "classnames";
 import { ThemeSwitch } from "nextra-theme-docs";
 import LogoAnimated from "./LogoAnimated";
+import LogoOwl from "./LogoOwl";
 
 function FooterLink({ href, children }: { href: string; children: ReactNode }) {
     const classes = "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 hover:dark:text-gray-200 transition";
@@ -143,16 +144,17 @@ function FooterContent() {
                 <div className="pt-8 mt-8 sm:flex sm:items-center sm:justify-between">
                     <div>
                         <a
-                            className="text-current"
+                            className="text-current flex gap-4 items-center"
                             target="_blank"
                             rel="noopener noreferrer"
                             title="homepage"
                             href="/"
                         >
+                            <LogoOwl />
                             <LogoAnimated animation={false} />
                         </a>
                         <p className="mt-4 text-xs text-gray-500 dark:text-[#888888]">
-                        &copy; {new Date().getFullYear()} Eru, Ltd. All rights reserved.
+                        &copy; {new Date().getFullYear()} Eru Iluvatar, Ltd. All rights reserved.
                         </p>
                     </div>
                 </div>
