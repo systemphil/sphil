@@ -35,4 +35,4 @@ jobs:
     - name: Deploy
       uses: 'google-github-actions/deploy-appengine@v1'
       with:
-        build_dir: ./out
+        working_directory: ./out
