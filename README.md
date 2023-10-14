@@ -20,7 +20,7 @@ If you'd like to be part of the development of sPhil, kindly follow the instruct
 
 ### Environmental Variables
 
-2.0. There are no environmental variables! This is a static website.
+2.0. There are no environmental variables! This is a static website. (Caveat: we defined some public variables depending on where the site is hosted.)
 
 ### Running the Server
 
