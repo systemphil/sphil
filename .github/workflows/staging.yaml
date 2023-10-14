@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   deploy:
@@ -20,6 +17,10 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 18
+
+    - name: 'Create env file'
+      run: |
+        echo "${{ secrets.ENV_STAGING }}" > .env
 
     - name: Install Dependencies
       run: npm ci

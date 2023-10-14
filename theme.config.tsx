@@ -4,10 +4,10 @@ import Footer from "@/components/Footer";
 import { useRouter } from "next/router";
 import { type DocsThemeConfig, useConfig } from "nextra-theme-docs";
 
-const SITE_ROOT = "https://sphil-test.ey.r.appspot.com/";
+const SITE_ROOT = process.env.NEXT_PUBLIC_SITE_ROOT;
 
 const config: DocsThemeConfig = {
-	docsRepositoryBase: "https://github.com/Firgrep/sphil/tree/main", // root for every edit link
+	docsRepositoryBase: "https://github.com/systemphil/sphil/tree/main", // root for every edit link
 	editLink: {
 		text: "Edit this page on GitHub",
 	},
@@ -81,7 +81,7 @@ const config: DocsThemeConfig = {
 		light: 215
 	},
     project: {
-      	link: "https://github.com/Firgrep/sphil" // linked icon in the navbar top-right
+      	link: "https://github.com/systemphil/sphil" // linked icon in the navbar top-right
     },
 	search: {
 		placeholder: "Search encyclopaedia…",
