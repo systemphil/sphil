@@ -21,6 +21,10 @@ const config: Config = {
       //   'gradient-conic':
       //     'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       // },
+      backgroundImage: {
+        'radial-gradient': 'radial-gradient(#FFFFFF 25%, rgb(255 255 255), transparent)',
+        'radial-gradient-dark': 'radial-gradient(rgb(40 40 40) 40%, rgb(175 185 159) 50%, transparent, rgb(20 20 20))',
+      },
       fontFamily: {
         serif: ['var(--font-cinzel)'],
       },
