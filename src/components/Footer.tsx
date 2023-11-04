@@ -9,7 +9,7 @@ function FooterLink({ href, children }: { href: string; children: ReactNode }) {
     const classes = "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 hover:dark:text-gray-200 transition";
     if (href.startsWith("http")) {
         return (
-            <a href={href} className={classes}>
+            <a href={href} className={classes} target="_blank">
                 {children}
             </a>
         );
@@ -28,42 +28,29 @@ function FooterHeader({ children }: { children: ReactNode }) {
 const navigation = {
     general: [
         { name: "Blog", href: "/blog" },
-        { name: "Releases", href: "https://github.com" },
+        { name: "Symposia", href: "/" },
+        { name: "Acknowledgements", href: "/acknowledgements" },
     ],
     hegel: [
         { name: "Guides", href: "/hegel/guides" },
         { name: "Reference", href: "/hegel/reference" },
-        { name: "FAQ", href: "/hegel" },
     ],
     kant: [
         { name: "Guides", href: "/kant/guides" },
         { name: "Reference", href: "/kant/reference" },
     ],
-    support: [
-        {
-            name: "GitHub",
-            href: "https://github.com/",
-        },
-        {
-            name: "Discord",
-            href: "https://discord.com",
-        },
-    ],
     company: [
-        { name: "sPhil", href: "/" },
-        {
-            name: "Open Source Philosophy",
-            href: "/",
-        },
-        {
-            name: "Contact",
-            href: `/`,
-        },
-        { name: "Twitter", href: "https://twitter.com" },
+        { name: "Contributing", href: "/-contributing" },
+        { name: "Methodology", href: "/-contributing/methodology", },
+        { name: "Code of Conduct", href: `/-contributing/code-of-conduct`, },
     ],
     legal: [
         { name: "Privacy Policy", href: "/privacy" },
-        { name: "Terms of Service", href: "/terms" },
+        { name: "Terms of Use", href: "/terms" },
+    ],
+    support: [
+        { name: "GitHub ↗", href: "https://github.com/systemphil/", },
+        { name: "YouTube ↗", href: "https://www.youtube.com/@systemphil" },
     ],
 };
 
