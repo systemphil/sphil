@@ -4,18 +4,20 @@ import cn from "classnames";
 import { ThemeSwitch } from "nextra-theme-docs";
 import LogoAnimated from "./LogoAnimated";
 import LogoOwl from "./LogoOwl";
+import { clearCookies } from "@/util/clearCookies";
+
+const footerLinkClasses = "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 hover:dark:text-gray-200 transition";
 
 function FooterLink({ href, children }: { href: string; children: ReactNode }) {
-    const classes = "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 hover:dark:text-gray-200 transition";
     if (href.startsWith("http")) {
         return (
-            <a href={href} className={classes} target="_blank">
+            <a href={href} className={footerLinkClasses} target="_blank">
                 {children}
             </a>
         );
     }
     return (
-        <Link href={href} className={classes}>
+        <Link href={href} className={footerLinkClasses}>
             {children}
         </Link>
     );
@@ -55,6 +57,12 @@ const navigation = {
 };
 
 function FooterContent() {
+
+    const handleClearCookies = () => {
+        clearCookies();
+        console.log("cookies should be cleared");
+    }
+
     return (
         <div className="w-full" aria-labelledby="footer-heading">
             <h2 id="footer-heading" className="sr-only">
@@ -79,7 +87,7 @@ function FooterContent() {
                                 <ul role="list" className="mt-4 space-y-1.5 list-none ml-0">
                                 {navigation.hegel.map((item) => (
                                     <li key={item.name}>
-                                    <FooterLink href={item.href}>{item.name}</FooterLink>
+                                        <FooterLink href={item.href}>{item.name}</FooterLink>
                                     </li>
                                 ))}
                                 </ul>
@@ -89,7 +97,7 @@ function FooterContent() {
                                 <ul role="list" className="mt-4 space-y-1.5 list-none ml-0">
                                 {navigation.kant.map((item) => (
                                     <li key={item.name}>
-                                    <FooterLink href={item.href}>{item.name}</FooterLink>
+                                        <FooterLink href={item.href}>{item.name}</FooterLink>
                                     </li>
                                 ))}
                                 </ul>
@@ -112,6 +120,12 @@ function FooterContent() {
                                         <FooterLink href={item.href}>{item.name}</FooterLink>
                                     </li>
                                 ))}
+                                    <li 
+                                        key="cookie-removal"
+                                        onClick={() => handleClearCookies()}
+                                    >
+                                        <button className={footerLinkClasses}>Delete Cookies</button>
+                                    </li>
                                 </ul>
                             </div>
                             <div className="mt-12 md:!mt-0">
