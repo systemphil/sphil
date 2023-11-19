@@ -5,6 +5,7 @@ import { ThemeSwitch } from "nextra-theme-docs";
 import LogoAnimated from "./LogoAnimated";
 import LogoOwl from "./LogoOwl";
 import { clearCookies } from "@/util/clearCookies";
+import Button from "@/components/Button";
 
 const footerLinkClasses = "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 hover:dark:text-gray-200 transition";
 
@@ -57,10 +58,20 @@ const navigation = {
 };
 
 function FooterContent() {
-
+    
     const handleClearCookies = () => {
         clearCookies();
-        console.log("cookies should be cleared");
+        const dialog = document.getElementById("cookie-dialog") as HTMLDialogElement;
+        if (dialog) {
+            dialog.show();
+        }
+    }
+
+    const handleCloseDialog = () => {
+        const dialog = document.getElementById("cookie-dialog") as HTMLDialogElement;
+        if (dialog) {
+            dialog.close();
+        }
     }
 
     return (
@@ -126,6 +137,13 @@ function FooterContent() {
                                     >
                                         <button className={footerLinkClasses}>Delete Cookies</button>
                                     </li>
+                                    
+                                    <dialog id="cookie-dialog">
+                                        <div className="flex flex-col items-center justify-center max-w-md shadow p-4 rounded-md">
+                                            <span className="p-2">All cookies should now be deleted and you will be asked upon next visit to accept or decline cookies.</span>
+                                            <Button onClick={() => handleCloseDialog()}>Close</Button>
+                                        </div>
+                                    </dialog>
                                 </ul>
                             </div>
                             <div className="mt-12 md:!mt-0">

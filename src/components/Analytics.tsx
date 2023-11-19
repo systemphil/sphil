@@ -1,12 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import CookieConsent, { getCookieConsentValue } from "react-cookie-consent"
 
-// declare global {
-//     interface Window {
-//         dataLayer: any[];
-//     }
-// }
-
 const G_TAG_MNGR_ID = "g-tag-mngr";
 const G_TAG_ID = "g-tag";
 
@@ -14,12 +8,10 @@ function removeGoogleAnalytics() {
     const scriptTagMngr = document.getElementById(G_TAG_MNGR_ID);
     if (scriptTagMngr) {
         document.head.removeChild(scriptTagMngr);
-        console.log("removed ", scriptTagMngr)
     }
     const scriptTag = document.getElementById(G_TAG_ID);
     if (scriptTag) {
         document.head.removeChild(scriptTag);
-        console.log("removed ", scriptTag)
     }
 }
 
@@ -30,7 +22,6 @@ const Analytics = () => {
     const loadGoogleAnalytics = useCallback(() => {
         if (!GA_ID) return;
         setHasConsentValue(true);
-        console.log("loading GA");
         const scriptTagMngr = document.createElement("script");
         scriptTagMngr.id = G_TAG_MNGR_ID;
         scriptTagMngr.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
@@ -39,7 +30,6 @@ const Analytics = () => {
 
         const scriptTag = document.createElement("script");
         scriptTag.id = G_TAG_ID;
-        console.log("GA ID: ", GA_ID)
         scriptTag.innerHTML = `
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -59,43 +49,8 @@ const Analytics = () => {
         }
     }, [loadGoogleAnalytics]);
 
-        // <Script id="google-analytics">
-        //     {`
-        //         window.dataLayer = window.dataLayer || [];
-        //         function gtag(){dataLayer.push(arguments);}
-        //         gtag('js', new Date());
-        //         gtag('config', ${GA_ID})
-        //     `}
-        // </Script>
-
-        // window.dataLayer = window.dataLayer || [];
-
-        // const gtag: Gtag.Gtag = function () {
-        //     window.dataLayer.push(arguments);
-        // }
-        // gtag("js", new Date());
-        // gtag('config', 'G-MMKZQ2ZQ5G', {
-        //     page_path: window.location.pathname,
-        // } as any);
-    
-    // useEffect(() => {
-    //     window.dataLayer = window.dataLayer || [];
-    //     function gtag() { dataLayer.push(arguments); }
-
-    //     gtag('js', new Date());
-    //     gtag('config', 'G-MMKZQ2ZQ5G');
-
-    //     const script = document.createElement('script');
-    //     script.async = true;
-    //     script.src = 'https://www.googletagmanager.com/gtag/js?id=G-MMKZQ2ZQ5G';
-    //     script.onload = () => {
-    //     window.gtag().set('sendPageView');
-    //     };
-    //     document.head.appendChild(script);
-    // }, [])
-
+    // TODO fix banner UI
     return(
-
         <>
             {!hasConsentValue && (
                 <CookieConsent
@@ -104,21 +59,26 @@ const Analytics = () => {
                     onDecline={() => {
                         setHasConsentValue(true);
                     }}
-                    style={{ background: "#222", color: "white"}}
+                    style={{ background: "#111111", color: "white"}}
+                    
                     buttonStyle={{
-                        color: "yellow",
-                        background: "green",
+                        backgroundColor: "hsl(155, 100%, 66%, 0.17)",
+                        color: "#FFFFFF",
                         fontSize: "18px",
                         borderRadius: "4px",
+                        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
+                        transition: "background-color 0.3s, box-shadow 0.3s",
                     }}
                     declineButtonStyle={{
-                        color: "red",
-                        background: "gray",
+                        backgroundColor: "hsl(13, 13%, 27%)",
+                        color: "#FFFFFF",
                         fontSize: "18px",
                         borderRadius: "4px",
+                        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
+                        transition: "background-color 0.3s, box-shadow 0.3s",
                     }}
                 >
-                    We has cookies. Make your choice.
+                    This site uses cookies to analyze traffic for marketing purposes and to improve your experience. To learn more, visit our <a href="/privacy" className="text-blue-400 underline hover:text-blue-300">Privary Policy</a>.{" "}
                 </CookieConsent>
             )}
         </>
