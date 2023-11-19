@@ -5,7 +5,6 @@ import Heading from "@/components/Heading";
 import Paragraph from "@/components/Paragraph";
 import Link from "next/link";
 import FadeIn from "@/components/FadeIn";
-import LogoOwl from "@/components/LogoOwl";
 
 const LandingPage = () => {
 

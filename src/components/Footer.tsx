@@ -4,18 +4,21 @@ import cn from "classnames";
 import { ThemeSwitch } from "nextra-theme-docs";
 import LogoAnimated from "./LogoAnimated";
 import LogoOwl from "./LogoOwl";
+import { clearCookies } from "@/util/clearCookies";
+import Button from "@/components/Button";
+
+const footerLinkClasses = "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 hover:dark:text-gray-200 transition";
 
 function FooterLink({ href, children }: { href: string; children: ReactNode }) {
-    const classes = "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 hover:dark:text-gray-200 transition";
     if (href.startsWith("http")) {
         return (
-            <a href={href} className={classes}>
+            <a href={href} className={footerLinkClasses} target="_blank">
                 {children}
             </a>
         );
     }
     return (
-        <Link href={href} className={classes}>
+        <Link href={href} className={footerLinkClasses}>
             {children}
         </Link>
     );
@@ -28,46 +31,49 @@ function FooterHeader({ children }: { children: ReactNode }) {
 const navigation = {
     general: [
         { name: "Blog", href: "/blog" },
-        { name: "Releases", href: "https://github.com" },
+        { name: "Symposia", href: "/" },
+        { name: "Acknowledgements", href: "/acknowledgements" },
     ],
     hegel: [
         { name: "Guides", href: "/hegel/guides" },
         { name: "Reference", href: "/hegel/reference" },
-        { name: "FAQ", href: "/hegel" },
     ],
     kant: [
         { name: "Guides", href: "/kant/guides" },
         { name: "Reference", href: "/kant/reference" },
     ],
-    support: [
-        {
-            name: "GitHub",
-            href: "https://github.com/",
-        },
-        {
-            name: "Discord",
-            href: "https://discord.com",
-        },
-    ],
     company: [
-        { name: "sPhil", href: "/" },
-        {
-            name: "Open Source Philosophy",
-            href: "/",
-        },
-        {
-            name: "Contact",
-            href: `/`,
-        },
-        { name: "Twitter", href: "https://twitter.com" },
+        { name: "Contributing", href: "/-contributing" },
+        { name: "Methodology", href: "/-contributing/methodology", },
+        { name: "Code of Conduct", href: `/-contributing/code-of-conduct`, },
     ],
     legal: [
         { name: "Privacy Policy", href: "/privacy" },
-        { name: "Terms of Service", href: "/terms" },
+        { name: "Terms of Use", href: "/terms" },
+    ],
+    support: [
+        { name: "GitHub ↗", href: "https://github.com/systemphil/", },
+        { name: "YouTube ↗", href: "https://www.youtube.com/@systemphil" },
     ],
 };
 
 function FooterContent() {
+    
+    const handleClearCookies = () => {
+        clearCookies();
+        const dialog = document.getElementById("cookie-dialog") as HTMLDialogElement;
+        if (dialog) {
+            dialog.show();
+        }
+    }
+
+    const handleCloseDialog = () => {
+        const dialog = document.getElementById("cookie-dialog") as HTMLDialogElement;
+        if (dialog) {
+            dialog.close();
+        }
+    }
+
     return (
         <div className="w-full" aria-labelledby="footer-heading">
             <h2 id="footer-heading" className="sr-only">
@@ -92,7 +98,7 @@ function FooterContent() {
                                 <ul role="list" className="mt-4 space-y-1.5 list-none ml-0">
                                 {navigation.hegel.map((item) => (
                                     <li key={item.name}>
-                                    <FooterLink href={item.href}>{item.name}</FooterLink>
+                                        <FooterLink href={item.href}>{item.name}</FooterLink>
                                     </li>
                                 ))}
                                 </ul>
@@ -102,7 +108,7 @@ function FooterContent() {
                                 <ul role="list" className="mt-4 space-y-1.5 list-none ml-0">
                                 {navigation.kant.map((item) => (
                                     <li key={item.name}>
-                                    <FooterLink href={item.href}>{item.name}</FooterLink>
+                                        <FooterLink href={item.href}>{item.name}</FooterLink>
                                     </li>
                                 ))}
                                 </ul>
@@ -125,6 +131,19 @@ function FooterContent() {
                                         <FooterLink href={item.href}>{item.name}</FooterLink>
                                     </li>
                                 ))}
+                                    <li 
+                                        key="cookie-removal"
+                                        onClick={() => handleClearCookies()}
+                                    >
+                                        <button className={footerLinkClasses}>Delete Cookies</button>
+                                    </li>
+                                    
+                                    <dialog id="cookie-dialog">
+                                        <div className="flex flex-col items-center justify-center max-w-md shadow p-4 rounded-md">
+                                            <span className="p-2">All cookies should now be deleted and you will be asked upon next visit to accept or decline cookies.</span>
+                                            <Button onClick={() => handleCloseDialog()}>Close</Button>
+                                        </div>
+                                    </dialog>
                                 </ul>
                             </div>
                             <div className="mt-12 md:!mt-0">
