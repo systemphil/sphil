@@ -43,6 +43,7 @@ const navigation = {
         { name: "Reference", href: "/kant/reference" },
     ],
     company: [
+        { name: "Team", href: "/team"},
         { name: "Contributing", href: "/-contributing" },
         { name: "Methodology", href: "/-contributing/methodology", },
         { name: "Code of Conduct", href: `/-contributing/code-of-conduct`, },
