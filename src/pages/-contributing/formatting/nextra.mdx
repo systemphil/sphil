@@ -1,0 +1,147 @@
+## Nextra Site Generation Framework
+
+Nextra is the tool that powers [nextjs.org](https://nextjs.org) and [vercel.com](https://vercel.com). It's a framework for building static sites with Next.js. It's built on top of Next.js and adds a bunch of features that make it easy to build static sites, such as our website here.
+
+## Built-in Components
+
+Nextra comes with some handy tools out of the box for us to use. Note that these will only work in `.mdx` files.
+
+### `Callout`
+
+Use callout to highlight important information. You can use the `type` prop to change the color of the callout. The available types are `info`, `default`, `warning`, and `error`. You can also use the `emoji` prop to add an emoji to the callout.
+
+import { Callout } from 'nextra/components'
+ 
+<Callout type="info" emoji="ℹ️">
+    Today is {new Date().toLocaleString(undefined, { weekday: 'long'})}.
+</Callout>
+
+```mdx
+import { Callout } from 'nextra/components'
+ 
+<Callout type="info" emoji="ℹ️">
+    Today is {new Date().toLocaleString(undefined, { weekday: 'long'})}.
+</Callout>
+```
+
+### `Tabs`
+
+Use tabs to organize content into different sections. You can use the `items` prop to define the tabs. The `items` prop should be an array of strings. You can then use the `Tabs.Tab` component to define the content of each tab. The `Tabs.Tab` component should be used inside the `Tabs` component.
+
+import { Tabs } from 'nextra/components'
+ 
+<Tabs items={['Intuitions', 'Concepts', 'Ideas']}>
+    <Tabs.Tab>**Intuitions**: Immediate and sensuous.</Tabs.Tab>
+    <Tabs.Tab>**Concepts** mediated and pure, but connected directly to intuitions.</Tabs.Tab>
+    <Tabs.Tab>**Ideas** also mediated and pure, but only indirectly connected to intuitions, via the understanding.</Tabs.Tab>
+</Tabs>
+
+---
+
+```mdx
+import { Tabs } from 'nextra/components'
+ 
+<Tabs items={['Intuitions', 'Concepts', 'Ideas']}>
+    <Tabs.Tab>**Intuitions**: Immediate and sensuous.</Tabs.Tab>
+    <Tabs.Tab>**Concepts**: Mediated and pure, but connected directly to intuitions.</Tabs.Tab>
+    <Tabs.Tab>**Ideas**: Also mediated and pure, but only indirectly connected to intuitions, via the understanding.</Tabs.Tab>
+</Tabs>
+```
+
+### `Cards`
+
+Use cards to display a list of links. You can use the `Cards` component to define the list of cards. The `Cards` component should be used inside the `Card` component. You can then use the `Card` component to define each card. The `Card` component should be used inside the `Cards` component.
+
+import { Cards, Card } from 'nextra/components'
+ 
+<Cards>
+    <Card icon={"📄"} title="Methodology" href="/-contributing/methodology" />
+    <Card icon={"📜"} title="Code of Conduct" href="/-contributing/code-of-conduct" />
+    <Card icon={"📎"} title="GitHub" href="https://github.com/" />
+</Cards>
+
+The `Card` component takes the following props:
+
+```mdx
+import { Cards, Card } from 'nextra/components'
+ 
+<Cards>
+    <Card icon={"📄"} title="Methodology" href="/-contributing/methodology" />
+    <Card icon={"📜"} title="Code of Conduct" href="/-contributing/code-of-conduct" />
+    <Card icon={"📎"} title="GitHub" href="https://github.com/" />
+</Cards>
+```
+
+### `Steps`
+
+Use steps to display a list of steps. You can use the `Steps` component to define the list of steps. Each step must be a markdown heading, which means it will be displayed in the navigation menu to the right. 
+
+<Callout type="info" emoji="ℹ️">
+    Note: numbering *only* appears with H3 headings. 
+</Callout>
+
+import { Steps } from 'nextra/components'
+ 
+<Steps>
+### Step 1
+ 
+Contents for step 1.
+ 
+### Step 2
+ 
+Contents for step 2.
+</Steps>
+
+```mdx
+import { Steps } from 'nextra/components'
+ 
+<Steps>
+### Step 1
+ 
+Contents for step 1.
+ 
+### Step 2
+ 
+Contents for step 2.
+</Steps>
+```
+
+### `FileTree`
+
+Use file tree to display a list of files and folders. You can use the `FileTree` component to define the list of files and folders. The `FileTree.Folder` component should be used inside the `FileTree` component. You can then use the `FileTree.File` component to define each file.
+
+import { FileTree } from 'nextra/components'
+ 
+<FileTree>
+    <FileTree.Folder name="pages" defaultOpen>
+        <FileTree.File name="_meta.json" />
+        <FileTree.File name="contact.md" />
+        <FileTree.File name="index.mdx" />
+        <FileTree.Folder name="about">
+            <FileTree.File name="_meta.json" />
+            <FileTree.File name="legal.md" />
+            <FileTree.File name="index.mdx" />
+        </FileTree.Folder>
+    </FileTree.Folder>
+</FileTree>
+
+```mdx
+import { FileTree } from 'nextra/components'
+ 
+<FileTree>
+    <FileTree.Folder name="pages" defaultOpen>
+        <FileTree.File name="_meta.json" />
+        <FileTree.File name="contact.md" />
+        <FileTree.File name="index.mdx" />
+        <FileTree.Folder name="about">
+            <FileTree.File name="_meta.json" />
+            <FileTree.File name="legal.md" />
+            <FileTree.File name="index.mdx" />
+        </FileTree.Folder>
+    </FileTree.Folder>
+</FileTree>
+```
+
+## Nextra Documentation
+
+For more information about Nextra, see the [Nextra documentation](https://nextra.site/docs).
