@@ -1,0 +1,76 @@
+# General GitHub Workflow
+
+## Basic Setup
+
+Forking a repository on GitHub involves creating your copy of someone else's repository. It's a fundamental feature of GitHub that allows you to contribute to projects, experiment with changes, or use the code as a starting point for your own project.
+
+1. **Creating a Fork:** On GitHub, you'll find a "Fork" button on the top right of a repository page. Clicking this creates a copy of the repository under your GitHub account.
+
+```mermaid
+graph TD;
+    subgraph AA [github.com]
+    id1[(Codebase Repository)] --> id2[Your Copy on GitHub];
+    end
+```
+
+2. **Your Copy:** The forked repository now exists in your GitHub account, and you can make changes to it without affecting the original repository. You can clone this fork to your local machine and start working on it just like you would with any other repository.
+
+```mermaid
+graph TD;
+    subgraph AA [github.com]
+    id1[Your Copy on GitHub];
+    end
+    id1[Your Copy on GitHub] --> id2[Your Local Copy]
+```
+
+3. To create a local copy, find the "Clone or download" button on your GitHub repository page. Clicking this button reveals a URL that you can use to clone the repository to your local machine using the `git clone` command. The full command looks like this:
+
+```bash
+git clone <url>
+```
+
+Notice that the repository on your local machine and the repository on GitHub are now linked, but they *do not sync automatically*. To achieve this, you must manually push and pull changes between them using the `git push` and `git pull` commands.
+
+## Making Changes
+
+The basic workflow for making changes to a repository is as follows:
+
+1. **Create a Branch:** When you're working on a project, you're going to want to create a branch for each new feature or bug fix you implement. This keeps your changes organized and allows you to work on multiple features at once without affecting the main codebase. To create a branch, use the `git checkout` command with the `-b` flag:
+
+```bash
+git checkout -b <branch-name>
+```
+
+2. **Make Changes:** Once you've created a branch, you can start making changes to the codebase. You can use the `git status` command to see which files have been modified, and the `git diff` command to see the exact changes you've made. When you're ready to commit your changes, use the `git add` command to add the files you want to commit, and the `git commit` command to commit them:
+
+```bash
+git add <file1> <file2> ... # or `git add .` to add all files
+git commit -m "Commit message"
+```
+
+3. **Push Changes:** Once you've committed your changes, you can push them to your GitHub repository using the `git push` command:
+
+```bash
+git push origin <branch-name>
+```
+
+4. **Create a Pull Request:** Once you've pushed your changes to your GitHub repository, you can create a pull request to merge them into the main codebase. To do this, go to your repository page on GitHub and click the "New pull request" button. This will take you to a page where you can review your changes and create a pull request.
+
+```mermaid
+graph TD;
+    subgraph AA [github.com]
+    id1[Your Copy on GitHub] --> id2[(Pull Request)];
+    end
+```
+
+Note that any changes you make to your local repository after creating a pull request will be included in the pull request automatically. This means that you can continue working on your branch while the pull request is being reviewed.
+
+Note also that you any changes you do locally must be pushed to your GitHub repository before they can be included in the pull request.
+
+Further note that you can also create a pull request directly from the command line using the `git push` command with the `-u` flag:
+
+```bash
+git push -u origin <branch-name>
+```
+
+5. **Review Changes:** Once you've created a pull request, you can review your changes and make sure everything looks good before merging them into the main codebase. You can also use this time to discuss your changes with other contributors and make sure everyone is on the same page.
