@@ -11,6 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Check if running in the parent repository
+      run: |
+        if [ "${GITHUB_REPOSITORY}" != "systemphil/sphil" ]; then
+          echo "This workflow is only intended for the parent repository. Skipping deployment."
+          exit 0
+        fi
+
     - name: Checkout Code
       uses: actions/checkout@v3
 
