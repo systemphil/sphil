@@ -1,0 +1,49 @@
+name: Deploy to PROD
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - prod
+
+jobs:
+  build_and_deploy:
+    if: github.repository_owner == 'systemphil'
+    environment: prod
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check if running in the parent repository
+      run: |
+        if [ "${GITHUB_REPOSITORY}" != "systemphil/sphil" ]; then
+          echo "This workflow is only intended for the parent repository. Skipping deployment."
+          exit 1
+        fi
+        
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set Up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
+
+    - name: 'Create env file'
+      run: |
+        echo "${{ secrets.ENV_STAGING }}" > .env
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Build
+      run: npm run build
+
+    - name: Auth
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+
+    - name: Deploy
+      uses: 'google-github-actions/deploy-appengine@v2'
+      with:
+        working_directory: ./out
