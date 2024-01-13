@@ -1,0 +1,40 @@
+name: Deploy to DEV
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build_and_deploy:
+    environment: dev
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set Up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
+
+    - name: 'Create env file'
+      run: |
+        echo "${{ secrets.ENV_STAGING }}" > .env
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Build
+      run: npm run build
+
+    - name: Auth
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+
+    - name: Deploy
+      uses: 'google-github-actions/deploy-appengine@v2'
+      with:
+        working_directory: ./out
