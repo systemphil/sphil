@@ -28,7 +28,7 @@ jobs:
 
     - name: 'Create env file'
       run: |
-        echo "${{ secrets.ENV_STAGING }}" > .env
+        echo "${{ secrets.ENV_FILE }}" > .env
 
     - name: Install Dependencies
       run: npm ci
