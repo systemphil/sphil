@@ -1,12 +1,14 @@
 name: Deploy to PROD
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - prod
 
 jobs:
   build_and_deploy:
+    if: github.repository_owner == 'systemphil'
     environment: prod
     runs-on: ubuntu-latest
 
