@@ -15,7 +15,7 @@ jobs:
       run: |
         if [ "${GITHUB_REPOSITORY}" != "systemphil/sphil" ]; then
           echo "This workflow is only intended for the parent repository. Skipping deployment."
-          exit 0
+          exit 1
         fi
 
     - name: Checkout Code
