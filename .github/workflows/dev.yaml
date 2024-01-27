@@ -47,3 +47,4 @@ jobs:
       uses: 'google-github-actions/deploy-appengine@v2'
       with:
         working_directory: ./out
+        deliverables: app.yaml
