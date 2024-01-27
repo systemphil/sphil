@@ -1,12 +1,8 @@
-runtime: python27
-api_version: 1
-threadsafe: true
+runtime: nodejs20
 
 handlers:
-- url: /
-  static_files: www/index.html
-  upload: www/index.html
+  - url: www/static
+    static_dir: public
 
-- url: /(.*)
-  static_files: www/\1
-  upload: www/(.*)
+  - url: www/.*
+    script: auto
