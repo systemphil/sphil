@@ -76,7 +76,7 @@ const LandingPage = () => {
                             </Paragraph>
                         </FadeIn>
                         <FadeIn className="mt-6">
-                            <Link href="/-contributing"><Button>How to contribute</Button></Link>
+                            <Link href="/contributing"><Button>How to contribute</Button></Link>
                         </FadeIn>
                     </div>
                 </div>

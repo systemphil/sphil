@@ -227,4 +227,4 @@ To add an image, you basically make a link but start the code with a bang or exc
 
 ## Conclusion
 
-This covers the basic formatting in Markdown. We encourage you to click <span style="color: gray;">Edit this page on GibHub</span> in the right navigation panel to view the Markdown of this page! Alternatively, [click here](https://github.com/systemphil/sphil/tree/main/src/pages/-contributing/formatting/basic-markdown.md).
+This covers the basic formatting in Markdown. We encourage you to click <span style="color: gray;">Edit this page on GibHub</span> in the right navigation panel to view the Markdown of this page! Alternatively, [click here](https://github.com/systemphil/sphil/tree/main/src/pages/contributing/formatting/basic-markdown.md).
