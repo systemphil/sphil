@@ -45,4 +45,5 @@ jobs:
 
     - name: Deploy
       run: |
+        pwd
         gcloud app deploy ./out/app.yaml
