@@ -45,4 +45,4 @@ jobs:
 
     - name: Deploy
       run: |
-        gcloud app deploy ~/out/app.yaml
+        gcloud app deploy ./out/app.yaml
