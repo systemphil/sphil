@@ -21,7 +21,9 @@ jobs:
         fi
 
     - name: Checkout Code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Set Up Node.js
       uses: actions/setup-node@v3
@@ -38,12 +40,15 @@ jobs:
     - name: Build
       run: npm run build
 
+    - name: Copy app.yaml to out directory
+      run: cp app.yaml ./out/
+
     - name: Auth
       uses: 'google-github-actions/auth@v2'
       with:
         credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
 
     - name: Deploy
-      uses: 'google-github-actions/deploy-appengine@v2'
-      with:
-        working_directory: ./out
+      run: |
+        cd out && ls
+        gcloud app deploy app.yaml
