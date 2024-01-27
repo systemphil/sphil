@@ -40,6 +40,9 @@ jobs:
     - name: Build
       run: npm run build
 
+    - name: Copy app.yaml to out directory
+      run: cp app.yaml ./out/
+
     - name: Auth
       uses: 'google-github-actions/auth@v2'
       with:
@@ -48,4 +51,4 @@ jobs:
     - name: Deploy
       run: |
         cd out && ls
-        # gcloud app deploy app.yaml
+        gcloud app deploy app.yaml
