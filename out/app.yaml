@@ -1,8 +1,8 @@
 runtime: nodejs20
 
 handlers:
-  - url: www/static
+  - url: /static
     static_dir: public
 
-  - url: www/.*
+  - url: /.*
     script: auto
