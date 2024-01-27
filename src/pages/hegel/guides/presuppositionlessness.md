@@ -1,3 +1,5 @@
+# Presuppositionless Thinking
+
 ## Why be presuppositionless?
 
 Simply put, the insistence on presuppositionlessness is a commitment to embarking on a kind of philosophical inquiry that does not proceed according to preconceived notions of how things are but is instead open to the possibility that things may be otherwise. At its most honest, the tenet of presuppositionlessness is the acceptance that our knowledge of things may be flawed or incomplete because the approach that philosophy has taken to comprehend our concepts may have itself been flawed. Thus, it is a voyage of exploration into the regions of pure reason that may or may not disclose something new. It is entirely possible that a presuppositionless approach may yield nothing at all, or nothing at all new. It is equally possible, however, that presuppositionlessness may show us something new about thought. 

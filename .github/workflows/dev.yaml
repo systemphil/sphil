@@ -42,7 +42,10 @@ jobs:
       uses: 'google-github-actions/auth@v2'
       with:
         credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
-
+    
+    # App Engine instance must be created manually within the project with the followig APIs enabled:
+    # App Admin API
+    # Cloud Build API 
     - name: Deploy
       uses: 'google-github-actions/deploy-appengine@v2'
       with:
