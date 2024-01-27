@@ -47,7 +47,5 @@ jobs:
 
     - name: Deploy
       run: |
-        pwd
-        ls
         cd out && ls
-        gcloud app deploy app.yaml
+        # gcloud app deploy app.yaml
