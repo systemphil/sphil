@@ -44,7 +44,5 @@ jobs:
         credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
 
     - name: Deploy
-      uses: 'google-github-actions/deploy-appengine@v2'
-      with:
-        working_directory: ./out
-        deliverables: app.yaml
+      run: |
+        gcloud app deploy ~/out/app.yaml
