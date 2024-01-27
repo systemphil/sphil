@@ -50,5 +50,4 @@ jobs:
 
     - name: Deploy
       run: |
-        cd out && ls
         gcloud app deploy app.yaml
