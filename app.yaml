@@ -1,9 +1,10 @@
 runtime: python312
 
 handlers:
-- url: /(.*\.(html|css|js|png|jpg))$
-  static_files: \1
-  upload: ./(.*\.(html|css|js|png|jpg))$
-- url: /.*
+- url: /
   static_files: index.html
   upload: index.html
+
+- url: /(.*)
+  static_files: \1
+  upload: /(.*)
