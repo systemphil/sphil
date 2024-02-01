@@ -45,8 +45,11 @@ jobs:
         registry: "${{ env.REGION }}-docker.pkg.dev"
 
     - name: Build and Push Container
+      # NEXT_PUBLIC_ env variables have to be set during the build phase. 
       run: |-
         docker build \
+          --build-arg NEXT_PUBLIC_SITE_ROOT=${{secrets.NEXT_PUBLIC_SITE_ROOT}} \
+          --build-arg NEXT_PUBLIC_GA_ID=${{secrets.NEXT_PUBLIC_GA_ID}} \
           -f Dockerfile \
           -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}" ./
         docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"
@@ -58,5 +61,4 @@ jobs:
             --region=${{ env.REGION }} \
             --max-instances=4 \
             --min-instances=default \
-            --update-secrets=NEXT_PUBLIC_SITE_ROOT=NEXT_PUBLIC_SITE_ROOT:latest,NEXT_PUBLIC_GA_ID=NEXT_PUBLIC_GA_ID:latest \
             --image="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"

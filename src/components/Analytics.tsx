@@ -17,7 +17,6 @@ function removeGoogleAnalytics() {
 
 const Analytics = () => {
     const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-    console.log(GA_ID) // TODO remove
     const [hasConsentValue, setHasConsentValue] = useState<boolean>(false);
 
     const loadGoogleAnalytics = useCallback(() => {
