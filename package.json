@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@napi-rs/simple-git-linux-x64-gnu": "^0.1.9",
+    "@napi-rs/simple-git-linux-x64-musl": "^0.1.16",
     "@types/node": "20.6.0",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
