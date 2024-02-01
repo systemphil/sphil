@@ -6,8 +6,6 @@ import { type DocsThemeConfig, useConfig } from "nextra-theme-docs";
 
 const SITE_ROOT = process.env.NEXT_PUBLIC_SITE_ROOT;
 
-console.log(SITE_ROOT); // TODO remove
-
 const config: DocsThemeConfig = {
 	docsRepositoryBase: "https://github.com/systemphil/sphil/tree/main", // root for every edit link
 	editLink: {
