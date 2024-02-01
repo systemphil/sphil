@@ -56,6 +56,7 @@ jobs:
           gcloud run deploy ${{env.SERVICE}} \
             --platform=managed \
             --region=${{ env.REGION }} \
+            --allow-unauthenticated \
             --max-instances=4 \
             --min-instances=1 \
             --update-secrets=NEXT_PUBLIC_SITE_ROOT=NEXT_PUBLIC_SITE_ROOT:latest,NEXT_PUBLIC_GA_ID=NEXT_PUBLIC_GA_ID:latest \
