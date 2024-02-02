@@ -11,6 +11,11 @@ jobs:
     if: github.repository_owner == 'systemphil'
     environment: prod
     runs-on: ubuntu-latest
+    env:
+      PROJECT_ID: ${{ secrets.PROJECT_ID }}
+      SERVICE: ${{ secrets.SERVICE }}
+      REGION: ${{ secrets.REGION }}
+      TAG: latest
 
     steps:
     - name: Check if running in the parent repository
@@ -19,34 +24,40 @@ jobs:
           echo "This workflow is only intended for the parent repository. Skipping deployment."
           exit 1
         fi
-        
+
     - name: Checkout Code
-      uses: actions/checkout@v3
-
-    - name: Set Up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/checkout@v4
       with:
-        node-version: 20
-
-    - name: 'Create env file'
-      run: |
-        echo "${{ secrets.ENV_STAGING }}" > .env
-
-    - name: Install Dependencies
-      run: npm ci
-
-    - name: Build
-      run: npm run build
+        fetch-depth: 0
 
     - name: Auth
       uses: 'google-github-actions/auth@v2'
       with:
         credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
-    
-    # App Engine instance must be created manually within the project with the followig APIs enabled:
-    # App Admin API
-    # Cloud Build API 
-    - name: Deploy
-      uses: 'google-github-actions/deploy-appengine@v2'
+
+    - name: Docker Auth
+      id: docker-auth
+      uses: "docker/login-action@v1"
       with:
-        working_directory: ./out
+        username: _json_key
+        password: "${{ secrets.GOOGLE_CREDENTIALS }}"
+        registry: "${{ env.REGION }}-docker.pkg.dev"
+
+    - name: Build and Push Container
+      # NEXT_PUBLIC_ env variables have to be set during the build phase. 
+      run: |-
+        docker build \
+          --build-arg NEXT_PUBLIC_SITE_ROOT=${{secrets.NEXT_PUBLIC_SITE_ROOT}} \
+          --build-arg NEXT_PUBLIC_GA_ID=${{secrets.NEXT_PUBLIC_GA_ID}} \
+          -f Dockerfile \
+          -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}" ./
+        docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"
+
+    - name: Deploy to Cloud Run
+      run: |
+          gcloud run deploy ${{env.SERVICE}} \
+            --platform=managed \
+            --region=${{ env.REGION }} \
+            --max-instances=4 \
+            --min-instances=default \
+            --image="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"
