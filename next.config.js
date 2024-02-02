@@ -5,7 +5,7 @@ const nextConfig = {
 	images: {
 		unoptimized: true
 	},
-	distDir: "out/www",
+	distDir: "build",
 }
 
 const withNextra = require("nextra")({

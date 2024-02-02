@@ -44,9 +44,9 @@ const navigation = {
     ],
     company: [
         { name: "Team", href: "/team"},
-        { name: "Contributing", href: "/-contributing" },
-        { name: "Methodology", href: "/-contributing/methodology", },
-        { name: "Code of Conduct", href: `/-contributing/code-of-conduct`, },
+        { name: "Contributing", href: "/contributing" },
+        { name: "Methodology", href: "/contributing/methodology", },
+        { name: "Code of Conduct", href: `/contributing/code-of-conduct`, },
     ],
     legal: [
         { name: "Privacy Policy", href: "/privacy" },
