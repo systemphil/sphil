@@ -6,17 +6,16 @@ on:
     branches:
       - dev
 
-env:
-  PROJECT_ID: ${{ secrets.PROJECT_ID }}
-  SERVICE: ${{ secrets.SERVICE }}
-  REGION: ${{ secrets.REGION }}
-  TAG: latest
-
 jobs:
   build_and_deploy:
     if: github.repository_owner == 'systemphil'
     environment: dev 
     runs-on: ubuntu-latest
+    env:
+      PROJECT_ID: ${{ secrets.PROJECT_ID }}
+      SERVICE: ${{ secrets.SERVICE }}
+      REGION: ${{ secrets.REGION }}
+      TAG: latest
 
     steps:
     - name: Check if running in the parent repository
