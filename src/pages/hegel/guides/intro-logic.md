@@ -45,7 +45,7 @@ One thus is, albeit highly expedited, transported to the place of absolute begin
 
 ## Other Predispositions Considered
 
-Hegel considers a number of other typical approaches to logic and its relation to thinking. These help to further specify the determination of logic that Hegel intends to work with.
+Hegel considers a number of other typical approaches to logic and its relation to thinking. These help to further specify the determination of logic that Hegel intends to work with. The following issues are explored in more technical detail, but they all revolve around the core issue of logic being merely something external to concrete reality and formally dependent on it instead of being the self-determining essence of reality.
 
 ### Logic as Mere Form
 
@@ -67,9 +67,17 @@ Hegel notes that the manner one here views logic and its subject matter, thought
 
 > ...when these prejudices are carried over to reason, as if in reason the same relation obtained, as if this relation had any truth in and for itself, then they are errors, and the refutation of them in every part of the spiritual and natural universe is what philosophy is; or rather,since they block the entrance to philosophy, they are the errors that must be removed before one can enter it (Hegel, 2010, 25/21.29).
 
-Curiously, the ancient thinkers, Hegel continues, had a higher conception of thinking since it was reasoned that only things known in thought, as opposed to known immediately, was understood to be the truth of the matter. It is, then, not what is _first_ experienced that is considered true, but what is _thought_ to be so. For example, in the distance an object may appear as a shipwreck but coming closer it becomes apparent that the object is actually a peculiar hut. Did the object itself morph between the two states? No, one reasons that perception gave a certain impression at one point and a different form another, but that the object had been what it was in both respects. One simply comes to _realize_ what the thing really was.
+Curiously, the ancient thinkers, Hegel continues, had a higher conception of thinking since it was reasoned that only things known in thought, as opposed to known immediately, was understood to be the truth of the matter. It is, then, not what is _first_ experienced that is considered true, but what is _thought_ to be so. For example, in the distance an object may appear as a shipwreck but coming closer it becomes apparent that the object is actually a peculiar hut. Did the object itself morph between the two states? No, one reasons that perception gave a certain impression at one point and a different form another, but that the object had been what it was in both respects. One simply comes to _realize_ what the thing really was. Here thought is not alient to the world but is immanent to it, "the _things_ and the _thinking_ of them agree in and for themselves (also our language expresses a kinship between them)" (Hegel, 2010, 25/21.29). 
 
 ### The Conflict of Determinations
+
+Hegel complains that the understanding has taken hold philosophy, and that, what is worse, ordinary common sense is granted dominion over the evaluating the truth about all things. Ordinary common sense being rooted in sensuous reality with the notion that thoughts are _only_ thoughts. Essentially, this view is uncritical and philosophically naive.
+
+However, Hegel detects a more serious obstacle in this thinking when it is attempted to be philosophically applied. When, according to this naive position, thoughts are _only_ thoughts and that real knowledge is the intertwining of thoughtful form and wordly impressions, it can be easily missed that what are assumed to be conflicts of the world are really conflicts of ideas. In Hegel's more technical vocabulary, it is _the conflict of determinations_.
+
+> The basis of the [conception of modern philosophy is] in the insight into the _necessary conflict_ of the determinations of the understanding with themselves. - The reflection already mentioned consists in _transcending_ the concrete immediate, in determining_ and _parting_ it. But this reflection must _equally transcend_ its _seperating_ determinations and above all _connect_ them. The conflict of determinations breaks out precisely at the point of connection. This reflective activity of connection belongs in itself to reason, and to rise above the determinations ad attain insight into their discord is hte great negative step on the way to the true concept of reason (Hegel, 2010, 26/21.30).
+
+When logic is not considered on its own terms but merely in relation to sensuous existence, one fails to grasp that logic is in fact in conflict with itself. Discord and struggle are not exclusive to the domain of wordly reality but are also&mdash;perhaps more intensely&mdash;active in the domain of logic and reason. Philosophy disciplines the ability to distinguish what is proper to each domain and being able to understand when an apprent conflict belongs to wordly reality, the realm of pure logic or is an erronous mismatch between the two. 
 
 ---
 
