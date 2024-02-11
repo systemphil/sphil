@@ -1,0 +1,8 @@
+---
+title: Hegel Guides
+description: Learn about the philosophy of G. W. F. Hegel
+---
+
+## Welcome to the Hegel Guides
+
+Welcome to the guides section on Hegel's philosophy. Here you will find articles that are meant to guide and help newcomers and veteran readers alike into the distinctive thought of the philosopher Hegel. 
