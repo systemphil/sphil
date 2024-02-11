@@ -15,7 +15,7 @@ This is logic as it is commonly known to us. In this vein, logic is like followi
 
 These definitions of logic all fall short of the self-critical demand of philosophy. 
 
-While for most ordinary and pragmatic pursuits, these definitions of logic work perfectly fine; as soon as the self-critical lens of philosophy is applied, it becomes readily apparent that there are incoherent gaps or unquestioned dependencies. A cursory inquiry exposes this: What is valid reasonig and argumentation? What grounds the principles and rules that govern correct and consistent thinking? How does a framework that is external to the issue it looks into have any real authority over that issue? What are the conditions for the possibility of rational thinking; is not *all* thinking, per definition, rational? Can a thought exist that is not rational?
+While for most ordinary and pragmatic pursuits, these definitions of logic work perfectly fine; however, as soon as the self-critical lens of philosophy is applied, it becomes readily apparent that there are incoherent gaps or unwarranted dependencies. A cursory inquiry exposes this: What is valid reasonig and argumentation? What grounds the principles and rules that govern correct and consistent thinking? How does a framework that is external to the issue it looks into have any real authority over that issue? What are the conditions for the possibility of rational thinking; is not *all* thinking, per definition, rational? Can a thought exist that is not rational?
 
 This is why Hegel begins, in the introduction to *The Science of Logic* (SL), with the following statement:
 
