@@ -97,7 +97,7 @@ The take-home message thus being that, if Hegel is right, philosophy cannot but 
 
 ### Logic as Non-Metaphysical
 
-TBC...
+TBC..
 
 ---
 
