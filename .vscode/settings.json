@@ -4,7 +4,11 @@
         "Filip",
         "Niklas",
         "presuppositionless",
+        "presuppositionlessness",
         "Rokni",
         "Sache"
+    ],
+    "cSpell.enableFiletypes": [
+        "mdx"
     ]
 }
