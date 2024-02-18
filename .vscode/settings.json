@@ -11,5 +11,7 @@
     ],
     "cSpell.enableFiletypes": [
         "mdx"
-    ]
+    ],
+    // Prevent MDX throwing false alarms when brackets are used textually
+    "mdx.validate.validateReferences": "ignore"
 }
