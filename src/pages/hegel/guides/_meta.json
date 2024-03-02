@@ -1,10 +1,6 @@
 {
     "index": {
-        "title": ""
+        "title": "Introduction"
     },
-    "-- theScienceOfLogic": {
-        "type": "separator",
-        "title": "The Science of Logic"
-    },
-    "science-of-logic-introduction": ""
+    "fancy-page": "Fancy Page"
 }
