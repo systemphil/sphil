@@ -1,0 +1,18 @@
+{
+    "recommendations": [
+        // Linting
+        "dbaeumer.vscode-eslint",
+
+        // Better comments
+        "aaron-bond.better-comments",
+
+        // Spell checker
+        "streetsidesoftware.code-spell-checker",
+
+        // MDX
+        "unifiedjs.vscode-mdx",
+
+        // Task management
+        "gruntfuggly.todo-tree"
+    ]
+}

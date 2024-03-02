@@ -1,0 +1,29 @@
+{
+    "files.eol": "\n",
+    "cSpell.words": [
+        "Ahilleas",
+        "atemporal",
+        "Befreiung",
+        "Filip",
+        "Georg",
+        "Guyer",
+        "Niklas",
+        "presuppositionless",
+        "presuppositionlessness",
+        "Rokni",
+        "Sache",
+        "simpliciter",
+        "Wissenschaft"
+    ],
+    "cSpell.enableFiletypes": [
+        "mdx"
+    ],
+    // Prevent MDX throwing false alarms when brackets are used textually
+    "mdx.validate.validateReferences": "ignore",
+    "[markdown]": {
+        "editor.wordWrap": "on"
+    },
+    "[mdx]": {
+        "editor.wordWrap": "on"
+    }
+}

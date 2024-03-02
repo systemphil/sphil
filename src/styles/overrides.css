@@ -1,0 +1,4 @@
+/* Override automatic italics of all text in block quotes */
+.nx-italic {
+    font-style: inherit;
+}
