@@ -1,6 +1,13 @@
 {
     "index": {
-        "title": "Introduction"
+        "title": ""
     },
-    "being": "Being"
+    "-- theScienceOfLogic": {
+        "type": "separator",
+        "title": "The Science of Logic"
+    },
+    "being": {
+        "title": ""
+    },
+    "mechanical-object": ""
 }
