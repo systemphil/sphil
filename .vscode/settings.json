@@ -15,6 +15,7 @@
         "Sache",
         "simpliciter",
         "sublated",
+        "Taggart",
         "Wissenschaft"
     ],
     "cSpell.enableFiletypes": [
@@ -22,6 +23,7 @@
     ],
     // Prevent MDX throwing false alarms when brackets are used textually
     "mdx.validate.validateReferences": "ignore",
+    "mdx.validate.validateFileLinks": "ignore",
     "[markdown]": {
         "editor.wordWrap": "on"
     },
