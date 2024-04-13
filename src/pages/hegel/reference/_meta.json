@@ -2,12 +2,18 @@
     "index": {
         "title": ""
     },
-    "-- theScienceOfLogic": {
+    "---": {
         "type": "separator",
         "title": "The Science of Logic"
     },
     "being": {
-        "title": ""
+        "title": "Being"
+    },
+    "nothing": {
+        "title": "Nothing"
+    },
+    "becoming": {
+        "title": "Becoming"
     },
     "mechanical-object": ""
 }
