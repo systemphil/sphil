@@ -15,5 +15,7 @@
     "becoming": {
         "title": "Becoming"
     },
-    "mechanical-object": ""
+    "mechanical-object": {
+        "title": "Mechanical Object"
+    }
 }
