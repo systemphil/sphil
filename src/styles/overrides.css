@@ -2,3 +2,11 @@
 .nx-italic {
     font-style: inherit;
 }
+
+.nx-leading-7 {
+    font-size: large;
+}
+
+.nextra-code-block {
+    font-size: larger;
+}
