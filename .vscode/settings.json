@@ -5,12 +5,15 @@
         "analysed",
         "atemporal",
         "Befreiung",
+        "Burbidge",
         "Filip",
         "Georg",
         "Guyer",
+        "Houlgate",
         "itselfness",
         "Keon",
         "mindmap",
+        "Houlgate",
         "Niklas",
         "posteriori",
         "presuppositionless",
@@ -18,6 +21,9 @@
         "Rokni",
         "Sache",
         "simpliciter",
+        "spatio",
+        "sublated",
+        "Taggart",
         "sublated",
         "Wissenschaft"
     ],
@@ -26,6 +32,7 @@
     ],
     // Prevent MDX throwing false alarms when brackets are used textually
     "mdx.validate.validateReferences": "ignore",
+    "mdx.validate.validateFileLinks": "ignore",
     "[markdown]": {
         "editor.wordWrap": "on"
     },

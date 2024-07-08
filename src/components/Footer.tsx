@@ -163,16 +163,14 @@ function FooterContent() {
 
                 <div className="pt-8 mt-8 sm:flex sm:items-center sm:justify-between">
                     <div>
-                        <a
+                        <Link
                             className="text-current flex gap-4 items-center"
                             target="_blank"
-                            rel="noopener noreferrer"
-                            title="homepage"
                             href="/"
                         >
                             <LogoOwl />
                             <LogoAnimated animation={false} />
-                        </a>
+                        </Link>
                         <p className="mt-4 text-xs text-gray-500 dark:text-[#888888]">
                         &copy; {new Date().getFullYear()} Eru Iluvatar, Ltd. All rights reserved.
                         </p>

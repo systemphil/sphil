@@ -14,6 +14,9 @@
     },
     "reference": {
         "title": "Reference",
-        "type": "page"
+        "type": "page",
+        "theme": {
+            "pagination": false
+        }
     }
 }
