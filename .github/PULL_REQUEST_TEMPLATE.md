@@ -28,7 +28,7 @@ Each PR should _either_ contribute content or functional code.
         ```
 
         </details>
-    - [ ] If the article is a stub or you want to actively encourage contribution, please add the following code at the bottom of the article content:
+    - [ ] My article is a stub or I want to actively encourage contribution, I've added the Stub component:
         <details>
         <summary>
         See example 🌿
@@ -38,6 +38,7 @@ Each PR should _either_ contribute content or functional code.
 
         ```ts
         import Stub from "@/components/Stub";
+
         <Stub />
         ```
 
