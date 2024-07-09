@@ -6,13 +6,15 @@ Each PR should _either_ contribute content or functional code.
 
 ## Checklist (pick `Docs` or `Code`)
 
+🚩`REQUIRED`
+
 <!-- put `x` inside of the brackets to click the check marks after you've opened your PR -->
 
 - [ ] Docs contribution (philosophy, literature, content)
-    - [ ] I accept that my writing is submitted under the [ATTRIBUTION-NONCOMMERCIAL-SHAREALIKE 4.0 INTERNATIONAL](https://creativecommons.org/licenses/by-nc-sa/4.0/), which, briefly put, prohibits commercial re-use of the content, but allows sharing, remixing and building upon the material insofar as attribution is given (see [legal code](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.en)), and in this regard I understand that my writing is open to be modified, remixed and build upon by others in the sPhil community within the `systemphil/sphil` project in future perpetuity.
-    - [ ] I have followed the [formatting guidelines](https://github.com/systemphil/sphil/blob/dev/src/pages/contributing/formatting/basic-markdown.md).
-    - [ ] I have followed the [MLA citation style](https://owl.purdue.edu/owl/research_and_citation/mla_style/mla_formatting_and_style_guide/mla_formatting_and_style_guide.html).
-    - [ ] I have added or verified title and description metadata.
+    - [ ] 🚩 I accept that my writing is submitted under the [ATTRIBUTION-NONCOMMERCIAL-SHAREALIKE 4.0 INTERNATIONAL](https://creativecommons.org/licenses/by-nc-sa/4.0/), which, briefly put, prohibits commercial re-use of the content, but allows sharing, remixing and building upon the material insofar as attribution is given (see [legal code](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.en)), and in this regard I understand that my writing is open to be modified, remixed and build upon by others in the sPhil community within the `systemphil/sphil` project in future perpetuity.
+    - [ ] 🚩 I have followed the [formatting guidelines](https://github.com/systemphil/sphil/blob/dev/src/pages/contributing/formatting/basic-markdown.md).
+    - [ ] 🚩 I have followed the [MLA citation style](https://owl.purdue.edu/owl/research_and_citation/mla_style/mla_formatting_and_style_guide/mla_formatting_and_style_guide.html).
+    - [ ] 🚩 I have added or verified title and description metadata.
         <details>
         <summary>
         See example 📜
@@ -26,7 +28,7 @@ Each PR should _either_ contribute content or functional code.
         ```
 
         </details>
-    - [ ] (_optional_) If the article is a stub or you want to actively encourage contribution, please add the following code at the bottom of the article content:
+    - [ ] If the article is a stub or you want to actively encourage contribution, please add the following code at the bottom of the article content:
         <details>
         <summary>
         See example 🌿
@@ -40,7 +42,7 @@ Each PR should _either_ contribute content or functional code.
         ```
 
         </details>
-    - [ ] I have added, verified or extended a bibliography.
+    - [ ] 🚩 I have added, verified or extended a bibliography.
         <details>
         <summary>
         See example 📚
@@ -59,7 +61,7 @@ Each PR should _either_ contribute content or functional code.
 
         </details>
     
-    - [ ] (_optional_) I have signed the document with my name/username under either as `Authors`, `Editors` or `Contributors`. 
+    - [ ] I have signed the document with my name/username under either as `Authors`, `Editors` or `Contributors`. 
         <details>
         <summary>
         See example ✒️
@@ -86,7 +88,7 @@ Each PR should _either_ contribute content or functional code.
         If you prefer to remain anonymous, that's fine too, but note that a record of your contributions based on your GitHub username will exist here in the codebase.
 
         </details>
-    - [ ] (_optional_) If the article makes use of footnotes, I have checked that `**Notes**` is exactly the very last item in the article.
+    - [ ] If the article makes use of footnotes, I have checked that `**Notes**` is exactly the very last item in the article.
 
 
 - [ ] Code contribution ([Apache version 2 license](https://www.apache.org/licenses/LICENSE-2.0.txt))
