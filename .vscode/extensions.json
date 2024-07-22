@@ -13,6 +13,9 @@
         "unifiedjs.vscode-mdx",
 
         // Task management
-        "gruntfuggly.todo-tree"
+        "gruntfuggly.todo-tree",
+
+        // Git Lens
+        "eamodio.gitlens"
     ]
 }

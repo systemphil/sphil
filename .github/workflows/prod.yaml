@@ -2,9 +2,8 @@ name: Deploy to PROD
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - prod
+  release:
+    types: [created]
 
 jobs:
   build_and_deploy:

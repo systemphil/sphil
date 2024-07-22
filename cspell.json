@@ -1,0 +1,36 @@
+{
+    "version": "0.2",
+    "ignorePaths": [],
+    "dictionaryDefinitions": [],
+    "dictionaries": [],
+    "words": [
+        "Ahilleas",
+        "analysed",
+        "atemporal",
+        "Befreiung",
+        "Burbidge",
+        "Filip",
+        "Georg",
+        "Guyer",
+        "Houlgate",
+        "itselfness",
+        "Keon",
+        "mindmap",
+        "Niklas",
+        "posteriori",
+        "presuppositionless",
+        "presuppositionlessness",
+        "Realphilosophie",
+        "Rokni",
+        "Sache",
+        "simpliciter",
+        "spatio",
+        "sublated",
+        "Taggart",
+        "Wissenschaft"
+    ],
+    "enableFiletypes": [
+        "mdx"
+    ],
+    "import": []
+}

@@ -1,35 +1,5 @@
 {
     "files.eol": "\n",
-    "cSpell.words": [
-        "Ahilleas",
-        "analysed",
-        "atemporal",
-        "Befreiung",
-        "Burbidge",
-        "Filip",
-        "Georg",
-        "Guyer",
-        "Houlgate",
-        "itselfness",
-        "Keon",
-        "mindmap",
-        "Houlgate",
-        "Niklas",
-        "posteriori",
-        "presuppositionless",
-        "presuppositionlessness",
-        "Rokni",
-        "Sache",
-        "simpliciter",
-        "spatio",
-        "sublated",
-        "Taggart",
-        "sublated",
-        "Wissenschaft"
-    ],
-    "cSpell.enableFiletypes": [
-        "mdx"
-    ],
     // Prevent MDX throwing false alarms when brackets are used textually
     "mdx.validate.validateReferences": "ignore",
     "mdx.validate.validateFileLinks": "ignore",
