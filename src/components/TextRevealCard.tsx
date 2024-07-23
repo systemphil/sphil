@@ -6,6 +6,10 @@ import { twMerge } from "tailwind-merge";
 import { cn } from "@/util/cn";
 import { SchoolOutlined } from "@mui/icons-material";
 
+/**
+ * Thanks to Aceternity UI for the following code snippet. It has been modified to match the project's needs.
+ * @docs https://ui.aceternity.com/components/text-reveal-card
+ */
 export const TextRevealCard = ({
     text,
     revealText,
