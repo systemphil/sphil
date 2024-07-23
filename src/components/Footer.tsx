@@ -7,7 +7,8 @@ import LogoOwl from "./LogoOwl";
 import { clearCookies } from "@/util/clearCookies";
 import Button from "@/components/Button";
 
-const footerLinkClasses = "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 hover:dark:text-gray-200 transition";
+const footerLinkClasses =
+    "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 hover:dark:text-gray-200 transition";
 
 function FooterLink({ href, children }: { href: string; children: ReactNode }) {
     if (href.startsWith("http")) {
@@ -31,7 +32,7 @@ function FooterHeader({ children }: { children: ReactNode }) {
 const navigation = {
     general: [
         { name: "Blog", href: "/blog" },
-        { name: "Symposia", href: "/" },
+        { name: "Symposia", href: "https://symposia.systemphil.com" },
         { name: "Acknowledgements", href: "/acknowledgements" },
     ],
     hegel: [
@@ -43,37 +44,40 @@ const navigation = {
         { name: "Reference", href: "/kant/reference" },
     ],
     company: [
-        { name: "Team", href: "/team"},
+        { name: "Team", href: "/team" },
         { name: "Contributing", href: "/contributing" },
-        { name: "Methodology", href: "/contributing/methodology", },
-        { name: "Code of Conduct", href: `/contributing/code-of-conduct`, },
+        { name: "Methodology", href: "/contributing/methodology" },
+        { name: "Code of Conduct", href: `/contributing/code-of-conduct` },
     ],
     legal: [
         { name: "Privacy Policy", href: "/privacy" },
         { name: "Terms of Use", href: "/terms" },
     ],
     support: [
-        { name: "GitHub ↗", href: "https://github.com/systemphil/", },
+        { name: "GitHub ↗", href: "https://github.com/systemphil/" },
         { name: "YouTube ↗", href: "https://www.youtube.com/@systemphil" },
     ],
 };
 
 function FooterContent() {
-    
     const handleClearCookies = () => {
         clearCookies();
-        const dialog = document.getElementById("cookie-dialog") as HTMLDialogElement;
+        const dialog = document.getElementById(
+            "cookie-dialog"
+        ) as HTMLDialogElement;
         if (dialog) {
             dialog.show();
         }
-    }
+    };
 
     const handleCloseDialog = () => {
-        const dialog = document.getElementById("cookie-dialog") as HTMLDialogElement;
+        const dialog = document.getElementById(
+            "cookie-dialog"
+        ) as HTMLDialogElement;
         if (dialog) {
             dialog.close();
         }
-    }
+    };
 
     return (
         <div className="w-full" aria-labelledby="footer-heading">
@@ -86,75 +90,118 @@ function FooterContent() {
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 md:gap-8">
                             <div className="mt-12 md:!mt-0">
                                 <FooterHeader>Resources</FooterHeader>
-                                <ul role="list" className="mt-4 space-y-1.5 list-none ml-0">
-                                {navigation.general.map((item) => (
-                                    <li key={item.name}>
-                                        <FooterLink href={item.href}>{item.name}</FooterLink>
-                                    </li>
-                                ))}
+                                <ul
+                                    role="list"
+                                    className="mt-4 space-y-1.5 list-none ml-0"
+                                >
+                                    {navigation.general.map((item) => (
+                                        <li key={item.name}>
+                                            <FooterLink href={item.href}>
+                                                {item.name}
+                                            </FooterLink>
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
                             <div className="mt-12 md:!mt-0">
                                 <FooterHeader>Hegel</FooterHeader>
-                                <ul role="list" className="mt-4 space-y-1.5 list-none ml-0">
-                                {navigation.hegel.map((item) => (
-                                    <li key={item.name}>
-                                        <FooterLink href={item.href}>{item.name}</FooterLink>
-                                    </li>
-                                ))}
+                                <ul
+                                    role="list"
+                                    className="mt-4 space-y-1.5 list-none ml-0"
+                                >
+                                    {navigation.hegel.map((item) => (
+                                        <li key={item.name}>
+                                            <FooterLink href={item.href}>
+                                                {item.name}
+                                            </FooterLink>
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
                             <div className="mt-12 md:!mt-0">
                                 <FooterHeader>Kant</FooterHeader>
-                                <ul role="list" className="mt-4 space-y-1.5 list-none ml-0">
-                                {navigation.kant.map((item) => (
-                                    <li key={item.name}>
-                                        <FooterLink href={item.href}>{item.name}</FooterLink>
-                                    </li>
-                                ))}
+                                <ul
+                                    role="list"
+                                    className="mt-4 space-y-1.5 list-none ml-0"
+                                >
+                                    {navigation.kant.map((item) => (
+                                        <li key={item.name}>
+                                            <FooterLink href={item.href}>
+                                                {item.name}
+                                            </FooterLink>
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
                             <div className="mt-12 md:!mt-0">
                                 <FooterHeader>About</FooterHeader>
-                                <ul role="list" className="mt-4 space-y-1.5 list-none ml-0">
-                                {navigation.company.map((item) => (
-                                    <li key={item.name}>
-                                        <FooterLink href={item.href}>{item.name}</FooterLink>
-                                    </li>
-                                ))}
+                                <ul
+                                    role="list"
+                                    className="mt-4 space-y-1.5 list-none ml-0"
+                                >
+                                    {navigation.company.map((item) => (
+                                        <li key={item.name}>
+                                            <FooterLink href={item.href}>
+                                                {item.name}
+                                            </FooterLink>
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
                             <div className="mt-12 md:!mt-0">
                                 <FooterHeader>Legal</FooterHeader>
-                                <ul role="list" className="mt-4 space-y-1.5 list-none ml-0">
-                                {navigation.legal.map((item) => (
-                                    <li key={item.name}>
-                                        <FooterLink href={item.href}>{item.name}</FooterLink>
-                                    </li>
-                                ))}
-                                    <li 
+                                <ul
+                                    role="list"
+                                    className="mt-4 space-y-1.5 list-none ml-0"
+                                >
+                                    {navigation.legal.map((item) => (
+                                        <li key={item.name}>
+                                            <FooterLink href={item.href}>
+                                                {item.name}
+                                            </FooterLink>
+                                        </li>
+                                    ))}
+                                    <li
                                         key="cookie-removal"
                                         onClick={() => handleClearCookies()}
                                     >
-                                        <button className={footerLinkClasses}>Delete Cookies</button>
+                                        <button className={footerLinkClasses}>
+                                            Delete Cookies
+                                        </button>
                                     </li>
-                                    
+
                                     <dialog id="cookie-dialog">
                                         <div className="flex flex-col items-center justify-center max-w-md shadow p-4 rounded-md">
-                                            <span className="p-2">All cookies should now be deleted and you will be asked upon next visit to accept or decline cookies.</span>
-                                            <Button onClick={() => handleCloseDialog()}>Close</Button>
+                                            <span className="p-2">
+                                                All cookies should now be
+                                                deleted and you will be asked
+                                                upon next visit to accept or
+                                                decline cookies.
+                                            </span>
+                                            <Button
+                                                onClick={() =>
+                                                    handleCloseDialog()
+                                                }
+                                            >
+                                                Close
+                                            </Button>
                                         </div>
                                     </dialog>
                                 </ul>
                             </div>
                             <div className="mt-12 md:!mt-0">
                                 <FooterHeader>Support</FooterHeader>
-                                <ul role="list" className="mt-4 space-y-1.5 list-none ml-0">
-                                {navigation.support.map((item) => (
-                                    <li key={item.name}>
-                                        <FooterLink href={item.href}>{item.name}</FooterLink>
-                                    </li>
-                                ))}
+                                <ul
+                                    role="list"
+                                    className="mt-4 space-y-1.5 list-none ml-0"
+                                >
+                                    {navigation.support.map((item) => (
+                                        <li key={item.name}>
+                                            <FooterLink href={item.href}>
+                                                {item.name}
+                                            </FooterLink>
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
                         </div>
@@ -172,7 +219,8 @@ function FooterContent() {
                             <LogoAnimated animation={false} />
                         </Link>
                         <p className="mt-4 text-xs text-gray-500 dark:text-[#888888]">
-                        &copy; {new Date().getFullYear()} Eru Iluvatar, Ltd. All rights reserved.
+                            &copy; {new Date().getFullYear()} Eru Iluvatar, Ltd.
+                            All rights reserved.
                         </p>
                     </div>
                 </div>
