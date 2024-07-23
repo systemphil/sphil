@@ -6,6 +6,7 @@ import LogoAnimated from "./LogoAnimated";
 import LogoOwl from "./LogoOwl";
 import { clearCookies } from "@/util/clearCookies";
 import Button from "@/components/Button";
+import { SymposiaCard } from "./SymposiaCard";
 
 const footerLinkClasses =
     "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 hover:dark:text-gray-200 transition";
@@ -208,7 +209,7 @@ function FooterContent() {
                     </div>
                 </div>
 
-                <div className="pt-8 mt-8 sm:flex sm:items-center sm:justify-between">
+                <div className="pt-8 mt-8 sm:flex sm:items-center sm:justify-between gap-28">
                     <div>
                         <Link
                             className="text-current flex gap-4 items-center"
@@ -222,6 +223,10 @@ function FooterContent() {
                             &copy; {new Date().getFullYear()} Eru Iluvatar, Ltd.
                             All rights reserved.
                         </p>
+                    </div>
+
+                    <div className="visible xl:hidden">
+                        <SymposiaCard />
                     </div>
                 </div>
             </div>
