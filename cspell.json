@@ -25,12 +25,19 @@
         "Sache",
         "simpliciter",
         "spatio",
+        "sphil",
         "sublated",
+        "systemphil",
         "Taggart",
         "Wissenschaft"
     ],
     "enableFiletypes": [
         "mdx"
+    ],
+    "ignoreWords": [
+        "encyclopaedia",
+        "msapplication",
+        "nextra"
     ],
     "import": []
 }
