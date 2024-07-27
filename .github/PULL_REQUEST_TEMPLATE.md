@@ -1,13 +1,13 @@
 <!-- Thank you for wanting to contribute to sPhil! 🧙 🦉 -->
-<!-- We would like to keep our code and writing as neat and tidy as possible, and would appreciate if you could verify the following checklist. Each PR should _either_ contribute content or functional code. -->
+<!-- We would like to keep our code and writing as neat and tidy as possible, and would appreciate if you could verify the following checklist if you are submitting philosophical or literary content -->
 
 ## PR Author's Note
 
 <!-- Write your PR text here -->
 
-## Checklist (pick `Docs` or `Code`)
+## Checklist
 
--   [ ] Docs contribution (philosophy, literature, content)
+-   [ ] **Checked:** Docs contribution (philosophy, literature, content). Leave **unchecked** for <code>code</code> contribution.
 
     -   [ ] **REQUIRED** I accept that my writing is submitted under the [ATTRIBUTION-NONCOMMERCIAL-SHAREALIKE 4.0 INTERNATIONAL](https://creativecommons.org/licenses/by-nc-sa/4.0/), which, briefly put, prohibits commercial re-use of the content, but allows sharing, remixing and building upon the material insofar as attribution is given (see [legal code](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.en)), and in this regard I understand that my writing is open to be modified, remixed and build upon by others in the sPhil community within the `systemphil/sphil` project in future perpetuity.
     -   [ ] **REQUIRED** I have followed the [formatting guidelines](https://github.com/systemphil/sphil/blob/dev/src/pages/contributing/formatting/basic-markdown.md) and verified there are no formatting bugs. [Try markdown preview here](https://markdownlivepreview.com/).
@@ -64,7 +64,7 @@
 
     -   [ ] If the article makes use of footnotes, I have checked that `**Notes**` is exactly the very last item in the file.
 
--   [ ] Code contribution ([Apache version 2 license](https://www.apache.org/licenses/LICENSE-2.0.txt))
+-   **If Docs contribution is unchecked:** Code contribution ([Apache version 2 license](https://www.apache.org/licenses/LICENSE-2.0.txt))
       <details>
 
     All code apart of what is inside `src/pages/**` (excluding `/contributing/**`, `_app.mdx`, `_document.tsx`, `_meta.json`, `acknowledgements.mdx`, `index.mdx`, `privacy.mdx`, `team.mdx`, `terms.mdx`) is subject to Apache version 2 license. Basically, anything outside of content, literature, philosophy.
