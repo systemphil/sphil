@@ -7,7 +7,7 @@
 
 ## Checklist
 
--   [ ] **Checked:** Docs contribution (philosophy, literature, content). Leave **unchecked** for <code>code</code> contribution.
+-   [ ] Docs contribution (philosophy, literature, content). Leave **unchecked** for <code>code</code> contribution.
 
     -   [ ] **REQUIRED** I accept that my writing is submitted under the [ATTRIBUTION-NONCOMMERCIAL-SHAREALIKE 4.0 INTERNATIONAL](https://creativecommons.org/licenses/by-nc-sa/4.0/), which, briefly put, prohibits commercial re-use of the content, but allows sharing, remixing and building upon the material insofar as attribution is given (see [legal code](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.en)), and in this regard I understand that my writing is open to be modified, remixed and build upon by others in the sPhil community within the `systemphil/sphil` project in future perpetuity.
     -   [ ] **REQUIRED** I have followed the [formatting guidelines](https://github.com/systemphil/sphil/blob/dev/src/pages/contributing/formatting/basic-markdown.md) and verified there are no formatting bugs. [Try markdown preview here](https://markdownlivepreview.com/).
