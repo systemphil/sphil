@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { useRouter } from "next/router";
 import { type DocsThemeConfig, useConfig } from "nextra-theme-docs";
 import { SymposiaCard } from "@/components/SymposiaCard";
+import { ArticleWrapper } from "@/components/ArticleWrapper";
 
 const SITE_ROOT = process.env.NEXT_PUBLIC_SITE_ROOT;
 
@@ -88,6 +89,7 @@ const config: DocsThemeConfig = {
     },
     logo: NavbarHeader,
     logoLink: false,
+    main: ArticleWrapper,
     navbar: {
         component: Navigation,
     },

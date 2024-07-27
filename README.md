@@ -1,6 +1,6 @@
 # 🚧 This is a work in progress
 
-If you'd like to be part of the development of sPhil, kindly follow the instructions below. If you have any further questions or would like to get involved, [get in touch with Firgrep here](https://www.filipniklas.com/#/contact).
+If you'd like to be part of the development of sPhil, kindly follow the instructions below. If you have any further questions or would like to get involved, [get in touch with Filip (Firgrep) here](mailto:service@systemphil.com).
 
 ## Setting up your local environment and branch
 
@@ -26,7 +26,11 @@ If you'd like to be part of the development of sPhil, kindly follow the instruct
 
 9.9. Finally, to start a local development server, run `npm run dev` and open up `http://localhost:3000` on your favorite browser.
 
-- Whenever you make any edits to the source files while the server is running, the server will pick up those changes and output them immediately. This is extremely handy during development, as you can input code and hit `ctrl` + `k` then `s` (save-all) and view directly your latest changes.
-- To terminate the server, hit `ctrl` + `c` on your keyboard whilst in the terminal where the server runs, input `y` when prompted to terminate batch job.
+-   Whenever you make any edits to the source files while the server is running, the server will pick up those changes and output them immediately. This is extremely handy during development, as you can input code and hit `ctrl` + `k` then `s` (save-all) and view directly your latest changes.
+-   To terminate the server, hit `ctrl` + `c` on your keyboard whilst in the terminal where the server runs, input `y` when prompted to terminate batch job.
 
 > ❗ You may get an error (e.g. `useRef` is `null`) as your development server refreshes. This is likely due to how `nextra` processes the `mdx` files. Perform a hard refresh (hit `F5`) to resolve this.
+
+## License
+
+All files and content under `/src/pages`, with the exception of `/src/pages/_app.mdx`, `/src/pages/_document.tsx`, `/src/pages/acknowledgements.tsx`, `/src/pages/index.mdx`, `/src/pages/privacy.tsx`, `/src/pages/team.mdx`, `/src/pages/terms.mdx`, any files within `src/pages/contributing` folder and any `_meta.json` files, are subject to Attribution-NonCommercial-ShareAlike 4.0 International License. The rest follows Apache License Version 2.0, January 2004.
