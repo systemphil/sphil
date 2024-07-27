@@ -1,0 +1,3 @@
+-   Burbidge, John. _On Hegel's Logic: Fragments of A Commentary_. Humanities Press, 1981.
+-   Houlgate, Stephen. _Hegel on Being_. _Quality and the Birth of Quantity in Hegel's Science of Logic_ Volume 1. Bloomsbury Academic, 2022.
+-   McTaggart, John. _A Commentary on Hegel's Logic_. Cambridge University Press, 1910.
