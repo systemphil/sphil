@@ -6,7 +6,10 @@ import { CreativeCommonsLogo } from "./icons/CreativeCommonsLogo";
 export const License = () => {
     const path = usePathname();
 
-    if (path.startsWith("/contributing")) {
+    if (
+        path.startsWith("/contributing") ||
+        path.startsWith("/acknowledgements")
+    ) {
         return null;
     }
 
