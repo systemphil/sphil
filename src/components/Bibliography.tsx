@@ -1,11 +1,15 @@
 import BibliographyData from "../data/bibliography.json";
 
-type BibliographyEntry = `${string}, ${number}${string | undefined}`;
+type BibliographyComponentEntry = `${string}, ${number}${string | undefined}`;
 
 /**
  * @example <Bibliography entries={["Hegel, 2010", "Burbidge, 1981"]} />
  */
-export function Bibliography({ entries }: { entries: BibliographyEntry[] }) {
+export function Bibliography({
+    entries,
+}: {
+    entries: BibliographyComponentEntry[];
+}) {
     const bibliographyData = BibliographyData.toSorted();
     const output: string[] = [];
 

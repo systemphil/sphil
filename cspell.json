@@ -35,9 +35,11 @@
         "mdx"
     ],
     "ignoreWords": [
+        "biblatex",
         "encyclopaedia",
         "msapplication",
-        "nextra"
+        "nextra",
+        "splitn"
     ],
     "import": []
 }
