@@ -36,6 +36,7 @@
     ],
     "ignoreWords": [
         "biblatex",
+        "datetime",
         "encyclopaedia",
         "msapplication",
         "nextra",
