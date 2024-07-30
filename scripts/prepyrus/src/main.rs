@@ -44,7 +44,7 @@ fn main() {
 
     // Verify MDX files integrity
     for mdx_path in &mdx_paths {
-        let (_, _, _) = match read_mdx_file(&mdx_path) {
+        let (metadata, markdown_content, _) = match read_mdx_file(&mdx_path) {
             Ok(data) => data,
             Err(err) => {
                 if err.kind() == io::ErrorKind::InvalidData {
@@ -56,13 +56,40 @@ fn main() {
                 }
             }
         };
+        if !metadata.is_article {
+            continue;
+        }
+        let citations = extract_citations_from_markdown(&markdown_content);
+        match verify_citations_format(&citations) {
+            Ok(_) => {}
+            Err(err) => {
+                eprintln!("Error verifying citations: {} in {}", err, mdx_path);
+                std::process::exit(1);
+            }
+        };
+        let citations_set = create_citations_set(citations);
+        if citations_set.is_empty() {
+            continue;
+        }
+        println!("{:?}", citations_set);
+        println!("No of unique citations: {:?}", citations_set.len());
+        match match_citations_to_bibliography(citations_set, &all_entries) {
+            Ok(data) => data,
+            Err(err) => {
+                eprintln!(
+                    "Error matching citations to bibliography: {} in {}",
+                    err, mdx_path
+                );
+                std::process::exit(1);
+            }
+        };
     }
     println!("===Integrity check OK");
 
     // Process MDX files
-    for mdx_path in mdx_paths {
-        process_mdx_file(&mdx_path, &all_entries);
-    }
+    // for mdx_path in mdx_paths {
+    //     process_mdx_file(&mdx_path, &all_entries);
+    // }
 
     println!("===Prepyrus completed successfully!");
 }
@@ -82,16 +109,13 @@ fn process_mdx_file(path: &str, all_entries: &Vec<Entry>) {
     };
 
     if !metadata.is_article {
-        eprintln!("Invalid file format. Please provide a file with isArticle set to true.");
-        std::process::exit(1);
+        return;
     }
 
-    println!("Is article: {}", metadata.title);
-    return;
+    // todo remove
+    // println!("Is article: {}", metadata.title);
 
     let citations = extract_citations_from_markdown(&markdown_content);
-    // println!("{:?}", citations);
-    println!("No of citations: {:?}", citations.len());
 
     match verify_citations_format(&citations) {
         Ok(_) => {}
@@ -105,6 +129,7 @@ fn process_mdx_file(path: &str, all_entries: &Vec<Entry>) {
     println!("{:?}", citations_set);
     println!("No of unique citations: {:?}", citations_set.len());
 
+    // todo - handle the case if citations set is empty
     let matched_citations = match match_citations_to_bibliography(citations_set, &all_entries) {
         Ok(data) => data,
         Err(err) => {
@@ -169,6 +194,7 @@ fn filter_mdx_paths_for_exceptions(mdx_paths: Vec<String>, exceptions: Vec<Strin
 
 #[derive(Debug, Deserialize)]
 struct Metadata {
+    #[allow(dead_code)]
     title: String,
     #[allow(dead_code)]
     description: String,
