@@ -8,43 +8,86 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.len() < 2 {
         eprintln!(
-            "Library missing. Please provide a file path as an argument. Remember to include the .bib extension."
+            "Library missing. Please provide a file path as a first argument. Remember to include the .bib extension."
         );
         std::process::exit(1);
     }
     if args.len() < 3 {
-        eprintln!(
-            "Target markdown missing. Please provide a file path as an argument. Remember to include the .mdx extension."
-        );
+        eprintln!("Target folder missing. Please provide a path as a second argument.");
         std::process::exit(1);
     }
-    let src = fs::read_to_string(&args[1]).unwrap();
     if !args[1].ends_with(".bib") {
         eprintln!("Invalid file format. Please provide a file with .bib extension.");
         std::process::exit(1);
     }
-    if !args[2].ends_with(".mdx") {
-        eprintln!("Invalid file format. Please provide a file with .mdx extension.");
-        std::process::exit(1);
-    }
 
+    let exceptions = vec![
+        "src/pages/contributing/",
+        "src/pages/privacy.mdx",
+        "src/pages/terms.mdx",
+        "src/pages/team.mdx",
+        "src/pages/acknowledgements.mdx",
+        "src/pages/index.mdx",
+        "src/pages/_app.mdx",
+    ]
+    .iter()
+    .map(|&s| s.to_string())
+    .collect::<Vec<String>>();
+
+    let mdx_paths_raw = extract_mdx_paths(&args[2]).unwrap();
+    let mdx_paths = filter_mdx_paths_for_exceptions(mdx_paths_raw, exceptions);
+    println!("{:?}", mdx_paths);
+
+    let src = fs::read_to_string(&args[1]).unwrap();
     let bibliography = Bibliography::parse(&src).unwrap();
     let all_entries = bibliography.into_vec();
 
-    let (metadata, markdown_content, full_file_content) = match read_mdx_file(&args[2]) {
+    // Verify MDX files integrity
+    for mdx_path in &mdx_paths {
+        let (_, _, _) = match read_mdx_file(&mdx_path) {
+            Ok(data) => data,
+            Err(err) => {
+                if err.kind() == io::ErrorKind::InvalidData {
+                    eprintln!("Invalid MDX data format: {}", err);
+                    std::process::exit(1);
+                } else {
+                    eprintln!("Unexpected error reading MDX file: {}", err);
+                    std::process::exit(1);
+                }
+            }
+        };
+    }
+    println!("===Integrity check OK");
+
+    // Process MDX files
+    for mdx_path in mdx_paths {
+        process_mdx_file(&mdx_path, &all_entries);
+    }
+
+    println!("===Prepyrus completed successfully!");
+}
+
+fn process_mdx_file(path: &str, all_entries: &Vec<Entry>) {
+    let (metadata, markdown_content, full_file_content) = match read_mdx_file(path) {
         Ok(data) => data,
         Err(err) => {
-            eprintln!("Error reading MDX file: {}", err);
-            std::process::exit(1);
+            if err.kind() == io::ErrorKind::InvalidData {
+                eprintln!("Invalid MDX data format: {}", err);
+                std::process::exit(1);
+            } else {
+                eprintln!("Unexpected error reading MDX file: {}", err);
+                std::process::exit(1);
+            }
         }
     };
-
-    println!("Is article: {}", metadata.is_article);
 
     if !metadata.is_article {
         eprintln!("Invalid file format. Please provide a file with isArticle set to true.");
         std::process::exit(1);
     }
+
+    println!("Is article: {}", metadata.title);
+    return;
 
     let citations = extract_citations_from_markdown(&markdown_content);
     // println!("{:?}", citations);
@@ -75,26 +118,68 @@ fn main() {
 
     let updated_markdown_content = format!("{}\n{}", full_file_content, html_bibliography);
 
-    match write_html_to_mdx_file(&args[2], &updated_markdown_content) {
+    match write_html_to_mdx_file(path, &updated_markdown_content) {
         Ok(_) => println!("HTML bibliography injected successfully!"),
         Err(err) => {
             eprintln!("Error writing HTML to MDX file: {}", err);
             std::process::exit(1);
         }
     }
+}
 
-    // let entry = bibliography.get("hegel2010logic").unwrap();
-    // let author = entry.author().unwrap();
-    // println!("{}", author[0].name);
-    // assert_eq!(author[0].name, "Tolkien");
+/// Excavates all MDX files in a directory and its subdirectories
+/// and returns a vector of paths to the MDX files.
+/// The function skips the "contributing" folder.
+fn extract_mdx_paths(path: &str) -> io::Result<Vec<String>> {
+    let mut mdx_paths = Vec::new();
+    let entries = fs::read_dir(path)?;
+
+    for entry in entries {
+        let entry = entry?;
+        let path = entry.path();
+
+        if path.is_dir() {
+            if path.file_name() == Some(std::ffi::OsStr::new("contributing")) {
+                continue; // Skip the "contributing" folder
+            }
+            let sub_paths = extract_mdx_paths(path.to_str().unwrap())?;
+            mdx_paths.extend(sub_paths);
+        } else if path.is_file() && path.extension() == Some(std::ffi::OsStr::new("mdx")) {
+            mdx_paths.push(path.to_str().unwrap().to_string());
+        }
+    }
+    if mdx_paths.is_empty() {
+        return Err(io::Error::new(
+            io::ErrorKind::NotFound,
+            "No MDX files found in the directory",
+        ));
+    }
+    Ok(mdx_paths)
+}
+
+fn filter_mdx_paths_for_exceptions(mdx_paths: Vec<String>, exceptions: Vec<String>) -> Vec<String> {
+    let mut filtered_paths = Vec::new();
+    for path in mdx_paths {
+        if !exceptions.contains(&path) {
+            filtered_paths.push(path);
+        }
+    }
+    filtered_paths
 }
 
 #[derive(Debug, Deserialize)]
 struct Metadata {
     title: String,
+    #[allow(dead_code)]
     description: String,
     #[serde(rename = "isArticle")]
     is_article: bool,
+    #[allow(dead_code)]
+    authors: Option<String>,
+    #[allow(dead_code)]
+    editors: Option<String>,
+    #[allow(dead_code)]
+    contributors: Option<String>,
 }
 
 fn write_html_to_mdx_file(path: &str, content: &str) -> io::Result<()> {
@@ -115,14 +200,19 @@ fn read_mdx_file(path: &str) -> io::Result<(Metadata, String, String)> {
     if parts.len() != 3 {
         return Err(io::Error::new(
             io::ErrorKind::InvalidData,
-            "Invalid MDX file format",
+            format!("Unable to extract metadata in {}", path),
         ));
     }
 
     let metadata_str = parts[1];
     let metadata: Metadata = match serde_yaml::from_str(metadata_str) {
         Ok(data) => data,
-        Err(err) => return Err(io::Error::new(io::ErrorKind::InvalidData, err)),
+        Err(err) => {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                format!("{} in {}", err, path),
+            ))
+        }
     };
     let markdown_content = parts[2].to_string();
     let full_file_content = content.clone();

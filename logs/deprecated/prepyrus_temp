@@ -1,0 +1,51 @@
+    let (metadata, markdown_content, full_file_content) = match read_mdx_file(&args[2]) {
+        Ok(data) => data,
+        Err(err) => {
+            eprintln!("Error reading MDX file: {}", err);
+            std::process::exit(1);
+        }
+    };
+
+    println!("Is article: {}", metadata.is_article);
+
+    if !metadata.is_article {
+        eprintln!("Invalid file format. Please provide a file with isArticle set to true.");
+        std::process::exit(1);
+    }
+
+    let citations = extract_citations_from_markdown(&markdown_content);
+    // println!("{:?}", citations);
+    println!("No of citations: {:?}", citations.len());
+
+    match verify_citations_format(&citations) {
+        Ok(_) => {}
+        Err(err) => {
+            eprintln!("Error verifying citations: {}", err);
+            std::process::exit(1);
+        }
+    };
+
+    let citations_set = create_citations_set(citations);
+    println!("{:?}", citations_set);
+    println!("No of unique citations: {:?}", citations_set.len());
+
+    let matched_citations = match match_citations_to_bibliography(citations_set, &all_entries) {
+        Ok(data) => data,
+        Err(err) => {
+            eprintln!("Error matching citations to bibliography: {}", err);
+            std::process::exit(1);
+        }
+    };
+
+    let html_bibliography = generate_html_bibliography(matched_citations);
+    println!("{:?}", html_bibliography);
+
+    let updated_markdown_content = format!("{}\n{}", full_file_content, html_bibliography);
+
+    match write_html_to_mdx_file(&args[2], &updated_markdown_content) {
+        Ok(_) => println!("HTML bibliography injected successfully!"),
+        Err(err) => {
+            eprintln!("Error writing HTML to MDX file: {}", err);
+            std::process::exit(1);
+        }
+    }
