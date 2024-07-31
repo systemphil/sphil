@@ -1,4 +1,4 @@
-name: Verify
+name: Verify MDX content
 
 on:
     workflow_dispatch:
@@ -22,4 +22,4 @@ jobs:
             - name: Install dependencies
               run: cargo build --release --package prepyrus
             - name: Run Rust script
-              run: target/debug/prepyrus absolute_bibliography.bib src/pages verify
+              run: target/release/prepyrus absolute_bibliography.bib src/pages verify
