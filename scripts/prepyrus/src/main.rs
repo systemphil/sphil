@@ -6,18 +6,16 @@ use std::io::{self, BufReader, Read, Write};
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
-    if args.len() < 2 {
-        eprintln!(
-            "Library missing. Please provide a file path as a first argument. Remember to include the .bib extension."
-        );
-        std::process::exit(1);
-    }
-    if args.len() < 3 {
-        eprintln!("Target folder missing. Please provide a path as a second argument.");
+    if args.len() < 4 {
+        eprintln!("Arguments missing: <bibliography.bib> <target_directory> <mode>");
         std::process::exit(1);
     }
     if !args[1].ends_with(".bib") {
         eprintln!("Invalid file format. Please provide a file with .bib extension.");
+        std::process::exit(1);
+    }
+    if !args[3].eq("verify") && !args[3].eq("process") {
+        eprintln!("Invalid mode. Please provide either 'verify' or 'process'.");
         std::process::exit(1);
     }
 
@@ -36,6 +34,7 @@ fn main() {
 
     let mdx_paths_raw = extract_mdx_paths(&args[2]).unwrap();
     let mdx_paths = filter_mdx_paths_for_exceptions(mdx_paths_raw, exceptions);
+    // todo remove this after testing
     println!("{:?}", mdx_paths);
 
     let src = fs::read_to_string(&args[1]).unwrap();
@@ -71,8 +70,6 @@ fn main() {
         if citations_set.is_empty() {
             continue;
         }
-        println!("{:?}", citations_set);
-        println!("No of unique citations: {:?}", citations_set.len());
         match match_citations_to_bibliography(citations_set, &all_entries) {
             Ok(data) => data,
             Err(err) => {
@@ -84,12 +81,15 @@ fn main() {
             }
         };
     }
-    println!("===Integrity check OK");
+    println!("===Integrity verification OK");
 
-    // Process MDX files
-    // for mdx_path in mdx_paths {
-    //     process_mdx_file(&mdx_path, &all_entries);
-    // }
+    // Process MDX files (requires arg[3] mode to be set to "process")
+    if args[3].eq("process") {
+        for mdx_path in mdx_paths {
+            process_mdx_file(&mdx_path, &all_entries);
+        }
+        println!("===Processing OK");
+    }
 
     println!("===Prepyrus completed successfully!");
 }
