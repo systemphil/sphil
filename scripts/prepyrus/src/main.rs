@@ -79,6 +79,9 @@ fn main() {
             }
         };
     }
+    // todo remove after testing
+    println!("{:?}", mdx_paths);
+
     println!(
         "===Integrity verification OK. {} files verified.",
         mdx_paths.len()
