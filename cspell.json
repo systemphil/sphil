@@ -19,6 +19,7 @@
         "mindmap",
         "Niklas",
         "posteriori",
+        "Prepyrus",
         "presuppositionless",
         "presuppositionlessness",
         "Realphilosophie",
@@ -36,9 +37,12 @@
         "mdx"
     ],
     "ignoreWords": [
+        "biblatex",
+        "datetime",
         "encyclopaedia",
         "msapplication",
-        "nextra"
+        "nextra",
+        "splitn"
     ],
     "import": []
 }
