@@ -34,8 +34,6 @@ fn main() {
 
     let mdx_paths_raw = extract_mdx_paths(&args[2]).unwrap();
     let mdx_paths = filter_mdx_paths_for_exceptions(mdx_paths_raw, exceptions);
-    // todo remove this after testing
-    println!("{:?}", mdx_paths);
 
     let src = fs::read_to_string(&args[1]).unwrap();
     let bibliography = Bibliography::parse(&src).unwrap();
@@ -81,7 +79,10 @@ fn main() {
             }
         };
     }
-    println!("===Integrity verification OK");
+    println!(
+        "===Integrity verification OK. {} files verified.",
+        mdx_paths.len()
+    );
 
     // Process MDX files (requires arg[3] mode to be set to "process")
     if args[3].eq("process") {
