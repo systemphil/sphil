@@ -5,8 +5,6 @@ on:
     push:
         branches:
             - main
-    pull_request_target:
-        types: [ready_for_review]
 
 jobs:
     build_and_deploy:
@@ -30,8 +28,8 @@ jobs:
             - name: Checkout Code
               uses: actions/checkout@v4
               with:
-                  repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
-                  ref: ${{ github.event.pull_request.head.ref || github.ref }}
+                  repository: ${{ github.repository }}
+                  ref: ${{ github.ref }}
                   fetch-depth: 1
 
             - name: Auth
