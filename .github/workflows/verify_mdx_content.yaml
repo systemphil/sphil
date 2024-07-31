@@ -19,7 +19,7 @@ jobs:
                       ~/.cargo/registry/cache/
                       ~/.cargo/git/db/
                       target/
-                  key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyprus/Cargo.lock') }}-${{ hashFiles('scripts/prepyprus/src/**') }}
+                  key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
             - name: Install Rust
               if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
               uses: actions-rust-lang/setup-rust-toolchain@v1
@@ -42,4 +42,4 @@ jobs:
                       ~/.cargo/registry/cache/
                       ~/.cargo/git/db/
                       target/
-                  key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyprus/Cargo.lock') }}-${{ hashFiles('scripts/prepyprus/src/**') }}
+                  key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
