@@ -80,6 +80,7 @@ fn main() {
         };
     }
     // todo remove after testing
+    println!("=?=TESTING CACHE");
     println!("{:?}", mdx_paths);
 
     println!(
