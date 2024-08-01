@@ -3,15 +3,21 @@ use regex::Regex;
 use serde::Deserialize;
 use std::fs;
 use std::io::{self, BufReader, Read, Write};
+use std::path::Path;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.len() < 4 {
-        eprintln!("Arguments missing: <bibliography.bib> <target_directory> <mode>");
+        eprintln!("Arguments missing: <bibliography.bib> <target_dir_or_file> <mode>");
         std::process::exit(1);
     }
     if !args[1].ends_with(".bib") {
         eprintln!("Invalid file format. Please provide a file with .bib extension.");
+        std::process::exit(1);
+    }
+    let target_arg = &args[2];
+    if !Path::new(target_arg).is_dir() && !target_arg.ends_with(".mdx") {
+        eprintln!("Invalid target. Please provide a directory or a single MDX file.");
         std::process::exit(1);
     }
     if !args[3].eq("verify") && !args[3].eq("process") {
@@ -38,6 +44,8 @@ fn main() {
     let src = fs::read_to_string(&args[1]).unwrap();
     let bibliography = Bibliography::parse(&src).unwrap();
     let all_entries = bibliography.into_vec();
+
+    let mut article_count = 0;
 
     // Verify MDX files integrity
     for mdx_path in &mdx_paths {
@@ -78,13 +86,15 @@ fn main() {
                 std::process::exit(1);
             }
         };
+        article_count += 1;
     }
     // todo remove after testing
     println!("{:?}", mdx_paths);
 
     println!(
-        "===Integrity verification OK. {} files verified.",
-        mdx_paths.len()
+        "===Integrity verification OK: {} files verified, including {} articles",
+        mdx_paths.len(),
+        article_count
     );
 
     // Process MDX files (requires arg[3] mode to be set to "process")
@@ -142,8 +152,13 @@ fn process_mdx_file(path: &str, all_entries: &Vec<Entry>) {
         }
     };
 
+    // todo rename var to just html or something
     let html_bibliography = generate_html_bibliography(matched_citations);
     println!("{:?}", html_bibliography);
+
+    // todo check for and add authors html
+
+    // todo check for footnotes and add notes heading to html
 
     let updated_markdown_content = format!("{}\n{}", full_file_content, html_bibliography);
 
@@ -161,6 +176,12 @@ fn process_mdx_file(path: &str, all_entries: &Vec<Entry>) {
 /// The function skips the "contributing" folder.
 fn extract_mdx_paths(path: &str) -> io::Result<Vec<String>> {
     let mut mdx_paths = Vec::new();
+
+    if !Path::new(path).is_dir() && path.ends_with(".mdx") {
+        mdx_paths.push(path.to_string());
+        return Ok(mdx_paths);
+    }
+
     let entries = fs::read_dir(path)?;
 
     for entry in entries {
@@ -433,7 +454,7 @@ fn generate_html_bibliography(entries: Vec<Entry>) -> String {
                 html.push_str(&format!("<i>{}.</i> ", title));
                 html.push_str(&format!("{}.", publisher));
             }
-            _ => todo!(),
+            _ => println!("Entry type not supported: {:?}", entry.entry_type),
         }
         html.push_str("\n");
     }
@@ -446,18 +467,3 @@ fn generate_html_bibliography(entries: Vec<Entry>) -> String {
 
     html
 }
-
-// fn match_citations_to_bibliography(
-//     citations: Vec<String>,
-//     bibliography: Vec<String>,
-// ) -> Vec<String> {
-//     let mut matched_citations = Vec::new();
-//     for citation in citations {
-//         for entry in bibliography {
-//             if entry.contains(&citation) {
-//                 matched_citations.push(citation);
-//             }
-//         }
-//     }
-//     matched_citations
-// }
