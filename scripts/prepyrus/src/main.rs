@@ -126,41 +126,43 @@ fn process_mdx_file(path: &str, all_entries: &Vec<Entry>) {
         return;
     }
 
-    // todo remove
-    // println!("Is article: {}", metadata.title);
-
     let citations = extract_citations_from_markdown(&markdown_content);
-
-    match verify_citations_format(&citations) {
-        Ok(_) => {}
-        Err(err) => {
-            eprintln!("Error verifying citations: {}", err);
-            std::process::exit(1);
-        }
-    };
-
     let citations_set = create_citations_set(citations);
+
     println!("{:?}", citations_set);
     println!("No of unique citations: {:?}", citations_set.len());
 
-    // todo - handle the case if citations set is empty
-    let matched_citations = match match_citations_to_bibliography(citations_set, &all_entries) {
-        Ok(data) => data,
-        Err(err) => {
-            eprintln!("Error matching citations to bibliography: {}", err);
-            std::process::exit(1);
-        }
-    };
+    let mut mdx_payload = String::new();
+    let mut mdx_bibliography = String::new();
 
-    // todo rename var to just html or something
-    let html_bibliography = generate_html_bibliography(matched_citations);
-    println!("{:?}", html_bibliography);
+    if !citations_set.is_empty() {
+        let matched_citations = match match_citations_to_bibliography(citations_set, &all_entries) {
+            Ok(data) => data,
+            Err(err) => {
+                eprintln!("Error matching citations to bibliography: {}", err);
+                std::process::exit(1);
+            }
+        };
+        mdx_bibliography = generate_mdx_bibliography(matched_citations);
+    }
 
-    // todo check for and add authors html
+    let mdx_authors = generate_mdx_authors(&metadata);
+    let mdx_notes_heading = generate_notes_heading(&markdown_content);
 
-    // todo check for footnotes and add notes heading to html
+    if !mdx_bibliography.is_empty() {
+        mdx_payload.push_str(&mdx_bibliography);
+    }
+    if !mdx_authors.is_empty() {
+        mdx_payload.push_str(&mdx_authors);
+    }
+    if !mdx_notes_heading.is_empty() {
+        mdx_payload.push_str(&mdx_notes_heading);
+    }
+    if mdx_payload.is_empty() {
+        return;
+    }
 
-    let updated_markdown_content = format!("{}\n{}", full_file_content, html_bibliography);
+    let updated_markdown_content = format!("{}\n{}", full_file_content, mdx_payload);
 
     match write_html_to_mdx_file(path, &updated_markdown_content) {
         Ok(_) => println!("HTML bibliography injected successfully!"),
@@ -352,8 +354,12 @@ fn extract_year(date: &PermissiveType<Date>, reference: String) -> Result<i32, i
     }
 }
 
-fn extract_title(title: &[Spanned<Chunk>]) -> String {
-    title
+/// Use this to extract from a Spanned<Chunk> vector
+/// ```
+/// let address = extract_spanned_chunk(&address_spanned);
+/// ```
+fn extract_spanned_chunk(spanned_chunk: &[Spanned<Chunk>]) -> String {
+    spanned_chunk
         .iter()
         .filter_map(|spanned_chunk| match spanned_chunk.v {
             Chunk::Normal(ref s) => Some(s.clone()),
@@ -416,54 +422,118 @@ fn match_citations_to_bibliography(
     Ok(matched_citations)
 }
 
-fn generate_html_bibliography(entries: Vec<Entry>) -> String {
-    let mut html = String::new();
+fn generate_mdx_bibliography(entries: Vec<Entry>) -> String {
+    let mut mdx_html = String::new();
 
-    html.push_str("\n## Bibliography\n\n<div className=\"text-sm\">\n");
+    mdx_html.push_str("\n## Bibliography\n\n<div className=\"text-sm\">\n");
 
     for entry in entries {
-        html.push_str("- ");
+        mdx_html.push_str("- ");
         match entry.entry_type {
             EntryType::Book => {
                 let author = entry.author().unwrap();
                 let title_spanned: &[biblatex::Spanned<biblatex::Chunk>] = entry.title().unwrap();
-                let title = extract_title(title_spanned);
+                let title = extract_spanned_chunk(title_spanned);
                 let publisher_spanned: Vec<Vec<Spanned<Chunk>>> = entry.publisher().unwrap();
                 let publisher = extract_publisher(&publisher_spanned);
+                let address_spanned: &[Spanned<Chunk>] = entry.address().unwrap();
+                let address = extract_spanned_chunk(address_spanned);
                 let date = entry.date().unwrap();
                 let year = extract_year(&date, entry.key.clone()).unwrap();
-                // Example:
-                // Smith, John. 2020. Understanding Modern Science. New York: Academic Press.
+                let translators = entry.translator().unwrap();
+
                 if author.len() > 2 {
-                    html.push_str(&format!(
+                    mdx_html.push_str(&format!(
                         "{}, {} et al. ",
                         author[0].name, author[0].given_name
                     ));
                 } else if author.len() == 2 {
-                    html.push_str(&format!(
+                    mdx_html.push_str(&format!(
                         "{}, {} and {}, {}. ",
                         author[0].name, author[0].given_name, author[1].name, author[1].given_name
                     ));
                 } else {
-                    html.push_str(&format!("{}, {}. ", author[0].name, author[0].given_name));
+                    mdx_html.push_str(&format!("{}, {}. ", author[0].name, author[0].given_name));
                 }
-                html.push_str(&format!("{}. ", year));
+                mdx_html.push_str(&format!("{}. ", year));
+                mdx_html.push_str(&format!("_{}_. ", title));
 
-                // TODO add optional translators and editors if there are any
+                let translators_mdx = generate_contributors(translators, "Translated".to_string());
+                if !translators_mdx.is_empty() {
+                    mdx_html.push_str(&translators_mdx);
+                }
 
-                html.push_str(&format!("<i>{}.</i> ", title));
-                html.push_str(&format!("{}.", publisher));
+                mdx_html.push_str(&format!("{}: {}.", address, publisher));
             }
             _ => println!("Entry type not supported: {:?}", entry.entry_type),
         }
-        html.push_str("\n");
+        mdx_html.push_str("\n");
     }
 
-    html.push_str("</div>\n");
+    mdx_html.push_str("</div>\n");
 
-    html = html.replace("..", ".");
-    html = html.replace("...", ".");
-    html = html.replace("....", ".");
+    mdx_html = mdx_html.replace("..", ".");
+    mdx_html = mdx_html.replace("...", ".");
+    mdx_html = mdx_html.replace("....", ".");
 
-    html
+    mdx_html
+}
+
+fn generate_contributors(
+    contributors: Vec<biblatex::Person>,
+    contributor_description: String,
+) -> String {
+    let mut contributors_str = String::new();
+    if contributors.len() > 1 {
+        contributors_str.push_str(&format!("{} by ", contributor_description));
+        for (i, person) in contributors.iter().enumerate() {
+            if i == contributors.len() - 1 {
+                contributors_str.push_str(&format!("and {} {}. ", person.given_name, person.name));
+            } else {
+                contributors_str.push_str(&format!("{} {}, ", person.given_name, person.name));
+            }
+        }
+    } else if contributors.len() == 1 {
+        contributors_str.push_str(&format!(
+            "{} by {} {}. ",
+            contributor_description, contributors[0].given_name, contributors[0].name
+        ));
+    }
+    contributors_str
+}
+
+fn generate_mdx_authors(metadata: &Metadata) -> String {
+    let mut mdx_html = String::new();
+
+    if let Some(authors) = &metadata.authors {
+        mdx_html.push_str("\n**Authors**  \n");
+        mdx_html.push_str(&authors);
+        mdx_html.push_str("\n");
+    }
+    if let Some(editors) = &metadata.editors {
+        mdx_html.push_str("\n**Editors**  \n");
+        mdx_html.push_str(&editors);
+        mdx_html.push_str("\n");
+    }
+    if let Some(contributors) = &metadata.contributors {
+        mdx_html.push_str("\n**Contributors**  \n");
+        mdx_html.push_str(&contributors);
+        mdx_html.push_str("\n");
+    }
+
+    mdx_html
+}
+
+fn generate_notes_heading(markdown: &String) -> String {
+    let mut mdx_notes_heading = String::new();
+
+    let footnote_regex = Regex::new(r"\[([^\]]*?[^1])\]").unwrap();
+
+    'outer: for line in markdown.lines() {
+        for _captures in footnote_regex.captures_iter(line) {
+            mdx_notes_heading.push_str("\n**Notes**");
+            break 'outer;
+        }
+    }
+    mdx_notes_heading
 }
