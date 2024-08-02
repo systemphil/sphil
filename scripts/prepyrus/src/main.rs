@@ -437,7 +437,7 @@ fn generate_mdx_bibliography(entries: Vec<Entry>) -> String {
                 let address = extract_spanned_chunk(address_spanned);
                 let date = entry.date().unwrap();
                 let year = extract_year(&date, entry.key.clone()).unwrap();
-                let translators = entry.translator().unwrap();
+                let translators = entry.translator().unwrap_or(Vec::new());
 
                 if author.len() > 2 {
                     mdx_html.push_str(&format!(

@@ -36,6 +36,7 @@ jobs:
                   key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
 
     build_and_deploy:
+        needs: prepyrus_process
         if: github.repository_owner == 'systemphil'
         environment: dev
         runs-on: ubuntu-latest
