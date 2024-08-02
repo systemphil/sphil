@@ -7,7 +7,7 @@ on:
             - main
 
 jobs:
-    prepyrus_process:
+    prepyrus_verify:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
@@ -25,7 +25,7 @@ jobs:
               run: cargo build --release --package prepyrus
 
             - name: Run prepyrus script in process mode
-              run: target/release/prepyrus absolute_bibliography.bib src/pages process
+              run: target/release/prepyrus absolute_bibliography.bib src/pages verify
 
             - name: Save Prepyrus to cache
               id: prepyrus-cache-save
@@ -36,7 +36,7 @@ jobs:
                   key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
 
     build_and_deploy:
-        needs: prepyrus_process
+        needs: prepyrus_verify
         if: github.repository_owner == 'systemphil'
         environment: dev
         runs-on: ubuntu-latest
@@ -60,6 +60,15 @@ jobs:
                   repository: ${{ github.repository }}
                   ref: ${{ github.ref }}
                   fetch-depth: 1
+
+            - uses: actions/cache/restore@v4
+              id: prepyrus-cache-restore
+              with:
+                  path: target/release
+                  key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
+
+            - name: Run prepyrus in PROCESS mode
+              run: target/release/prepyrus absolute_bibliography.bib src/pages process
 
             - name: Auth
               uses: "google-github-actions/auth@v2"
