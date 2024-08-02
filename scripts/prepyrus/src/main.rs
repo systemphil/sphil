@@ -88,8 +88,6 @@ fn main() {
         };
         article_count += 1;
     }
-    // todo remove after testing
-    println!("{:?}", mdx_paths);
 
     println!(
         "===Integrity verification OK: {} files verified, including {} articles",
@@ -129,7 +127,6 @@ fn process_mdx_file(path: &str, all_entries: &Vec<Entry>) {
     let citations = extract_citations_from_markdown(&markdown_content);
     let citations_set = create_citations_set(citations);
 
-    println!("{:?}", citations_set);
     println!("No of unique citations: {:?}", citations_set.len());
 
     let mut mdx_payload = String::new();
@@ -165,7 +162,7 @@ fn process_mdx_file(path: &str, all_entries: &Vec<Entry>) {
     let updated_markdown_content = format!("{}\n{}", full_file_content, mdx_payload);
 
     match write_html_to_mdx_file(path, &updated_markdown_content) {
-        Ok(_) => println!("HTML bibliography injected successfully!"),
+        Ok(_) => println!("Success! HTML bibliography injected for {}", path),
         Err(err) => {
             eprintln!("Error writing HTML to MDX file: {}", err);
             std::process::exit(1);
