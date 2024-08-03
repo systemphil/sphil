@@ -76,7 +76,7 @@ jobs:
         path: target/release/prepyrus
 
     - name: Run prepyrus in PROCESS mode
-      run: target/release/prepyrus absolute_bibliography.bib src/pages process
+      run: target/release/prepyrus/prepyrus absolute_bibliography.bib src/pages process
 
     - name: Auth
       uses: "google-github-actions/auth@v2"
