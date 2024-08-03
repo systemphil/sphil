@@ -8,13 +8,14 @@ on:
 
 jobs:
     prepyrus_verify:
+        if: github.repository_owner == 'systemphil'
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
             - uses: actions/cache/restore@v4
               id: prepyrus-cache-restore
               with:
-                  path: target/release
+                  path: target/release/prepyrus
                   key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
             - name: Install Rust
               if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
@@ -24,7 +25,7 @@ jobs:
               if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
               run: cargo build --release --package prepyrus
 
-            - name: Run prepyrus script in process mode
+            - name: Run prepyrus script in VERIFY mode
               run: target/release/prepyrus absolute_bibliography.bib src/pages verify
 
             - name: Save Prepyrus to cache
@@ -32,7 +33,7 @@ jobs:
               if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
               uses: actions/cache/save@v4
               with:
-                  path: target/release
+                  path: target/release/prepyrus
                   key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
 
     build_and_deploy:

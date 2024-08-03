@@ -5,25 +5,26 @@ use std::fs;
 use std::io::{self, BufReader, Read, Write};
 use std::path::Path;
 
+/// Prepyrus is a tool for verifying and processing MDX files
+/// that contain citations in Chicago author-date style.
+/// The tool reads a bibliography file in BibTeX format and
+/// verifies the citations in the MDX files against the bibliography.
+/// If the citations are valid, the tool processes the MDX files
+/// by adding a bibliography section at the end of the file.
+/// It also adds author, editor, and contributor from the MDX file metadata if available.
+/// Finally, it also adds a notes heading at the end if footnotes are present in the file.
+///
+/// Arguments: `<bibliography.bib> <target_dir_or_file> <mode>`
+///
+/// The tool has two modes: `verify` and `process`.
+///
+/// In `verify` mode, the tool only verifies the citations in the MDX files
+/// and matches them against the bibliography.  
+/// In `process` mode, the tool _additionally_ processes the MDX files by injecting bibliography
+/// and other details into the MDX files.
 fn main() {
     let args: Vec<String> = std::env::args().collect();
-    if args.len() < 4 {
-        eprintln!("Arguments missing: <bibliography.bib> <target_dir_or_file> <mode>");
-        std::process::exit(1);
-    }
-    if !args[1].ends_with(".bib") {
-        eprintln!("Invalid file format. Please provide a file with .bib extension.");
-        std::process::exit(1);
-    }
-    let target_arg = &args[2];
-    if !Path::new(target_arg).is_dir() && !target_arg.ends_with(".mdx") {
-        eprintln!("Invalid target. Please provide a directory or a single MDX file.");
-        std::process::exit(1);
-    }
-    if !args[3].eq("verify") && !args[3].eq("process") {
-        eprintln!("Invalid mode. Please provide either 'verify' or 'process'.");
-        std::process::exit(1);
-    }
+    verify_arguments(&args);
 
     let exceptions = vec![
         "src/pages/contributing/",
@@ -45,9 +46,42 @@ fn main() {
     let bibliography = Bibliography::parse(&src).unwrap();
     let all_entries = bibliography.into_vec();
 
-    let mut article_count = 0;
+    // Phase 1: Verify MDX files
+    verify_mdx_files(mdx_paths.clone(), &all_entries);
 
-    // Verify MDX files integrity
+    // Phase 2: Process MDX files (requires arg[3] mode to be set to "process")
+    if args[3].eq("process") {
+        for mdx_path in mdx_paths {
+            process_mdx_file(&mdx_path, &all_entries);
+        }
+        println!("===Processing OK");
+    }
+
+    println!("===Prepyrus completed successfully!");
+}
+
+fn verify_arguments(args: &Vec<String>) {
+    if args.len() < 4 {
+        eprintln!("Arguments missing: <bibliography.bib> <target_dir_or_file> <mode>");
+        std::process::exit(1);
+    }
+    if !args[1].ends_with(".bib") {
+        eprintln!("Invalid file format. Please provide a file with .bib extension.");
+        std::process::exit(1);
+    }
+    let target_arg = &args[2];
+    if !Path::new(target_arg).is_dir() && !target_arg.ends_with(".mdx") {
+        eprintln!("Invalid target. Please provide a directory or a single MDX file.");
+        std::process::exit(1);
+    }
+    if !args[3].eq("verify") && !args[3].eq("process") {
+        eprintln!("Invalid mode. Please provide either 'verify' or 'process'.");
+        std::process::exit(1);
+    }
+}
+
+fn verify_mdx_files(mdx_paths: Vec<String>, all_entries: &Vec<Entry>) {
+    let mut article_count = 0;
     for mdx_path in &mdx_paths {
         let (metadata, markdown_content, _) = match read_mdx_file(&mdx_path) {
             Ok(data) => data,
@@ -88,22 +122,11 @@ fn main() {
         };
         article_count += 1;
     }
-
     println!(
         "===Integrity verification OK: {} files verified, including {} articles",
         mdx_paths.len(),
         article_count
     );
-
-    // Process MDX files (requires arg[3] mode to be set to "process")
-    if args[3].eq("process") {
-        for mdx_path in mdx_paths {
-            process_mdx_file(&mdx_path, &all_entries);
-        }
-        println!("===Processing OK");
-    }
-
-    println!("===Prepyrus completed successfully!");
 }
 
 fn process_mdx_file(path: &str, all_entries: &Vec<Entry>) {
@@ -524,7 +547,7 @@ fn generate_mdx_authors(metadata: &Metadata) -> String {
 fn generate_notes_heading(markdown: &String) -> String {
     let mut mdx_notes_heading = String::new();
 
-    let footnote_regex = Regex::new(r"\[([^\]]*?[^1])\]").unwrap();
+    let footnote_regex = Regex::new(r"\[\^1\]").unwrap();
 
     'outer: for line in markdown.lines() {
         for _captures in footnote_regex.captures_iter(line) {
