@@ -75,6 +75,9 @@ jobs:
         name: prepyrus_artifact
         path: target/release/prepyrus
 
+    - name: Give execution permissions to prepyrus
+      run: chmod +x target/release/prepyrus/prepyrus
+
     - name: Run prepyrus in PROCESS mode
       run: target/release/prepyrus/prepyrus absolute_bibliography.bib src/pages process
 
