@@ -9,6 +9,7 @@
         "atemporal",
         "Befreiung",
         "Burbidge",
+        "determinacies",
         "Filip",
         "Georg",
         "Geraets",
@@ -21,6 +22,7 @@
         "Niklas",
         "Pinkard",
         "posteriori",
+        "Prepyrus",
         "presuppositionless",
         "presuppositionlessness",
         "Realphilosophie",
@@ -41,9 +43,12 @@
         "mdx"
     ],
     "ignoreWords": [
+        "biblatex",
+        "datetime",
         "encyclopaedia",
         "msapplication",
-        "nextra"
+        "nextra",
+        "splitn"
     ],
     "import": []
 }

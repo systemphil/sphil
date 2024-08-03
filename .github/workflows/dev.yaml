@@ -1,17 +1,52 @@
-name: Deploy to DEV
+name: Deploy to Development
 
 on:
   workflow_dispatch:
   push:
     branches:
       - main
-  pull_request_target:
-    types: [ready_for_review]
 
 jobs:
-  build_and_deploy:
+  prepyrus_verify:
     if: github.repository_owner == 'systemphil'
-    environment: dev 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/cache/restore@v4
+      id: prepyrus-cache-restore
+      with:
+        path: target/release/prepyrus
+        key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
+
+    - name: Install Rust
+      if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
+      uses: actions-rust-lang/setup-rust-toolchain@v1
+
+    - name: Install dependencies
+      if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
+      run: cargo build --release --package prepyrus
+
+    - name: Run prepyrus script in VERIFY mode
+      run: target/release/prepyrus absolute_bibliography.bib src/pages verify
+
+    - name: Upload prepyrus for next job
+      uses: actions/upload-artifact@v4
+      with:
+        name: prepyrus_artifact
+        path: target/release/prepyrus
+
+    - name: Save Prepyrus to cache
+      id: prepyrus-cache-save
+      if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: target/release/prepyrus
+        key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
+
+  build_and_deploy:
+    needs: prepyrus_verify
+    if: github.repository_owner == 'systemphil'
+    environment: dev
     runs-on: ubuntu-latest
     env:
       PROJECT_ID: ${{ secrets.PROJECT_ID }}
@@ -30,14 +65,26 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
       with:
-        repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
-        ref: ${{ github.event.pull_request.head.ref || github.ref }}
+        repository: ${{ github.repository }}
+        ref: ${{ github.ref }}
         fetch-depth: 1
 
-    - name: Auth
-      uses: 'google-github-actions/auth@v2'
+    - name: Download prepyrus artifact
+      uses: actions/download-artifact@v4
       with:
-        credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+        name: prepyrus_artifact
+        path: target/release/prepyrus
+
+    - name: Give execution permissions to prepyrus
+      run: chmod +x target/release/prepyrus/prepyrus
+
+    - name: Run prepyrus in PROCESS mode
+      run: target/release/prepyrus/prepyrus absolute_bibliography.bib src/pages process
+
+    - name: Auth
+      uses: "google-github-actions/auth@v2"
+      with:
+        credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
 
     - name: Docker Auth
       id: docker-auth
@@ -48,7 +95,7 @@ jobs:
         registry: "${{ env.REGION }}-docker.pkg.dev"
 
     - name: Build and Push Container
-      # NEXT_PUBLIC_ env variables have to be set during the build phase. 
+      # NEXT_PUBLIC_ env variables have to be set during the build phase.
       run: |-
         docker build \
           --build-arg NEXT_PUBLIC_SITE_ROOT=${{secrets.NEXT_PUBLIC_SITE_ROOT}} \
@@ -59,9 +106,9 @@ jobs:
 
     - name: Deploy to Cloud Run
       run: |
-          gcloud run deploy ${{env.SERVICE}} \
-            --platform=managed \
-            --region=${{ env.REGION }} \
-            --max-instances=4 \
-            --min-instances=default \
-            --image="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"
+        gcloud run deploy ${{env.SERVICE}} \
+          --platform=managed \
+          --region=${{ env.REGION }} \
+          --max-instances=4 \
+          --min-instances=default \
+          --image="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"
