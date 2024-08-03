@@ -73,6 +73,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: prepyrus_artifact
+        path: target/release/prepyrus
 
     - name: Run prepyrus in PROCESS mode
       run: target/release/prepyrus absolute_bibliography.bib src/pages process
