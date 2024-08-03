@@ -1,2 +1,0 @@
--   Hegel, Friedrich Georg Wilhelm. _The Science of Logic_. Translated by George di Giovanni, Cambridge University Press, 2010.
--   Hegel, Friedrich Georg Wilhelm. _The Phenomenology of Spirit_. Translated and edited by Terry Pinkard, Cambridge University Press, 2018.

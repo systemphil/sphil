@@ -1,1 +1,0 @@
--   Kant, Immanuel. _The Critique of Pure Reason_. Edited by Paul Guyer and Allen W. Wood, Cambridge University Press, 1998.
