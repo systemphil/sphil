@@ -55,8 +55,8 @@ const navigation = {
         { name: "Terms of Use", href: "/terms" },
     ],
     support: [
-        { name: "GitHub ↗", href: "https://github.com/systemphil/" },
-        { name: "YouTube ↗", href: "https://www.youtube.com/@systemphil" },
+        { name: "GitHub", href: "https://github.com/systemphil/" },
+        { name: "YouTube", href: "https://www.youtube.com/@systemphil" },
     ],
 };
 
