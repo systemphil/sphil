@@ -7,6 +7,25 @@
         "editor.wordWrap": "on"
     },
     "[mdx]": {
-        "editor.wordWrap": "on"
+        "editor.wordWrap": "on",
+        "editor.quickSuggestions": {
+            "other": false,
+            "comments": false,
+            "strings": false
+        },
+        "editor.suggest.showSnippets": false,
+        "editor.suggest.showWords": false,
+        "editor.acceptSuggestionOnCommitCharacter": false,
+        "editor.acceptSuggestionOnEnter": "off",
+        "editor.wordBasedSuggestions": "off",
+        "editor.parameterHints.enabled": false,
+        "editor.suggestOnTriggerCharacters": false
+    },
+    "[plaintext]": {
+        "editor.quickSuggestions": {
+            "comments": "off",
+            "other": "off",
+            "strings": "off"
+        },
     }
 }
