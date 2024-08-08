@@ -122,6 +122,7 @@ fn verify_mdx_files(mdx_paths: Vec<String>, all_entries: &Vec<Entry>) {
         };
         article_count += 1;
     }
+    // todo : construct the array of structs of each article and return the full list
     println!(
         "===Integrity verification OK: {} files verified, including {} articles",
         mdx_paths.len(),
@@ -129,7 +130,9 @@ fn verify_mdx_files(mdx_paths: Vec<String>, all_entries: &Vec<Entry>) {
     );
 }
 
-fn process_mdx_file(path: &str, all_entries: &Vec<Entry>) {
+// todo : arg should be a struct based on {path, metadata, markdown_content, full_file_content} as well as all_bib_entries
+// todo : then we skip reading and checking its article, we just work from the structs
+fn process_mdx_file(path: &str, all_bib_entries: &Vec<Entry>) {
     let (metadata, markdown_content, full_file_content) = match read_mdx_file(path) {
         Ok(data) => data,
         Err(err) => {
@@ -156,13 +159,14 @@ fn process_mdx_file(path: &str, all_entries: &Vec<Entry>) {
     let mut mdx_bibliography = String::new();
 
     if !citations_set.is_empty() {
-        let matched_citations = match match_citations_to_bibliography(citations_set, &all_entries) {
-            Ok(data) => data,
-            Err(err) => {
-                eprintln!("Error matching citations to bibliography: {}", err);
-                std::process::exit(1);
-            }
-        };
+        let matched_citations =
+            match match_citations_to_bibliography(citations_set, &all_bib_entries) {
+                Ok(data) => data,
+                Err(err) => {
+                    eprintln!("Error matching citations to bibliography: {}", err);
+                    std::process::exit(1);
+                }
+            };
         mdx_bibliography = generate_mdx_bibliography(matched_citations);
     }
 
