@@ -1,11 +1,10 @@
-use biblatex::{Bibliography, Chunk, Date, DateValue, Entry, EntryType, PermissiveType, Spanned};
+use biblatex::{Bibliography, Chunk, Entry, EntryType, Spanned};
 use regex::Regex;
-use serde::Deserialize;
 use std::fs;
-use std::io::{self, BufReader, Read, Write};
+use std::io::{self, Write};
 use std::path::Path;
 use utils::BiblatexUtils;
-use validation::Metadata;
+use validation::{ArticleFileData, Metadata};
 
 mod utils;
 mod validation;
@@ -52,13 +51,11 @@ fn main() {
     let all_entries = bibliography.into_vec();
 
     // Phase 1: Verify MDX files
-    validation::verify_mdx_files(mdx_paths.clone(), &all_entries);
+    let articles_file_data = validation::verify_mdx_files(mdx_paths.clone(), &all_entries).unwrap();
 
     // Phase 2: Process MDX files (requires arg[3] mode to be set to "process")
     if args[3].eq("process") {
-        for mdx_path in mdx_paths {
-            process_mdx_file(&mdx_path, &all_entries);
-        }
+        process_mdx_files(articles_file_data);
         println!("===Processing OK");
     }
 
@@ -82,73 +79,6 @@ fn verify_arguments(args: &Vec<String>) {
     if !args[3].eq("verify") && !args[3].eq("process") {
         eprintln!("Invalid mode. Please provide either 'verify' or 'process'.");
         std::process::exit(1);
-    }
-}
-
-// todo : arg should be a struct based on {path, metadata, markdown_content, full_file_content} as well as all_bib_entries
-// todo : then we skip reading and checking its article, we just work from the structs
-fn process_mdx_file(path: &str, all_bib_entries: &Vec<Entry>) {
-    let (metadata, markdown_content, full_file_content) = match read_mdx_file(path) {
-        Ok(data) => data,
-        Err(err) => {
-            if err.kind() == io::ErrorKind::InvalidData {
-                eprintln!("Invalid MDX data format: {}", err);
-                std::process::exit(1);
-            } else {
-                eprintln!("Unexpected error reading MDX file: {}", err);
-                std::process::exit(1);
-            }
-        }
-    };
-
-    if !metadata.is_article {
-        return;
-    }
-
-    let citations = extract_citations_from_markdown(&markdown_content);
-    let citations_set = create_citations_set(citations);
-
-    println!("No of unique citations: {:?}", citations_set.len());
-
-    let mut mdx_payload = String::new();
-    let mut mdx_bibliography = String::new();
-
-    if !citations_set.is_empty() {
-        let matched_citations =
-            match match_citations_to_bibliography(citations_set, &all_bib_entries) {
-                Ok(data) => data,
-                Err(err) => {
-                    eprintln!("Error matching citations to bibliography: {}", err);
-                    std::process::exit(1);
-                }
-            };
-        mdx_bibliography = generate_mdx_bibliography(matched_citations);
-    }
-
-    let mdx_authors = generate_mdx_authors(&metadata);
-    let mdx_notes_heading = generate_notes_heading(&markdown_content);
-
-    if !mdx_bibliography.is_empty() {
-        mdx_payload.push_str(&mdx_bibliography);
-    }
-    if !mdx_authors.is_empty() {
-        mdx_payload.push_str(&mdx_authors);
-    }
-    if !mdx_notes_heading.is_empty() {
-        mdx_payload.push_str(&mdx_notes_heading);
-    }
-    if mdx_payload.is_empty() {
-        return;
-    }
-
-    let updated_markdown_content = format!("{}\n{}", full_file_content, mdx_payload);
-
-    match write_html_to_mdx_file(path, &updated_markdown_content) {
-        Ok(_) => println!("Success! HTML bibliography injected for {}", path),
-        Err(err) => {
-            eprintln!("Error writing HTML to MDX file: {}", err);
-            std::process::exit(1);
-        }
     }
 }
 
@@ -196,6 +126,49 @@ fn filter_mdx_paths_for_exceptions(mdx_paths: Vec<String>, exceptions: Vec<Strin
         }
     }
     filtered_paths
+}
+
+fn process_mdx_files(all_articles: Vec<ArticleFileData>) {
+    for article in all_articles {
+        process_mdx_file(article);
+    }
+    println!("===Processing OK");
+}
+// todo : arg should be a struct based on {path, metadata, markdown_content, full_file_content} as well as all_bib_entries
+// todo : then we skip reading and checking its article, we just work from the structs
+fn process_mdx_file(article_file_data: ArticleFileData) {
+    let mut mdx_payload = String::new();
+    let mdx_bibliography = generate_mdx_bibliography(article_file_data.matched_citations);
+
+    let mdx_authors = generate_mdx_authors(&article_file_data.metadata);
+    let mdx_notes_heading = generate_notes_heading(&article_file_data.markdown_content);
+
+    if !mdx_bibliography.is_empty() {
+        mdx_payload.push_str(&mdx_bibliography);
+    }
+    if !mdx_authors.is_empty() {
+        mdx_payload.push_str(&mdx_authors);
+    }
+    if !mdx_notes_heading.is_empty() {
+        mdx_payload.push_str(&mdx_notes_heading);
+    }
+    if mdx_payload.is_empty() {
+        return;
+    }
+
+    let updated_markdown_content =
+        format!("{}\n{}", article_file_data.full_file_content, mdx_payload);
+
+    match write_html_to_mdx_file(&article_file_data.path, &updated_markdown_content) {
+        Ok(_) => println!(
+            "Success! HTML bibliography injected for {}",
+            article_file_data.path
+        ),
+        Err(err) => {
+            eprintln!("Error writing HTML to MDX file: {}", err);
+            std::process::exit(1);
+        }
+    }
 }
 
 fn write_html_to_mdx_file(path: &str, content: &str) -> io::Result<()> {

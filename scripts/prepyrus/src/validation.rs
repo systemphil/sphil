@@ -3,28 +3,41 @@ use biblatex::Entry;
 use regex::Regex;
 use serde::Deserialize;
 use std::fs;
-use std::io::{self, BufReader, Read};
+use std::io::{self, BufReader, Error, Read};
 
 #[derive(Debug, Deserialize)]
 pub struct Metadata {
     #[allow(dead_code)]
-    title: String,
+    pub title: String,
     #[allow(dead_code)]
-    description: String,
+    pub description: String,
     #[serde(rename = "isArticle")]
-    is_article: bool,
+    pub is_article: bool,
     #[allow(dead_code)]
-    authors: Option<String>,
+    pub authors: Option<String>,
     #[allow(dead_code)]
-    editors: Option<String>,
+    pub editors: Option<String>,
     #[allow(dead_code)]
-    contributors: Option<String>,
+    pub contributors: Option<String>,
 }
 
-pub fn verify_mdx_files(mdx_paths: Vec<String>, all_entries: &Vec<Entry>) {
+#[derive(Debug)]
+pub struct ArticleFileData {
+    pub path: String,
+    pub metadata: Metadata,
+    pub markdown_content: String,
+    pub matched_citations: Vec<Entry>,
+    pub full_file_content: String,
+}
+
+pub fn verify_mdx_files(
+    mdx_paths: Vec<String>,
+    all_entries: &Vec<Entry>,
+) -> Result<Vec<ArticleFileData>, Error> {
     let mut article_count = 0;
+    let mut all_articles: Vec<ArticleFileData> = Vec::new();
     for mdx_path in &mdx_paths {
-        let (metadata, markdown_content, _) = match read_mdx_file(&mdx_path) {
+        let (metadata, markdown_content, full_file_content) = match read_mdx_file(&mdx_path) {
             Ok(data) => data,
             Err(err) => {
                 if err.kind() == io::ErrorKind::InvalidData {
@@ -48,10 +61,7 @@ pub fn verify_mdx_files(mdx_paths: Vec<String>, all_entries: &Vec<Entry>) {
             }
         };
         let citations_set = create_citations_set(citations);
-        if citations_set.is_empty() {
-            continue;
-        }
-        match match_citations_to_bibliography(citations_set, &all_entries) {
+        let matched_citations = match match_citations_to_bibliography(citations_set, &all_entries) {
             Ok(data) => data,
             Err(err) => {
                 eprintln!(
@@ -61,14 +71,21 @@ pub fn verify_mdx_files(mdx_paths: Vec<String>, all_entries: &Vec<Entry>) {
                 std::process::exit(1);
             }
         };
+        all_articles.push(ArticleFileData {
+            path: mdx_path.clone(),
+            metadata,
+            markdown_content,
+            matched_citations,
+            full_file_content,
+        });
         article_count += 1;
     }
-    // todo : construct the array of structs of each article and return the full list
     println!(
         "===Integrity verification OK: {} files verified, including {} articles",
         mdx_paths.len(),
         article_count
     );
+    Ok(all_articles)
 }
 
 fn read_mdx_file(path: &str) -> io::Result<(Metadata, String, String)> {
