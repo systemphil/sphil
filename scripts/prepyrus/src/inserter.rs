@@ -59,6 +59,10 @@ fn write_html_to_mdx_file(path: &str, content: &str) -> io::Result<()> {
 fn generate_mdx_bibliography(entries: Vec<Entry>) -> String {
     let mut mdx_html = String::new();
 
+    if entries.is_empty() {
+        return mdx_html;
+    }
+
     mdx_html.push_str("\n## Bibliography\n\n<div className=\"text-sm\">\n");
 
     for entry in entries {
