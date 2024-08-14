@@ -7,14 +7,37 @@ use validator::{ArticleFileData, Metadata};
 
 use crate::{utils, validator};
 
-pub fn process_mdx_files(all_articles: Vec<ArticleFileData>) {
-    for article in all_articles {
-        process_mdx_file(article);
-    }
-    println!("===Processing OK");
+struct InserterOutcome {
+    total_articles_processed: i32,
+    total_bibliographies_inserted: i32,
+    total_authors_inserted: i32,
+    total_notes_headings_inserted: i32,
+    total_empty_payloads: i32,
 }
 
-fn process_mdx_file(article_file_data: ArticleFileData) {
+pub fn process_mdx_files(all_articles: Vec<ArticleFileData>) {
+    let mut inserter_outcome = InserterOutcome {
+        total_articles_processed: 0,
+        total_bibliographies_inserted: 0,
+        total_authors_inserted: 0,
+        total_notes_headings_inserted: 0,
+        total_empty_payloads: 0,
+    };
+
+    for article in all_articles {
+        process_mdx_file(article, &mut inserter_outcome);
+    }
+    println!(
+        "===Processing OK. Total articles processed: {}, including {} bibliographies, {} authors, and {} notes headings. {} were empty payloads",
+        inserter_outcome.total_articles_processed,
+        inserter_outcome.total_bibliographies_inserted,
+        inserter_outcome.total_authors_inserted,
+        inserter_outcome.total_notes_headings_inserted,
+        inserter_outcome.total_empty_payloads
+    );
+}
+
+fn process_mdx_file(article_file_data: ArticleFileData, inserter_outcome: &mut InserterOutcome) {
     let mut mdx_payload = String::new();
     let mdx_bibliography = generate_mdx_bibliography(article_file_data.matched_citations);
 
@@ -23,14 +46,18 @@ fn process_mdx_file(article_file_data: ArticleFileData) {
 
     if !mdx_bibliography.is_empty() {
         mdx_payload.push_str(&mdx_bibliography);
+        inserter_outcome.total_bibliographies_inserted += 1;
     }
     if !mdx_authors.is_empty() {
         mdx_payload.push_str(&mdx_authors);
+        inserter_outcome.total_authors_inserted += 1;
     }
     if !mdx_notes_heading.is_empty() {
         mdx_payload.push_str(&mdx_notes_heading);
+        inserter_outcome.total_notes_headings_inserted += 1;
     }
     if mdx_payload.is_empty() {
+        inserter_outcome.total_empty_payloads += 1;
         return;
     }
 
@@ -38,10 +65,13 @@ fn process_mdx_file(article_file_data: ArticleFileData) {
         format!("{}\n{}", article_file_data.full_file_content, mdx_payload);
 
     match write_html_to_mdx_file(&article_file_data.path, &updated_markdown_content) {
-        Ok(_) => println!(
-            "Success! HTML bibliography injected for {}",
-            article_file_data.path
-        ),
+        Ok(_) => {
+            inserter_outcome.total_articles_processed += 1;
+            println!(
+                "Success! HTML bibliography inserted for {}",
+                article_file_data.path
+            );
+        }
         Err(err) => {
             eprintln!("Error writing HTML to MDX file: {}", err);
             std::process::exit(1);
