@@ -16,6 +16,7 @@ struct InserterOutcome {
 }
 
 pub fn process_mdx_files(all_articles: Vec<ArticleFileData>) {
+    let all_articles_length = all_articles.len();
     let mut inserter_outcome = InserterOutcome {
         total_articles_processed: 0,
         total_bibliographies_inserted: 0,
@@ -28,8 +29,9 @@ pub fn process_mdx_files(all_articles: Vec<ArticleFileData>) {
         process_mdx_file(article, &mut inserter_outcome);
     }
     println!(
-        "===Processing OK. Total articles processed: {}. Inserted {} bibliographies, {} authors, and {} notes headings. {} were empty payloads",
+        "===Processing OK. Total articles processed: {}/{}. Inserted {} bibliographies, {} authors, and {} notes headings. {} were empty payloads",
         inserter_outcome.total_articles_processed,
+        all_articles_length,
         inserter_outcome.total_bibliographies_inserted,
         inserter_outcome.total_authors_inserted,
         inserter_outcome.total_notes_headings_inserted,
@@ -68,7 +70,7 @@ fn process_mdx_file(article_file_data: ArticleFileData, inserter_outcome: &mut I
         Ok(_) => {
             inserter_outcome.total_articles_processed += 1;
             println!(
-                "Success! HTML bibliography inserted for {}",
+                "---Success! HTML bibliography inserted for {}",
                 article_file_data.path
             );
         }
