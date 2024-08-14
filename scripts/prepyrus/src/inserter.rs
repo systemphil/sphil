@@ -28,7 +28,7 @@ pub fn process_mdx_files(all_articles: Vec<ArticleFileData>) {
         process_mdx_file(article, &mut inserter_outcome);
     }
     println!(
-        "===Processing OK. Total articles processed: {}, including {} bibliographies, {} authors, and {} notes headings. {} were empty payloads",
+        "===Processing OK. Total articles processed: {}. Inserted {} bibliographies, {} authors, and {} notes headings. {} were empty payloads",
         inserter_outcome.total_articles_processed,
         inserter_outcome.total_bibliographies_inserted,
         inserter_outcome.total_authors_inserted,
