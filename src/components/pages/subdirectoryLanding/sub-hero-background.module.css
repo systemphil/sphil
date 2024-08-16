@@ -1,132 +1,132 @@
 .card-root {
-	--background-rgb: transparent;
-	--background-light-rgb: 30 41 59;
-	
-	--border-rgb: 255 255 255;
-	--border: 1px solid rgb(var(--border-rgb) / 20%);
-	
-	--hyperplexed-main-rgb: 41 121 255;
-	--hyperplexed-main-light-rgb: 56 182 255;
-	--hyperplexed-secondary-rgb: 42 252 152;
-		
-	--card-size: 480px;
-	--font-size: 0.8rem;
-	--logo-size: calc(var(--card-size) * 0.3);
+    --background-rgb: transparent;
+    --background-light-rgb: 30 41 59;
 
-	background: rgb(var(--background-rgb));
-	display: flex;
-	flex-grow: 1;
-	height: 100%;
-	width: 100%;
-	justify-content: center;
-	overflow: hidden;
-	font-family: 'Noto Sans', sans-serif;
+    --border-rgb: 255 255 255;
+    --border: 1px solid rgb(var(--border-rgb) / 20%);
+
+    --hyperplexed-main-rgb: 41 121 255;
+    --hyperplexed-main-light-rgb: 56 182 255;
+    --hyperplexed-secondary-rgb: 42 252 152;
+
+    --card-size: 480px;
+    --font-size: 0.8rem;
+    --logo-size: calc(var(--card-size) * 0.3);
+
+    background: rgb(var(--background-rgb));
+    display: flex;
+    flex-grow: 1;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    overflow: hidden;
+    font-family: "Noto Sans", sans-serif;
 }
 
 .card-track {
-	height: 100%;
-	width: 100%;
-	flex-grow: 1;
-	display: flex;
-	align-items: center;
-	position: relative;
+    height: 100%;
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    position: relative;
 }
 
 .card-wrapper {
-	flex-grow: 1;
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .card {
-	margin: 20px;
-	padding: 30px;
-	height: 75vh;
-	flex-grow: 0.8;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	position: relative;
-	margin: 1rem;
-	border-radius: 2rem;
-	overflow: hidden;
-	cursor: default;
+    margin: 20px;
+    padding: 30px;
+    height: 75vh;
+    flex-grow: 0.8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 1rem;
+    border-radius: 2rem;
+    overflow: hidden;
+    cursor: default;
 }
 
 .card-center {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	position: relative;
-	z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 4;
 }
 
 .card-center > img {
-  	width: var(--logo-size);
+    width: var(--logo-size);
 }
 
 .card-gradient {
-	height: 100%;
-	width: 100%;
-	position: absolute;
-	pointer-events: none;
-	z-index: 3;
-	mix-blend-mode: darken;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    pointer-events: none;
+    z-index: 3;
+    mix-blend-mode: darken;
 }
 
 .card-letters {
-	--x: 0px;
-	--y: 0px;
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	height: 100%;
-	width: 100%;
-	font-size: var(--font-size);
-	font-weight: 500;
-	word-wrap: break-word;
-	opacity: 0;
-	transition: opacity 800ms;
-	mask-image: radial-gradient(
-		calc(var(--card-size) * 0.8) circle at var(--x) var(--y), 
-		rgb(255, 255, 255) 20%, 
-		rgba(255, 255, 255, 0.25), 
-		transparent
-	);
-	-webkit-mask-image: radial-gradient(
-		calc(var(--card-size) * 0.8) circle at var(--x) var(--y), 
-		rgb(255, 255, 255) 20%, 
-		rgb(255 255 255 / 25%), 
-		transparent
-	);
-	scale: 1.03;
+    --x: 0px;
+    --y: 0px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    font-size: var(--font-size);
+    font-weight: 500;
+    word-wrap: break-word;
+    opacity: 0;
+    transition: opacity 800ms;
+    mask-image: radial-gradient(
+        calc(var(--card-size) * 0.8) circle at var(--x) var(--y),
+        rgb(255, 255, 255) 20%,
+        rgba(255, 255, 255, 0.25),
+        transparent
+    );
+    -webkit-mask-image: radial-gradient(
+        calc(var(--card-size) * 0.8) circle at var(--x) var(--y),
+        rgb(255, 255, 255) 20%,
+        rgb(255 255 255 / 25%),
+        transparent
+    );
+    scale: 1.03;
 }
 /* 
 */
 
 .card:hover .card-letters {
-  	opacity: 1;
+    opacity: 1;
 }
 
 /* -- Extra Styles -- */
 
 .card-track:before,
 .card-track:after {
-	content: "";
-	height: 100vh;
-	width: 1px;
-	position: absolute;
-	top: 50%;
-	translate: 0% -50%;
+    content: "";
+    height: 100vh;
+    width: 1px;
+    position: absolute;
+    top: 50%;
+    translate: 0% -50%;
 }
 
 .card-wrapper:before,
 .card-wrapper:after {
-	content: "";
-	width: 100vw;
-	position: absolute;
-	left: 50%;
-	translate: -50%;
+    content: "";
+    width: 100vw;
+    position: absolute;
+    left: 50%;
+    translate: -50%;
 }

@@ -7,20 +7,21 @@
     position: relative;
     --slate-500: #64748b;
     --cyan-500: #06b6d4;
-    --fuchsia-500: #d946ef; 
+    --fuchsia-500: #d946ef;
 }
 .card-magic::before,
 .card-magic::after {
     content: "";
     position: absolute;
-    inset: -.10rem;
+    inset: -0.1rem;
     z-index: -1;
     border-radius: inherit;
     background: conic-gradient(
         from var(--magic-angle),
         var(--fuchsia-500),
         var(--cyan-500),
-        var(--fuchsia-500));
+        var(--fuchsia-500)
+    );
     animation: rotate 3s linear infinite;
     opacity: 0;
     transition: opacity 2s;
@@ -28,7 +29,7 @@
 .card-magic::after {
     filter: blur(3.5rem);
 }
-.card-magic:hover:before, 
+.card-magic:hover:before,
 .card-magic:hover:after {
     opacity: 1;
 }
