@@ -31,8 +31,7 @@ jobs:
 
     - name: Run Prettier (specific version)
       run: |
-        npm install prettier@$PRETTIER_VERSION
-        npx prettier --config .prettierrc --write .
+        npx --yes prettier@$PRETTIER_VERSION --config .prettierrc --write .
 
     - name: Check for changes
       run: |
