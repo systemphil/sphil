@@ -26,7 +26,7 @@ jobs:
     
     - name: Get Prettier version from package-lock.json
       run: |
-        PRETTIER_VERSION=$(cat package-lock.json | grep -m 1 'prettier' | cut -d '"' -f 4 | cut -c 2-)
+        PRETTIER_VERSION=$(grep -m 1 'prettier' package-lock.json | cut -d '"' -f 4 | cut -c 2-)
         echo $PRETTIER_VERSION
 
     - name: Run Prettier (specific version)
