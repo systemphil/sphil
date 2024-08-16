@@ -26,12 +26,12 @@ jobs:
     
     - name: Get Prettier version from package-lock.json
       run: |
-        PRETTIER_WITH_VERSION=$(npm ls | grep prettier | awk '{print $2}')
-        echo $PRETTIER_WITH_VERSION
+        PRETTIER_VERSION=$(cat package-lock.json | grep -m 1 'prettier' | cut -d '"' -f 4 | cut -c 2-)
+        echo $PRETTIER_VERSION
 
     - name: Run Prettier (specific version)
       run: |
-        npm install $PRETTIER_WITH_VERSION
+        npm install prettier@$PRETTIER_VERSION
         npx prettier --config .prettierrc --write .
 
     - name: Check for changes
