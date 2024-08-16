@@ -22,16 +22,14 @@ import { Callout } from "nextra/components";
 <Callout type="info" emoji="ℹ️">
     Today is {new Date().toLocaleString(undefined, { weekday: "long" })}.
 </Callout>
-;
 
+{/* prettier-ignore */}
 ```mdx
 import { Callout } from 'nextra/components'
  
 <Callout type="info" emoji="ℹ️">
     Today is {new Date().toLocaleString(undefined, { weekday: 'long'})}.
-</Callout
-
->
+</Callout>
 ```
 
 ### `Tabs`
@@ -43,6 +41,7 @@ then use the `Tabs.Tab` component to define the content of each tab. The
 
 import { Tabs } from "nextra/components";
 
+{/* prettier-ignore */}
 <Tabs items={["Intuitions", "Concepts", "Ideas"]}>
     <Tabs.Tab>**Intuitions**: Immediate and sensuous.</Tabs.Tab>
     <Tabs.Tab>
@@ -53,10 +52,10 @@ import { Tabs } from "nextra/components";
         intuitions, via the understanding.
     </Tabs.Tab>
 </Tabs>
-;
 
 ---
 
+{/* prettier-ignore */}
 ```mdx
 import { Tabs } from 'nextra/components'
  
@@ -64,9 +63,7 @@ import { Tabs } from 'nextra/components'
     <Tabs.Tab>**Intuitions**: Immediate and sensuous.</Tabs.Tab>
     <Tabs.Tab>**Concepts**: Mediated and pure, but connected directly to intuitions.</Tabs.Tab>
     <Tabs.Tab>**Ideas**: Also mediated and pure, but only indirectly connected to intuitions, via the understanding.</Tabs.Tab>
-</Tabs
-
->
+</Tabs>
 ```
 
 ### `Cards`
@@ -78,6 +75,7 @@ component should be used inside the `Cards` component.
 
 import { Cards, Card } from "nextra/components";
 
+{/* prettier-ignore */}
 <Cards>
     <Card icon={"📄"} title="Methodology" href="/contributing/methodology" />
     <Card
@@ -87,10 +85,10 @@ import { Cards, Card } from "nextra/components";
     />
     <Card icon={"📎"} title="GitHub" href="https://github.com/" />
 </Cards>
-;
 
 The `Card` component takes the following props:
 
+{/* prettier-ignore */}
 ```mdx
 import { Cards, Card } from 'nextra/components'
  
@@ -98,9 +96,7 @@ import { Cards, Card } from 'nextra/components'
     <Card icon={"📄"} title="Methodology" href="/contributing/methodology" />
     <Card icon={"📜"} title="Code of Conduct" href="/contributing/code-of-conduct" />
     <Card icon={"📎"} title="GitHub" href="https://github.com/" />
-</Cards
-
->
+</Cards>
 ```
 
 ### `Steps`
@@ -117,6 +113,7 @@ import { Steps } from "nextra/components";
 
 <Steps>### Step 1 Contents for step 1. ### Step 2 Contents for step 2.</Steps>;
 
+{/* prettier-ignore */}
 ```mdx
 import { Steps } from 'nextra/components'
  
@@ -128,9 +125,7 @@ Contents for step 1.
 ### Step 2
  
 Contents for step 2.
-</Steps
-
->
+</Steps>
 ```
 
 ### `FileTree`
@@ -142,6 +137,7 @@ component should be used inside the `FileTree` component. You can then use the
 
 import { FileTree } from "nextra/components";
 
+{/* prettier-ignore */}
 <FileTree>
     <FileTree.Folder name="pages" defaultOpen>
         <FileTree.File name="_meta.json" />
@@ -154,8 +150,8 @@ import { FileTree } from "nextra/components";
         </FileTree.Folder>
     </FileTree.Folder>
 </FileTree>
-;
 
+{/* prettier-ignore */}
 ```mdx
 import { FileTree } from 'nextra/components'
  
@@ -170,9 +166,7 @@ import { FileTree } from 'nextra/components'
             <FileTree.File name="index.mdx" />
         </FileTree.Folder>
     </FileTree.Folder>
-</FileTree
-
->
+</FileTree>
 ```
 
 ## Nextra Documentation

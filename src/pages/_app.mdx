@@ -3,11 +3,10 @@ import Analytics from "@/components/Analytics";
 import "../styles/overrides.css";
 
 export default function App({ Component, pageProps }) {
-  	return (
-		<>
-			<Component {...pageProps} />
-			<Analytics />
-		</>
-	)
-
+    return (
+        <>
+            <Component {...pageProps} />
+            <Analytics />
+        </>
+    );
 }

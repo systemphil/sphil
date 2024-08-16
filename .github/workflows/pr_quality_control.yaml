@@ -1,4 +1,4 @@
-name: Verify MDX content
+name: Pull Request Quality Control
 
 on:
   workflow_dispatch:
@@ -6,10 +6,51 @@ on:
     branches: [main]
 
 jobs:
-  verification:
+  formatting:
+    permissions:
+        contents: "write"
+        pull-requests: "write"
+
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    
+    - name: Get Prettier version from package-lock.json
+      run: |
+        PRETTIER_WITH_VERSION=$(npm ls | grep prettier | awk '{print $2}')
+        echo "$PRETTIER_WITH_VERSION"
+
+    - name: Run Prettier (specific version)
+      run: |
+        npx prettier@$PRETTIER_WITH_VERSION --config .prettierrc --write .
+    
+    - name: Run Prettier
+      run: npx prettier --config .prettierrc --write .
+
+    - name: Check for changes
+      run: |
+        git config --global user.name "Quality Checks"
+        git config --global user.email "actions@github.com"
+        if [[ `git status --porcelain` ]]; then
+            git add .
+            git commit -m "ci: format code with Prettier [on behalf of ${{ github.event.sender.name }}]"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+        fi
+
+  verification:
+    needs: formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - uses: actions/cache/restore@v4
         id: prepyrus-cache-restore
         with:
