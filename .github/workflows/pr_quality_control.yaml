@@ -34,6 +34,7 @@ jobs:
         npx --yes prettier@$PRETTIER_VERSION --config .prettierrc --write .
 
     - name: Check for changes
+      id: check-changes
       run: |
         git config --global user.name "sPhil_PR_quality_ctl"
         git config --global user.email "actions@github.com"
@@ -42,6 +43,7 @@ jobs:
             git commit -m "ci: format code with Prettier [on behalf of ${{ github.event.pull_request.user.login }}]"
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
         fi
+        echo "LAST_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
   verification:
     needs: formatting
@@ -50,7 +52,7 @@ jobs:
 
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ steps.check-changes.outputs.LAST_COMMIT }}
 
       - uses: actions/cache/restore@v4
         id: prepyrus-cache-restore
