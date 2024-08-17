@@ -69,5 +69,5 @@ jobs:
     - name: Invoke workflow
       run: |
         echo "SHA: ${{ steps.check-changes.outputs.commit_sha }}"
-        gh workflow run verify_mdx_content.yaml --ref ${{ github.event.pull_request.head.ref }} -f pr_id=${{ github.event.pull_request.head.ref }}
+        gh workflow run verify_mdx_content.yaml --ref ${{ github.event.pull_request.head.ref }} -f pr_id=${{ steps.check-changes.outputs.commit_sha }}
     # pr_id=${{ steps.get-sha.outputs.sha }}
