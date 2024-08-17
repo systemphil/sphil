@@ -46,6 +46,9 @@ jobs:
             git add .
             git commit -m "ci: format code with Prettier [on behalf of ${{ github.event.pull_request.user.login }}]"
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
+            COMMIT_SHA=$(git rev-parse HEAD)
+            echo "Commit SHA: $COMMIT_SHA"
+            echo "::set-output name=commit_sha::$COMMIT_SHA"
         fi
 
     - name: Get sha from PR number and save output
@@ -65,5 +68,6 @@ jobs:
 
     - name: Invoke workflow
       run: |
-        gh workflow run verify_mdx_content.yaml --ref ${{ github.event.pull_request.head.ref }} -f pr_id=${{ steps.get-sha.outputs.sha }}
-    
+        echo "SHA: ${{ steps.check-changes.outputs.commit_sha }}"
+        gh workflow run verify_mdx_content.yaml --ref ${{ github.event.pull_request.head.ref }} -f pr_id=${{ github.event.pull_request.head.ref }}
+    # pr_id=${{ steps.get-sha.outputs.sha }}
