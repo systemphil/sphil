@@ -2,19 +2,9 @@ name: Verify MDX Content
 
 on:
   workflow_dispatch:
-    # inputs:
-    #   pr_id:
-    #     description: 'Pull Request ID'
-    #     required: true
-#   workflow_run:
-#     workflows: ["Verify formatting"]
-#     types:
-#       - completed
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
-    types: [edited, opened, synchronize, reopened]
+    # types: [edited, opened, synchronize, reopened]
   
 
 jobs:
@@ -28,8 +18,6 @@ jobs:
     steps:
 
     - uses: actions/checkout@v4
-    #   with:
-    #     ref: ${{ github.event.pull_request.head.sha }}
 
     - uses: actions/cache/restore@v4
       id: prepyrus-cache-restore
@@ -57,26 +45,6 @@ jobs:
         path: target/release/prepyrus
         key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
 
-    # - name: Report tests check
-    #   uses: actions/github-script@v3
-    #   with:
-    #       github-token: ${{ secrets.GITHUB_TOKEN }}
-    #       script: |
-    #         github.checks.create({
-    #             name: 'prepyrus verification',
-    #             head_sha: '${{ github.event.inputs.pr_id }}',
-    #             status: 'completed',
-    #             conclusion: '${{ steps.prepyrus-run.outcome }}',
-    #             output: {
-    #             title: 'Prepyrus verification',
-    #             summary: 'Results: ${{ steps.prepyrus-run.outcome }}'
-    #             },
-    #             owner: context.repo.owner,
-    #             repo: context.repo.repo
-    #         })
-    #   if: always()
-
-      # head_sha: '${{ github.event.inputs.pr_id }}',
 # To include multiple paths for the cache:
 # path: |
 #   ~/.cargo/bin/
