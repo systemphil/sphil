@@ -7,7 +7,6 @@ on:
 
 jobs:
   verification:
-    needs: formatting
     runs-on: ubuntu-latest
     steps:
 
@@ -38,6 +37,7 @@ jobs:
         key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
 
   formatting:
+    needs: verification
     permissions:
         contents: "write"
         pull-requests: "write"
