@@ -10,8 +10,11 @@ on:
 #     workflows: ["Verify formatting"]
 #     types:
 #       - completed
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
+    types: [edited, opened, synchronize, reopened]
   
 
 jobs:
