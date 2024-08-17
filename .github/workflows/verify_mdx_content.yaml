@@ -71,6 +71,7 @@ jobs:
             })
       if: always()
 
+      # head_sha: '${{ github.event.inputs.pr_id }}',
 # To include multiple paths for the cache:
 # path: |
 #   ~/.cargo/bin/

@@ -2,11 +2,11 @@ name: Pull Request Quality Control
 
 on:
   workflow_dispatch:
-  # pull_request:
-  #   branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  formatting:
+  format_and_verify:
     permissions:
         contents: "write"
         pull-requests: "write"
@@ -42,16 +42,14 @@ jobs:
             git add .
             git commit -m "ci: format code with Prettier [on behalf of ${{ github.event.pull_request.user.login }}]"
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
+            COMMIT_SHA=$(git rev-parse HEAD)
+            echo "Commit SHA: $COMMIT_SHA"
+            echo "::set-output name=commit_sha::$COMMIT_SHA"
         fi
-
-  verification:
-    needs: formatting
-    runs-on: ubuntu-latest
-    steps:
 
     - uses: actions/checkout@v4
       with:
-        ref: ${{ github.event.pull_request.head.sha }}
+        ref: ${{ steps.check-changes.outputs.commit_sha  }}
 
     - uses: actions/cache/restore@v4
       id: prepyrus-cache-restore
