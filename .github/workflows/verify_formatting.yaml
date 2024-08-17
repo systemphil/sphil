@@ -44,3 +44,7 @@ jobs:
             git commit -m "ci: format code with Prettier [on behalf of ${{ github.event.pull_request.user.login }}]"
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
         fi
+
+    - name: Invoke workflow
+      run: |
+        gh workflow run verify_mdx_content.yaml --ref ${{ github.event.pull_request.head.ref }}
