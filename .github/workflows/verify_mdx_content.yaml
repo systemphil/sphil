@@ -32,6 +32,7 @@ jobs:
       run: cargo build --release --package prepyrus
 
     - name: Run prepyrus script in verification mode
+      id: prepyrus-run
       run: target/release/prepyrus absolute_bibliography.bib src/pages verify
 
     - name: Save Prepyrus to cache
@@ -42,7 +43,24 @@ jobs:
         path: target/release/prepyrus
         key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
 
-
+    - name: Report tests check
+      uses: actions/github-script@v3
+      with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.checks.create({
+                name: 'run tests',
+                head_sha: '${{ github.sha }}',
+                status: 'completed',
+                conclusion: '${{ steps.prepyrus-run.outcome }}',
+                output: {
+                title: 'Run tests',
+                summary: 'Results: ${{ steps.prepyrus-run.outcome }}'
+                },
+                owner: context.repo.owner,
+                repo: context.repo.repo
+            })
+      if: always()
 
 # To include multiple paths for the cache:
 # path: |
