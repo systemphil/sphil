@@ -44,11 +44,15 @@ jobs:
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
         fi
         echo "LAST_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
+        echo $LAST_COMMIT
 
   verification:
     needs: formatting
     runs-on: ubuntu-latest
     steps:
+      
+      - name: Check Last Commit
+        run: echo "${{ steps.check-changes.outputs.LAST_COMMIT }}"
 
       - uses: actions/checkout@v4
         with:
