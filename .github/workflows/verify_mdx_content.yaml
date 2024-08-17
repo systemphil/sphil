@@ -59,7 +59,7 @@ jobs:
           script: |
             github.checks.create({
                 name: 'prepyrus verification',
-                head_sha: '${{ github.inputs.pr_id }}',
+                head_sha: '${{ github.event.inputs.pr_id }}',
                 status: 'completed',
                 conclusion: '${{ steps.prepyrus-run.outcome }}',
                 output: {
