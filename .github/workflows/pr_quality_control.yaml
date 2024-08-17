@@ -6,6 +6,37 @@ on:
     branches: [main]
 
 jobs:
+  verification:
+    needs: formatting
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v4
+
+    - uses: actions/cache/restore@v4
+      id: prepyrus-cache-restore
+      with:
+        path: target/release/prepyrus
+        key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
+    - name: Install Rust
+      if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
+      uses: actions-rust-lang/setup-rust-toolchain@v1
+
+    - name: Install dependencies
+      if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
+      run: cargo build --release --package prepyrus
+
+    - name: Run prepyrus script in verification mode
+      run: target/release/prepyrus absolute_bibliography.bib src/pages verify
+
+    - name: Save Prepyrus to cache
+      id: prepyrus-cache-save
+      if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: target/release/prepyrus
+        key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
+
   formatting:
     permissions:
         contents: "write"
@@ -43,45 +74,7 @@ jobs:
             git commit -m "ci: format code with Prettier [on behalf of ${{ github.event.pull_request.user.login }}]"
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
         fi
-        echo "LAST_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
-        echo $LAST_COMMIT
 
-  verification:
-    needs: formatting
-    runs-on: ubuntu-latest
-    steps:
-      
-      - name: Check Last Commit
-        run: echo "${{ steps.check-changes.outputs.LAST_COMMIT }}"
-
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ steps.check-changes.outputs.LAST_COMMIT }}
-
-      - uses: actions/cache/restore@v4
-        id: prepyrus-cache-restore
-        with:
-          path: target/release/prepyrus
-          key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
-      - name: Install Rust
-        if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
-        uses: actions-rust-lang/setup-rust-toolchain@v1
-
-      - name: Install dependencies
-        if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
-        run: cargo build --release --package prepyrus
-
-      - name: Run prepyrus script in verification mode
-        run: target/release/prepyrus absolute_bibliography.bib src/pages verify
-
-      - name: Save Prepyrus to cache
-        id: prepyrus-cache-save
-        if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: target/release/prepyrus
-          key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
-#
 # To include multiple paths for the cache:
 # path: |
 #   ~/.cargo/bin/
