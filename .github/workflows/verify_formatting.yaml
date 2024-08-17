@@ -48,7 +48,22 @@ jobs:
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
         fi
 
+    - name: Get sha from PR number and save output
+      id: get-sha
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          console.log('PR number: ' + ${{ github.event.pull_request.number }})
+          const pr = await github.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: ${{ github.event.pull_request.number }}
+          })
+          console.log('PR Head sha: ' + pr.data.head.sha)
+          core.setOutput('sha', pr.data.head.sha)
+
     - name: Invoke workflow
       run: |
-        gh workflow run verify_mdx_content.yaml --ref ${{ github.event.pull_request.head.ref }} -f pr_id=${{ github.event.pull_request.head.sha }}
+        gh workflow run verify_mdx_content.yaml --ref ${{ github.event.pull_request.head.ref }} -f pr_id=${{ steps.get-sha.outputs.sha }}
     
