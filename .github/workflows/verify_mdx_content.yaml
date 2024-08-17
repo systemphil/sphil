@@ -2,22 +2,19 @@ name: Verify MDX Content
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: ["Verify formatting"]
-    types:
-      - completed
-  
+  pull_request:
+    branches: [main]
 
 jobs:
   verification:
     runs-on: ubuntu-latest
     steps:
 
-    - uses: actions/checkout@v4
-    #   with:
-    #     ref: ${{ github.event.pull_request.head.sha }}
+    - name: Checkout
+      uses: actions/checkout@v4
 
-    - uses: actions/cache/restore@v4
+    - name: Revive Prepyrus
+      uses: actions/cache/restore@v4
       id: prepyrus-cache-restore
       with:
         path: target/release/prepyrus
@@ -32,6 +29,7 @@ jobs:
       run: cargo build --release --package prepyrus
 
     - name: Run prepyrus script in verification mode
+      id: prepyrus-run
       run: target/release/prepyrus absolute_bibliography.bib src/pages verify
 
     - name: Save Prepyrus to cache
@@ -41,8 +39,6 @@ jobs:
       with:
         path: target/release/prepyrus
         key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
-
-
 
 # To include multiple paths for the cache:
 # path: |
