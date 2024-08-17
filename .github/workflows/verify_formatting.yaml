@@ -1,0 +1,45 @@
+name: Verify formatting
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+
+jobs:
+  formatting:
+    permissions:
+        contents: "write"
+        pull-requests: "write"
+
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    
+    - name: Get Prettier version from package-lock.json
+      run: |
+        PRETTIER_VERSION=$(grep -m 1 'prettier' package-lock.json | cut -d '"' -f 4 | cut -c 2-)
+        echo $PRETTIER_VERSION
+
+    - name: Run Prettier (specific version)
+      run: |
+        npx --yes prettier@$PRETTIER_VERSION --config .prettierrc --write .
+
+    - name: Check for changes
+      id: check-changes
+      run: |
+        git config --global user.name "sPhil_PR_quality_ctl"
+        git config --global user.email "actions@github.com"
+        if [[ `git status --porcelain` ]]; then
+            git add .
+            git commit -m "ci: format code with Prettier [on behalf of ${{ github.event.pull_request.user.login }}]"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+        fi
