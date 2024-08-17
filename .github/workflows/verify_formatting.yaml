@@ -50,5 +50,5 @@ jobs:
 
     - name: Invoke workflow
       run: |
-        gh workflow run verify_mdx_content.yaml --ref ${{ github.event.pull_request.head.ref }}
+        gh workflow run verify_mdx_content.yaml --ref ${{ github.event.pull_request.head.ref }} -f pr_id=${{ github.event.pull_request.head.sha }}
     
