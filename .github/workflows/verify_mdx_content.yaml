@@ -2,10 +2,10 @@ name: Verify MDX Content
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: ["Verify formatting"]
-    types:
-      - completed
+#   workflow_run:
+#     workflows: ["Verify formatting"]
+#     types:
+#       - completed
   
 
 jobs:
