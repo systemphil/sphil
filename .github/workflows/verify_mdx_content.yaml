@@ -4,22 +4,17 @@ on:
   workflow_dispatch:
   pull_request:
     branches: [main]
-    # types: [edited, opened, synchronize, reopened]
-  
 
 jobs:
   verification:
-    permissions:
-      checks: write
-      issues: write
-      pull-requests: write
-
     runs-on: ubuntu-latest
     steps:
 
-    - uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
 
-    - uses: actions/cache/restore@v4
+    - name: Revive Prepyrus
+      uses: actions/cache/restore@v4
       id: prepyrus-cache-restore
       with:
         path: target/release/prepyrus

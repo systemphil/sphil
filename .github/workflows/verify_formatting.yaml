@@ -5,19 +5,13 @@ on:
   pull_request:
     branches: [main]
 
-# env:
-#   GH_TOKEN: ${{ github.token }}
-
 jobs:
   formatting:
-    # permissions:
-    #     contents: "write"
-    #     pull-requests: "write"
-
     runs-on: ubuntu-latest
     steps:
 
-    - id: create_token
+    - name: Generate COG token
+      id: create_token
       uses: tibdex/github-app-token@v2
       with:
         app_id: ${{ secrets.COG_APP_ID }}
