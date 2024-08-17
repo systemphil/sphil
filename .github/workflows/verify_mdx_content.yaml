@@ -2,14 +2,16 @@ name: Verify MDX Content
 
 on:
   workflow_dispatch:
-    inputs:
-      pr_id:
-        description: 'Pull Request ID'
-        required: true
+    # inputs:
+    #   pr_id:
+    #     description: 'Pull Request ID'
+    #     required: true
 #   workflow_run:
 #     workflows: ["Verify formatting"]
 #     types:
 #       - completed
+  pull_request:
+    branches: [main]
   
 
 jobs:
@@ -52,24 +54,24 @@ jobs:
         path: target/release/prepyrus
         key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
 
-    - name: Report tests check
-      uses: actions/github-script@v3
-      with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.checks.create({
-                name: 'prepyrus verification',
-                head_sha: '${{ github.event.inputs.pr_id }}',
-                status: 'completed',
-                conclusion: '${{ steps.prepyrus-run.outcome }}',
-                output: {
-                title: 'Prepyrus verification',
-                summary: 'Results: ${{ steps.prepyrus-run.outcome }}'
-                },
-                owner: context.repo.owner,
-                repo: context.repo.repo
-            })
-      if: always()
+    # - name: Report tests check
+    #   uses: actions/github-script@v3
+    #   with:
+    #       github-token: ${{ secrets.GITHUB_TOKEN }}
+    #       script: |
+    #         github.checks.create({
+    #             name: 'prepyrus verification',
+    #             head_sha: '${{ github.event.inputs.pr_id }}',
+    #             status: 'completed',
+    #             conclusion: '${{ steps.prepyrus-run.outcome }}',
+    #             output: {
+    #             title: 'Prepyrus verification',
+    #             summary: 'Results: ${{ steps.prepyrus-run.outcome }}'
+    #             },
+    #             owner: context.repo.owner,
+    #             repo: context.repo.repo
+    #         })
+    #   if: always()
 
       # head_sha: '${{ github.event.inputs.pr_id }}',
 # To include multiple paths for the cache:
