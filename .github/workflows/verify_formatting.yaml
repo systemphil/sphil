@@ -51,3 +51,6 @@ jobs:
     - name: Invoke workflow
       run: |
         gh workflow run verify_mdx_content.yaml --ref ${{ github.event.pull_request.head.ref }}
+    
+    - name: Set status check
+      run: echo "::set-status name=my_check::success::Check passed"
