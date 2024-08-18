@@ -42,7 +42,10 @@ jobs:
       run: |
         echo "has_changes=$(git status --porcelain | wc -l)" >> $GITHUB_OUTPUT
 
-    - uses: EndBug/add-and-commit@v5
+    - name: Add and commit changes
+      uses: EndBug/add-and-commit@v5
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         message: 'ci: format code [automated action on behalf of ${{ github.event.pull_request.user.login }}]'
       if: steps.prettier-changes.outputs.has_changes != '0'
