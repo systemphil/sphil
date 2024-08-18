@@ -40,9 +40,7 @@
         "Wissenschaft",
         "Zusätze"
     ],
-    "enableFiletypes": [
-        "mdx"
-    ],
+    "enableFiletypes": ["mdx"],
     "ignoreWords": [
         "biblatex",
         "datetime",

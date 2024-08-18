@@ -1,10 +1,9 @@
 import Heading from "@/components/Heading";
 import SubHeroBackground from "./SubHeroBackground";
-import { Card } from 'nextra/components'
+import { Card } from "nextra/components";
 
-const SubdirectoryLanding = ({subdirectory}: {subdirectory: string}) => {
-
-    return(
+const SubdirectoryLanding = ({ subdirectory }: { subdirectory: string }) => {
+    return (
         <main>
             <section className="relative flex flex-col items-center justify-start w-full h-screen overflow-hidden mb-10">
                 <SubHeroBackground>
@@ -15,18 +14,22 @@ const SubdirectoryLanding = ({subdirectory}: {subdirectory: string}) => {
                                 icon={" 📄 "}
                                 title="Guides"
                                 href={`/${subdirectory}/guides`}
-                            >_</Card>
+                            >
+                                _
+                            </Card>
                             <Card
                                 icon={" 📄 "}
                                 title="Reference"
                                 href={`/${subdirectory}/reference`}
-                            >_</Card>
+                            >
+                                _
+                            </Card>
                         </div>
                     </div>
                 </SubHeroBackground>
             </section>
         </main>
     );
-}
+};
 
-export default SubdirectoryLanding; 
+export default SubdirectoryLanding;

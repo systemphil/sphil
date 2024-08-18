@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import Stars from "./Stars";
 
-
 const HeroBackground = () => {
-    // We must use typeof window !== "undefined" to avoid crashing the Nextjs server during development. 
-    const [theme, setTheme] = useState(typeof window !== "undefined" ? localStorage.theme :  "light");
+    // We must use typeof window !== "undefined" to avoid crashing the Nextjs server during development.
+    const [theme, setTheme] = useState(
+        typeof window !== "undefined" ? localStorage.theme : "light"
+    );
 
     useEffect(() => {
         /**
@@ -15,7 +16,7 @@ const HeroBackground = () => {
          */
         const DOMTokenListChecker = () => {
             if (document.documentElement.classList.contains("dark")) {
-                setTheme("dark"); 
+                setTheme("dark");
             } else {
                 setTheme("light");
             }
@@ -25,9 +26,9 @@ const HeroBackground = () => {
          * to check if darkmode is on are kept.
          */
         const targetObservable = document.documentElement;
-        const config = { 
-            attributes: true, 
-            attributeFilter: ["class"]
+        const config = {
+            attributes: true,
+            attributeFilter: ["class"],
         };
         /**
          * For the callback function we check whether there is a change in the relevant type and attributeName.
@@ -35,7 +36,10 @@ const HeroBackground = () => {
          */
         const callback: MutationCallback = (mutationList, observer) => {
             for (const mutation of mutationList) {
-                if (mutation.type === "attributes" && mutation.attributeName === "class") {
+                if (
+                    mutation.type === "attributes" &&
+                    mutation.attributeName === "class"
+                ) {
                     DOMTokenListChecker();
                 }
             }
@@ -51,11 +55,9 @@ const HeroBackground = () => {
              */
             observer.disconnect();
         };
-    }, [theme])
+    }, [theme]);
 
-    return(
-        <Stars theme={theme}/>
-    )
-}
+    return <Stars theme={theme} />;
+};
 
 export default HeroBackground;

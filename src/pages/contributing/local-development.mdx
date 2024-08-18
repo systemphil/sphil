@@ -1,41 +1,80 @@
-import { Callout } from 'nextra/components'
+import { Callout } from "nextra/components";
 
 # Local Development
 
-Settings up local development takes a bit of work, but it's absolutely worth it if you plan on contributing often to sPhil. The following is a guide on how to set up a local development environment on Windows. If you're on Mac, you're on your own. Just kidding, the process should be roughly the same. (Linux users are probably smart enough to figure it out on their own.)
+Settings up local development takes a bit of work, but it's absolutely worth it
+if you plan on contributing often to sPhil. The following is a guide on how to
+set up a local development environment on Windows. If you're on Mac, you're on
+your own. Just kidding, the process should be roughly the same. (Linux users are
+probably smart enough to figure it out on their own.)
 
-Furthermore, this guide is split into lite and full versions. The lite version is for those who just want to write and edit the content, but don't plan on running the site locally or involve themselves with the programmatic parts. The full version is for those who do want to get fully involved, code and all, and run the site locally. 
+Furthermore, this guide is split into lite and full versions. The lite version
+is for those who just want to write and edit the content, but don't plan on
+running the site locally or involve themselves with the programmatic parts. The
+full version is for those who do want to get fully involved, code and all, and
+run the site locally.
 
 ### Lite Version
 
 #### Terminals and Installation
 
-First, get acquainted with your terminal. Windows comes with Command Prompt, but we recommend using either [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4) or [Git Bash](https://git-scm.com/downloads) instead. PowerShell is best installed from Window's App Store, while Git Bash is best installed from the link above. The simplest way to launch a terminal in Windows is to press `Win` button and type `powershell` or `git bash` into the prompt (note you want `powershell`, not `windows powershell`). This launches a terminal from the user's home directory (usually). No need to do anything yet but know how to start a terminal when we need it. 
+First, get acquainted with your terminal. Windows comes with Command Prompt, but
+we recommend using either
+[PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4)
+or [Git Bash](https://git-scm.com/downloads) instead. PowerShell is best
+installed from Window's App Store, while Git Bash is best installed from the
+link above. The simplest way to launch a terminal in Windows is to press `Win`
+button and type `powershell` or `git bash` into the prompt (note you want
+`powershell`, not `windows powershell`). This launches a terminal from the
+user's home directory (usually). No need to do anything yet but know how to
+start a terminal when we need it.
 
 Now, you will need to install the following on your local machine:
 
-- [Git](https://git-scm.com/downloads)
-- A text editor (We recommend [VS Code](https://code.visualstudio.com/), but you can use whatever you want)
-- [GitHub Command Line Interface](https://cli.github.com/)
+-   [Git](https://git-scm.com/downloads)
+-   A text editor (We recommend [VS Code](https://code.visualstudio.com/), but
+    you can use whatever you want)
+-   [GitHub Command Line Interface](https://cli.github.com/)
 
-With the tools installed, open up a terminal and navigate to a directory where you want to store the sPhil codebase. For example, if your terminal starts you in your root user directory, you can make a new folder for all your development projects by typing `mkdir dev` and then `cd dev` to navigate into the new folder.
+With the tools installed, open up a terminal and navigate to a directory where
+you want to store the sPhil codebase. For example, if your terminal starts you
+in your root user directory, you can make a new folder for all your development
+projects by typing `mkdir dev` and then `cd dev` to navigate into the new
+folder.
 
-If your terminal starts you in your system directory, you can navigate to your user directory by typing `cd ~` (the long route is to type `cd ../..` and then type `cd Users/<your-username>`). Then, you can make a new folder for all your development projects by typing `mkdir dev` and then `cd dev` to navigate into the new folder.
+If your terminal starts you in your system directory, you can navigate to your
+user directory by typing `cd ~` (the long route is to type `cd ../..` and then
+type `cd Users/<your-username>`). Then, you can make a new folder for all your
+development projects by typing `mkdir dev` and then `cd dev` to navigate into
+the new folder.
 
 #### Cloning the Repository
 
-Now, we need to clone the repository. First, retrieve the link from your GitHub copy of sPhil and type `git clone <insert-url-here> sphil` into your terminal. This will create a new folder called `sphil` in your current directory and clone the repository into it. It is important you have exactly one space between all the elements of the command.
+Now, we need to clone the repository. First, retrieve the link from your GitHub
+copy of sPhil and type `git clone <insert-url-here> sphil` into your terminal.
+This will create a new folder called `sphil` in your current directory and clone
+the repository into it. It is important you have exactly one space between all
+the elements of the command.
 
-Once the repository is cloned, navigate into the `sphil` folder by typing `cd sphil`. You should now be in the root directory of the repository.
+Once the repository is cloned, navigate into the `sphil` folder by typing
+`cd sphil`. You should now be in the root directory of the repository.
 
 #### Editing Content
 
-Inside the `sphil` directory in your terminal, type `code .` to open the repository in VS Code. This will open a new VS Code window with the repository's contents. From here you can look around and open any file to view and edit its contents. At its core, VS Code is really just a text editor, so you can use it to edit any text file, which is what programming source files largely are.
+Inside the `sphil` directory in your terminal, type `code .` to open the
+repository in VS Code. This will open a new VS Code window with the repository's
+contents. From here you can look around and open any file to view and edit its
+contents. At its core, VS Code is really just a text editor, so you can use it
+to edit any text file, which is what programming source files largely are.
 
-The content of the sPhil is stored in the `pages` folder under `src`. Inside the `pages` folder, you will find a folder for each page of the website.
+The content of the sPhil is stored in the `pages` folder under `src`. Inside the
+`pages` folder, you will find a folder for each page of the website.
 
 <Callout type="info" emoji="ℹ️">
-    VS Code will likely prompt you about installing some extensions based on the file-types it detects in the repository. You can install them if you want, but they are not necessary for editing the content. However, we do recommend installing a few. 
+    VS Code will likely prompt you about installing some extensions based on the
+    file-types it detects in the repository. You can install them if you want,
+    but they are not necessary for editing the content. However, we do recommend
+    installing a few.
     <ul>
         <li>- Better Comments</li>
         <li>- MDX</li>
@@ -45,47 +84,87 @@ The content of the sPhil is stored in the `pages` folder under `src`. Inside the
 
 #### Committing Changes and Pushing to GitHub
 
-Once you've made some changes to the content, you can commit them to your local repository. First, open up a terminal in VS Code by pressing the `TERMINAL` button at the bottom panel and type `git status`. This will show you all the files you've changed since the last commit. (Note: the panels in VS Code can be adjusted by dragging the divider between them.)
+Once you've made some changes to the content, you can commit them to your local
+repository. First, open up a terminal in VS Code by pressing the `TERMINAL`
+button at the bottom panel and type `git status`. This will show you all the
+files you've changed since the last commit. (Note: the panels in VS Code can be
+adjusted by dragging the divider between them.)
 
-Next, type `git add .` to add all the changed files to the commit. Then, type `git commit -m "<insert-commit-message-here>"` to commit the changes. The commit message should be a short description of the changes you made. For example, if you added a new page, you could type `git commit -m "Added new page on X"`.
+Next, type `git add .` to add all the changed files to the commit. Then, type
+`git commit -m "<insert-commit-message-here>"` to commit the changes. The commit
+message should be a short description of the changes you made. For example, if
+you added a new page, you could type `git commit -m "Added new page on X"`.
 
-Finally, type `git push` to push the changes to your GitHub copy repository. You will be prompted to enter your GitHub username and password. Once you do, the changes will be pushed to your GitHub repository. 
+Finally, type `git push` to push the changes to your GitHub copy repository. You
+will be prompted to enter your GitHub username and password. Once you do, the
+changes will be pushed to your GitHub repository.
 
-Open your browser and navigate to your GitHub repository. You should see the changes you made in the repository and you can open a PR to the source repository from there.
+Open your browser and navigate to your GitHub repository. You should see the
+changes you made in the repository and you can open a PR to the source
+repository from there.
 
 <Callout type="info" emoji="ℹ️">
-    Use the GitHub CLI to login to your GitHub account and push changes to your repository. This will save you from having to enter your username and password every time you push changes. Use the command <code>gh auth login</code> to login to your GitHub account. You can also use the command <code>gh auth status</code> to check if you're logged in.
+    Use the GitHub CLI to login to your GitHub account and push changes to your
+    repository. This will save you from having to enter your username and
+    password every time you push changes. Use the command{" "}
+    <code>gh auth login</code> to login to your GitHub account. You can also use
+    the command <code>gh auth status</code> to check if you're logged in.
 </Callout>
-
 
 ### Full Version
 
-The full version extends the lite version by adding the ability to run the site locally. This is useful for testing out changes to the site before pushing them to the source repository. You need to have the lite version set up before you can do the full version.
+The full version extends the lite version by adding the ability to run the site
+locally. This is useful for testing out changes to the site before pushing them
+to the source repository. You need to have the lite version set up before you
+can do the full version.
 
 #### Installation
 
-In addition to all the other things installed previously, you need to install [Node.js](https://nodejs.org/en/download/). We recommend installing the LTS version. Once installed, open up a terminal and type `node -v` to check that it's installed correctly. You should see the version number of the Node.js installation.
+In addition to all the other things installed previously, you need to install
+[Node.js](https://nodejs.org/en/download/). We recommend installing the LTS
+version. Once installed, open up a terminal and type `node -v` to check that
+it's installed correctly. You should see the version number of the Node.js
+installation.
 
-Next, navigate to your local `sphil` repository in a terminal and type `npm install` to install all the dependencies. This will take a while, so go grab a coffee or something. Once it's done, you're ready to run the site locally.
+Next, navigate to your local `sphil` repository in a terminal and type
+`npm install` to install all the dependencies. This will take a while, so go
+grab a coffee or something. Once it's done, you're ready to run the site
+locally.
 
 If you use VS Code, some extensions you might want to install are:
-- Better Comments
-- MDX
-- ESLint
-- Git Graph
-- Git History
-- Pretty TypeScript Errors
-- Tailwind CSS IntelliSense
-- vscode-icons (if you want swanky icons)
+
+-   Better Comments
+-   MDX
+-   ESLint
+-   Git Graph
+-   Git History
+-   Pretty TypeScript Errors
+-   Tailwind CSS IntelliSense
+-   vscode-icons (if you want swanky icons)
 
 #### Running the Site Locally
 
-To run the site locally, navigate to your local `sphil` repository in a terminal and type `npm run dev` (this will occupy the terminal in which this is launched). This will start a local development server and open a browser window with the site running (or navigate to `https://localhost:3000` in your browser). You can now make changes to the content and see them instantly reflected in the browser!
+To run the site locally, navigate to your local `sphil` repository in a terminal
+and type `npm run dev` (this will occupy the terminal in which this is
+launched). This will start a local development server and open a browser window
+with the site running (or navigate to `https://localhost:3000` in your browser).
+You can now make changes to the content and see them instantly reflected in the
+browser!
 
 <Callout type="info" emoji="ℹ️">
-    Normally when you make changes to the content, the site will automatically reload in the browser. However, sometimes it doesn't or it crashes. If either happens, try refreshing the page. The missing `useRef` error is a common one that causes the site to crash, which has to do with how Nextra loads and transpiles `.mdx` files. If you see this error, nothing to worry about, just refresh the page.
+    Normally when you make changes to the content, the site will automatically
+    reload in the browser. However, sometimes it doesn't or it crashes. If
+    either happens, try refreshing the page. The missing `useRef` error is a
+    common one that causes the site to crash, which has to do with how Nextra
+    loads and transpiles `.mdx` files. If you see this error, nothing to worry
+    about, just refresh the page.
 </Callout>
 
 ### Troubleshooting
 
-Running into issues? Google is your friend and should be the first stop to debug any issues you run into. Second you can try ChatGPT or an other AI; they're good for basic issues but for more advanced problems they tend to be more an obstacle. Usually, the best source is the documentation website for the specific program or tool in which you're having trouble with. If you can't find a solution, feel free to reach out to the sPhil team for help.
+Running into issues? Google is your friend and should be the first stop to debug
+any issues you run into. Second you can try ChatGPT or an other AI; they're good
+for basic issues but for more advanced problems they tend to be more an
+obstacle. Usually, the best source is the documentation website for the specific
+program or tool in which you're having trouble with. If you can't find a
+solution, feel free to reach out to the sPhil team for help.

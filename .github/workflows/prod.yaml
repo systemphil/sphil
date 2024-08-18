@@ -106,6 +106,6 @@ jobs:
         gcloud run deploy ${{env.SERVICE}} \
           --platform=managed \
           --region=${{ env.REGION }} \
-          --max-instances=4 \
+          --max-instances=2 \
           --min-instances=default \
           --image="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"
