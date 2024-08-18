@@ -1,13 +1,14 @@
-import Link from "next/link"
-import SiteSwitcher from "./SiteSwitcher"
+import Link from "next/link";
+import SiteSwitcher from "./SiteSwitcher";
 import LogoAnimated from "./LogoAnimated";
 import LogoOwl from "./LogoOwl";
 
 const NavbarHeader = () => {
-
-    return(
+    return (
         <>
-            <h2 id="navbar-heading" className="sr-only">Navbar heading</h2>
+            <h2 id="navbar-heading" className="sr-only">
+                Navbar heading
+            </h2>
             <Link href="/" title="Home" className="flex items-center gap-4">
                 <LogoOwl />
                 <LogoAnimated />
@@ -17,6 +18,6 @@ const NavbarHeader = () => {
             </div>
         </>
     );
-}
+};
 
 export default NavbarHeader;

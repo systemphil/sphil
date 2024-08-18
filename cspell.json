@@ -37,9 +37,7 @@
         "Trisokkas",
         "Wissenschaft"
     ],
-    "enableFiletypes": [
-        "mdx"
-    ],
+    "enableFiletypes": ["mdx"],
     "ignoreWords": [
         "biblatex",
         "datetime",
