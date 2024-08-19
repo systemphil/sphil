@@ -22,8 +22,8 @@ export default function FadeIn({
     const fadeUpVariants = {
         initial: {
             opacity: 0,
-                y: noVertical ? 0 : 24,
-            },
+            y: noVertical ? 0 : 24,
+        },
         animate: {
             opacity: 1,
             y: 0,
