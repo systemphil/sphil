@@ -33,9 +33,13 @@
         "sublation",
         "systemphil",
         "Taggart",
+        "unseparated",
+        "unseparatedness",
         "Wissenschaft"
     ],
-    "enableFiletypes": ["mdx"],
+    "enableFiletypes": [
+        "mdx"
+    ],
     "ignoreWords": [
         "biblatex",
         "datetime",
