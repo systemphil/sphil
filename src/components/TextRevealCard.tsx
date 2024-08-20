@@ -177,30 +177,55 @@ export const TextRevealCardDescription = ({
     );
 };
 
+interface StarStyle {
+    top: string;
+    left: string;
+    opacity: number;
+}
+
 const Stars = () => {
-    const randomMove = () => Math.random() * 4 - 2;
-    const randomOpacity = () => Math.random();
-    const random = () => Math.random();
+    const [starStyles, setStarStyles] = useState<StarStyle[]>([]);
+
+    useEffect(() => {
+        const generateStarStyles = (): StarStyle[] => {
+            return [...Array(20)].map(() => ({
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+                opacity: Math.random(),
+            }));
+        };
+
+        setStarStyles(generateStarStyles());
+    }, []);
+
     return (
         <div className="absolute inset-0">
-            {[...Array(20)].map((_, i) => (
+            {starStyles.map((style, i) => (
                 <motion.span
                     key={`star-${i}`}
+                    initial={{
+                        top: style.top,
+                        left: style.left,
+                    }}
                     animate={{
-                        top: `calc(${random() * 100}% + ${randomMove()}px)`,
-                        left: `calc(${random() * 100}% + ${randomMove()}px)`,
-                        opacity: randomOpacity(),
+                        top: [
+                            `${Math.random() * 100}%`,
+                            `${Math.random() * 100}%`,
+                        ],
+                        left: [
+                            `${Math.random() * 100}%`,
+                            `${Math.random() * 100}%`,
+                        ],
+                        opacity: style.opacity,
                         scale: [1, 1.2, 0],
                     }}
                     transition={{
-                        duration: random() * 10 + 20,
+                        duration: Math.random() * 10 + 20,
                         repeat: Infinity,
                         ease: "linear",
                     }}
                     style={{
                         position: "absolute",
-                        top: `${random() * 100}%`,
-                        left: `${random() * 100}%`,
                         width: `2px`,
                         height: `2px`,
                         backgroundColor: "white",
