@@ -10,7 +10,7 @@ export function CreativeCommonsLogo() {
             width="32px"
             height="32px"
             viewBox="5.5 -3.5 64 64"
-            enable-background="new 5.5 -3.5 64 64"
+            enableBackground="new 5.5 -3.5 64 64"
             xmlSpace="preserve"
         >
             <g>
