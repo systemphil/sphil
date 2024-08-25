@@ -224,3 +224,48 @@ fn match_citations_to_bibliography(
 
     Ok(matched_citations)
 }
+
+#[cfg(test)]
+mod tests_citation_extraction {
+    use super::*;
+
+    #[test]
+    fn single_citation() {
+        let markdown = String::from("This is a citation (Smith 2021) in the text.");
+        let citations = extract_citations_from_markdown(&markdown);
+        assert_eq!(citations, vec!["Smith 2021"]);
+    }
+
+    #[test]
+    fn multiple_citations() {
+        let markdown =
+            String::from("This is a citation (Smith 2021) and another one (Doe 2020, 123).");
+        let citations = extract_citations_from_markdown(&markdown);
+        assert_eq!(citations, vec!["Smith 2021", "Doe 2020, 123"]);
+    }
+
+    #[test]
+    fn no_citation() {
+        let markdown = String::from("This text has no citations.");
+        let citations = extract_citations_from_markdown(&markdown);
+        assert_eq!(citations, Vec::<String>::new());
+    }
+
+    #[test]
+    fn citation_with_additional_text() {
+        let markdown = String::from("This citation (Johnson 2019) has additional text.");
+        let citations = extract_citations_from_markdown(&markdown);
+        assert_eq!(citations, vec!["Johnson 2019"]);
+    }
+
+    #[test]
+    fn multiple_lines() {
+        let markdown = String::from(
+            "First citation (Adams 2020).\n\
+            Second citation on a new line (Brown 2018).\n\
+            No citation here.",
+        );
+        let citations = extract_citations_from_markdown(&markdown);
+        assert_eq!(citations, vec!["Adams 2020", "Brown 2018"]);
+    }
+}
