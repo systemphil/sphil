@@ -52,6 +52,12 @@ pub fn verify_mdx_files(
         if !metadata.is_article {
             continue;
         }
+        if !check_parentheses_balance(&markdown_content) {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                format!("Unbalanced parentheses in {}", mdx_path),
+            ));
+        }
         let citations = extract_citations_from_markdown(&markdown_content);
         match verify_citations_format(&citations) {
             Ok(_) => {}
@@ -119,9 +125,31 @@ fn read_mdx_file(path: &str) -> io::Result<(Metadata, String, String)> {
     Ok((metadata, markdown_content, full_file_content))
 }
 
+fn check_parentheses_balance(markdown: &String) -> bool {
+    let mut balance = 0;
+
+    for ch in markdown.chars() {
+        if ch == '(' {
+            balance += 1;
+        } else if ch == ')' {
+            balance -= 1;
+        }
+
+        if balance < 0 {
+            return false;
+        }
+    }
+
+    balance == 0
+}
+
 /// Extract citations from a markdown string
 /// The citations are assumed to be Chicago author-date style
-/// and in the format (Author 2021) or (Author 2021, 123)
+/// and in the format (Author_last_name 2021) or (Author_last_name 2021, 123)
+///
+/// ### Example
+///
+/// (Hegel 2021) or (Hegel 2021, 123)
 fn extract_citations_from_markdown(markdown: &String) -> Vec<String> {
     //      Regex explanation
     //
@@ -135,7 +163,7 @@ fn extract_citations_from_markdown(markdown: &String) -> Vec<String> {
     //      )?      End the non-capturing group and make it optional
     //      \)      Match a closing parenthesis
     //
-    // The regex will match citations in the format (Author 2021) or (Author 2021, 123)
+    // The regex will match citations in the format (Author_last_name 2021) or (Author_last_name 2021, 123)
     //
     let citation_regex = Regex::new(r"\(([A-Z][^()]*?\d+(?:,[^)]*)?)\)").unwrap();
     let mut citations = Vec::new();
@@ -226,46 +254,141 @@ fn match_citations_to_bibliography(
 }
 
 #[cfg(test)]
+mod tests_balanced_parentheses {
+    use super::*;
+
+    #[test]
+    fn balanced_parentheses() {
+        let markdown = String::from("This is a balanced citation (Spinoza 2021).");
+        assert!(check_parentheses_balance(&markdown));
+    }
+    #[test]
+    fn unbalanced_parentheses_more_open() {
+        let markdown = String::from("This is an unbalanced citation (Spinoza 2021.");
+        assert!(!check_parentheses_balance(&markdown));
+    }
+    #[test]
+    fn unbalanced_parentheses_more_close() {
+        let markdown = String::from("This is an unbalanced citation Spinoza 2021).");
+        assert!(!check_parentheses_balance(&markdown));
+    }
+}
+
+#[cfg(test)]
 mod tests_citation_extraction {
     use super::*;
 
     #[test]
     fn single_citation() {
-        let markdown = String::from("This is a citation (Smith 2021) in the text.");
+        let markdown = String::from("This is a citation (Hegel 2021) in the text.");
         let citations = extract_citations_from_markdown(&markdown);
-        assert_eq!(citations, vec!["Smith 2021"]);
+        assert_eq!(citations, vec!["Hegel 2021"]);
     }
-
     #[test]
     fn multiple_citations() {
         let markdown =
-            String::from("This is a citation (Smith 2021) and another one (Doe 2020, 123).");
+            String::from("This is a citation (Spinoza 2021) and another one (Kant 2020, 123).");
         let citations = extract_citations_from_markdown(&markdown);
-        assert_eq!(citations, vec!["Smith 2021", "Doe 2020, 123"]);
+        assert_eq!(citations, vec!["Spinoza 2021", "Kant 2020, 123"]);
     }
-
     #[test]
     fn no_citation() {
         let markdown = String::from("This text has no citations.");
         let citations = extract_citations_from_markdown(&markdown);
         assert_eq!(citations, Vec::<String>::new());
     }
-
     #[test]
     fn citation_with_additional_text() {
-        let markdown = String::from("This citation (Johnson 2019) has additional text.");
+        let markdown = String::from("This citation (Plato 2019) has additional text.");
         let citations = extract_citations_from_markdown(&markdown);
-        assert_eq!(citations, vec!["Johnson 2019"]);
+        assert_eq!(citations, vec!["Plato 2019"]);
     }
-
     #[test]
     fn multiple_lines() {
         let markdown = String::from(
-            "First citation (Adams 2020).\n\
-            Second citation on a new line (Brown 2018).\n\
+            "First citation (Aristotle 2020).\n\
+            Second citation on a new line (Hume 2018).\n\
             No citation here.",
         );
         let citations = extract_citations_from_markdown(&markdown);
-        assert_eq!(citations, vec!["Adams 2020", "Brown 2018"]);
+        assert_eq!(citations, vec!["Aristotle 2020", "Hume 2018"]);
     }
+    #[test]
+    fn incomplete_citation_opening_parenthesis_only() {
+        let markdown = String::from("This is an incomplete citation (Spinoza 2021.");
+        let valid_citations = extract_citations_from_markdown(&markdown);
+        assert!(valid_citations.is_empty());
+    }
+    #[test]
+    fn incomplete_citation_closing_parenthesis_only() {
+        let markdown = String::from("This is an incomplete citation Descartes 2021).");
+        let valid_citations = extract_citations_from_markdown(&markdown);
+        assert!(valid_citations.is_empty());
+    }
+    #[test]
+    fn mixed_valid_and_invalid_citations() {
+        let markdown =
+            String::from("Valid citation (Sartre 2021). Incomplete citation Derrida 2021).");
+        let valid_citations = extract_citations_from_markdown(&markdown);
+        assert_eq!(valid_citations, vec!["Sartre 2021"]);
+    }
+}
+
+#[cfg(test)]
+mod tests_validate_citations {
+    use super::*;
+
+    #[test]
+    fn valid_citations() {
+        let citations = vec!["Hegel 2021".to_string(), "Kant 2020, 123".to_string()];
+        assert!(verify_citations_format(&citations).is_ok());
+    }
+    #[test]
+    fn missing_year() {
+        let citations = vec!["Hegel".to_string(), "Kant 2020, 123".to_string()];
+        assert!(verify_citations_format(&citations).is_err());
+    }
+    #[test]
+    fn invalid_citation_extra_comma() {
+        let citations = vec![
+            "Hegel 2021".to_string(),
+            "Kant 2020, 123".to_string(),
+            "Hume, 2020".to_string(),
+        ];
+        assert!(verify_citations_format(&citations).is_err());
+    }
+    #[test]
+    fn valid_citations_set() {
+        let citations = vec![
+            "Hegel 2021".to_string(),
+            "Kant 2020, 123".to_string(),
+            "Hegel 2021".to_string(),
+            "Hegel 2021, 1234".to_string(),
+            "Hegel 2021, 99".to_string(),
+        ];
+        let citations_set = create_citations_set(citations);
+        assert_eq!(citations_set, vec!["Hegel 2021", "Kant 2020"]);
+    }
+    #[test]
+    fn empty_citations_set() {
+        let citations = Vec::<String>::new();
+        let citations_set = create_citations_set(citations);
+        assert!(citations_set.is_empty());
+    }
+    #[test]
+    fn invalid_citations_set() {
+        let citations = vec!["Hegel 2021".to_string(), "Kant, 2020, 123".to_string()];
+        let citations_set = create_citations_set(citations);
+        assert_eq!(citations_set, vec!["Hegel 2021", "Kant"]);
+    }
+    // #[test]
+    // fn test_match_citations_to_bibliography() {
+    //     let bibliography = vec![
+    //         Entry::new("book", "Hegel 2021"),
+    //         Entry::new("book", "Kant 2020"),
+    //     ];
+    //     let citations = vec!["Hegel 2021".to_string(), "Kant 2020".to_string()];
+    //     let matched_citations = match_citations_to_bibliography(citations, &bibliography).unwrap();
+    //     assert_eq!(matched_citations, bibliography);
+    // }
 }
