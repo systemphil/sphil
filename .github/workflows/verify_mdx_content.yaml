@@ -17,8 +17,8 @@ jobs:
       uses: actions/cache/restore@v4
       id: prepyrus-cache-restore
       with:
-        path: target/release/prepyrus
-        key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
+        path: target/release/prepyrus_runner
+        key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus_runner/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus_runner/src/**') }}
 
     - name: Install Rust
       if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
@@ -26,19 +26,19 @@ jobs:
 
     - name: Install dependencies
       if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
-      run: cargo build --release --package prepyrus
+      run: cargo build --release --package prepyrus_runner
 
     - name: Run prepyrus script in verification mode
       id: prepyrus-run
-      run: target/release/prepyrus absolute_bibliography.bib src/pages verify
+      run: target/release/prepyrus_runner absolute_bibliography.bib src/pages verify
 
     - name: Save Prepyrus to cache
       id: prepyrus-cache-save
       if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
       uses: actions/cache/save@v4
       with:
-        path: target/release/prepyrus
-        key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus/src/**') }}
+        path: target/release/prepyrus_runner
+        key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus_runner/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus_runner/src/**') }}
 
 # To include multiple paths for the cache:
 # path: |

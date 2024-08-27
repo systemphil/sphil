@@ -89,7 +89,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "prepyrus_script"
+name = "prepyrus_runner"
 version = "0.1.0"
 dependencies = [
  "prepyrus",
