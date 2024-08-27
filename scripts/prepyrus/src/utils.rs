@@ -77,20 +77,20 @@ impl CoreUtils {
     }
 
     pub fn verify_arguments(args: &Vec<String>) {
-        if args.len() < 4 {
+        if args.len() < 3 {
             eprintln!("Arguments missing: <bibliography.bib> <target_dir_or_file> <mode>");
             std::process::exit(1);
         }
-        if !args[1].ends_with(".bib") {
+        if !args[0].ends_with(".bib") {
             eprintln!("Invalid file format. Please provide a file with .bib extension.");
             std::process::exit(1);
         }
-        let target_arg = &args[2];
+        let target_arg = &args[1];
         if !Path::new(target_arg).is_dir() && !target_arg.ends_with(".mdx") {
             eprintln!("Invalid target. Please provide a directory or a single MDX file.");
             std::process::exit(1);
         }
-        if !args[3].eq("verify") && !args[3].eq("process") {
+        if !args[2].eq("verify") && !args[2].eq("process") {
             eprintln!("Invalid mode. Please provide either 'verify' or 'process'.");
             std::process::exit(1);
         }
