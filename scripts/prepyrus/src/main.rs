@@ -13,6 +13,4 @@ fn main() {
         eprintln!("Error: {}", e);
         std::process::exit(1);
     }
-
-    println!("===Prepyrus completed successfully!");
 }
