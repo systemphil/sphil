@@ -1,0 +1,8 @@
+[package]
+name = "prepyrus_runner"
+authors = ["Firgrep <code@filipniklas.com>"]
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+prepyrus = "0.1"
