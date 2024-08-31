@@ -10,6 +10,7 @@
         "Aufhebung",
         "Befreiung",
         "Burbidge",
+        "Dasein",
         "determinacies",
         "diremption",
         "distinguishedness",
@@ -37,6 +38,7 @@
         "simpliciter",
         "spatio",
         "sphil",
+        "subcontraries",
         "sublate",
         "sublated",
         "sublates",
@@ -52,7 +54,9 @@
         "Wissenschaft",
         "Zusätze"
     ],
-    "enableFiletypes": ["mdx"],
+    "enableFiletypes": [
+        "mdx"
+    ],
     "ignoreWords": [
         "biblatex",
         "datetime",
