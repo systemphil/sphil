@@ -18,6 +18,7 @@
         "Geraets",
         "Guyer",
         "Hackett",
+        "Hiraclitean",
         "Houlgate",
         "itselfness",
         "Keon",
@@ -50,7 +51,9 @@
         "Wissenschaft",
         "Zusätze"
     ],
-    "enableFiletypes": ["mdx"],
+    "enableFiletypes": [
+        "mdx"
+    ],
     "ignoreWords": [
         "biblatex",
         "datetime",
