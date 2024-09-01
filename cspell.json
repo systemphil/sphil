@@ -32,6 +32,7 @@
         "Prepyrus",
         "presuppositionless",
         "presuppositionlessness",
+        "problematizes",
         "Realphilosophie",
         "Rokni",
         "Sache",
@@ -48,13 +49,16 @@
         "systemphil",
         "Taggart",
         "Trisokkas",
+        "Übergang",
         "unseparated",
         "unseparatedness",
         "vanishedness",
         "Wissenschaft",
         "Zusätze"
     ],
-    "enableFiletypes": ["mdx"],
+    "enableFiletypes": [
+        "mdx"
+    ],
     "ignoreWords": [
         "biblatex",
         "datetime",
