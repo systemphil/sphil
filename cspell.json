@@ -16,7 +16,9 @@
         "Geraets",
         "Guyer",
         "Hackett",
+        "headeronly",
         "Houlgate",
+        "Iluvatar",
         "itselfness",
         "Keon",
         "Meinen",
@@ -34,8 +36,8 @@
         "spatio",
         "sphil",
         "sublated",
-        "sublating",
         "sublates",
+        "sublating",
         "Suchting",
         "systemphil",
         "Taggart",
@@ -43,7 +45,9 @@
         "Wissenschaft",
         "Zusätze"
     ],
-    "enableFiletypes": ["mdx"],
+    "enableFiletypes": [
+        "mdx"
+    ],
     "ignoreWords": [
         "biblatex",
         "datetime",
