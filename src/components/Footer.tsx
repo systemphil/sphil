@@ -33,7 +33,7 @@ function FooterHeader({ children }: { children: ReactNode }) {
 const navigation = {
     general: [
         { name: "Blog", href: "/blog" },
-        { name: "Symposia", href: "https://symposia.systemphil.com" },
+        { name: "Symposia", href: "https://symposia.sphil.xyz" },
         { name: "Acknowledgements", href: "/acknowledgements" },
     ],
     hegel: [

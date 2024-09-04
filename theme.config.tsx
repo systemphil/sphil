@@ -21,7 +21,7 @@ const config: DocsThemeConfig = {
         const { frontMatter } = useConfig();
         const systemTheme = "light";
         const fullUrl =
-            router.asPath === "/" ? SITE_ROOT : `${SITE_ROOT}${router.asPath}`;
+            router.asPath === "/" ? SITE_ROOT : `${SITE_ROOT}/${router.asPath}`;
 
         return (
             <>
