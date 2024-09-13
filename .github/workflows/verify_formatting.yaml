@@ -8,6 +8,9 @@ on:
 jobs:
   formatting:
     runs-on: ubuntu-latest
+    permissions: 
+      contents: write
+      pull-requests: write
     steps:
 
     - name: Generate COG token
@@ -28,8 +31,6 @@ jobs:
     - name: Checkout without token
       uses: actions/checkout@v4
       if: steps.create_token.outcome == 'failure'
-      # with:
-      #   ref: ${{ github.event.pull_request.head.ref }}
       with:
         repository: ${{ github.event.pull_request.head.repo.full_name }}
         ref: ${{ github.event.pull_request.head.ref }}
