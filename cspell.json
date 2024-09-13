@@ -1,6 +1,6 @@
 {
     "version": "0.2",
-    "ignorePaths": [],
+    "ignorePaths": ["package.json", "package-lock.json"],
     "dictionaryDefinitions": [],
     "dictionaries": [],
     "words": [
@@ -45,9 +45,7 @@
         "Wissenschaft",
         "Zusätze"
     ],
-    "enableFiletypes": [
-        "mdx"
-    ],
+    "enableFiletypes": ["mdx"],
     "ignoreWords": [
         "biblatex",
         "datetime",
