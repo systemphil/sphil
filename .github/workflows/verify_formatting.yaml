@@ -11,6 +11,7 @@ jobs:
     steps:
 
     - name: Generate COG token
+      continue-on-error: true
       id: create_token
       uses: tibdex/github-app-token@v2
       with:
