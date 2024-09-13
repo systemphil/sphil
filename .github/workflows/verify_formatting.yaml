@@ -18,18 +18,18 @@ jobs:
         app_id: ${{ secrets.COG_APP_ID }}
         private_key: ${{ secrets.COG_PRIVATE_KEY }}
 
-    - name: Checkout
+    - name: Checkout with token
       uses: actions/checkout@v4
       if: steps.create_token.outcome == 'success'
       with:
         ref: ${{ github.event.pull_request.head.ref }}
         token: ${{ steps.create_token.outputs.token }}
 
-    - name: Checkout
+    - name: Checkout without token
       uses: actions/checkout@v4
       if: steps.create_token.outcome == 'failure'
-      with:
-        ref: ${{ github.event.pull_request.head.ref }}
+      # with:
+      #   ref: ${{ github.event.pull_request.head.ref }}
     
     - name: Set up Node.js
       uses: actions/setup-node@v4
