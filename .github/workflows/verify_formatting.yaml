@@ -20,9 +20,16 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v4
+      if: steps.create_token.outcome == 'success'
       with:
         ref: ${{ github.event.pull_request.head.ref }}
         token: ${{ steps.create_token.outputs.token }}
+
+    - name: Checkout
+      uses: actions/checkout@v4
+      if: steps.create_token.outcome == 'failure'
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
     
     - name: Set up Node.js
       uses: actions/setup-node@v4
