@@ -5,14 +5,15 @@ on:
   pull_request:
     branches: [main]
 
+permissions: 
+  contents: write
+  pull-requests: write
+  actions: write
+  repository-projects: write
+
 jobs:
   formatting:
     runs-on: ubuntu-latest
-    permissions: 
-      contents: write
-      pull-requests: write
-      actions: write
-      
     steps:
 
     - name: Generate COG token
