@@ -15,7 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.issue.pull_request.head.ref  }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -41,7 +41,7 @@ jobs:
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          message: 'ci: format code [automated action on behalf of ${{ github.event.pull_request.user.login }}]'
+          message: 'ci: format code [automated action on behalf of ${{ github.event.comment.user.login }}]'
         if: steps.prettier-changes.outputs.has_changes != '0'
 
     #   - name: Push changes
