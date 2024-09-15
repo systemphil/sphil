@@ -7,10 +7,6 @@ on:
 
 permissions: 
   contents: write
-  pull-requests: write
-  actions: write
-  repository-projects: write
-  id-token: write
 
 jobs:
   formatting:
@@ -25,19 +21,19 @@ jobs:
         app_id: ${{ secrets.COG_APP_ID }}
         private_key: ${{ secrets.COG_PRIVATE_KEY }}
 
-    - name: Checkout with token
+    - name: Checkout with app
       uses: actions/checkout@v4
       if: steps.create_token.outcome == 'success'
       with:
         ref: ${{ github.event.pull_request.head.ref }}
         token: ${{ steps.create_token.outputs.token }}
 
-    - name: Checkout without token
+    - name: Checkout with token
       uses: actions/checkout@v4
       if: steps.create_token.outcome == 'failure'
       with:
-        repository: ${{ github.event.pull_request.head.repo.full_name }}
         ref: ${{ github.event.pull_request.head.ref }}
+        token: ${{ secrets.GH_PAT }}       
     
     - name: Set up Node.js
       uses: actions/setup-node@v4
