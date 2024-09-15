@@ -28,7 +28,6 @@
         "nextra": "^2.13.2",
         "nextra-theme-docs": "^2.13.2",
         "postcss": "8.4.29",
-        "prettier": "^3.3.3",
         "react": "18.2.0",
         "react-cookie-consent": "^9.0.0",
         "react-dom": "18.2.0",
