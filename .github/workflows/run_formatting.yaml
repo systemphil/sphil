@@ -1,0 +1,52 @@
+name: Run formatting on command
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions: 
+  contents: write
+
+jobs:
+  run-prettier:
+    if: ${{ github.event.comment.body == '/run-format' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+    
+      - name: Get Prettier version from package-lock.json
+        run: |
+          PRETTIER_VERSION=$(grep -m 1 'prettier' package-lock.json | cut -d '"' -f 4 | cut -c 2-)
+          echo $PRETTIER_VERSION
+
+      - name: Run Prettier (specific version)
+        run: |
+          npx --yes prettier@$PRETTIER_VERSION --check --config .prettierrc --write .
+
+      - name: Check for Prettier Changes
+        id: prettier-changes
+        run: |
+            echo "has_changes=$(git status --porcelain | wc -l)" >> $GITHUB_OUTPUT
+
+      - name: Add and commit changes
+        uses: EndBug/add-and-commit@v5
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          message: 'ci: format code [automated action on behalf of ${{ github.event.pull_request.user.login }}]'
+        if: steps.prettier-changes.outputs.has_changes != '0'
+
+    #   - name: Push changes
+    #     if: success()
+    #     uses: ad-m/github-push-action@v0.8.0
+    #     with:
+    #       github_token: ${{ secrets.GITHUB_TOKEN }}
+    #       branch: ${{ github.event.issue.pull_request.head.ref }}
