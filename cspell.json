@@ -1,6 +1,6 @@
 {
     "version": "0.2",
-    "ignorePaths": [],
+    "ignorePaths": ["node_modules", "dist", "build", "out", "public", "package-lock.json", "package.json"],
     "dictionaryDefinitions": [],
     "dictionaries": [],
     "words": [
