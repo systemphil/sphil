@@ -1,0 +1,64 @@
+name: Verify formatting
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+
+permissions: 
+  contents: write
+
+jobs:
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Generate COG token
+      continue-on-error: true
+      id: create_token
+      uses: tibdex/github-app-token@v2
+      with:
+        app_id: ${{ secrets.COG_APP_ID }}
+        private_key: ${{ secrets.COG_PRIVATE_KEY }}
+
+    - name: Checkout with app
+      uses: actions/checkout@v4
+      if: steps.create_token.outcome == 'success'
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+        token: ${{ steps.create_token.outputs.token }}
+
+    - name: Checkout with token
+      uses: actions/checkout@v4
+      if: steps.create_token.outcome == 'failure'
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+        token: ${{ secrets.GH_PAT }}       
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    
+    - name: Get Prettier version from package-lock.json
+      run: |
+        PRETTIER_VERSION=$(grep -m 1 'prettier' package-lock.json | cut -d '"' -f 4 | cut -c 2-)
+        echo $PRETTIER_VERSION
+
+    - name: Run Prettier (specific version)
+      run: |
+        npx --yes prettier@$PRETTIER_VERSION --check --config .prettierrc --write .
+
+    - name: Check for Prettier Changes
+      id: prettier-changes
+      run: |
+        echo "has_changes=$(git status --porcelain | wc -l)" >> $GITHUB_OUTPUT
+
+    - name: Add and commit changes
+      uses: EndBug/add-and-commit@v5
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        message: 'ci: format code [automated action on behalf of ${{ github.event.pull_request.user.login }}]'
+      if: steps.prettier-changes.outputs.has_changes != '0'
+
