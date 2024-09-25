@@ -32,7 +32,10 @@ function FooterHeader({ children }: { children: ReactNode }) {
 
 const navigation = {
     general: [
-        { name: "Blog", href: "/blog" },
+        {
+            name: "Discussion",
+            href: "https://github.com/systemphil/sphil/discussions",
+        },
         { name: "Symposia", href: "https://symposia.sphil.xyz" },
         { name: "Acknowledgements", href: "/acknowledgements" },
     ],
@@ -57,6 +60,11 @@ const navigation = {
     support: [
         { name: "GitHub", href: "https://github.com/systemphil/" },
         { name: "YouTube", href: "https://www.youtube.com/@systemphil" },
+        { name: "Twitter", href: "https://twitter.com/sphildotxyz" },
+        {
+            name: "Facebook",
+            href: "https://www.facebook.com/profile.php?id=61564840656103",
+        },
     ],
 };
 

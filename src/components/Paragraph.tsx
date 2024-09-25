@@ -10,7 +10,7 @@ const Paragraph = ({ children, style = "base" }: ParagraphProps) => {
         case "grotesk":
             return (
                 <p
-                    className={`${baseClasses} text-center text-xl md:text-2xl font-space-grotesk max-h-[112px] md:max-h-[96px] w-[315px] md:w-[600px]`}
+                    className={`${baseClasses} text-center text-lg sm:text-xl md:text-2xl font-space-grotesk max-h-[112px] md:max-h-[96px] w-[315px] md:w-[600px]`}
                 >
                     {children}
                 </p>
