@@ -3,15 +3,15 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useRouter } from "next/router";
 import { type DocsThemeConfig, useConfig } from "nextra-theme-docs";
-import { SymposiaCard } from "@/components/SymposiaCard";
 import { ArticleWrapper } from "@/components/ArticleWrapper";
+import { TableOfContentsExtra } from "@/components/TableOfContentsExtra";
 
 const SITE_ROOT = process.env.NEXT_PUBLIC_SITE_ROOT;
 
 const config: DocsThemeConfig = {
     docsRepositoryBase: "https://github.com/systemphil/sphil/tree/dev", // root for every edit link
     editLink: {
-        text: "Edit this page on GitHub",
+        text: "Edit this page on GitHub ✏️",
     },
     footer: {
         component: Footer,
@@ -105,7 +105,7 @@ const config: DocsThemeConfig = {
     },
     toc: {
         backToTop: true,
-        extraContent: <SymposiaCard />,
+        extraContent: <TableOfContentsExtra />,
     },
     useNextSeoProps: function SEO() {
         const router = useRouter();
