@@ -39,5 +39,9 @@
         "tailwindcss": "3.3.3",
         "tailwindcss-animate": "^1.0.7",
         "typescript": "5.2.2"
+    },
+    "optionalDependencies": {
+        "@napi-rs/simple-git-linux-x64-gnu": "^0.1.9",
+        "@napi-rs/simple-git-linux-x64-musl": "^0.1.16"
     }
 }

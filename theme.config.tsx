@@ -12,7 +12,6 @@ const SITE_ROOT = process.env.NEXT_PUBLIC_SITE_ROOT;
 const config: DocsThemeConfig = {
     docsRepositoryBase: "https://github.com/systemphil/sphil/tree/dev", // root for every edit link
     editLink: {
-        text: "Edit this page on GitHub ✏️",
         component: ({ filePath }) => (
             <ContributeModal
                 docsRepositoryBase="https://github.com/systemphil/sphil/tree/dev"

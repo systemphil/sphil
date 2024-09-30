@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import {
@@ -46,7 +48,7 @@ export function ContributeModal({
                 </DialogHeader>
                 <div className="py-4">
                     <h4 className="text-sm font-medium mb-2">
-                        Contribution checklist:
+                        You might want to
                     </h4>
                     <ul className="list-disc pl-5 space-y-1 text-sm">
                         <li>
@@ -57,7 +59,7 @@ export function ContributeModal({
                                 rel="noopener noreferrer"
                                 onClick={handleClose}
                             >
-                                Familiarize yourself with Git basics
+                                Familiarize yourself with the basics of GitHub
                             </a>
                         </li>
                         <li>
