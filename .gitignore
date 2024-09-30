@@ -39,4 +39,8 @@ next-env.d.ts
 # Ignore generated credentials from google-github-actions/auth
 gha-creds-*.json
 
+# IDE
+.idea
+.vscode
+
 target/
