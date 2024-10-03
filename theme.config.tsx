@@ -120,12 +120,13 @@ const config: DocsThemeConfig = {
             section = "Spinoza";
         }
 
-        const defaultTitle = frontMatter.overrideTitle || section;
+        const defaultTitle =
+            frontMatter.seoTitle || frontMatter.title || section;
 
         return {
             description: frontMatter.description,
             defaultTitle,
-            titleTemplate: `%s – ${section}`,
+            titleTemplate: `${defaultTitle} – ${section}`,
         };
     },
 };
