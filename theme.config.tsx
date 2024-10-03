@@ -79,9 +79,7 @@ const config: DocsThemeConfig = {
                     name="title"
                     property="og:title"
                     content={
-                        frontMatter.overrideTitle ||
-                        frontMatter.title ||
-                        "sPhil"
+                        frontMatter.seoTitle || frontMatter.title || "sPhil"
                     }
                 />
             </>
@@ -122,12 +120,13 @@ const config: DocsThemeConfig = {
             section = "Spinoza";
         }
 
-        const defaultTitle = frontMatter.overrideTitle || section;
+        const defaultTitle =
+            frontMatter.seoTitle || frontMatter.title || section;
 
         return {
             description: frontMatter.description,
             defaultTitle,
-            titleTemplate: `%s – ${section}`,
+            titleTemplate: `${defaultTitle} – ${section}`,
         };
     },
 };
