@@ -79,9 +79,7 @@ const config: DocsThemeConfig = {
                     name="title"
                     property="og:title"
                     content={
-                        frontMatter.overrideTitle ||
-                        frontMatter.title ||
-                        "sPhil"
+                        frontMatter.seoTitle || frontMatter.title || "sPhil"
                     }
                 />
             </>
