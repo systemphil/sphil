@@ -5,6 +5,9 @@
 
 <!-- Briefly describe your changes and their purpose -->
 
+## Tags
+<!-- Need tags for changes -->
+
 ## Contribution Type
 
 -   [ ] Philosophical/Literary Content (docs)
