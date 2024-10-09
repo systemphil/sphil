@@ -1,12 +1,23 @@
 {
     "version": "0.2",
-    "ignorePaths": ["package.json", "package-lock.json", "node_modules", "dist", "build", "out", "public", "package-lock.json", "package.json"],
+    "ignorePaths": [
+        "package.json",
+        "package-lock.json",
+        "node_modules",
+        "dist",
+        "build",
+        "out",
+        "public",
+        "package-lock.json",
+        "package.json"
+    ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
     "words": [
         "Ahilleas",
         "analysed",
         "atemporal",
+        "aufheben",
         "Aufhebung",
         "Befreiung",
         "Burbidge",
@@ -27,6 +38,7 @@
         "Meinen",
         "mindmap",
         "Niklas",
+        "oppheve",
         "Parmenidean",
         "Pinkard",
         "posteriori",
@@ -44,12 +56,12 @@
         "sublate",
         "sublated",
         "sublates",
-        "sublates",
         "sublating",
         "sublation",
         "Suchting",
         "systemphil",
         "Taggart",
+        "tollere",
         "Trisokkas",
         "Übergang",
         "unseparated",
@@ -58,7 +70,9 @@
         "Wissenschaft",
         "Zusätze"
     ],
-    "enableFiletypes": ["mdx"],
+    "enableFiletypes": [
+        "mdx"
+    ],
     "ignoreWords": [
         "biblatex",
         "datetime",
