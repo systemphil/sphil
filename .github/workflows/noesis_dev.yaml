@@ -34,10 +34,13 @@ jobs:
         ref: ${{ github.ref }}
         fetch-depth: 1
 
-    - name: Auth
+    - name: GCP Auth
       uses: "google-github-actions/auth@v2"
       with:
         credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
+    
+    - name: Set up Cloud SDK
+      uses: "google-github-actions/setup-gcloud@v2"
 
     - name: Docker Auth
       id: docker-auth
