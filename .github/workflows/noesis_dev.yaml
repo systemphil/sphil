@@ -41,7 +41,7 @@ jobs:
 
     - name: Docker Auth
       id: docker-auth
-      uses: "docker/login-action@v1"
+      uses: "docker/login-action@v3"
       with:
         username: _json_key
         password: "${{ secrets.GOOGLE_CREDENTIALS }}"
@@ -65,7 +65,7 @@ jobs:
         else
             echo "✅ Artifact Registry already exists."
         fi
-        
+
     - name: Build and Push Container
       run: |-
         docker build \
