@@ -14,6 +14,7 @@ jobs:
     environment: dev
     runs-on: ubuntu-latest
     env:
+      BUILD_PATH: packages/noesis
       PROJECT_ID: ${{ secrets.PROJECT_ID }}
       SERVICE: noesis-dev
       REGION: ${{ secrets.REGION }}
@@ -72,7 +73,7 @@ jobs:
     - name: Build and Push Container
       run: |-
         docker build \
-          -f Dockerfile \
+          -f ${{ env.BUILD_PATH }}/Dockerfile \
           -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}" ./
         docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"
 
