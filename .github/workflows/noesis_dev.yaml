@@ -1,0 +1,83 @@
+name: Deploy Noesis Dev
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/noesis/**'
+
+jobs:
+  build_and_deploy:
+    if: github.repository_owner == 'systemphil'
+    environment: dev
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_ID: ${{ secrets.PROJECT_ID }}
+      SERVICE: noesis-dev
+      REGION: ${{ secrets.REGION }}
+      TAG: latest
+
+    steps:
+    - name: Check if running in the parent repository
+      run: |
+        if [ "${GITHUB_REPOSITORY}" != "systemphil/sphil" ]; then
+          echo "This workflow is only intended for the parent repository. Skipping deployment."
+          exit 1
+        fi
+
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ github.repository }}
+        ref: ${{ github.ref }}
+        fetch-depth: 1
+
+    - name: Auth
+      uses: "google-github-actions/auth@v2"
+      with:
+        credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
+
+    - name: Docker Auth
+      id: docker-auth
+      uses: "docker/login-action@v1"
+      with:
+        username: _json_key
+        password: "${{ secrets.GOOGLE_CREDENTIALS }}"
+        registry: "${{ env.REGION }}-docker.pkg.dev"
+    
+        # Verify artifact registry exists, otherwise create one
+    - name: Verify Artifact Registry
+      run: |
+        set +e  # Temporarily allow errors
+        gcloud artifacts repositories describe ${{ env.SERVICE }} --location=${{ env.REGION }} --format='value(name)' > /dev/null 2>&1
+        STATUS=$?  # Capture the exit status
+        set -e  # Re-enable exit on error
+        if [ $STATUS -ne 0 ]; then
+            echo "🏗️ Artifact Registry not found. Attempting to create one..."
+            gcloud artifacts repositories create ${{ env.SERVICE }} \
+                --repository-format=docker \
+                --location=${{ env.REGION }}
+            gcloud artifacts repositories set-cleanup-policies ${{ env.SERVICE }} \
+                --location=${{ env.REGION }} \
+                --policy=.github/artifact_repository_cleanup_policy.json
+        else
+            echo "✅ Artifact Registry already exists."
+        fi
+        
+    - name: Build and Push Container
+      run: |-
+        docker build \
+          -f Dockerfile \
+          -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}" ./
+        docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"
+
+    - name: Deploy to Cloud Run
+      run: |
+        gcloud run deploy ${{env.SERVICE}} \
+          --platform=managed \
+          --region=${{ env.REGION }} \
+          --max-instances=1 \
+          --min-instances=default \
+          --image="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"
