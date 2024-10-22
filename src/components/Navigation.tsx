@@ -3,7 +3,6 @@ import { useSphilSite } from "./SiteSwitcher";
 
 type NavbarArgs = Parameters<typeof Navbar>;
 type NavigationProps = {
-    flatDirectories: NavbarArgs[0]["flatDirectories"];
     items: NavbarArgs[0]["items"];
 };
 /**
@@ -21,14 +20,12 @@ const Navigation = (props: NavigationProps) => {
         props.items.unshift(
             {
                 title: "Guides",
-                kind: "Folder",
                 name: "guides",
                 route: `/${site}/guides`,
                 type: "page",
             },
             {
                 title: "Reference",
-                kind: "Folder",
                 name: "reference",
                 route: `/${site}/reference`,
                 type: "page",
