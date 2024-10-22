@@ -1,6 +1,6 @@
 import Heading from "@/components/Heading";
 import SubHeroBackground from "./SubHeroBackground";
-import { Card } from "nextra/components";
+import { Cards } from "nextra/components";
 
 const SubdirectoryLanding = ({ subdirectory }: { subdirectory: string }) => {
     return (
@@ -10,20 +10,22 @@ const SubdirectoryLanding = ({ subdirectory }: { subdirectory: string }) => {
                     <div className="flex flex-col items-center justify-center">
                         <Heading>{subdirectory.toUpperCase()}</Heading>
                         <div className="flex flex-wrap justify-between gap-4 bg-white rounded-lg dark:bg-transparent p-8 shadow-[10px_10px_50px_50px_rgba(255,255,255,0.8)] dark:shadow-none">
-                            <Card
-                                icon={" 📄 "}
-                                title="Guides"
-                                href={`/${subdirectory}/guides`}
-                            >
-                                _
-                            </Card>
-                            <Card
-                                icon={" 📄 "}
-                                title="Reference"
-                                href={`/${subdirectory}/reference`}
-                            >
-                                _
-                            </Card>
+                            <Cards>
+                                <Cards.Card
+                                    icon={" 📄 " as any}
+                                    title="Guides"
+                                    href={`/${subdirectory}/guides`}
+                                >
+                                    _
+                                </Cards.Card>
+                                <Cards.Card
+                                    icon={" 📄 " as any}
+                                    title="Reference"
+                                    href={`/${subdirectory}/reference`}
+                                >
+                                    _
+                                </Cards.Card>
+                            </Cards>
                         </div>
                     </div>
                 </SubHeroBackground>
