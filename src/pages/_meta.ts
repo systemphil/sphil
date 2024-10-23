@@ -30,10 +30,6 @@ export default {
         title: "Privacy Policy",
         display: "hidden",
     },
-    "code-of-conduct": {
-        title: "Code of Conduct",
-        display: "hidden",
-    },
     acknowledgements: {
         title: "Acknowledgements",
         display: "hidden",
