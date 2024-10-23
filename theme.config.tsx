@@ -11,7 +11,7 @@ const SITE_ROOT = process.env.NEXT_PUBLIC_SITE_ROOT;
 const config: DocsThemeConfig = {
     docsRepositoryBase: "https://github.com/systemphil/sphil/tree/dev", // root for every edit link
     editLink: {
-        text: "Edit this page on GitHub ✏️",
+        content: "Edit this page on GitHub ✏️",
     },
     footer: {
         component: Footer,
@@ -22,6 +22,21 @@ const config: DocsThemeConfig = {
         const systemTheme = "light";
         const fullUrl =
             router.asPath === "/" ? SITE_ROOT : `${SITE_ROOT}/${router.asPath}`;
+
+        let section = "sPhil";
+        if (router?.pathname.startsWith("/hegel")) {
+            section = "Hegel";
+        }
+        if (router?.pathname.startsWith("/kant")) {
+            section = "Kant";
+        }
+        if (router?.pathname.startsWith("/spinoza")) {
+            section = "Spinoza";
+        }
+
+        const defaultTitle = frontMatter.seoTitle || frontMatter.title || "";
+        const defaultTitleString = defaultTitle ? `${defaultTitle} – ` : "";
+        const titleTemplate = `${defaultTitleString}${section}`;
 
         return (
             <>
@@ -78,10 +93,9 @@ const config: DocsThemeConfig = {
                 <meta
                     name="title"
                     property="og:title"
-                    content={
-                        frontMatter.seoTitle || frontMatter.title || "sPhil"
-                    }
+                    content={titleTemplate}
                 />
+                <title>{titleTemplate}</title>
             </>
         );
     },
@@ -91,9 +105,11 @@ const config: DocsThemeConfig = {
     navbar: {
         component: Navigation,
     },
-    primaryHue: {
-        dark: 155,
-        light: 215,
+    color: {
+        hue: {
+            dark: 155,
+            light: 215,
+        },
     },
     project: {
         link: "https://github.com/systemphil/sphil", // linked icon in the navbar top-right
@@ -104,30 +120,6 @@ const config: DocsThemeConfig = {
     toc: {
         backToTop: true,
         extraContent: <TableOfContentsExtra />,
-    },
-    useNextSeoProps: function SEO() {
-        const router = useRouter();
-        const { frontMatter } = useConfig();
-
-        let section = "sPhil";
-        if (router?.pathname.startsWith("/hegel")) {
-            section = "Hegel";
-        }
-        if (router?.pathname.startsWith("/kant")) {
-            section = "Kant";
-        }
-        if (router?.pathname.startsWith("/spinoza")) {
-            section = "Spinoza";
-        }
-
-        const defaultTitle =
-            frontMatter.seoTitle || frontMatter.title || section;
-
-        return {
-            description: frontMatter.description,
-            defaultTitle,
-            titleTemplate: `${defaultTitle} – ${section}`,
-        };
     },
 };
 

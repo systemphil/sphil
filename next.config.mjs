@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
+
+import nextra from "nextra";
+
 const nextConfig = {
     output: "export",
     reactStrictMode: true,
@@ -8,7 +11,7 @@ const nextConfig = {
     distDir: "build",
 };
 
-const withNextra = require("nextra")({
+const withNextra = nextra({
     theme: "nextra-theme-docs",
     themeConfig: "./theme.config.tsx",
     // options
@@ -17,4 +20,4 @@ const withNextra = require("nextra")({
     // defaultShowCopyCode: true,
 });
 
-module.exports = withNextra(nextConfig);
+export default withNextra(nextConfig);

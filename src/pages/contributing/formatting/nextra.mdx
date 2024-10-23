@@ -73,29 +73,29 @@ define the list of cards. The `Cards` component should be used inside the `Card`
 component. You can then use the `Card` component to define each card. The `Card`
 component should be used inside the `Cards` component.
 
-import { Cards, Card } from "nextra/components";
+import { Cards } from "nextra/components";
 
 {/* prettier-ignore */}
 <Cards>
-    <Card icon={"📄"} title="Methodology" href="/contributing/methodology" />
-    <Card
+    <Cards.Card icon={"📄"} title="Methodology" href="/contributing/methodology" />
+    <Cards.Card
         icon={"📜"}
         title="Code of Conduct"
         href="/contributing/code-of-conduct"
     />
-    <Card icon={"📎"} title="GitHub" href="https://github.com/" />
+    <Cards.Card icon={"📎"} title="GitHub" href="https://github.com/" />
 </Cards>
 
 The `Card` component takes the following props:
 
 {/* prettier-ignore */}
 ```mdx
-import { Cards, Card } from 'nextra/components'
+import { Cards } from 'nextra/components'
  
 <Cards>
-    <Card icon={"📄"} title="Methodology" href="/contributing/methodology" />
-    <Card icon={"📜"} title="Code of Conduct" href="/contributing/code-of-conduct" />
-    <Card icon={"📎"} title="GitHub" href="https://github.com/" />
+    <Cards.Card icon={"📄"} title="Methodology" href="/contributing/methodology" />
+    <Cards.Card icon={"📜"} title="Code of Conduct" href="/contributing/code-of-conduct" />
+    <Cards.Card icon={"📎"} title="GitHub" href="https://github.com/" />
 </Cards>
 ```
 
