@@ -1,7 +1,4 @@
 export default {
-    "*": {
-        type: "page",
-    },
     index: {
         display: "hidden",
         theme: {
@@ -25,10 +22,16 @@ export default {
     terms: {
         title: "Terms of Use",
         display: "hidden",
+        theme: {
+            typesetting: "article",
+        },
     },
     privacy: {
         title: "Privacy Policy",
         display: "hidden",
+        theme: {
+            typesetting: "article",
+        },
     },
     acknowledgements: {
         title: "Acknowledgements",

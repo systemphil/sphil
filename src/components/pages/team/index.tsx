@@ -1,3 +1,5 @@
+"use client";
+
 import CardTeamMember from "@/components/CardTeamMember";
 
 const TeamPage = () => {
