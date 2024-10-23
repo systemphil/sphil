@@ -6,7 +6,8 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "postbuild": "pagefind --site .next/server/app --output-path .next/static/chunks/pagefind"
     },
     "dependencies": {
         "@emotion/react": "^11.13.0",
@@ -23,8 +24,8 @@
         "eslint-config-next": "13.4.19",
         "framer-motion": "^10.18.0",
         "next": "14.2.13",
-        "nextra": "^3.1",
-        "nextra-theme-docs": "^3.1",
+        "nextra": "4.0.0-app-router.10",
+        "nextra-theme-docs": "4.0.0-app-router.10",
         "postcss": "8.4.47",
         "prettier": "^3.3.3",
         "react": "18.2.0",

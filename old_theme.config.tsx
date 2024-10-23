@@ -9,13 +9,6 @@ import { TableOfContentsExtra } from "@/components/TableOfContentsExtra";
 const SITE_ROOT = process.env.NEXT_PUBLIC_SITE_ROOT;
 
 const config: DocsThemeConfig = {
-    docsRepositoryBase: "https://github.com/systemphil/sphil/tree/dev", // root for every edit link
-    editLink: {
-        content: "Edit this page on GitHub ✏️",
-    },
-    footer: {
-        component: Footer,
-    },
     head: function Head() {
         const router = useRouter();
         const { frontMatter } = useConfig();
@@ -99,9 +92,7 @@ const config: DocsThemeConfig = {
             </>
         );
     },
-    logo: NavbarHeader,
-    logoLink: false,
-    main: ArticleWrapper,
+    // main: ArticleWrapper,
     navbar: {
         component: Navigation,
     },
@@ -110,9 +101,6 @@ const config: DocsThemeConfig = {
             dark: 155,
             light: 215,
         },
-    },
-    project: {
-        link: "https://github.com/systemphil/sphil", // linked icon in the navbar top-right
     },
     search: {
         placeholder: "Search encyclopaedia…",

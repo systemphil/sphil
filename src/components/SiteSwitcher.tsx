@@ -1,12 +1,13 @@
+"use client";
+
 import cn from "classnames";
-import { useRouter } from "next/router";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export type SphilSite = "hegel" | "kant" | "spinoza";
 
 export function useSphilSite(): SphilSite | undefined {
-    const { pathname } = useRouter();
-
+    const pathname = usePathname();
     if (pathname.startsWith("/hegel")) {
         return "hegel";
     }

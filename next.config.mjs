@@ -1,23 +1,59 @@
-/** @type {import('next').NextConfig} */
-
 import nextra from "nextra";
 
-const nextConfig = {
-    output: "export",
-    reactStrictMode: true,
-    images: {
-        unoptimized: true,
-    },
-    distDir: "build",
-};
-
 const withNextra = nextra({
-    theme: "nextra-theme-docs",
-    themeConfig: "./theme.config.tsx",
-    // options
-    // flexsearch: true,
-    // staticImage: true,
-    // defaultShowCopyCode: true,
+    latex: true,
+    defaultShowCopyCode: true,
 });
 
-export default withNextra(nextConfig);
+const nextConfig = withNextra({
+    reactStrictMode: true,
+    eslint: {
+        // ESLint behaves weirdly in this monorepo.
+        ignoreDuringBuilds: true,
+    },
+    distDir: "build",
+    redirects: async () => [
+        {
+            source: "/docs/guide/:slug(typescript|latex|tailwind-css|mermaid)",
+            destination: "/docs/guide/advanced/:slug",
+            permanent: true,
+        },
+        {
+            source: "/docs/docs-theme/built-ins/:slug(callout|steps|tabs|bleed)",
+            destination: "/docs/guide/built-ins/:slug",
+            permanent: true,
+        },
+        {
+            source: "/docs/docs-theme/api/use-config",
+            destination: "/docs/docs-theme/api",
+            permanent: true,
+        },
+        {
+            source: "/docs/docs-theme/built-ins",
+            destination: "/docs/guide/built-ins",
+            permanent: true,
+        },
+    ],
+    webpack(config) {
+        // rule.exclude doesn't work starting from Next.js 15
+        const { test: _test, ...imageLoaderOptions } = config.module.rules.find(
+            (rule) => rule.test?.test?.(".svg")
+        );
+        config.module.rules.push({
+            test: /\.svg$/,
+            oneOf: [
+                {
+                    resourceQuery: /svgr/,
+                    use: ["@svgr/webpack"],
+                },
+                imageLoaderOptions,
+            ],
+        });
+        return config;
+    },
+    experimental: {
+        optimizePackageImports: ["nextra/components"],
+    },
+});
+
+export default nextConfig;
