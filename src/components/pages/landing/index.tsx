@@ -1,3 +1,5 @@
+"use client";
+
 import Button from "@/components/Button";
 import HeroBackground from "./HeroBackground";
 import CardFancy from "@/components/CardFancy";

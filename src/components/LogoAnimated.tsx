@@ -1,3 +1,5 @@
+"use client";
+
 const LogoAnimated = ({ animation = true }: { animation?: boolean }) => {
     if (animation) {
         return (

@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Copyright (c) 2023 by Hyperplexed (https://codepen.io/Hyperplexed/pen/VwqLQbo)
  *

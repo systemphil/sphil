@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { ReactNode, ReactElement } from "react";
 import cn from "classnames";

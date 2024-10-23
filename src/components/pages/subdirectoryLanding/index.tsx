@@ -1,3 +1,5 @@
+"use client";
+
 import Heading from "@/components/Heading";
 import SubHeroBackground from "./SubHeroBackground";
 import { Cards } from "nextra/components";

@@ -1,3 +1,5 @@
+"use client";
+
 import { License } from "./License";
 
 export function ArticleWrapper({ children }: { children: React.ReactNode }) {
