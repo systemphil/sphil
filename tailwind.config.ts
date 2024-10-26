@@ -2,6 +2,9 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
     content: [
+        "./app/**/*.{js,ts,jsx,tsx,md,mdx}",
+        "./lib/components/**/*.{js,ts,jsx,tsx,md,mdx}",
+        "./components/**/*.{js,ts,jsx,tsx,md,mdx}",
         "./src/pages/**/*.{js,ts,jsx,tsx,md,mdx}",
         "./src/components/**/*.{js,ts,jsx,tsx,md,mdx}",
         "./src/app/**/*.{js,ts,jsx,tsx,md,mdx}",
@@ -36,6 +39,10 @@ const config: Config = {
         },
     },
     darkMode: "class",
-    plugins: [],
+    plugins: [require("daisyui"), require("@tailwindcss/typography")],
+    daisyui: {
+        logs: false,
+        themes: ["light", "emerald", "pastel", "fantasy"],
+    },
 };
 export default config;

@@ -5,7 +5,6 @@ import { useConfig } from "nextra-theme-docs";
 
 export const License = () => {
     const { frontMatter } = useConfig();
-
     if (frontMatter && frontMatter.isArticle === true) {
         return (
             <div className="has-tooltip">

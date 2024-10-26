@@ -56,7 +56,7 @@ const navigation = {
         { name: "Code of Conduct", href: `/contributing/code-of-conduct` },
     ],
     legal: [
-        { name: "Privacy Policy", href: "/privacy" },
+        { name: "Privacy Policy", href: "/docs/privacy" },
         { name: "Terms of Use", href: "/terms" },
     ],
     support: [

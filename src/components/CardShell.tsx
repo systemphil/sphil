@@ -1,3 +1,5 @@
+"use client";
+
 import { ReactNode } from "react";
 import styles from "./card.module.css";
 import cn from "classnames";

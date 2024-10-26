@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import CardShell from "./CardShell";
 import Button from "./Button";

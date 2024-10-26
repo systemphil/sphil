@@ -3,36 +3,12 @@ import nextra from "nextra";
 const withNextra = nextra({
     latex: true,
     defaultShowCopyCode: true,
+    useContentDir: true,
 });
 
 const nextConfig = withNextra({
+    output: "standalone",
     reactStrictMode: true,
-    eslint: {
-        // ESLint behaves weirdly in this monorepo.
-        ignoreDuringBuilds: true,
-    },
-    redirects: async () => [
-        {
-            source: "/docs/guide/:slug(typescript|latex|tailwind-css|mermaid)",
-            destination: "/docs/guide/advanced/:slug",
-            permanent: true,
-        },
-        {
-            source: "/docs/docs-theme/built-ins/:slug(callout|steps|tabs|bleed)",
-            destination: "/docs/guide/built-ins/:slug",
-            permanent: true,
-        },
-        {
-            source: "/docs/docs-theme/api/use-config",
-            destination: "/docs/docs-theme/api",
-            permanent: true,
-        },
-        {
-            source: "/docs/docs-theme/built-ins",
-            destination: "/docs/guide/built-ins",
-            permanent: true,
-        },
-    ],
     webpack(config) {
         // rule.exclude doesn't work starting from Next.js 15
         const { test: _test, ...imageLoaderOptions } = config.module.rules.find(
@@ -50,8 +26,31 @@ const nextConfig = withNextra({
         });
         return config;
     },
+    images: {
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "storage.googleapis.com",
+                port: "",
+                pathname: `/${process.env.GCP_SECONDARY_BUCKET_NAME}/**`,
+            },
+        ],
+    },
     experimental: {
-        optimizePackageImports: ["nextra/components"],
+        turbo: {
+            rules: {
+                "./app/_icons/*.svg": {
+                    loaders: ["@svgr/webpack"],
+                    as: "*.js",
+                },
+            },
+        },
+        optimizePackageImports: [
+            // '@app/_icons'
+            // Provoke error
+            // Could not find the module in the React Client Manifest. This is probably a bug in the React Server Components bundler
+            // 'nextra/components'
+        ],
     },
 });
 

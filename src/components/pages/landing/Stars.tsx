@@ -139,6 +139,7 @@ const Stars = ({ theme }: StarsProps) => {
                     triangles.push(tri);
                     tri = [];
                 }
+                // @ts-ignore
                 tri.push(vertices[i]);
             }
             //console.log(JSON.stringify(triangles));

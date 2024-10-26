@@ -11,7 +11,7 @@ import { Maintenance } from "@/components/Maintenance";
 
 const LandingPage = () => {
     return (
-        <main>
+        <>
             <section className="relative flex flex-col items-center justify-start w-full h-full overflow-hidden">
                 <HeroBackground />
                 <div className="relative flex flex-col items-center justify-center z-10 py-28">
@@ -142,7 +142,7 @@ const LandingPage = () => {
                     message="This is a very early release of sPhil and we are continuously working to improve it. If you encounter any issues or want to get involved, please visit our GitHub repository."
                 />
             </section>
-        </main>
+        </>
     );
 };
 
