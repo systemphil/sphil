@@ -7,8 +7,15 @@ export default {
     // },
     symposia: {
         title: "Symposia 🏺",
-        type: "page",
-        href: "/symposia",
+        type: "menu",
+        items: {
+            about: {
+                href: "/symposia",
+            },
+            courses: {
+                href: "/symposia/courses",
+            },
+        },
     },
     terms: {
         title: "Terms of Use",
