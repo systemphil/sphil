@@ -1,18 +1,26 @@
 <!-- Thank you for wanting to contribute to sPhil! 🧙 🦉 -->
 
 ## Author's Note
+
 <!-- Briefly describe your changes and their purpose -->
 
 <details>
 <summary>📝 Guidelines for Philosophical/Literary Contributions</summary>
 
 ### License Agreement
-By submitting this PR, you agree to license your content under the [CC BY-NC-SA 4.0 License](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+
+By submitting this PR, you agree to license your content under the
+[CC BY-NC-SA 4.0 License](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
 ### Required Steps
-1. Follow the [formatting guidelines](https://github.com/systemphil/sphil/blob/dev/src/pages/contributing/formatting/basic-markdown.md)
-2. Use [Chicago author-date style](https://www.chicagomanualofstyle.org/tools_citationguide/citation-guide-2.html) for citations
-3. Update the [project's central bibliography](https://github.com/systemphil/sphil/blob/main/README_BIBLIOGRAPHY.md)
+
+1. Follow the
+   [formatting guidelines](https://github.com/systemphil/sphil/blob/dev/src/pages/contributing/formatting/basic-markdown.md)
+2. Use
+   [Chicago author-date style](https://www.chicagomanualofstyle.org/tools_citationguide/citation-guide-2.html)
+   for citations
+3. Update the
+   [project's central bibliography](https://github.com/systemphil/sphil/blob/main/README_BIBLIOGRAPHY.md)
 4. Add metadata at the top of your file:
 
 ```md
@@ -29,27 +37,38 @@ contributors: Contributor Name
 ```
 
 ### Optional
+
 Consider adding the Stub component to encourage further contributions.
+
 </details>
 
 <details>
 <summary>💻 Guidelines for Code Contributions</summary>
 
 ### License Agreement
-By submitting this PR, you agree to license your code under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt).
+
+By submitting this PR, you agree to license your code under the
+[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt).
 
 ### Required Steps
+
 1. Ensure code adheres to project coding standards
 2. Thoroughly test all changes
 
 ### License Scope
-The Apache License 2.0 applies to all code except content within `src/pages/**` (with specific exclusions like `/contributing/**`, `_app.mdx`, `_document.tsx`, etc.). This primarily covers technical implementations rather than content, literature, or philosophy.
+
+The Apache License 2.0 applies to all code except content within `src/pages/**`
+(with specific exclusions like `/contributing/**`, `_app.mdx`, `_document.tsx`,
+etc.). This primarily covers technical implementations rather than content,
+literature, or philosophy.
+
 </details>
 
 <details>
 <summary>ℹ️ Additional Information</summary>
 
-- Philosophical/literary content: Licensed under CC BY-NC-SA 4.0
-- Code contributions: Licensed under Apache License 2.0
-- Please sign your contribution in the metadata under Authors, Editors, or Contributors
+-   Philosophical/literary content: Licensed under CC BY-NC-SA 4.0
+-   Code contributions: Licensed under Apache License 2.0
+-   Please sign your contribution in the metadata under Authors, Editors, or
+Contributors
 </details>
