@@ -16,7 +16,10 @@ export async function SymposiaLanding() {
             <PageWrapper>
                 <OpeningDescription />
                 <Suspense>
-                    <Maintenance area="global" />
+                    <Maintenance
+                        area="global"
+                        componentToDisplayForBeta={<NewsletterSignUpForBeta />}
+                    />
                 </Suspense>
                 <MainInfoCard />
                 <InfoCards />
@@ -144,6 +147,17 @@ function NewsletterSignUp() {
             <p className="text-lg text-slate-500 py-2">
                 Sign up to receive updates on new courses, seminars, and other
                 events.
+            </p>
+            <SubscribeToNewsletter />
+        </>
+    );
+}
+
+function NewsletterSignUpForBeta() {
+    return (
+        <>
+            <p className="text-lg text-slate-900 dark:text-slate-200 py-2">
+                Sign up to receive updates on as we ready the platform
             </p>
             <SubscribeToNewsletter />
         </>

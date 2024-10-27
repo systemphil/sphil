@@ -17,7 +17,13 @@ import {
 import { Heading } from "./ui/Heading";
 import { FadeIn } from "./animations/FadeIn";
 
-export async function Maintenance({ area }: { area: "global" | "user" }) {
+export async function Maintenance({
+    area,
+    componentToDisplayForBeta,
+}: {
+    area: "global" | "user";
+    componentToDisplayForBeta?: React.ReactNode | undefined;
+}) {
     const getMaintenanceMsgGlobal = cache(
         async () => {
             return await dbGetMaintenanceMessageGlobal();
@@ -75,9 +81,8 @@ export async function Maintenance({ area }: { area: "global" | "user" }) {
                                 {maintenance.message}
                             </p>
                             {maintenance.severity === "beta" && (
-                                <div className="flex justify-center">
-                                    {/* <NewsletterEmail /> */}
-                                    TODO NewsletterEmail
+                                <div className="flex flex-col justify-center items-center">
+                                    {componentToDisplayForBeta ?? null}
                                 </div>
                             )}
                         </div>
