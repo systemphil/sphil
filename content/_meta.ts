@@ -1,10 +1,11 @@
 export default {
+    contributing: {
+        title: "Contributing",
+        type: "page",
+    },
     // hegel: "Hegel",
     // kant: "Kant",
     // spinoza: "Spinoza",
-    // contributing: {
-    //     title: "Contributing",
-    // },
     symposia: {
         title: "Symposia 🏺",
         type: "menu",
