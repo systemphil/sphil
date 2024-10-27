@@ -29,7 +29,7 @@ canvas {
     top: 0px;
     left: 0px;
 }
-    
+
 #background-image {
     z-index: 1;
     background-image: url("https://assets.codepen.io/1468070/Lofi+Rainy+Loft+Interior.jpg?format=webp&quality=90");

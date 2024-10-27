@@ -1,14 +1,14 @@
 .animated-glow::before {
     @apply absolute rounded-lg opacity-0 transition-opacity duration-300 hover:opacity-100;
     background: radial-gradient(
-      1000px circle at var(--x) var(--y),
-      #d53af8 0,
-      #dc5290 25%,
-      rgba(255, 255, 255, 0) 50%,
-      transparent 80%
+        1000px circle at var(--x) var(--y),
+        #d53af8 0,
+        #dc5290 25%,
+        rgba(255, 255, 255, 0) 50%,
+        transparent 80%
     );
     z-index: -1;
-    content: '';
+    content: "";
     inset: -1px;
 }
 
