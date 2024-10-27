@@ -3,7 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
-export default function FadeIn({
+export function FadeIn({
     children,
     className,
     noVertical,

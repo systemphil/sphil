@@ -10,12 +10,12 @@ import {
     cache,
     CACHE_REVALIDATION_INTERVAL_MAINTENANCE,
 } from "lib/server/cache";
-import FadeIn from "./animations/FadeIn";
 import {
     dbGetMaintenanceMessageGlobal,
     dbGetMaintenanceMessageUser,
 } from "lib/database/dbFuncs";
 import { Heading } from "./ui/Heading";
+import { FadeIn } from "./animations/FadeIn";
 
 export async function Maintenance({ area }: { area: "global" | "user" }) {
     const getMaintenanceMsgGlobal = cache(

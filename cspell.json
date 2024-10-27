@@ -1,6 +1,17 @@
 {
     "version": "0.2",
-    "ignorePaths": ["package.json", "package-lock.json", "node_modules", "dist", "build", "out", "public", "package-lock.json", "package.json"],
+    "ignorePaths": [
+        "package.json",
+        "package-lock.json",
+        "node_modules",
+        "dist",
+        "build",
+        "out",
+        "public",
+        "package-lock.json",
+        "package.json",
+        "next.config.mjs"
+    ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
     "words": [
@@ -10,6 +21,7 @@
         "Aufhebung",
         "Befreiung",
         "Burbidge",
+        "clsx",
         "Dasein",
         "determinacies",
         "diremption",
@@ -21,9 +33,11 @@
         "Hackett",
         "headeronly",
         "Houlgate",
+        "IIFE",
         "Iluvatar",
         "itselfness",
         "Keon",
+        "mdxeditor",
         "Meinen",
         "mindmap",
         "Niklas",
@@ -44,12 +58,12 @@
         "sublate",
         "sublated",
         "sublates",
-        "sublates",
         "sublating",
         "sublation",
         "Suchting",
         "systemphil",
         "Taggart",
+        "tailwindcss",
         "Trisokkas",
         "Übergang",
         "unseparated",
@@ -58,7 +72,9 @@
         "Wissenschaft",
         "Zusätze"
     ],
-    "enableFiletypes": ["mdx"],
+    "enableFiletypes": [
+        "mdx"
+    ],
     "ignoreWords": [
         "biblatex",
         "datetime",
