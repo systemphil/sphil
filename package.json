@@ -37,6 +37,8 @@
         "react": "18.3.1",
         "react-cookie-consent": "^9.0.0",
         "react-dom": "18.3.1",
+        "react-hook-form": "^7.53.1",
+        "react-hot-toast": "^2.4.1",
         "remark-directive": "^3.0.0",
         "remark-gfm": "^4.0.0",
         "stripe": "^17.2.1",

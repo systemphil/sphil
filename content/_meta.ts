@@ -8,12 +8,7 @@ export default {
     symposia: {
         title: "Symposia 🏺",
         type: "page",
-        href: "https://symposia.sphil.xyz",
-    },
-    dashboard: {
-        title: "Dashboard",
-        type: "page",
-        href: "/dashboard",
+        href: "/symposia",
     },
     terms: {
         title: "Terms of Use",

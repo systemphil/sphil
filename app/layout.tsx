@@ -18,6 +18,7 @@ import { TableOfContentsExtra } from "@/components/TableOfContentsExtra";
 import { ThemeConfigProps } from "node_modules/nextra-theme-docs/dist/layout.mjs";
 import { UserMenu } from "lib/components/navigation/UserMenu";
 import { Loading } from "lib/components/animations/Loading";
+import { Toaster } from "react-hot-toast";
 
 const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub →";
 const PROJECT_LINK = "https://github.com/systemphil/sphil";
@@ -115,6 +116,7 @@ export default async function RootLayout({
                         toc={toc}
                     >
                         {children}
+                        <Toaster position="bottom-right" />
                     </NextraLayout>
                 </SessionProvider>
                 <Analytics />

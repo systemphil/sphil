@@ -1,7 +1,5 @@
-export default function SymposiaPage() {
-    return (
-        <div>
-            <h1>Symposia Landing Page</h1>
-        </div>
-    );
+import { SymposiaLanding } from "features/marketing/components/SymposiaLanding";
+
+export default async function SymposiaPage() {
+    return <SymposiaLanding />;
 }
