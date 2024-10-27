@@ -22,5 +22,3 @@ function LinkToDiscussion() {
         </a>
     );
 }
-
-// Question? Give us feedback →

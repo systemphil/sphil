@@ -1,5 +1,5 @@
-import LandingPage from "@/components/pages/landing";
+import { SPhilLanding } from "features/marketing/components/SPhilLanding";
 
 export default function Home() {
-    return <LandingPage />;
+    return <SPhilLanding />;
 }

@@ -111,7 +111,7 @@ function dedup(edges: any) {
     }
 }
 
-const Delaunay = {
+export const Delaunay = {
     triangulate: function (vertices: any, key?: any) {
         var n = vertices.length,
             i,
@@ -248,5 +248,3 @@ const Delaunay = {
         return [u, v];
     },
 };
-
-export default Delaunay;
