@@ -1,11 +1,15 @@
-function Ball() {
+function RingLg() {
     return <span className="loading loading-ring loading-lg"></span>;
 }
 
-function BallFullPage() {
+function RingMd() {
+    return <span className="loading loading-ring loading-md"></span>;
+}
+
+function RingFullPage() {
     return (
         <div className="flex w-full justify-center mt-10 min-h-screen">
-            <Ball />
+            <RingLg />
         </div>
     );
 }
@@ -15,8 +19,9 @@ function SkeletonFullPage() {
 }
 
 const Loading = {
-    Ball,
-    BallFullPage,
+    RingMd,
+    RingLg,
+    RingFullPage,
     SkeletonFullPage,
 };
 

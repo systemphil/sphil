@@ -11,15 +11,9 @@ export function SignInButton({
                 "use server";
                 await signIn();
             }}
+            className="flex grow"
         >
-            <button
-                type="submit"
-                className={cn(
-                    "bg-blue-500 hover:bg-blue-400 transition-colors duration-300 text-white font-bold py-2 px-4 rounded",
-                    className
-                )}
-                {...props}
-            >
+            <button type="submit" className={cn("", className)} {...props}>
                 Sign in
             </button>
         </form>

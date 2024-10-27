@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { PageWrapper } from "lib/components/ui/PageWrapper";
-import { FadeIn } from "lib/components/animations/FadeIn";
 import { Loading } from "lib/components/animations/Loading";
 import { CourseFrontPage } from "features/courses/components/CourseFrontPage";
 import { errorMessages } from "lib/config/errorMessages";
@@ -19,11 +18,9 @@ export default async function CourseFrontPageRoute({
 
     return (
         <PageWrapper>
-            <FadeIn>
-                <Suspense fallback={<Loading.Ball />}>
-                    <CourseFrontPage slug={slug} />
-                </Suspense>
-            </FadeIn>
+            <Suspense fallback={<Loading.RingFullPage />}>
+                <CourseFrontPage slug={slug} />
+            </Suspense>
         </PageWrapper>
     );
 }

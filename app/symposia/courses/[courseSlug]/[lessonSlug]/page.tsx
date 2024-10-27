@@ -1,6 +1,5 @@
 import { LessonFrontPage } from "features/courses/components/LessonFrontPage";
 import { auth } from "lib/auth/authConfig";
-import { FadeIn } from "lib/components/animations/FadeIn";
 import { Loading } from "lib/components/animations/Loading";
 import { errorMessages } from "lib/config/errorMessages";
 import { dbGetUserPurchasedCourses } from "lib/database/dbFuncs";
@@ -38,10 +37,8 @@ export default async function LessonFrontPageRoute({
     }
 
     return (
-        <FadeIn>
-            <Suspense fallback={<Loading.BallFullPage />}>
-                <LessonFrontPage lessonSlug={lessonSlug} />
-            </Suspense>
-        </FadeIn>
+        <Suspense fallback={<Loading.RingFullPage />}>
+            <LessonFrontPage lessonSlug={lessonSlug} />
+        </Suspense>
     );
 }

@@ -2,29 +2,35 @@ import { auth } from "lib/auth/authConfig";
 import { SignInButton } from "../auth/SignInButton";
 import Link from "next/link";
 import { SignOutButton } from "../auth/SignOutButton";
+import { FadeIn } from "../animations/FadeIn";
 
 export async function UserMenu() {
     const session = await auth();
 
     if (!session?.user) {
-        return <SignInButton />;
+        return <SignInButton className="btn btn-primary btn-sm" />;
     }
 
     return (
         <div className="dropdown dropdown-bottom dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost btn-circle">
-                <div className="avatar">
-                    <div className="w-7 rounded-full">
-                        {/* eslint-disable-next-line */}
-                        <img
-                            src={
-                                session?.user.image ??
-                                "/static/images/avatar_placeholder.png"
-                            }
-                            alt="avatar_picture"
-                        />
+            <label
+                tabIndex={0}
+                className="btn btn-circle bg-transparent border-0 shadow-none hover:bg-gray-100 translate-y-[0.6px]"
+            >
+                <FadeIn noVertical>
+                    <div className="avatar">
+                        <div className="w-[26px] rounded-full">
+                            {/* eslint-disable-next-line */}
+                            <img
+                                src={
+                                    session?.user.image ??
+                                    "/static/images/avatar_placeholder.png"
+                                }
+                                alt="avatar_picture"
+                            />
+                        </div>
                     </div>
-                </div>
+                </FadeIn>
             </label>
             <ul
                 tabIndex={0}
@@ -53,7 +59,7 @@ export async function UserMenu() {
                 </li>
                 <li className="border-t my-1" />
                 <li>
-                    <SignOutButton className="w-[155px] flex" />
+                    <SignOutButton className="w-[157px] flex" />
                 </li>
             </ul>
         </div>

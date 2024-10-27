@@ -17,6 +17,7 @@ import { SessionProvider } from "next-auth/react";
 import { TableOfContentsExtra } from "@/components/TableOfContentsExtra";
 import { ThemeConfigProps } from "node_modules/nextra-theme-docs/dist/layout.mjs";
 import { UserMenu } from "lib/components/navigation/UserMenu";
+import { Loading } from "lib/components/animations/Loading";
 
 const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub →";
 const PROJECT_LINK = "https://github.com/systemphil/sphil";
@@ -99,9 +100,11 @@ export default async function RootLayout({
                                 logo={<NavbarHeader />}
                                 projectLink={PROJECT_LINK}
                             >
-                                <Suspense fallback={<div>Loading...</div>}>
-                                    <UserMenu />
-                                </Suspense>
+                                <div className="w-[70px] flex justify-center">
+                                    <Suspense fallback={<Loading.RingMd />}>
+                                        <UserMenu />
+                                    </Suspense>
+                                </div>
                             </NextraNavbar>
                         }
                         footer={

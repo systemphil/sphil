@@ -13,7 +13,7 @@ export default async function CoursesPage() {
             </div>
 
             <FadeIn>
-                <Suspense fallback={<Loading.Ball />}>
+                <Suspense fallback={<Loading.RingLg />}>
                     <CoursesDisplay />
                 </Suspense>
             </FadeIn>

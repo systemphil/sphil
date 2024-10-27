@@ -45,7 +45,7 @@ export const MDXRenderer = ({ data }: { data: MDXCompilerReturnType }) => {
                     </div>
                 </article>
             ) : (
-                <Loading.Ball />
+                <Loading.RingLg />
             )}
         </>
     );
