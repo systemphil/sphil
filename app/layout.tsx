@@ -59,7 +59,7 @@ export const metadata: Metadata = {
         title: "sPhil",
     },
     title: {
-        absolute: "",
+        absolute: "sPhil",
         template: "%s | sPhil",
     },
     icons: {
@@ -105,6 +105,13 @@ export default async function RootLayout({
                 // faviconGlyph="✦"
                 // backgroundColor={BACKGROUND_COLOR}
             >
+                <meta
+                    // TODO fix titles to be dynamic
+                    name="title"
+                    property="og:title"
+                    content="sPhil"
+                />
+                <title>sPhil</title>
                 <link
                     rel="shortcut icon"
                     href="/images/favicon-light/favicon.ico"
