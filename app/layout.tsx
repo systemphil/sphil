@@ -102,9 +102,31 @@ export default async function RootLayout({
         >
             <Head
                 color={COLOR}
-                faviconGlyph="✦"
+                // faviconGlyph="✦"
                 // backgroundColor={BACKGROUND_COLOR}
-            />
+            >
+                <link
+                    rel="shortcut icon"
+                    href="/images/favicon-light/favicon.ico"
+                />
+                <link
+                    rel="apple-touch-icon"
+                    sizes="180x180"
+                    href="/images/favicon-light/apple-touch-icon.png"
+                />
+                <link
+                    rel="icon"
+                    type="image/png"
+                    sizes="32x32"
+                    href="/images/favicon-light/favicon-32x32.png"
+                />
+                <link
+                    rel="icon"
+                    type="image/png"
+                    sizes="16x16"
+                    href="/images/favicon-light/favicon-16x16.png"
+                />
+            </Head>
             <body>
                 <SessionProvider>
                     <NextraLayout
