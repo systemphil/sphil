@@ -15,7 +15,7 @@ export async function UserMenu() {
         <div className="dropdown dropdown-bottom dropdown-end">
             <label
                 tabIndex={0}
-                className="btn btn-circle bg-transparent border-0 shadow-none hover:bg-gray-100 translate-y-[0.6px]"
+                className="btn btn-circle bg-transparent border-0 shadow-none hover:bg-gray-100 dark:hover:bg-acid-green/10 translate-y-[0.6px]"
             >
                 <FadeIn noVertical>
                     <div className="avatar">
@@ -34,7 +34,7 @@ export async function UserMenu() {
             </label>
             <ul
                 tabIndex={0}
-                className="menu dropdown-content z-[1] p-2 shadow bg-white rounded-box w-52 drop-shadow-2xl"
+                className="menu dropdown-content z-[1] p-2 shadow bg-white dark:bg-neutral-900  rounded-box w-52 drop-shadow-2xl"
             >
                 <li>
                     <a className="pointer-events-none cursor-default opacity-75 text-lg pb-0">
@@ -54,11 +54,11 @@ export async function UserMenu() {
                     </li>
                 )}
                 <li className="border-t my-1" />
-                <li>
+                <li className="dark:hover:bg-acid-green/50 rounded-md duration-75 transition-colors">
                     <Link href="/billing">Account & Billing</Link>
                 </li>
                 <li className="border-t my-1" />
-                <li>
+                <li className="dark:hover:bg-acid-green/50 rounded-md duration-75 transition-colors">
                     <SignOutButton className="w-[157px] flex" />
                 </li>
             </ul>
