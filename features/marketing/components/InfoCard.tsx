@@ -42,7 +42,7 @@ export async function InfoCard({
                     <Heading as="h3">{title}</Heading>
                 </div>
                 <p
-                    className="text-slate-700 pt-4 text-justify"
+                    className="text-slate-700 dark:text-slate-300 pt-4 text-justify"
                     dangerouslySetInnerHTML={{ __html: text }}
                 ></p>
                 {url && urlDescription && (

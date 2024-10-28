@@ -95,7 +95,7 @@ function Review({
                             </h3>
                         </div>
                     </div>
-                    <div className="text-slate-600/90 text-md mt-2">
+                    <div className="text-slate-600/90 dark:text-slate-300 text-md mt-2">
                         &quot;{text}&quot;
                     </div>
                 </a>

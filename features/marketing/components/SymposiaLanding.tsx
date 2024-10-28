@@ -48,7 +48,7 @@ function Hero() {
                         Discover & Reflect
                     </Heading>
                 </div>
-                <h3 className="text-xl my-1.5 md:text-2xl lg:text-3xl text-stone-600 font-light inter-var text-center">
+                <h3 className="text-xl my-1.5 md:text-2xl lg:text-3xl text-stone-600 dark:text-stone-300/90 font-light inter-var text-center">
                     In-depth learning courses on philosophy
                 </h3>
                 <div className="w-[40rem] h-40 relative">
@@ -67,9 +67,12 @@ function OpeningDescription() {
     return (
         <FadeIn>
             <Heading as="h3" additionalClasses="max-w-xl">
-                <span className="text-[#6b0072]">Symposia</span> is a philosophy
-                course platform that offers on-demand digital courses, live
-                university-grade seminars, and personalized tuition.
+                <span className="dark:text-acid-green text-[#6b0072]">
+                    Symposia
+                </span>{" "}
+                is a philosophy course platform that offers on-demand digital
+                courses, live university-grade seminars, and personalized
+                tuition.
             </Heading>
         </FadeIn>
     );
@@ -127,9 +130,12 @@ function Community() {
     return (
         <>
             <Heading as="h3" additionalClasses="max-w-lg mt-10 md:mt-32">
-                Join the <span className="text-[#6b0072]">community</span>
+                Join the{" "}
+                <span className="dark:text-acid-green text-[#6b0072]">
+                    community
+                </span>
             </Heading>
-            <p className="text-lg text-slate-500 py-2">
+            <p className="text-lg text-slate-500 dark:text-slate-300 py-2">
                 What do our students say about our courses and instructors?
             </p>
             <Reviews />
@@ -142,9 +148,11 @@ function NewsletterSignUp() {
         <>
             <Heading as="h3" additionalClasses="max-w-lg mt-10 md:mt-32">
                 Stay up-to-date with our{" "}
-                <span className="text-[#6b0072]">newsletter</span>
+                <span className="dark:text-acid-green text-[#6b0072]">
+                    newsletter
+                </span>
             </Heading>
-            <p className="text-lg text-slate-500 py-2">
+            <p className="text-lg text-slate-500 dark:text-slate-300 py-2">
                 Sign up to receive updates on new courses, seminars, and other
                 events.
             </p>
@@ -156,7 +164,7 @@ function NewsletterSignUp() {
 function NewsletterSignUpForBeta() {
     return (
         <>
-            <p className="text-lg text-slate-900 dark:text-slate-200 py-2">
+            <p className="text-lg text-slate-900 dark:text-slate-300 py-2">
                 Sign up to receive updates on as we ready the platform
             </p>
             <SubscribeToNewsletter />
@@ -169,9 +177,11 @@ function VisitCourses() {
         <>
             <Heading as="h3" additionalClasses="max-w-xl mt-10 md:mt-32">
                 Look through the eyes of{" "}
-                <span className="text-[#6b0072]">millenia</span>
+                <span className="dark:text-acid-green text-[#6b0072]">
+                    millenia
+                </span>
             </Heading>
-            <p className="text-lg text-slate-500 py-4">
+            <p className="text-lg text-slate-500 dark:text-slate-300 py-4">
                 Discover and partake in philosophical discourses that stretches
                 beyond empires, generations and time.
             </p>
@@ -186,9 +196,12 @@ function Instructors() {
     return (
         <>
             <Heading as="h3" additionalClasses="max-w-lg mt-10 md:mt-32">
-                Meet the <span className="text-[#6b0072]">instructors</span>
+                Meet the{" "}
+                <span className="dark:text-acid-green text-[#6b0072]s">
+                    instructors
+                </span>
             </Heading>
-            <p className="text-lg text-slate-500 py-2">
+            <p className="text-lg text-slate-500 dark:text-slate-300 py-2">
                 Here you can find brief information about our teacher&apos;s
                 interests and qualifications.
             </p>
@@ -215,9 +228,12 @@ function Refunds() {
         <>
             <Heading as="h3" additionalClasses="max-w-xl mt-10 md:mt-32">
                 Tried it, not for you,{" "}
-                <span className="text-[#6b0072]">changed</span> your mind?
+                <span className="dark:text-acid-green text-[#6b0072]">
+                    changed
+                </span>{" "}
+                your mind?
             </Heading>
-            <p className="text-lg text-slate-500 py-4">
+            <p className="text-lg text-slate-500 dark:text-slate-300 py-4">
                 If you find that a particular course wasn&apos;t for you, we
                 offer full refunds up until 30-days after purchase.
             </p>

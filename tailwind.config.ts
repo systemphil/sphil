@@ -36,12 +36,14 @@ const config: Config = {
             },
             colors: {
                 "dark-green-hsl": "hsl(155, 100%, 66%, 0.17)",
+                "acid-green": "#0bda84",
             },
         },
     },
     darkMode: "class",
     plugins: [require("daisyui"), require("@tailwindcss/typography")],
     daisyui: {
+        darkTheme: "dark",
         base: false, // necessary to not conflict with Nextra styles
         logs: false,
         themes: ["light", "emerald", "pastel", "fantasy"],
