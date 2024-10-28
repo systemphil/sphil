@@ -46,7 +46,7 @@ const config: Config = {
         darkTheme: "dark",
         base: false, // necessary to not conflict with Nextra styles
         logs: false,
-        themes: ["light", "emerald", "pastel", "fantasy"],
+        themes: ["light", "emerald", "pastel", "fantasy"], // the curret theme is set in the top-level html element
     },
 };
 export default config;
