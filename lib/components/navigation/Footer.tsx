@@ -253,17 +253,8 @@ function FooterContent() {
 export function Footer({ menu }: { menu?: boolean }): React.ReactElement {
     return (
         <footer className="pb-12 relative">
-            <div className="absolute top-0 h-36 w-full -translate-y-full bg-gradient-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10" />
-            {/* Because nextra displays ThemeSwitch button on the docs, we disable it from here whenever the user is not on doc pages*/}
-            <div
-                className={cn(
-                    "mx-auto max-w-[90rem] py-2 px-4 flex gap-2",
-                    menu ? "flex" : "hidden"
-                )}
-            >
-                <ThemeSwitch />
-            </div>
-            <hr className="dark:border-neutral-800" />
+            {/* <div className="absolute top-0 h-36 w-full -translate-y-full bg-gradient-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10" /> */}
+
             <div className="mx-auto max-w-[90rem] p-12 flex justify-center md:justify-center text-black dark:text-white">
                 <FooterContent />
             </div>

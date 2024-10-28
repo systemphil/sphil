@@ -24,6 +24,20 @@ const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub →";
 const PROJECT_LINK = "https://github.com/systemphil/sphil";
 const DOCS_REPOSITORY_BASE = "https://github.com/systemphil/sphil/tree/main";
 const SITE_ROOT = process.env.NEXT_PUBLIC_SITE_ROOT as string;
+const BACKGROUND_COLOR = {
+    light: "#fca5a5",
+    dark: "#1e40af",
+};
+const COLOR = {
+    hue: {
+        dark: 155,
+        light: 215,
+    },
+    saturation: {
+        dark: 90,
+        light: 90,
+    },
+};
 
 export const viewport: Viewport = Head.viewport;
 
@@ -86,7 +100,11 @@ export default async function RootLayout({
             className="nextra-scrollbar"
             data-theme="fantasy"
         >
-            <Head faviconGlyph="✦" />
+            <Head
+                color={COLOR}
+                faviconGlyph="✦"
+                // backgroundColor={BACKGROUND_COLOR}
+            />
             <body>
                 <SessionProvider>
                     <NextraLayout
@@ -109,9 +127,15 @@ export default async function RootLayout({
                             </NextraNavbar>
                         }
                         footer={
-                            <NextraFooter className="flex-col items-center md:items-start">
-                                <Footer />
-                            </NextraFooter>
+                            <>
+                                <div
+                                    data-name="footer-flair"
+                                    className=" h-20 w-full  bg-gradient-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
+                                />
+                                <NextraFooter className="flex-col items-center md:items-start">
+                                    <Footer />
+                                </NextraFooter>
+                            </>
                         }
                         toc={toc}
                     >
@@ -127,7 +151,7 @@ export default async function RootLayout({
 
 const Banner = () => {
     return (
-        <NextraBanner storageKey="4.0-release">
+        <NextraBanner storageKey="4.0-release" dismissible>
             <div className='before:content-["🎉_"]'>
                 Nextra 4.0 is released.{" "}
                 <NextraLink href="#" className='after:content-["_→"]'>

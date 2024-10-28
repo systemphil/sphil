@@ -36,7 +36,7 @@ export async function SymposiaLanding() {
 
 function Hero() {
     return (
-        <div className="h-[45rem] -my-36 md:my-6 w-full bg-white flex flex-col items-center justify-center overflow-hidden rounded-md ">
+        <div className="h-[45rem] -my-36 md:my-6 w-full  flex flex-col items-center justify-center overflow-hidden rounded-md ">
             <div className="absolute overflow-hidden -translate-y-5">
                 <FadeIn>
                     <PolyRhythmicSpiral />

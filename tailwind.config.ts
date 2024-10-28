@@ -42,6 +42,7 @@ const config: Config = {
     darkMode: "class",
     plugins: [require("daisyui"), require("@tailwindcss/typography")],
     daisyui: {
+        base: false, // necessary to not conflict with Nextra styles
         logs: false,
         themes: ["light", "emerald", "pastel", "fantasy"],
     },
