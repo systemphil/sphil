@@ -59,6 +59,7 @@ model User {
 enum Role {
     BASIC
     ADMIN
+    SUPERADMIN
 }
 
 model VerificationToken {

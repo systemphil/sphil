@@ -7,17 +7,17 @@ import {
     LessonTranscript,
     Video,
 } from "@prisma/client";
-import type Stripe from "stripe";
 import { prisma } from "./dbInit";
 import { exclude } from "lib/utils";
 import { mdxCompiler } from "lib/server/mdxCompiler";
+import { withAdmin, withUser } from "lib/auth/authFuncs";
 
 /**
  * Calls the database to retrieve all courses.
+ * @access ADMIN
  */
-export const dbGetAllCourses = async () => {
-    return await prisma.course.findMany();
-};
+export const dbGetAllCourses = () => withAdmin(() => prisma.course.findMany());
+
 /**
  * Calls the database to retrieve all published courses.
  */
@@ -151,49 +151,58 @@ export async function dbUpdateUserPurchases({
 }
 /**
  * Calls the database to retrieve specific course, its course details and lessons by id identifier.
+ * @access ADMIN
  */
-export const dbGetCourseAndDetailsAndLessonsById = async (id: string) => {
-    const validId = z.string().parse(id);
-    return await prisma.course.findFirst({
-        where: {
-            id: validId,
-        },
-        include: {
-            lessons: true,
-            details: {
-                select: {
-                    id: true,
+export async function dbGetCourseAndDetailsAndLessonsById(id: string) {
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.course.findFirst({
+            where: {
+                id: validId,
+            },
+            include: {
+                lessons: true,
+                details: {
+                    select: {
+                        id: true,
+                    },
                 },
             },
-        },
-    });
-};
+        });
+    }
+    return withAdmin(task);
+}
 /**
- * Calls the database to retrieve specific lesson and relations by id identifier. Does not include fields with byte objects, only plain objects.
+ * Calls the database to retrieve specific lesson and relations by id identifier.
+ * Does not include fields with byte objects, only plain objects.
+ * @access ADMIN
  */
 export const dbGetLessonAndRelationsById = async (id: string) => {
-    const validId = z.string().parse(id);
-    return await prisma.lesson.findFirst({
-        where: {
-            id: validId,
-        },
-        include: {
-            part: true,
-            content: {
-                select: {
-                    id: true,
-                    lessonId: true,
-                },
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.lesson.findFirst({
+            where: {
+                id: validId,
             },
-            transcript: {
-                select: {
-                    id: true,
-                    lessonId: true,
+            include: {
+                part: true,
+                content: {
+                    select: {
+                        id: true,
+                        lessonId: true,
+                    },
                 },
+                transcript: {
+                    select: {
+                        id: true,
+                        lessonId: true,
+                    },
+                },
+                video: true,
             },
-            video: true,
-        },
-    });
+        });
+    }
+    return withAdmin(task);
 };
 /**
  * Calls the database to retrieve specific lesson and relations by id identifier.
@@ -240,6 +249,7 @@ export const dbGetLessonAndRelationsBySlug = async (slug: string) => {
  * Converts binary content of found record to string so that it can pass the tRPC network boundary
  * and/or be passed down to Client Components from Server Components.
  * @supports LessonContent | LessonTranscript | CourseDetails
+ * TODO fixme! Auth guard this
  */
 export const dbGetMdxByModelId = async (id: string) => {
     const validId = z.string().parse(id);
@@ -430,40 +440,48 @@ export const dbGetCompiledMdxBySlugs = async ({
 /**
  * Calls the database to retrieve specific Video entry based on the ID of the Lesson it is related to.
  * Returns null when either Lesson or its related Video is not found.
+ * @access ADMIN
  */
 export const dbGetVideoByLessonId = async (id: string) => {
-    const validId = z.string().parse(id);
-    const lessonWithVideo = await prisma.lesson.findUnique({
-        where: {
-            id: validId,
-        },
-        include: {
-            video: true,
-        },
-    });
-    if (lessonWithVideo) {
-        if (lessonWithVideo.video) {
-            return lessonWithVideo.video;
+    async function task() {
+        const validId = z.string().parse(id);
+        const lessonWithVideo = await prisma.lesson.findUnique({
+            where: {
+                id: validId,
+            },
+            include: {
+                video: true,
+            },
+        });
+        if (lessonWithVideo) {
+            if (lessonWithVideo.video) {
+                return lessonWithVideo.video;
+            }
+            return null;
         }
         return null;
     }
-    return null;
+    return withAdmin(task);
 };
 
 /**
  * Calls the database to retrieve specific video.fileName by id identifier.
+ * @access ADMIN
  */
 export const dbGetVideoFileNameByVideoId = async (id: string) => {
-    const validId = z.string().parse(id);
-    const video = await prisma.video.findUnique({
-        where: {
-            id: validId,
-        },
-        select: {
-            fileName: true,
-        },
-    });
-    return video;
+    async function task() {
+        const validId = z.string().parse(id);
+        const video = await prisma.video.findUnique({
+            where: {
+                id: validId,
+            },
+            select: {
+                fileName: true,
+            },
+        });
+        return video;
+    }
+    return withAdmin(task);
 };
 export type DbUpsertCourseByIdProps = Omit<
     Course,
@@ -471,6 +489,7 @@ export type DbUpsertCourseByIdProps = Omit<
 > & { id?: string };
 /**
  * Updates an existing course details by id as identifier or creates a new one if id is not provided.
+ * @access ADMIN
  */
 export const dbUpsertCourseById = async ({
     id,
@@ -491,78 +510,84 @@ export const dbUpsertCourseById = async ({
     seminarAvailability,
     dialogueAvailability,
 }: DbUpsertCourseByIdProps) => {
-    const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
-    const validName = z.string().parse(name);
-    const validDescription = z.string().parse(description);
-    const validSlug = z.string().toLowerCase().parse(slug);
-    const validProductId = stripeProductId
-        ? z.string().parse(stripeProductId)
-        : undefined;
-    const validBasePriceId = stripeBasePriceId
-        ? z.string().parse(stripeBasePriceId)
-        : undefined;
-    const validStripeSeminarPriceId = stripeSeminarPriceId
-        ? z.string().parse(stripeSeminarPriceId)
-        : undefined;
-    const validStripeDialoguePriceId = stripeDialoguePriceId
-        ? z.string().parse(stripeDialoguePriceId)
-        : undefined;
-    const validBasePrice = z.number().parse(basePrice);
-    const validSeminarPrice = z.number().parse(seminarPrice);
-    const validDialoguePrice = z.number().parse(dialoguePrice);
-    const validImageUrl = imageUrl
-        ? z.string().url().parse(imageUrl)
-        : undefined;
-    const validAuthor = author ? z.string().parse(author) : undefined;
-    const validPublished = published ? z.boolean().parse(published) : undefined;
-    const validBaseAvailability = z.date().parse(baseAvailability);
-    const validSeminarAvailability = z.date().parse(seminarAvailability);
-    const validDialogueAvailability = z.date().parse(dialogueAvailability);
+    async function task() {
+        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
+        const validName = z.string().parse(name);
+        const validDescription = z.string().parse(description);
+        const validSlug = z.string().toLowerCase().parse(slug);
+        const validProductId = stripeProductId
+            ? z.string().parse(stripeProductId)
+            : undefined;
+        const validBasePriceId = stripeBasePriceId
+            ? z.string().parse(stripeBasePriceId)
+            : undefined;
+        const validStripeSeminarPriceId = stripeSeminarPriceId
+            ? z.string().parse(stripeSeminarPriceId)
+            : undefined;
+        const validStripeDialoguePriceId = stripeDialoguePriceId
+            ? z.string().parse(stripeDialoguePriceId)
+            : undefined;
+        const validBasePrice = z.number().parse(basePrice);
+        const validSeminarPrice = z.number().parse(seminarPrice);
+        const validDialoguePrice = z.number().parse(dialoguePrice);
+        const validImageUrl = imageUrl
+            ? z.string().url().parse(imageUrl)
+            : undefined;
+        const validAuthor = author ? z.string().parse(author) : undefined;
+        const validPublished = published
+            ? z.boolean().parse(published)
+            : undefined;
+        const validBaseAvailability = z.date().parse(baseAvailability);
+        const validSeminarAvailability = z.date().parse(seminarAvailability);
+        const validDialogueAvailability = z.date().parse(dialogueAvailability);
 
-    return await prisma.course.upsert({
-        where: {
-            id: validId,
-        },
-        update: {
-            name: validName,
-            slug: validSlug,
-            description: validDescription,
-            stripeProductId: validProductId,
-            stripeBasePriceId: validBasePriceId,
-            stripeSeminarPriceId: validStripeSeminarPriceId,
-            stripeDialoguePriceId: validStripeDialoguePriceId,
-            basePrice: validBasePrice,
-            seminarPrice: validSeminarPrice,
-            dialoguePrice: validDialoguePrice,
-            imageUrl: validImageUrl,
-            author: validAuthor,
-            published: validPublished,
-            baseAvailability: validBaseAvailability,
-            seminarAvailability: validSeminarAvailability,
-            dialogueAvailability: validDialogueAvailability,
-        },
-        create: {
-            name: validName,
-            slug: validSlug,
-            description: validDescription,
-            stripeProductId: validProductId,
-            stripeBasePriceId: validBasePriceId,
-            stripeSeminarPriceId: validStripeSeminarPriceId,
-            stripeDialoguePriceId: validStripeDialoguePriceId,
-            basePrice: validBasePrice,
-            seminarPrice: validSeminarPrice,
-            dialoguePrice: validDialoguePrice,
-            imageUrl: validImageUrl,
-            author: validAuthor,
-            published: validPublished,
-            baseAvailability: validBaseAvailability,
-            seminarAvailability: validSeminarAvailability,
-            dialogueAvailability: validDialogueAvailability,
-        },
-    });
+        return await prisma.course.upsert({
+            where: {
+                id: validId,
+            },
+            update: {
+                name: validName,
+                slug: validSlug,
+                description: validDescription,
+                stripeProductId: validProductId,
+                stripeBasePriceId: validBasePriceId,
+                stripeSeminarPriceId: validStripeSeminarPriceId,
+                stripeDialoguePriceId: validStripeDialoguePriceId,
+                basePrice: validBasePrice,
+                seminarPrice: validSeminarPrice,
+                dialoguePrice: validDialoguePrice,
+                imageUrl: validImageUrl,
+                author: validAuthor,
+                published: validPublished,
+                baseAvailability: validBaseAvailability,
+                seminarAvailability: validSeminarAvailability,
+                dialogueAvailability: validDialogueAvailability,
+            },
+            create: {
+                name: validName,
+                slug: validSlug,
+                description: validDescription,
+                stripeProductId: validProductId,
+                stripeBasePriceId: validBasePriceId,
+                stripeSeminarPriceId: validStripeSeminarPriceId,
+                stripeDialoguePriceId: validStripeDialoguePriceId,
+                basePrice: validBasePrice,
+                seminarPrice: validSeminarPrice,
+                dialoguePrice: validDialoguePrice,
+                imageUrl: validImageUrl,
+                author: validAuthor,
+                published: validPublished,
+                baseAvailability: validBaseAvailability,
+                seminarAvailability: validSeminarAvailability,
+                dialogueAvailability: validDialogueAvailability,
+            },
+        });
+    }
+    return withAdmin(task);
 };
 /**
  * Updates an existing lesson details by id as identifier or creates a new one if id is not provided.
+ * @access ADMIN
  */
 export const dbUpsertLessonById = async ({
     id,
@@ -579,34 +604,38 @@ export const dbUpsertLessonById = async ({
     partId?: string | null;
     courseId: string | null;
 }) => {
-    const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
-    const validName = z.string().parse(name);
-    const validDescription = z.string().parse(description);
-    const validSlug = z.string().toLowerCase().parse(slug);
-    const validPartId = partId ? z.string().parse(partId) : undefined;
-    const validCourseId = z.string().parse(courseId);
+    async function task() {
+        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
+        const validName = z.string().parse(name);
+        const validDescription = z.string().parse(description);
+        const validSlug = z.string().toLowerCase().parse(slug);
+        const validPartId = partId ? z.string().parse(partId) : undefined;
+        const validCourseId = z.string().parse(courseId);
 
-    return await prisma.lesson.upsert({
-        where: {
-            id: validId,
-        },
-        update: {
-            name: validName,
-            slug: validSlug,
-            description: validDescription,
-            partId: validPartId,
-        },
-        create: {
-            name: validName,
-            description: validDescription,
-            slug: validSlug,
-            courseId: validCourseId,
-            partId: validPartId,
-        },
-    });
+        return await prisma.lesson.upsert({
+            where: {
+                id: validId,
+            },
+            update: {
+                name: validName,
+                slug: validSlug,
+                description: validDescription,
+                partId: validPartId,
+            },
+            create: {
+                name: validName,
+                description: validDescription,
+                slug: validSlug,
+                courseId: validCourseId,
+                partId: validPartId,
+            },
+        });
+    }
+    return withAdmin(task);
 };
 /**
  * Updates an existing lessonContent details by id as identifier or creates a new one if id is not provided.
+ * @access ADMIN
  */
 export const dbUpsertLessonContentById = async ({
     id,
@@ -617,30 +646,34 @@ export const dbUpsertLessonContentById = async ({
     lessonId: LessonContent["lessonId"];
     content: string;
 }) => {
-    const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
-    const validLessonId = z.string().parse(lessonId);
+    async function task() {
+        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
+        const validLessonId = z.string().parse(lessonId);
 
-    const contentAsBuffer = Buffer.from(content, "utf-8");
+        const contentAsBuffer = Buffer.from(content, "utf-8");
 
-    const result = await prisma.lessonContent.upsert({
-        where: {
-            id: validId,
-        },
-        update: {
-            mdx: contentAsBuffer,
-        },
-        create: {
-            lessonId: validLessonId,
-            mdx: contentAsBuffer,
-        },
-    });
+        const result = await prisma.lessonContent.upsert({
+            where: {
+                id: validId,
+            },
+            update: {
+                mdx: contentAsBuffer,
+            },
+            create: {
+                lessonId: validLessonId,
+                mdx: contentAsBuffer,
+            },
+        });
 
-    const resultWithoutContent = exclude(result, ["mdx"]);
-    return resultWithoutContent;
+        const resultWithoutContent = exclude(result, ["mdx"]);
+        return resultWithoutContent;
+    }
+    return withAdmin(task);
 };
 /**
  * Updates an existing LessonTranscript model by id as identifier or creates a new one if id is not provided.
  * Must have the id of the Lesson this LessonTranscript relates to.
+ * @access ADMIN
  */
 export const dbUpsertLessonTranscriptById = async ({
     id,
@@ -651,26 +684,29 @@ export const dbUpsertLessonTranscriptById = async ({
     lessonId: LessonContent["lessonId"];
     transcript: string;
 }) => {
-    const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
-    const validLessonId = z.string().parse(lessonId);
+    async function task() {
+        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
+        const validLessonId = z.string().parse(lessonId);
 
-    const contentAsBuffer = Buffer.from(transcript, "utf-8");
+        const contentAsBuffer = Buffer.from(transcript, "utf-8");
 
-    const result = await prisma.lessonTranscript.upsert({
-        where: {
-            id: validId,
-        },
-        update: {
-            mdx: contentAsBuffer,
-        },
-        create: {
-            lessonId: validLessonId,
-            mdx: contentAsBuffer,
-        },
-    });
+        const result = await prisma.lessonTranscript.upsert({
+            where: {
+                id: validId,
+            },
+            update: {
+                mdx: contentAsBuffer,
+            },
+            create: {
+                lessonId: validLessonId,
+                mdx: contentAsBuffer,
+            },
+        });
 
-    const resultWithoutTranscript = exclude(result, ["mdx"]);
-    return resultWithoutTranscript;
+        const resultWithoutTranscript = exclude(result, ["mdx"]);
+        return resultWithoutTranscript;
+    }
+    return withAdmin(task);
 };
 /**
  * Updates an existing CourseDetails  model by id as identifier or creates a new one if id is not provided.
@@ -685,29 +721,33 @@ export const dbUpsertCourseDetailsById = async ({
     courseId: Course["id"];
     content: string;
 }) => {
-    const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
-    const validCourseId = z.string().parse(courseId);
+    async function task() {
+        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
+        const validCourseId = z.string().parse(courseId);
 
-    const contentAsBuffer = Buffer.from(content, "utf-8");
+        const contentAsBuffer = Buffer.from(content, "utf-8");
 
-    const result = await prisma.courseDetails.upsert({
-        where: {
-            id: validId,
-        },
-        update: {
-            mdx: contentAsBuffer,
-        },
-        create: {
-            courseId: validCourseId,
-            mdx: contentAsBuffer,
-        },
-    });
+        const result = await prisma.courseDetails.upsert({
+            where: {
+                id: validId,
+            },
+            update: {
+                mdx: contentAsBuffer,
+            },
+            create: {
+                courseId: validCourseId,
+                mdx: contentAsBuffer,
+            },
+        });
 
-    const resultWithoutContent = exclude(result, ["mdx"]);
-    return resultWithoutContent;
+        const resultWithoutContent = exclude(result, ["mdx"]);
+        return resultWithoutContent;
+    }
+    return withAdmin(task);
 };
 /**
  * Updates mdx field for an existing model by id as identifier.
+ * @access ADMIN
  */
 export const dbUpdateMdxByModelId = async ({
     id,
@@ -716,67 +756,71 @@ export const dbUpdateMdxByModelId = async ({
     id: LessonContent["id"] | LessonTranscript["id"] | CourseDetails["id"];
     content: string;
 }) => {
-    const validId = z.string().parse(id);
-    const validContent = z.string().parse(content);
+    async function task() {
+        const validId = z.string().parse(id);
+        const validContent = z.string().parse(content);
 
-    const contentAsBuffer = Buffer.from(validContent, "utf-8");
-    /**
-     * Prisma does not allow us to traverse two tables at once, so we made SQL executions directly with $executeRaw where
-     * prisma returns the number of rows affected by the query instead of an error in the usual prisma.update().
-     * First we try to update one table where there is an id match, and, then, we check how many rows were affected.
-     * If 1, then proceed to compile mdx string for user consumption and return, otherwise proceed to check the next table until ID hit.
-     * @see {@link https://www.prisma.io/docs/concepts/components/prisma-client/raw-database-access#executeraw PrismaExecuteRaw}
-     * @see {@link https://www.cockroachlabs.com/docs/stable/sql-statements SQL@CockroachDB}
-     */
-    let result: number =
-        await prisma.$executeRaw`UPDATE "LessonContent" SET mdx = ${contentAsBuffer} WHERE id = ${validId};`;
-    if (result === 1) {
-        const compiledMdx = await mdxCompiler(validContent);
-        await prisma.lessonContent.update({
-            where: {
-                id: validId,
-            },
-            data: {
-                mdxCompiled: compiledMdx,
-            },
-        });
-        return;
+        const contentAsBuffer = Buffer.from(validContent, "utf-8");
+        /**
+         * Prisma does not allow us to traverse two tables at once, so we made SQL executions directly with $executeRaw where
+         * prisma returns the number of rows affected by the query instead of an error in the usual prisma.update().
+         * First we try to update one table where there is an id match, and, then, we check how many rows were affected.
+         * If 1, then proceed to compile mdx string for user consumption and return, otherwise proceed to check the next table until ID hit.
+         * @see {@link https://www.prisma.io/docs/concepts/components/prisma-client/raw-database-access#executeraw PrismaExecuteRaw}
+         * @see {@link https://www.cockroachlabs.com/docs/stable/sql-statements SQL@CockroachDB}
+         */
+        let result: number =
+            await prisma.$executeRaw`UPDATE "LessonContent" SET mdx = ${contentAsBuffer} WHERE id = ${validId};`;
+        if (result === 1) {
+            const compiledMdx = await mdxCompiler(validContent);
+            await prisma.lessonContent.update({
+                where: {
+                    id: validId,
+                },
+                data: {
+                    mdxCompiled: compiledMdx,
+                },
+            });
+            return;
+        }
+        result =
+            await prisma.$executeRaw`UPDATE "LessonTranscript" SET mdx = ${contentAsBuffer} WHERE id = ${validId};`;
+        if (result === 1) {
+            const compiledMdx = await mdxCompiler(validContent);
+            await prisma.lessonTranscript.update({
+                where: {
+                    id: validId,
+                },
+                data: {
+                    mdxCompiled: compiledMdx,
+                },
+            });
+            return;
+        }
+        result =
+            await prisma.$executeRaw`UPDATE "CourseDetails" SET mdx = ${contentAsBuffer} WHERE id = ${validId};`;
+        if (result === 1) {
+            const compiledMdx = await mdxCompiler(validContent);
+            await prisma.courseDetails.update({
+                where: {
+                    id: validId,
+                },
+                data: {
+                    mdxCompiled: compiledMdx,
+                },
+            });
+            return;
+        }
+        throw new Error(
+            "Database update should have returned exactly 1 updated record."
+        );
     }
-    result =
-        await prisma.$executeRaw`UPDATE "LessonTranscript" SET mdx = ${contentAsBuffer} WHERE id = ${validId};`;
-    if (result === 1) {
-        const compiledMdx = await mdxCompiler(validContent);
-        await prisma.lessonTranscript.update({
-            where: {
-                id: validId,
-            },
-            data: {
-                mdxCompiled: compiledMdx,
-            },
-        });
-        return;
-    }
-    result =
-        await prisma.$executeRaw`UPDATE "CourseDetails" SET mdx = ${contentAsBuffer} WHERE id = ${validId};`;
-    if (result === 1) {
-        const compiledMdx = await mdxCompiler(validContent);
-        await prisma.courseDetails.update({
-            where: {
-                id: validId,
-            },
-            data: {
-                mdxCompiled: compiledMdx,
-            },
-        });
-        return;
-    }
-    throw new Error(
-        "Database update should have returned exactly 1 updated record."
-    );
+    return withAdmin(task);
 };
 /**
  * Updates Video details by id as identifier or creates a new one if id is not provided, in which case
  * the id of the lesson this video is related to must be provided.
+ * @access ADMIN
  */
 export const dbUpsertVideoById = async ({
     id,
@@ -787,118 +831,152 @@ export const dbUpsertVideoById = async ({
     lessonId: string;
     fileName?: string;
 }) => {
-    const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value in order to query
-    const validLessonId = z.string().parse(lessonId);
-    const validFileName = fileName ? z.string().parse(fileName) : "";
+    async function task() {
+        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value in order to query
+        const validLessonId = z.string().parse(lessonId);
+        const validFileName = fileName ? z.string().parse(fileName) : "";
 
-    return await prisma.video.upsert({
-        where: {
-            id: validId,
-        },
-        update: {
-            fileName: validFileName,
-        },
-        create: {
-            lessonId: validLessonId,
-            fileName: validFileName,
-        },
-    });
+        return await prisma.video.upsert({
+            where: {
+                id: validId,
+            },
+            update: {
+                fileName: validFileName,
+            },
+            create: {
+                lessonId: validLessonId,
+                fileName: validFileName,
+            },
+        });
+    }
+    return withAdmin(task);
 };
 /**
  * Deletes entry from the LessonTranscript model. Returns only id of deleted model.
+ * @access ADMIN
  */
 export const dbDeleteLessonTranscriptById = async ({
     id,
 }: {
     id: LessonTranscript["id"];
 }) => {
-    const validId = z.string().parse(id);
-    return await prisma.lessonTranscript.delete({
-        where: { id: validId },
-        select: { id: true },
-    });
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.lessonTranscript.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    }
+    return withAdmin(task);
 };
 /**
  * Deletes entry from the LessonContent model. Returns only id of deleted model.
+ * @access ADMIN
  */
 export const dbDeleteLessonContentById = async ({
     id,
 }: {
     id: LessonContent["id"];
 }) => {
-    const validId = z.string().parse(id);
-    return await prisma.lessonContent.delete({
-        where: { id: validId },
-        select: { id: true },
-    });
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.lessonContent.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    }
+    return withAdmin(task);
 };
 /**
  * Deletes entry from the Video model. Returns only id of deleted model.
  * @note This function DOES NOT delete video from storage. Consider using `orderDeleteVideo()` instead.
+ * @access ADMIN
  */
 export const dbDeleteVideoById = async ({ id }: { id: Video["id"] }) => {
-    const validId = z.string().parse(id);
-    return await prisma.video.delete({
-        where: { id: validId },
-        select: { id: true },
-    });
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.video.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    }
+    return withAdmin(task);
 };
 /**
  * Deletes entry from the CourseDetails model. Returns only id of deleted model.
+ * @access ADMIN
  */
 export const dbDeleteCourseDetailsById = async ({
     id,
 }: {
     id: CourseDetails["id"];
 }) => {
-    const validId = z.string().parse(id);
-    return await prisma.courseDetails.delete({
-        where: { id: validId },
-        select: { id: true },
-    });
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.courseDetails.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    }
+    return withAdmin(task);
 };
 /**
  * Deletes entry from the Lesson model (and all related models). Returns only id of deleted model.
  * @warning Does NOT delete video from storage. Consider using `orderDeleteVideo()` or `orderDeleteLesson()` instead.
+ * @access ADMIN
  */
 export const dbDeleteLesson = async ({ id }: { id: Lesson["id"] }) => {
-    const validId = z.string().parse(id);
-    return await prisma.lesson.delete({
-        where: { id: validId },
-        select: { id: true },
-    });
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.lesson.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    }
+    return withAdmin(task);
 };
 
 /**
  * Deletes entry from the Course model (and all related models, including CourseDetails). Returns only id of deleted model.
  * @warning Does NOT delete video from storage. Consider using `orderDeleteVideo()` or `orderDeleteLesson()` instead.
+ * @access ADMIN
  */
 export const dbDeleteCourse = async ({ id }: { id: Course["id"] }) => {
-    const validId = z.string().parse(id);
-    return await prisma.course.delete({
-        where: { id: validId },
-        select: { id: true },
-    });
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.course.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    }
+    return withAdmin(task);
 };
 
+/**
+ * @access USER
+ */
 export async function dbVerifyUserPurchase(userId: string, priceId: string) {
-    const validUserId = z.string().parse(userId);
-    const validPriceId = z.string().parse(priceId);
-    const completePriceId = "price_" + validPriceId;
-    const user = await prisma.user.findUnique({
-        where: {
-            id: validUserId,
-        },
-        select: {
-            productsPurchased: true,
-        },
-    });
-    if (!user) return false;
-    const userPurchasedPriceIds = user.productsPurchased.map((id) => {
-        return id.split(":")[0];
-    });
-    const hasUserPurchased = userPurchasedPriceIds.includes(completePriceId);
-    return hasUserPurchased;
+    async function task() {
+        const validUserId = z.string().parse(userId);
+        const validPriceId = z.string().parse(priceId);
+        const completePriceId = "price_" + validPriceId;
+        const user = await prisma.user.findUnique({
+            where: {
+                id: validUserId,
+            },
+            select: {
+                productsPurchased: true,
+            },
+        });
+        if (!user) return false;
+        const userPurchasedPriceIds = user.productsPurchased.map((id) => {
+            return id.split(":")[0];
+        });
+        const hasUserPurchased =
+            userPurchasedPriceIds.includes(completePriceId);
+        return hasUserPurchased;
+    }
+    return withUser(task);
 }
 
 export async function dbGetMaintenanceMessageGlobal() {

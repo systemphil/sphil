@@ -1,6 +1,7 @@
 import { GetSignedUrlConfig } from "@google-cloud/storage";
 import { dbUpsertVideoById } from "lib/database/dbFuncs";
 import { primaryBucket, secondaryBucket } from "./bucketInit";
+import { withAdmin } from "lib/auth/authFuncs";
 
 type GcGenerateSignedPostUploadURLProps = {
     fileName: string;
@@ -12,54 +13,57 @@ type GcGenerateSignedPostUploadURLProps = {
  * will be related. Will create (using lessonId) or update Video entry based on whether existing video ID is provided.
  * Finally, will update the Video record if post url returned provided.
  * @description All lesson videos will be stored the directory named after their ID in the Video entry: /video/[VideoId]/[fileName].ext
- * @access "ADMIN"
+ * @access ADMIN
  */
 export async function bucketGenerateSignedUploadUrl({
     fileName,
     id,
     lessonId,
 }: GcGenerateSignedPostUploadURLProps) {
-    const videoEntry = {
-        id: id,
-        fileName: fileName,
-        lessonId: lessonId,
-    };
-    if (!videoEntry.id) {
-        const newVideoEntry = await dbUpsertVideoById({ lessonId });
-        videoEntry.id = newVideoEntry.id;
-    }
-    const filePath = `video/${videoEntry.id}/${videoEntry.fileName}`;
-    // * Alternative method using bucket server
-    // if (!BUCKET_SERVER_ORIGIN)
-    //     throw new Error("Bucket server URL not set.");
-    // const outgoingUrl = `${BUCKET_SERVER_ORIGIN}/write-object`;
-    // const res = await fetch(outgoingUrl, {
-    //     method: "POST",
-    //     body: JSON.stringify({ object: filePath }),
-    // });
-    // if (!res.ok) {
-    //     throw new Error("Failed to get signed upload URL");
-    // }
-    // const data = await res.json();
-    const options = {
-        version: "v4",
-        action: "write",
-        expires: Date.now() + 15 * 60 * 1000, // 15 minutes
-    } satisfies GetSignedUrlConfig;
-    const [url] = await primaryBucket.file(filePath).getSignedUrl(options);
+    async function task() {
+        const videoEntry = {
+            id: id,
+            fileName: fileName,
+            lessonId: lessonId,
+        };
+        if (!videoEntry.id) {
+            const newVideoEntry = await dbUpsertVideoById({ lessonId });
+            videoEntry.id = newVideoEntry.id;
+        }
+        const filePath = `video/${videoEntry.id}/${videoEntry.fileName}`;
+        // * Alternative method using bucket server
+        // if (!BUCKET_SERVER_ORIGIN)
+        //     throw new Error("Bucket server URL not set.");
+        // const outgoingUrl = `${BUCKET_SERVER_ORIGIN}/write-object`;
+        // const res = await fetch(outgoingUrl, {
+        //     method: "POST",
+        //     body: JSON.stringify({ object: filePath }),
+        // });
+        // if (!res.ok) {
+        //     throw new Error("Failed to get signed upload URL");
+        // }
+        // const data = await res.json();
+        const options = {
+            version: "v4",
+            action: "write",
+            expires: Date.now() + 15 * 60 * 1000, // 15 minutes
+        } satisfies GetSignedUrlConfig;
+        const [url] = await primaryBucket.file(filePath).getSignedUrl(options);
 
-    if (url) {
-        await dbUpsertVideoById({
-            lessonId: videoEntry.lessonId,
-            id: videoEntry.id,
-            fileName: videoEntry.fileName,
-        });
-    }
+        if (url) {
+            await dbUpsertVideoById({
+                lessonId: videoEntry.lessonId,
+                id: videoEntry.id,
+                fileName: videoEntry.fileName,
+            });
+        }
 
-    const data = {
-        url: url,
-    };
-    return data;
+        const data = {
+            url: url,
+        };
+        return data;
+    }
+    return withAdmin(task);
 }
 type GcVideoFilePathProps = {
     fileName: string;
@@ -74,31 +78,34 @@ export async function bucketDeleteVideoFile({
     fileName,
     id,
 }: GcVideoFilePathProps) {
-    const filePath = `video/${id}/${fileName}`;
-    // * Alternative method using bucket server
-    // if (!BUCKET_SERVER_ORIGIN) throw new Error("Bucket server URL not set.");
-    // const outgoingUrl = `${BUCKET_SERVER_ORIGIN}/delete-object`;
-    // const res = await fetch(outgoingUrl, {
-    //     method: "POST",
-    //     body: JSON.stringify({ object: filePath }),
-    // });
-    // if (!res.ok) {
-    //     console.error(`Failed to delete object ${filePath}`);
-    //     console.log(res);
-    //     throw new Error("Deleting object request failed.");
-    // }
-    await primaryBucket
-        .file(filePath)
-        .delete()
-        .then(() => {
-            console.info(`☑️ OBJECT DELETED->${filePath}`);
-        })
-        .catch((err) => {
-            console.error(`Failed to delete object ${filePath}`);
-            console.error(err);
-            throw new Error("Deleting object request failed.");
-        });
-    return;
+    async function task() {
+        const filePath = `video/${id}/${fileName}`;
+        // * Alternative method using bucket server
+        // if (!BUCKET_SERVER_ORIGIN) throw new Error("Bucket server URL not set.");
+        // const outgoingUrl = `${BUCKET_SERVER_ORIGIN}/delete-object`;
+        // const res = await fetch(outgoingUrl, {
+        //     method: "POST",
+        //     body: JSON.stringify({ object: filePath }),
+        // });
+        // if (!res.ok) {
+        //     console.error(`Failed to delete object ${filePath}`);
+        //     console.log(res);
+        //     throw new Error("Deleting object request failed.");
+        // }
+        await primaryBucket
+            .file(filePath)
+            .delete()
+            .then(() => {
+                console.info(`☑️ OBJECT DELETED->${filePath}`);
+            })
+            .catch((err) => {
+                console.error(`Failed to delete object ${filePath}`);
+                console.error(err);
+                throw new Error("Deleting object request failed.");
+            });
+        return;
+    }
+    return withAdmin(task);
 }
 /**
  * Generates a signed Read Url for specific video from bucket. Requires the ID of the Video entry from db and the filename.
@@ -129,9 +136,9 @@ export async function bucketGenerateReadSignedUrl({
     const [url] = await primaryBucket.file(filePath).getSignedUrl(options);
     return url;
 }
+
 /**
  * Uploads image to secondary bucket and returns the public URL.
- * @access "ADMIN"
  */
 export function bucketPipeImageUpload({
     file,
