@@ -19,8 +19,16 @@ jobs:
 
           async function addLabels(extensions) {
             const labels = [];
-            if (extensions.includes('.mdx')) labels.push('content');
-            if (extensions.includes('.tsx')) labels.push('code');
+            const CONTENT_EXTENSIONS = ['.mdx', '.md', '.svg', '.jpg', '.png'];
+            const CODE_EXTENSIONS = ['.tsx,', '.ts', '.html', '.css', '.json', '.toml', '.lock', '.yml', '.yaml', '.js'];
+        
+            if (extensions.some(ext => CONTENT_EXTENSIONS.includes(ext))) {
+              labels.push('content-contribution');
+            } else if (extensions.some(ext => CODE_EXTENSIONS.includes(ext))) {
+              labels.push('code-contribution'); 
+            } else {
+              labels.push('miscellaneous-contribution'); 
+            }
             
             if (labels.length > 0) {
               await github.rest.issues.addLabels({
