@@ -45,7 +45,6 @@ Consider adding the Stub component to encourage further contributions.
 <details>
 <summary>💻 Guidelines for Code Contributions</summary>
 
-
 ### Required Steps
 
 1. Ensure code adheres to project coding standards
@@ -69,9 +68,9 @@ literature, or philosophy.
 Contributors
 </details>
 
-
 ## License Agreement
 
 By submitting this PR, you agree to license your content under the
-[CC BY-NC-SA 4.0 License](https://creativecommons.org/licenses/by-nc-sa/4.0/) and your code under the
+[CC BY-NC-SA 4.0 License](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+and your code under the
 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt).
