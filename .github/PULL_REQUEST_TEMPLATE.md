@@ -30,7 +30,7 @@ description: Brief description of your content
 isArticle: true
 authors: Your Name (Year)
 editors: Editor Name (Year)
-contributors: Contributor Name
+contributors: Contributor Name (Year)
 ---
 
 ## Your Article Title
