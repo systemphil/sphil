@@ -3,20 +3,17 @@ export default {
         title: "Contributing",
         type: "page",
     },
-    // hegel: "Hegel",
-    // kant: "Kant",
-    // spinoza: "Spinoza",
-    symposia: {
-        title: "Symposia 🏺",
-        type: "menu",
-        items: {
-            about: {
-                href: "/symposia",
-            },
-            courses: {
-                href: "/symposia/courses",
-            },
-        },
+    kant: {
+        title: "Kant",
+        display: "children",
+    },
+    hegel: {
+        title: "Hegel",
+        display: "children",
+    },
+    spinoza: {
+        title: "Spinoza",
+        display: "children",
     },
     terms: {
         title: "Terms of Use",

@@ -1,6 +1,4 @@
-function Separator({ children }: { children: React.ReactNode }) {
-    return <div className="flex items-center gap-2">{children}</div>;
-}
+import { Separator } from "lib/components/ui/Separator";
 
 export default {
     "*": {
@@ -9,7 +7,7 @@ export default {
             pagination: false,
         },
     },
-    index: {
+    "contributing-to-sphil": {
         title: "Contributing",
     },
     "code-of-conduct": {
@@ -25,7 +23,11 @@ export default {
         title: <Separator>Code</Separator>,
     },
     "why-these-tools": "",
-    github: "",
-    formatting: "",
+    github: {
+        title: "GitHub",
+    },
+    formatting: {
+        title: "Formatting",
+    },
     "local-development": "",
 };

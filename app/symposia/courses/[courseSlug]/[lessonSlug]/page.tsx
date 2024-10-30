@@ -6,6 +6,8 @@ import { dbGetUserPurchasedCourses } from "lib/database/dbFuncs";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
+export const metadata = {};
+
 export default async function LessonFrontPageRoute({
     params,
 }: {

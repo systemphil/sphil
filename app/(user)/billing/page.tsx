@@ -4,6 +4,8 @@ import { PageWrapper } from "lib/components/ui/PageWrapper";
 import { dbGetUserPurchasedCourses } from "lib/database/dbFuncs";
 import { redirect } from "next/navigation";
 
+export const metadata = {};
+
 export default async function BillingPage() {
     const session = await auth();
 

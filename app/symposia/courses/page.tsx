@@ -5,6 +5,8 @@ import { Heading } from "lib/components/ui/Heading";
 import { PageWrapper } from "lib/components/ui/PageWrapper";
 import { Suspense } from "react";
 
+export const metadata = {};
+
 export default async function CoursesPage() {
     return (
         <PageWrapper>

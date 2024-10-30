@@ -3,6 +3,8 @@ import { PageWrapper } from "lib/components/ui/PageWrapper";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
+export const metadata = {};
+
 export default async function PublishedCourses({
     searchParams,
 }: {
