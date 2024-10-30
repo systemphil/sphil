@@ -5,8 +5,8 @@ jobs:
   label:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/github-script@v6
+    - uses: actions/checkout@v4
+    - uses: actions/github-script@v7
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
@@ -18,26 +18,45 @@ jobs:
           }
 
           async function addLabels(extensions) {
-            const labels = [];
-            const CONTENT_EXTENSIONS = ['.mdx', '.md', '.svg', '.jpg', '.png'];
-            const CODE_EXTENSIONS = ['.tsx,', '.ts', '.html', '.css', '.json', '.toml', '.lock', '.yml', '.yaml', '.js'];
-        
-            if (extensions.some(ext => CONTENT_EXTENSIONS.includes(ext))) {
-              labels.push('content-contribution');
-            } else if (extensions.some(ext => CODE_EXTENSIONS.includes(ext))) {
-              labels.push('code-contribution'); 
-            } else {
-              labels.push('miscellaneous-contribution'); 
+            let labels = [];
+            let hasContentChanges = false;
+            let hasCodeChanges = false;
+
+            extensions.forEach(ext => {
+              if (ext === '.mdx') {
+                hasContentChanges = true;
+              } else {
+                hasCodeChanges = true;
+              }
+            })
+
+            if (hasContentChanges) {
+              labels.push('CONTENT');
             }
+
+            if (hasCodeChanges) {
+              labels.push('CODE');
+            }
+
+            // Get current labels
+            const { data: currentLabels } = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            });
             
-            if (labels.length > 0) {
+            const currentLabelNames = currentLabels.map(label => label.name);
+            
+            // cross-reference current PR labels with the up-to-date label list
+            if (labels.length > 0 && labels.some(label => !currentLabelNames.includes(label))) {
               await github.rest.issues.addLabels({
-                issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
+                issue_number: context.issue.number,
                 labels: labels
               });
             }
+      
           }
 
           const { data: files } = await github.rest.pulls.listFiles({
