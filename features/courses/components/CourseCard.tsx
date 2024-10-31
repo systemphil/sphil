@@ -9,7 +9,7 @@ type CourseCardProps = {
 };
 
 export async function CourseCard({ course }: CourseCardProps) {
-    const href = `/courses/${course.slug}`;
+    const href = `/symposia/courses/${course.slug}`;
 
     return (
         <GlowBoundary>

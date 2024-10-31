@@ -1,27 +1,8 @@
 "use client";
 
+import { useSphilSite } from "lib/hooks/useSphilSite";
 import { cn } from "lib/utils";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-export type SphilSite = "hegel" | "kant" | "spinoza";
-
-export function useSphilSite(): SphilSite | undefined {
-    const pathname = usePathname();
-    if (pathname.startsWith("/hegel")) {
-        return "hegel";
-    }
-
-    if (pathname.startsWith("/kant")) {
-        return "kant";
-    }
-
-    if (pathname.startsWith("/spinoza")) {
-        return "spinoza";
-    }
-
-    return undefined;
-}
 
 function SiteSwitcherLink({
     href,
@@ -67,17 +48,17 @@ export function SiteSwitcher() {
             />
             <span className="z-50 absolute p-1 text-sm flex justify-between text-center w-[200px] text-[#666666] dark:text-[#888888]">
                 <SiteSwitcherLink
-                    href="/hegel"
+                    href="/docs/hegel"
                     text="Hegel"
                     isActive={site === "hegel"}
                 />
                 <SiteSwitcherLink
-                    href="/kant"
+                    href="/docs/kant"
                     text="Kant"
                     isActive={site === "kant"}
                 />
                 <SiteSwitcherLink
-                    href="/spinoza"
+                    href="/docs/spinoza"
                     text="Spinoza"
                     isActive={site === "spinoza"}
                 />

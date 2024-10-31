@@ -3,6 +3,7 @@ import { SignInButton } from "../auth/SignInButton";
 import Link from "next/link";
 import { SignOutButton } from "../auth/SignOutButton";
 import { FadeIn } from "../animations/FadeIn";
+import { GetSiteTest } from "./GetSiteTest";
 
 export async function UserMenu() {
     const session = await auth();
@@ -13,6 +14,7 @@ export async function UserMenu() {
 
     return (
         <div className="dropdown dropdown-bottom dropdown-end">
+            <GetSiteTest />
             <label
                 tabIndex={0}
                 className="btn btn-circle bg-transparent border-0 shadow-none hover:bg-gray-100 dark:hover:bg-acid-green/10 translate-y-[0.6px]"
