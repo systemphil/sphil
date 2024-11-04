@@ -6,6 +6,10 @@ function RingMd() {
     return <span className="loading loading-ring loading-md"></span>;
 }
 
+function RingXs() {
+    return <span className="loading loading-ring loading-xs"></span>;
+}
+
 function RingFullPage() {
     return (
         <div className="flex w-full justify-center mt-10 min-h-screen">
@@ -19,6 +23,7 @@ function SkeletonFullPage() {
 }
 
 const Loading = {
+    RingXs,
     RingMd,
     RingLg,
     RingFullPage,

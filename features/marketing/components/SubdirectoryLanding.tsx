@@ -11,7 +11,9 @@ export const SubdirectoryLanding = ({
 }) => {
     return (
         <main>
-            <section className="relative flex flex-col items-center justify-start w-full h-screen overflow-hidden mb-10">
+            <section
+                className={`relative flex flex-col items-center justify-start w-full h-screen overflow-hidden mb-10`}
+            >
                 <SubHeroBackground>
                     <div className="flex flex-col items-center justify-center">
                         <Heading>{subdirectory.toUpperCase()}</Heading>

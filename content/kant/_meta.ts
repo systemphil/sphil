@@ -1,6 +1,5 @@
 export default {
     index: {
-        type: "page",
         display: "children",
         theme: {
             layout: "full",

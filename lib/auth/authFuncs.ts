@@ -11,7 +11,7 @@ import { auth } from "./authConfig";
  * @returns {Promise<void>} A Promise that resolves if the user has admin access.
  * @async
  */
-export const requireAdminAuth = async (): Promise<void> => {
+export const validateAdminOrThrow = async (): Promise<void> => {
     const session = await auth();
 
     if (
@@ -22,7 +22,19 @@ export const requireAdminAuth = async (): Promise<void> => {
     }
 };
 
-export const requireUserAuth = async (): Promise<void> => {
+export const validateAdminAccess = async (): Promise<boolean> => {
+    const session = await auth();
+
+    if (
+        session &&
+        (session.user.role === "ADMIN" || session.user.role === "SUPERADMIN")
+    ) {
+        return true;
+    }
+    return false;
+};
+
+export const requireUserAuthOrThrow = async (): Promise<void> => {
     const session = await auth();
 
     if (!session?.user) {
@@ -44,7 +56,7 @@ export class UnauthorizedError extends Error {
 export const withAdmin = async <T>(
     retrieveFunc: () => Promise<T>
 ): Promise<T> => {
-    await requireAdminAuth();
+    await validateAdminOrThrow();
     return await retrieveFunc();
 };
 
@@ -56,6 +68,6 @@ export const withAdmin = async <T>(
 export const withUser = async <T>(
     retrieveFunc: () => Promise<T>
 ): Promise<T> => {
-    await requireUserAuth();
+    await requireUserAuthOrThrow();
     return await retrieveFunc();
 };

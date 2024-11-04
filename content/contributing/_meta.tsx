@@ -7,7 +7,7 @@ export default {
             pagination: false,
         },
     },
-    "contributing-to-sphil": {
+    index: {
         title: "Contributing",
     },
     "code-of-conduct": {

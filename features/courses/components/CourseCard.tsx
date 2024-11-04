@@ -6,10 +6,13 @@ import { GlowBoundary } from "lib/components/animations/GlowBoundary";
 
 type CourseCardProps = {
     course: Course;
+    isAdmin?: boolean;
 };
 
-export async function CourseCard({ course }: CourseCardProps) {
-    const href = `/symposia/courses/${course.slug}`;
+export async function CourseCard({ course, isAdmin = false }: CourseCardProps) {
+    const href = isAdmin
+        ? `/admin/courses/${course.id}`
+        : `/symposia/courses/${course.slug}`;
 
     return (
         <GlowBoundary>
@@ -17,20 +20,23 @@ export async function CourseCard({ course }: CourseCardProps) {
                 <Link href={href}>
                     {course.imageUrl && (
                         <Image
-                            className="w-full rounded-t-lg"
+                            className="max-h-[300px] w-full rounded-t-lg"
                             src={course.imageUrl}
                             alt={`Video thumbnail preview for ${course.name}`}
                             width={340}
                             height={240}
+                            layout="responsive"
                             priority
                         />
                     )}
 
-                    <div className="p-8">
+                    <div className="p-8 flex flex-col grow">
                         {!course.published && (
-                            <span className="bg-slate-200 text-slate-700 rounded-full text-xs py-1 px-3 mb-2 inline-block">
-                                Draft
-                            </span>
+                            <div>
+                                <span className="bg-slate-200 text-slate-700 rounded-full text-xs py-1 px-3 mb-2 inline-block">
+                                    Draft
+                                </span>
+                            </div>
                         )}
                         <Heading as="h3">{course.name}</Heading>
                         <p className="text-slate-700">{course.description}</p>

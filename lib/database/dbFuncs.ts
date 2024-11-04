@@ -11,6 +11,7 @@ import { prisma } from "./dbInit";
 import { exclude } from "lib/utils";
 import { mdxCompiler } from "lib/server/mdxCompiler";
 import { withAdmin, withUser } from "lib/auth/authFuncs";
+import { cache, CACHE_REVALIDATION_INTERVAL } from "lib/server/cache";
 
 /**
  * Calls the database to retrieve all courses.
@@ -20,13 +21,21 @@ export const dbGetAllCourses = () => withAdmin(() => prisma.course.findMany());
 
 /**
  * Calls the database to retrieve all published courses.
+ * @cache `allPublicCourses`
  */
 export const dbGetAllPublishedCourses = async () => {
-    return await prisma.course.findMany({
-        where: {
-            published: true,
+    const getAllCourses = cache(
+        async () => {
+            return await prisma.course.findMany({
+                where: {
+                    published: true,
+                },
+            });
         },
-    });
+        ["allPublicCurses"],
+        { revalidate: CACHE_REVALIDATION_INTERVAL }
+    );
+    return await getAllCourses();
 };
 /**
  * Calls the database to retrieve specific course by slug identifier

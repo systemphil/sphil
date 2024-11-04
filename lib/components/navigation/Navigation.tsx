@@ -1,7 +1,7 @@
 "use client";
 
-import { Navbar } from "nextra-theme-docs";
-import { useSphilSite } from "./SiteSwitcher";
+import { useSphilSite } from "lib/hooks/useSphilSite";
+import { Navbar, useConfig } from "nextra-theme-docs";
 
 type NavbarArgs = Parameters<typeof Navbar>;
 type NavigationProps = {
@@ -14,6 +14,7 @@ type NavigationProps = {
 const Navigation = (props: NavigationProps) => {
     // get the first subdirectory of the url if it exists
     const site = useSphilSite();
+    useConfig().normalizePagesResult.topLevelNavbarItems;
 
     const leadingItem = props.items[0];
 

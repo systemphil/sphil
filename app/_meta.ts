@@ -1,9 +1,21 @@
 export default {
     docs: {
-        title: "Contributing",
+        title: "Docs",
         type: "page",
         display: "children",
     },
+    // hegel: {
+    //     title: "Hegel",
+    //     type: "menu",
+    //     items: {
+    //         guides: {
+    //             href: "/docs/hegel/guides",
+    //         },
+    //         reference: {
+    //             href: "/docs/hegel/reference",
+    //         },
+    //     },
+    // },
     symposia: {
         title: "Symposia 🏺",
         type: "menu",
@@ -23,6 +35,9 @@ export default {
         display: "hidden",
     },
     "purchase-success": {
+        display: "hidden",
+    },
+    admin: {
         display: "hidden",
     },
 };

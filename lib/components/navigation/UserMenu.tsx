@@ -3,7 +3,6 @@ import { SignInButton } from "../auth/SignInButton";
 import Link from "next/link";
 import { SignOutButton } from "../auth/SignOutButton";
 import { FadeIn } from "../animations/FadeIn";
-import { GetSiteTest } from "./GetSiteTest";
 
 export async function UserMenu() {
     const session = await auth();
@@ -14,7 +13,6 @@ export async function UserMenu() {
 
     return (
         <div className="dropdown dropdown-bottom dropdown-end">
-            <GetSiteTest />
             <label
                 tabIndex={0}
                 className="btn btn-circle bg-transparent border-0 shadow-none hover:bg-gray-100 dark:hover:bg-acid-green/10 translate-y-[0.6px]"
@@ -36,7 +34,7 @@ export async function UserMenu() {
             </label>
             <ul
                 tabIndex={0}
-                className="menu dropdown-content z-[1] p-2 shadow bg-white dark:bg-neutral-900  rounded-box w-52 drop-shadow-2xl"
+                className="menu dropdown-content p-2 shadow bg-white dark:bg-neutral-900 z-50 rounded-box w-52 drop-shadow-2xl"
             >
                 <li>
                     <a className="pointer-events-none cursor-default opacity-75 text-lg pb-0">
@@ -55,6 +53,13 @@ export async function UserMenu() {
                         </a>
                     </li>
                 )}
+                {session &&
+                    (session.user.role === "ADMIN" ||
+                        session.user.role === "SUPERADMIN") && (
+                        <li className="dark:hover:bg-acid-green/50 rounded-md duration-75 transition-colors">
+                            <Link href="/admin">Admin 👑</Link>
+                        </li>
+                    )}
                 <li className="border-t my-1" />
                 <li className="dark:hover:bg-acid-green/50 rounded-md duration-75 transition-colors">
                     <Link href="/billing">Account & Billing</Link>

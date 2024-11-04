@@ -8,8 +8,8 @@ import {
 import { Banner as NextraBanner, Head } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import { Suspense, type ReactNode } from "react";
-import "./globals.css";
 import "nextra-theme-docs/style.css";
+import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { ThemeConfigProps } from "node_modules/nextra-theme-docs/dist/layout.mjs";
 import { UserMenu } from "lib/components/navigation/UserMenu";
