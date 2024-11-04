@@ -43,10 +43,11 @@ import {
     toolbarPlugin,
 } from "@mdxeditor/editor";
 import toast from "react-hot-toast";
-import { UploadProfileImageResponse } from "@/app/api/image-upload/route";
 import { dbGetMdxByModelId } from "lib/database/dbFuncs";
 import { Heading } from "lib/components/ui/Heading";
 import { Loading } from "lib/components/animations/Loading";
+import { actionUploadImage } from "lib/server/actions";
+import { sleep } from "lib/utils";
 
 /**
  * Context to hold the state of mutation loading as passing props did not work with the MDXEditor Toolbar.
@@ -54,7 +55,7 @@ import { Loading } from "lib/components/animations/Loading";
 const EditorContext = createContext(false);
 
 export type EditorProps = {
-    initialMaterial: Awaited<ReturnType<typeof dbGetMdxByModelId>>;
+    material: Awaited<ReturnType<typeof dbGetMdxByModelId>>;
     title: string;
 };
 /**
@@ -63,42 +64,39 @@ export type EditorProps = {
  * that useRef hook properly is passed down to the function.
  * @param props includes MDX string and title string
  */
-export default function EditorInternals({
-    initialMaterial,
-    title,
-}: EditorProps) {
+export default function EditorInternals({ material, title }: EditorProps) {
     const editorRef = React.useRef<MDXEditorMethods>(null);
-    const utils = apiClientside.useContext();
-    const updateMaterialMutation =
-        apiClientside.db.updateMdxByModelId.useMutation({
-            onSuccess: () => {
-                toast.success("Success! Saved to database.");
-                utils.db.getMdxByModelId.invalidate();
-            },
-            onError: (error) => {
-                console.error(error);
-                toast.error("Something went wrong");
-            },
-        });
+    // const utils = apiClientside.useContext();
+    // const updateMaterialMutation =
+    //     apiClientside.db.updateMdxByModelId.useMutation({
+    //         onSuccess: () => {
+    //             toast.success("Success! Saved to database.");
+    //             utils.db.getMdxByModelId.invalidate();
+    //         },
+    //         onError: (error) => {
+    //             console.error(error);
+    //             toast.error("Something went wrong");
+    //         },
+    //     });
 
-    if (!initialMaterial)
-        throw new Error(
-            "lessonMaterial Data missing / could not be retrieved from server"
-        );
+    // if (!initialMaterial)
+    //     throw new Error(
+    //         "lessonMaterial Data missing / could not be retrieved from server"
+    //     );
 
-    const { data: material } = apiClientside.db.getMdxByModelId.useQuery(
-        { id: initialMaterial.id },
-        {
-            initialData: initialMaterial,
-            refetchOnMount: false,
-            refetchOnReconnect: false,
-        }
-    );
+    // const { data: material } = apiClientside.db.getMdxByModelId.useQuery(
+    //     { id: initialMaterial.id },
+    //     {
+    //         initialData: initialMaterial,
+    //         refetchOnMount: false,
+    //         refetchOnReconnect: false,
+    //     }
+    // );
 
-    if (!material)
-        throw new Error(
-            "lessonMaterial Data missing / could not be retrieved from client query"
-        );
+    // if (!material)
+    //     throw new Error(
+    //         "lessonMaterial Data missing / could not be retrieved from client query"
+    //     );
 
     const handleSave = async () => {
         const markdownValue = editorRef.current?.getMarkdown();
@@ -106,7 +104,7 @@ export default function EditorInternals({
             console.error("No markdown value in handleSave", markdownValue);
             return;
         }
-
+        // todo turn into actions
         updateMaterialMutation.mutate({
             id: material.id,
             content: markdownValue,
@@ -115,27 +113,21 @@ export default function EditorInternals({
 
     const handleSelectedFileImageUpload = async (file: File) => {
         if (!file) {
+            toast.error("No file selected");
             throw new Error("No file selected");
         }
         const body = new FormData();
         body.set("image", file);
 
-        const response = await fetch("/api/image-upload", {
-            method: "POST",
-            body,
-        });
-        if (!response.ok) {
-            toast.error("Error uploading profile image");
-            throw new Error("Error uploading profile image");
+        const resp = await actionUploadImage(body);
+        if (resp.error || !resp.data) {
+            toast.error(`Error uploading profile image ${resp.error}`);
+            throw new Error(`Error uploading profile image ${resp.error}`);
         }
-
-        const result: UploadProfileImageResponse = await response.json();
-        if (!result) {
-            toast.error("Error uploading profile image");
-            throw new Error("Error uploading profile image");
-        }
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        return result.imageUrl;
+        const imageUrl = resp.data.imageUrl;
+        toast.success("Image uploaded!");
+        await sleep(2000);
+        return imageUrl;
     };
 
     return (

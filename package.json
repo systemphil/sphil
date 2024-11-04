@@ -7,7 +7,10 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "postbuild": "pagefind --site .next/server/app --output-path .next/static/chunks/pagefind"
+        "postbuild": "pagefind --site .next/server/app --output-path .next/static/chunks/pagefind",
+        "stripe:listen": "stripe listen --forward-to 127.0.0.1:3000/api/stripe-webhook",
+        "db:regen": "npx prisma generate",
+        "db:push": "npx prisma db push"
     },
     "dependencies": {
         "@auth/prisma-adapter": "^2.7.2",

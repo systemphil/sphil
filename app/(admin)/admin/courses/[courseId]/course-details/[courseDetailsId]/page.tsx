@@ -1,5 +1,8 @@
-// import Editor from "@/components/Editor";
-// import { dbGetCourseAndDetailsAndLessonsById, dbGetMdxByModelId } from "@/server/controllers/dbController";
+import Editor from "features/editor/components/Editor";
+import {
+    dbGetCourseAndDetailsAndLessonsById,
+    dbGetMdxByModelId,
+} from "lib/database/dbFuncs";
 
 export const metadata = {};
 /**
@@ -10,22 +13,21 @@ export default async function AdminLessonMaterialEdit({
 }: {
     params: { courseId: string; courseDetailsId: string };
 }) {
-    return <div>TODO Editor</div>;
-    // const courseId = params.courseId;
-    // const courseDetailsId = params.courseDetailsId;
-    // if (typeof courseDetailsId !== "string") { throw new Error("missing lessonContent id") };
+    const { courseId, courseDetailsId } = await params;
 
-    // const editorMaterial = await dbGetMdxByModelId(courseDetailsId);
-    // const course = await dbGetCourseAndDetailsAndLessonsById(courseId);
+    if (typeof courseDetailsId !== "string") {
+        throw new Error("missing lessonContent id");
+    }
 
-    // if (!editorMaterial) {
-    //     throw new Error("CourseDetails not found");
-    // }
-    // if (!course) {
-    //     throw new Error("Course not found");
-    // }
+    const editorMaterial = await dbGetMdxByModelId(courseDetailsId);
+    const course = await dbGetCourseAndDetailsAndLessonsById(courseId);
 
-    // return(
-    //     <Editor initialMaterial={editorMaterial} title={course.name}/>
-    // )
+    if (!editorMaterial) {
+        throw new Error("CourseDetails not found");
+    }
+    if (!course) {
+        throw new Error("Course not found");
+    }
+
+    return <Editor material={editorMaterial} title={course.name} />;
 }
