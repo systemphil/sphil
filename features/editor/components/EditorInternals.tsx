@@ -105,10 +105,10 @@ export default function EditorInternals({ material, title }: EditorProps) {
             return;
         }
         // todo turn into actions
-        updateMaterialMutation.mutate({
-            id: material.id,
-            content: markdownValue,
-        });
+        // updateMaterialMutation.mutate({
+        //     id: material.id,
+        //     content: markdownValue,
+        // });
     };
 
     const handleSelectedFileImageUpload = async (file: File) => {
@@ -130,13 +130,16 @@ export default function EditorInternals({ material, title }: EditorProps) {
         return imageUrl;
     };
 
+    // todo fix this
+    const isLoading = false;
+
     return (
         <>
             <Heading as="h1">
                 Editing {material.mdxCategory.toLowerCase()} of &quot;
                 <span className="italic">{title}</span>&nbsp;&quot;
             </Heading>
-            <EditorContext.Provider value={updateMaterialMutation.isLoading}>
+            <EditorContext.Provider value={isLoading}>
                 <MDXEditor
                     ref={editorRef}
                     markdown={material.mdx}

@@ -5,6 +5,27 @@ instructions below. If you have any further questions or would like to get
 involved,
 [get in touch with Filip (Firgrep) here](mailto:service@systemphil.com).
 
+## Setting up your local development environment
+
+### Setting up a database instance for local development (cockroachdb)
+
+1. To download and install cockroachdb locally, follow these guides for your
+   system:
+    - [Download latest stable production release](https://www.cockroachlabs.com/docs/releases)
+    - [Installation instructions](https://www.cockroachlabs.com/docs/v24.2/install-cockroachdb)
+2. Verify installation was successful, running `cockroach demo` and inputting
+   `SELECT ST_IsValid(ST_MakePoint(1,2));` into the interactive shell.
+3. Start a single-node local instance (commands for Windows may vary). Make sure
+   to input your home directory.
+    - ```sh
+      cockroach start-single-node --insecure \
+      --listen-addr=localhost:26257 \
+      --http-addr=localhost:8080 \
+      --store=path=/home/YOUR_USER/cockroach-data,size=2GB
+      ```
+4. From the standard output, make sure to extract and save the `sql:` path for
+   the `DATABASE_URL` for the `.env`. Starts with "postgresql://".
+
 ## Setting up your local environment and branch
 
 0.0. Once you have access to the repo on github, fork and/or clone it into a
@@ -12,15 +33,12 @@ folder where you keep your projects.
 
 0.1. Then `cd sphil` to get into the project directory.
 
-0.2. Make your own development branch `git branch dev-<your-name>` (example:
-`git branch dev-tim`).
+0.2. Make your own development branch `git checkout -b dev-<your-name>`
+(example: `git checkout -b dev-tim`).
 
-0.3. Set the newly made development branch as the current active branch, run
-`git checkout <your-branch-name>`.
-
-0.4. In future, when getting the latest changes from the main development
-branch, run `git merge dev` whilst on your development branch to incorporate the
-changes into your branch.
+0.3. In future, when getting the latest changes from the main development
+branch, run `git merge main` whilst on your development branch to incorporate
+the changes into your branch.
 
 ### Packages Installation
 

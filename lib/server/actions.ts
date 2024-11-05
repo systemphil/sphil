@@ -1,3 +1,5 @@
+"use server";
+
 import { validateAdminAccess } from "lib/auth/authFuncs";
 import sharp from "sharp";
 import { bucketPipeImageUpload } from "lib/bucket/bucketFuncs";
