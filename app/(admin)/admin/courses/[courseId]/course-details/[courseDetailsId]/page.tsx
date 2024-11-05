@@ -1,8 +1,10 @@
 import Editor from "features/editor/components/Editor";
+import { errorMessages } from "lib/config/errorMessages";
 import {
     dbGetCourseAndDetailsAndLessonsById,
     dbGetMdxByModelId,
 } from "lib/database/dbFuncs";
+import { redirect } from "next/navigation";
 
 export const metadata = {};
 /**
@@ -16,17 +18,17 @@ export default async function AdminLessonMaterialEdit({
     const { courseId, courseDetailsId } = await params;
 
     if (typeof courseDetailsId !== "string") {
-        throw new Error("missing lessonContent id");
+        return redirect(`/?error=${errorMessages.missingParams}`);
     }
 
     const editorMaterial = await dbGetMdxByModelId(courseDetailsId);
     const course = await dbGetCourseAndDetailsAndLessonsById(courseId);
 
     if (!editorMaterial) {
-        throw new Error("CourseDetails not found");
+        return redirect(`/admin?error=${errorMessages.lessonNotFound}`);
     }
     if (!course) {
-        throw new Error("Course not found");
+        return redirect(`/admin?error=${errorMessages.courseNotFound}`);
     }
 
     return <Editor material={editorMaterial} title={course.name} />;

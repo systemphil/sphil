@@ -8,8 +8,6 @@ import {
 import { Banner as NextraBanner, Head } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import { Suspense, type ReactNode } from "react";
-import "nextra-theme-docs/style.css";
-import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { ThemeConfigProps } from "node_modules/nextra-theme-docs/dist/layout.mjs";
 import { UserMenu } from "lib/components/navigation/UserMenu";
@@ -19,6 +17,11 @@ import { Footer } from "lib/components/navigation/Footer";
 import { Analytics } from "lib/components/Analytics";
 import { NavbarHeader } from "lib/components/navigation/NavbarHeader";
 import { TableOfContentsExtra } from "lib/components/navigation/TableOfContentsExtra";
+
+// CSS
+import "nextra-theme-docs/style.css";
+import "./globals.css";
+import "@mdxeditor/editor/style.css";
 
 const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub →";
 const PROJECT_LINK = "https://github.com/systemphil/sphil";

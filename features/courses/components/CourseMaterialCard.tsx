@@ -19,11 +19,12 @@ export const CourseMaterialCard = ({
     id,
     modelName,
 }: CourseMaterialCardProps) => {
+    console.log("CourseMaterialCard", { href, heading, id, modelName });
     return (
         <div className="flex border border-gray-200 rounded-lg mb-6 hover:bg-slate-200 duration-300 justify-between items-center">
             <Link className="flex grow" href={href}>
-                <div className="flex p-2 tooltip" data-tip="Click to edit">
-                    <Heading as="h3">{heading}</Heading>
+                <div className="flex p-2">
+                    <Heading as="h6">{heading}</Heading>
                 </div>
             </Link>
             <button

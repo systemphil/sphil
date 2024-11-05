@@ -1,6 +1,8 @@
 "use client";
 
-import React, { createContext, useContext } from "react";
+/* cSpell:disable */
+
+import React, { createContext, useContext, useState } from "react";
 import {
     AdmonitionDirectiveDescriptor,
     BlockTypeSelect,
@@ -48,6 +50,7 @@ import { Heading } from "lib/components/ui/Heading";
 import { Loading } from "lib/components/animations/Loading";
 import { actionUploadImage } from "lib/server/actions";
 import { sleep } from "lib/utils";
+import { actionUpdateMdxModelById } from "../server/actions";
 
 /**
  * Context to hold the state of mutation loading as passing props did not work with the MDXEditor Toolbar.
@@ -66,37 +69,7 @@ export type EditorProps = {
  */
 export default function EditorInternals({ material, title }: EditorProps) {
     const editorRef = React.useRef<MDXEditorMethods>(null);
-    // const utils = apiClientside.useContext();
-    // const updateMaterialMutation =
-    //     apiClientside.db.updateMdxByModelId.useMutation({
-    //         onSuccess: () => {
-    //             toast.success("Success! Saved to database.");
-    //             utils.db.getMdxByModelId.invalidate();
-    //         },
-    //         onError: (error) => {
-    //             console.error(error);
-    //             toast.error("Something went wrong");
-    //         },
-    //     });
-
-    // if (!initialMaterial)
-    //     throw new Error(
-    //         "lessonMaterial Data missing / could not be retrieved from server"
-    //     );
-
-    // const { data: material } = apiClientside.db.getMdxByModelId.useQuery(
-    //     { id: initialMaterial.id },
-    //     {
-    //         initialData: initialMaterial,
-    //         refetchOnMount: false,
-    //         refetchOnReconnect: false,
-    //     }
-    // );
-
-    // if (!material)
-    //     throw new Error(
-    //         "lessonMaterial Data missing / could not be retrieved from client query"
-    //     );
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSave = async () => {
         const markdownValue = editorRef.current?.getMarkdown();
@@ -104,11 +77,17 @@ export default function EditorInternals({ material, title }: EditorProps) {
             console.error("No markdown value in handleSave", markdownValue);
             return;
         }
-        // todo turn into actions
-        // updateMaterialMutation.mutate({
-        //     id: material.id,
-        //     content: markdownValue,
-        // });
+        setIsLoading(true);
+        const resp = await actionUpdateMdxModelById({
+            id: material.id,
+            content: markdownValue,
+        });
+        if (resp.error) {
+            toast.error(`Error saving ${resp.error}`);
+        } else {
+            toast.success("Success! Saved to database.");
+        }
+        setIsLoading(false);
     };
 
     const handleSelectedFileImageUpload = async (file: File) => {
@@ -130,17 +109,15 @@ export default function EditorInternals({ material, title }: EditorProps) {
         return imageUrl;
     };
 
-    // todo fix this
-    const isLoading = false;
-
     return (
-        <>
-            <Heading as="h1">
+        <div className="px-4 ">
+            <Heading as="h5">
                 Editing {material.mdxCategory.toLowerCase()} of &quot;
                 <span className="italic">{title}</span>&nbsp;&quot;
             </Heading>
             <EditorContext.Provider value={isLoading}>
                 <MDXEditor
+                    className="border-2 border-gray-200 rounded-lg"
                     ref={editorRef}
                     markdown={material.mdx}
                     contentEditableClassName="prose max-w-none"
@@ -173,8 +150,11 @@ export default function EditorInternals({ material, title }: EditorProps) {
                             ],
                         }),
                         diffSourcePlugin({
+                            diffMarkdown:
+                                material.mdx ??
+                                "No differences to show. Ignore this.",
+                            readOnlyDiff: true,
                             viewMode: "rich-text",
-                            diffMarkdown: "boo",
                         }),
                         markdownShortcutPlugin(),
                         toolbarPlugin({
@@ -185,14 +165,14 @@ export default function EditorInternals({ material, title }: EditorProps) {
                     ]}
                 />
             </EditorContext.Provider>
-            <div className="border-neutral-border border-dashed border-t-[1px] mb-16"></div>
+
             <button
-                className="btn btn-warning"
+                className="btn btn-warning btn-xs mt-4"
                 onClick={() => console.log(editorRef.current?.getMarkdown())}
             >
                 DEBUG:Print markdown to console
             </button>
-        </>
+        </div>
     );
 }
 
