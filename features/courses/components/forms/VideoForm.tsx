@@ -2,14 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import VideoFileInput from "./VideoFileInput";
 import { Video } from "@prisma/client";
-import SubmitInput from "./SubmitInput";
-import { apiClientside } from "@/lib/trpc/trpcClientside";
 import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
-import VideoViewer from "../VideoViewer";
-import { sleep } from "@/utils/utils";
+import { sleep } from "lib/utils";
+import { VideoViewer } from "lib/components/VideoViewer";
+import { VideoFileInput } from "./VideoFileInput";
+import { SubmitInput } from "./SubmitInput";
+import {
+    actionCreateSignedPostUrl,
+    actionCreateSignedReadUrl,
+    actionDeleteVideoFile,
+} from "features/courses/server/actions";
 
 type VideoFormValues = Video & {
     fileInput: FileList;
@@ -22,7 +26,7 @@ type VideoFormValues = Video & {
  * the same filename will automatically replace the old file on the storage.
  * @route Intended for the /admin route where the lessonId parameter is exposed.
  */
-const VideoForm = () => {
+export const VideoForm = ({ videoEntry }: { videoEntry: Video | null }) => {
     const [error, setError] = useState<boolean>(false);
     const [selectedFile, setSelectedFile] = useState<File>();
     const [handlerLoading, setHandlerLoading] = useState<boolean>(false);
@@ -30,34 +34,8 @@ const VideoForm = () => {
     const [queryIsRefreshing, setQueryIsRefreshing] = useState<boolean>(false);
     const isCalledRef = useRef(false);
     const params = useParams();
-    const utils = apiClientside.useContext();
     const lessonId = typeof params.lessonId === "string" ? params.lessonId : "";
 
-    // Queries and mutations
-    const { data: videoEntry } = apiClientside.db.getVideoByLessonId.useQuery({
-        id: lessonId,
-    });
-    const createSignedPostUrlMutation =
-        apiClientside.gc.createSignedPostUrl.useMutation({
-            onError: (error) => {
-                console.error(error);
-                toast.error("Oops! Something went wrong");
-            },
-        });
-    const deleteVideoMutation = apiClientside.gc.deleteVideoFile.useMutation({
-        onError: (error) => {
-            console.error(error);
-            toast.error("Oops! Could not delete the old file!");
-        },
-    });
-    const createSignedReadUrlMutation =
-        apiClientside.gc.createSignedReadUrl.useMutation({
-            onError: (error) => {
-                console.error(error);
-            },
-        });
-
-    // Event handlers and other hooks
     const handleSelectedFileChange = (
         e: React.ChangeEvent<HTMLInputElement>
     ) => {
@@ -91,19 +69,24 @@ const VideoForm = () => {
             //
             const file = data.fileInput[0];
             const filename = encodeURIComponent(file.name);
-            const response = await createSignedPostUrlMutation.mutateAsync({
+            const resp = await actionCreateSignedPostUrl({
                 id: videoEntry?.id || undefined,
                 lessonId: lessonId,
                 fileName: filename,
             });
-            if (!response.url) {
-                console.error(response);
-                throw new Error("No URL in the response from gc.");
+            if (resp?.error) {
+                toast.error(`Error getting upload link ${resp.error}`);
+                throw new Error("Error getting upload link");
+            }
+
+            if (!resp.data || !resp.data.url) {
+                toast.error(`Error getting upload link ${resp.data}`);
+                throw new Error("No URL in the response from bucket.");
             }
             //
             // 2. Preparing post for upload, sending request and checking response for OK.
             //
-            const { url } = response;
+            const { url } = resp.data;
             const upload = await fetch(url, {
                 method: "PUT",
                 body: file,
@@ -116,10 +99,13 @@ const VideoForm = () => {
                      * send a signal to the bucket to delete the old file. At this stage, videoEntry data is
                      * not yet updated (this invalidation takes place at the end of this function), so we can use its data.
                      */
-                    await deleteVideoMutation.mutateAsync({
+                    const resp = await actionDeleteVideoFile({
                         id: videoEntry.id,
                         fileName: videoEntry.fileName,
                     });
+                    if (resp?.error) {
+                        toast.error(`Error deleting old file ${resp.error}`);
+                    }
                     setQueryIsRefreshing(true);
                 }
                 toast.success("Success! Video uploaded / updated.");
@@ -130,7 +116,6 @@ const VideoForm = () => {
             // 3. Upload complete. Cleanup of form and resetting queries and states.
             //
             await sleep(1000);
-            void utils.db.getVideoByLessonId.invalidate();
         } catch (error) {
             toast.error("Oops! Something went wrong");
             throw error;
@@ -146,35 +131,31 @@ const VideoForm = () => {
     };
 
     useEffect(() => {
-        if (videoEntry && !previewUrl) {
-            if (error) return;
-            if (queryIsRefreshing) return;
-            if (isCalledRef.current === true) return;
-            isCalledRef.current = true; // Stop double call in strict mode.
-            createSignedReadUrlMutation
-                .mutateAsync({
+        const loadVideo = async () => {
+            if (videoEntry && !previewUrl) {
+                if (error) return;
+                if (queryIsRefreshing) return;
+                if (isCalledRef.current === true) return;
+                isCalledRef.current = true; // Stop double call in strict mode.
+                const resp = await actionCreateSignedReadUrl({
                     id: videoEntry.id,
                     fileName: videoEntry.fileName,
-                })
-                .then((url) => {
-                    setPreviewUrl(url);
-                })
-                .catch((error) => {
+                });
+                if (resp?.error) {
                     setError(true);
                     toast.error("Oops! Unable to get video preview");
-                    console.error("Error retrieving preview URL: ", error);
-                })
-                .finally(() => {
-                    isCalledRef.current = false;
-                });
-        }
-    }, [
-        videoEntry,
-        createSignedReadUrlMutation,
-        previewUrl,
-        error,
-        queryIsRefreshing,
-    ]);
+                    console.error("Error retrieving preview URL: ", resp.error);
+                } else if (!resp.data) {
+                    setError(true);
+                    toast.error("Oops! No video preview available");
+                } else {
+                    setPreviewUrl(resp.data);
+                }
+                isCalledRef.current = false;
+            }
+        };
+        loadVideo();
+    }, [videoEntry, previewUrl, error, queryIsRefreshing]);
 
     return (
         <FormProvider {...methods}>
@@ -208,5 +189,3 @@ const VideoForm = () => {
         </FormProvider>
     );
 };
-
-export default VideoForm;

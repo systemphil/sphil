@@ -1,11 +1,17 @@
 "use server";
 
 import { validateAdminAccess } from "lib/auth/authFuncs";
+import {
+    bucketDeleteVideoFile,
+    bucketGenerateReadSignedUrl,
+    bucketGenerateSignedUploadUrl,
+} from "lib/bucket/bucketFuncs";
+import { dbUpsertLessonById } from "lib/database/dbFuncs";
 import { ctrlCreateOrUpdateCourse } from "lib/server/ctrl";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
 
-const inputSchema = z.object({
+const upsertCourseSchema = z.object({
     id: z.string().optional(),
     name: z.string(),
     slug: z.string().toLowerCase(),
@@ -20,14 +26,14 @@ const inputSchema = z.object({
     seminarAvailability: z.date(),
     dialogueAvailability: z.date(),
 });
-type ActionUpsertCourseInput = z.infer<typeof inputSchema>;
+type ActionUpsertCourseInput = z.infer<typeof upsertCourseSchema>;
 
 export async function actionUpsertCourse(input: ActionUpsertCourseInput) {
     const isAdmin = await validateAdminAccess();
     if (!isAdmin) {
         return { error: "Unauthorized" };
     }
-    const parsedInput = inputSchema.safeParse(input);
+    const parsedInput = upsertCourseSchema.safeParse(input);
 
     if (!parsedInput.success) {
         return { error: `Bad request ${parsedInput.error.message}` };
@@ -35,5 +41,94 @@ export async function actionUpsertCourse(input: ActionUpsertCourseInput) {
     const data = await ctrlCreateOrUpdateCourse(input);
     revalidatePath("/(admin)/admin", "layout");
     revalidateTag("allPublicCurses");
+    return { data };
+}
+
+const upsertLessonSchema = z.object({
+    id: z.string().optional(),
+    name: z.string(),
+    slug: z.string().toLowerCase(),
+    description: z.string(),
+    partId: z.string().optional().nullish(),
+    courseId: z.string(),
+});
+type ActionUpsertLessonInput = z.infer<typeof upsertLessonSchema>;
+
+export async function actionUpsertLesson(input: ActionUpsertLessonInput) {
+    const isAdmin = await validateAdminAccess();
+    if (!isAdmin) {
+        return { error: "Unauthorized" };
+    }
+    const parsedInput = upsertLessonSchema.safeParse(input);
+
+    if (!parsedInput.success) {
+        return { error: `Bad request ${parsedInput.error.message}` };
+    }
+    const data = await dbUpsertLessonById(input);
+    revalidatePath("/(admin)/admin", "layout");
+    revalidateTag("allPublicCurses");
+    return { data };
+}
+
+const createSignedPostUrlSchema = z.object({
+    id: z.string().optional(),
+    lessonId: z.string(),
+    fileName: z.string(),
+});
+type ActionCreateSignedPostUrlInput = z.infer<typeof createSignedPostUrlSchema>;
+
+export async function actionCreateSignedPostUrl(
+    input: ActionCreateSignedPostUrlInput
+) {
+    const isAdmin = await validateAdminAccess();
+    if (!isAdmin) {
+        return { error: "Unauthorized" };
+    }
+    const parsedInput = createSignedPostUrlSchema.safeParse(input);
+
+    if (!parsedInput.success) {
+        return { error: `Bad request ${parsedInput.error.message}` };
+    }
+    const data = await bucketGenerateSignedUploadUrl(input);
+    revalidatePath("/(admin)/admin", "layout");
+    revalidateTag("allPublicCurses");
+    return { data };
+}
+
+const createSignedReadUrlSchema = z.object({
+    id: z.string(),
+    fileName: z.string(),
+});
+type ActionCreateSignedReadUrlInput = z.infer<typeof createSignedReadUrlSchema>;
+
+export async function actionCreateSignedReadUrl(
+    input: ActionCreateSignedReadUrlInput
+) {
+    const parsedInput = createSignedReadUrlSchema.safeParse(input);
+
+    if (!parsedInput.success) {
+        return { error: `Bad request ${parsedInput.error.message}` };
+    }
+    const data = await bucketGenerateReadSignedUrl(input);
+    return { data };
+}
+
+const deleteVideoFileSchema = z.object({
+    id: z.string(),
+    fileName: z.string(),
+});
+type ActionDeleteVideoFileInput = z.infer<typeof deleteVideoFileSchema>;
+
+export async function actionDeleteVideoFile(input: ActionDeleteVideoFileInput) {
+    const isAdmin = await validateAdminAccess();
+    if (!isAdmin) {
+        return { error: "Unauthorized" };
+    }
+    const parsedInput = createSignedPostUrlSchema.safeParse(input);
+
+    if (!parsedInput.success) {
+        return { error: `Bad request ${parsedInput.error.message}` };
+    }
+    const data = await bucketDeleteVideoFile(input);
     return { data };
 }

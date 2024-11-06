@@ -89,7 +89,7 @@ export async function bucketDeleteVideoFile({
         // });
         // if (!res.ok) {
         //     console.error(`Failed to delete object ${filePath}`);
-        //     console.log(res);
+        //
         //     throw new Error("Deleting object request failed.");
         // }
         await primaryBucket
@@ -156,7 +156,7 @@ export function bucketPipeImageUpload({
         throw new Error("Failed to upload image");
     });
     blobStream.on("finish", () => {
-        console.log(`Image ${fileName} uploaded`);
+        console.info(`Image ${fileName} uploaded`);
     });
     blobStream.end(file);
     return `https://storage.googleapis.com/${process.env.GCP_SECONDARY_BUCKET_NAME}/${filePath}`;

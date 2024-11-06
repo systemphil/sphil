@@ -168,7 +168,7 @@ export default function EditorInternals({ material, title }: EditorProps) {
 
             <button
                 className="btn btn-warning btn-xs mt-4"
-                onClick={() => console.log(editorRef.current?.getMarkdown())}
+                onClick={() => console.info(editorRef.current?.getMarkdown())}
             >
                 DEBUG:Print markdown to console
             </button>

@@ -46,8 +46,9 @@ export const CourseForm = ({ course }: { course?: Course }) => {
         const resp = await actionUpsertCourse(dataWithConvertedDates);
         if (resp?.error) {
             toast.error(`Error updating course ${resp.error}`);
+        } else {
+            toast.success("Course updated successfully");
         }
-        toast.success("Course updated successfully");
         setSubmitLoading(false);
         if (resp.data && params.courseId !== resp.data.id) {
             router.push(`/admin/courses/${resp.data.id}`);
