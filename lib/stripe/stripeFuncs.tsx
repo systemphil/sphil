@@ -1,4 +1,9 @@
+import type Stripe from "stripe";
 import { stripe } from "./stripeInit";
+import { dbUpdateUserPurchases } from "lib/database/dbFuncs";
+import { resend } from "lib/email/emailInit";
+import { PurchaseReceiptEmail } from "lib/components/email/PurchaseReceipt";
+import { PurchaseNotification } from "lib/components/email/PurchaseNotification";
 
 type StripeCreateProductProps = {
     name: string;
@@ -209,6 +214,88 @@ export async function stripeGetCustomerEmail({
     // TODO typescript isn't picking up the type here for some reason
     // @ts-expect-error
     return customer.email;
+}
+
+export async function handleSessionCompleted(
+    event: Stripe.CheckoutSessionCompletedEvent
+) {
+    const sessionMetadata = event.data.object
+        .metadata as StripeCheckoutSessionMetadata;
+    if (event.data.object.payment_status !== "paid") {
+        console.error(
+            `❌ Payment status not paid for session ${event.data.object.id}`
+        );
+        return;
+    }
+
+    const updatedUser = await dbUpdateUserPurchases({
+        userId: sessionMetadata.userId,
+        courseId: sessionMetadata.courseId,
+        purchasePriceId: sessionMetadata.purchase,
+    });
+
+    const customerEmail = event.data.object.customer_email;
+    if (!customerEmail) {
+        console.error(
+            `❌ No customer email found in session metadata. Session id ${event.data.object.id}`
+        );
+        return updatedUser;
+    }
+    const senderEmail = process.env.EMAIL_SEND;
+    if (!senderEmail) {
+        console.error("❌ No sender email found in process.env");
+        return updatedUser;
+    }
+
+    const order = {
+        id: event.data.object.id,
+        createdAt: new Date(event.data.object.created * 1000),
+        pricePaidInCents: event.data.object.amount_total ?? 0,
+    };
+
+    const product = {
+        name: sessionMetadata.name,
+        imagePath: sessionMetadata.imageUrl,
+        description: sessionMetadata.description,
+    };
+
+    await resend.emails.send({
+        from: `No Reply <${senderEmail}>`,
+        to: customerEmail,
+        subject: `Order Confirmation - ${product.name}`,
+        react: (
+            <PurchaseReceiptEmail
+                key={order.id}
+                order={order}
+                product={product}
+                courseLink={sessionMetadata.courseLink}
+            />
+        ),
+    });
+
+    const receiverEmail = process.env.EMAIL_RECEIVE;
+    if (receiverEmail) {
+        await resend.emails.send({
+            from: `No Reply <${senderEmail}>`,
+            to: receiverEmail,
+            subject: `New Purchase $${order.pricePaidInCents / 100} - ${
+                product.name
+            } - ${updatedUser.email}`,
+            react: (
+                <PurchaseNotification
+                    user={updatedUser}
+                    key={order.id}
+                    order={order}
+                    product={product}
+                    courseLink={sessionMetadata.courseLink}
+                />
+            ),
+        });
+    } else {
+        console.error("❌ No receiver email found in process.env");
+    }
+
+    return updatedUser;
 }
 
 // interface CreateStripeRefundProps {
