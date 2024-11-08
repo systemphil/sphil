@@ -1,15 +1,11 @@
+import Editor from "features/editor/components/Editor";
 import {
     dbGetLessonAndRelationsById,
     dbGetMdxByModelId,
 } from "lib/database/dbFuncs";
-import dynamic from "next/dynamic";
 
 export const metadata = {};
 
-// FIXME put this in a client component!
-const LiveEditor = dynamic(() => import("features/editor/components/Editor"), {
-    ssr: false,
-});
 /**
  * Common route for models LessonContent and LessonTranscript
  * that fetches respective data and renders the MDX Editor to the UI.
@@ -40,5 +36,5 @@ export default async function AdminLessonMaterialEdit({
         throw new Error("Lesson not found");
     }
 
-    return <LiveEditor material={lessonMaterial} title={lesson.name} />;
+    return <Editor material={lessonMaterial} title={lesson.name} />;
 }

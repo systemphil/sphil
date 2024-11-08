@@ -57,7 +57,7 @@ export async function UserMenu() {
                     (session.user.role === "ADMIN" ||
                         session.user.role === "SUPERADMIN") && (
                         <li className="dark:hover:bg-acid-green/50 rounded-md duration-75 transition-colors">
-                            <Link href="/admin">Admin 👑</Link>
+                            <Link href="/admin">Admin 🛡️</Link>
                         </li>
                     )}
                 <li className="border-t my-1" />

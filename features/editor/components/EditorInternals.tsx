@@ -8,6 +8,7 @@ import {
     BlockTypeSelect,
     BoldItalicUnderlineToggles,
     Button,
+    ButtonOrDropdownButton,
     ChangeAdmonitionType,
     ChangeCodeMirrorLanguage,
     CodeToggle,
@@ -159,7 +160,14 @@ export default function EditorInternals({ material, title }: EditorProps) {
                         markdownShortcutPlugin(),
                         toolbarPlugin({
                             toolbarContents: () => (
-                                <DefaultToolbar handleSave={handleSave} />
+                                <DefaultToolbar
+                                    handleSave={handleSave}
+                                    handleGetMarkdown={() =>
+                                        console.info(
+                                            editorRef.current?.getMarkdown()
+                                        )
+                                    }
+                                />
                             ),
                         }),
                     ]}
@@ -178,8 +186,12 @@ export default function EditorInternals({ material, title }: EditorProps) {
 
 type DefaultToolbarProps = {
     handleSave: () => void;
+    handleGetMarkdown: () => void;
 };
-const DefaultToolbar: React.FC<DefaultToolbarProps> = ({ handleSave }) => {
+const DefaultToolbar: React.FC<DefaultToolbarProps> = ({
+    handleSave,
+    handleGetMarkdown,
+}) => {
     const isLoading = useContext(EditorContext);
 
     const handleSaveButton = () => {
@@ -267,7 +279,15 @@ const DefaultToolbar: React.FC<DefaultToolbarProps> = ({ handleSave }) => {
                                 />
 
                                 <Separator />
-                                <InsertFrontmatter />
+                                <TooltipWrap title="Debug: Print to console">
+                                    <Button
+                                        onClick={() => handleGetMarkdown?.()}
+                                    >
+                                        🔧
+                                    </Button>
+                                </TooltipWrap>
+
+                                {/* <InsertFrontmatter /> */}
                             </>
                         ),
                     },
