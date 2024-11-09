@@ -37,7 +37,7 @@ export const LessonForm = ({
             toast.success("Course updated successfully");
         }
         setSubmitLoading(false);
-        if (resp.data && params.lessonId !== resp.data.id) {
+        if (resp.data && params?.lessonId !== resp.data.id) {
             toast.success("Redirecting...");
             router.push(`/admin/courses/${courseId}/lessons/${resp.data.id}`);
         }
