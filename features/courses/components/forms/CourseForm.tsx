@@ -51,6 +51,7 @@ export const CourseForm = ({ course }: { course?: Course }) => {
         }
         setSubmitLoading(false);
         if (resp.data && params.courseId !== resp.data.id) {
+            toast.success("Redirecting...");
             router.push(`/admin/courses/${resp.data.id}`);
         }
     };

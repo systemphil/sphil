@@ -1,28 +1,18 @@
 "use client";
 
-import Link from "next/link";
-import { Heading } from "lib/components/ui/Heading";
-import { ModelName } from "lib/server/ctrl";
-import { actionDeleteModelEntry } from "../server/actions";
+import { Alert, Dialog, DialogActions, DialogContent } from "@mui/material";
 import toast from "react-hot-toast";
-import { Dialog, DialogActions, DialogContent } from "@mui/material";
+import { actionDeleteModelEntry } from "../server/actions";
 import { useState } from "react";
+import { ModelName } from "lib/server/ctrl";
 
-type CourseMaterialCardProps = {
-    href: string;
-    heading: string;
-    id: string;
-    modelName: ModelName;
-};
-/**
- * A click-able card that displays a heading and links to provided href.
- */
-export function CourseMaterialCard({
-    href,
-    heading,
+export function CourseCardDeleteButton({
     id,
     modelName,
-}: CourseMaterialCardProps) {
+}: {
+    id: string;
+    modelName: ModelName;
+}) {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isPending, setIsPending] = useState(false);
 
@@ -47,24 +37,23 @@ export function CourseMaterialCard({
     };
 
     return (
-        <div className="flex border border-gray-200 rounded-lg mb-6 hover:bg-slate-200 duration-300 justify-between items-center">
-            <Link className="flex grow" href={href}>
-                <div className="flex p-2">
-                    <Heading as="h6">{heading}</Heading>
-                </div>
-            </Link>
+        <>
             <button
-                className="btn btn-square mr-2 hover:bg-red-500"
+                className="btn btn-error btn-sm"
                 disabled={isPending}
                 onClick={() => setIsDialogOpen(true)}
             >
-                <ButtonDeleteCross />
+                Delete Course
             </button>
             <Dialog open={isDialogOpen} onClose={onClose}>
                 <DialogContent>
                     Are you sure you want to delete this {modelName} item? This
                     action cannot be undone.
                 </DialogContent>
+                <Alert severity="error">
+                    This will remove the entire course, its lessons, videos,
+                    stripe integration and all related content.
+                </Alert>
                 <DialogActions>
                     <button
                         className="btn btn-error"
@@ -75,25 +64,6 @@ export function CourseMaterialCard({
                     </button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </>
     );
 }
-
-const ButtonDeleteCross = () => {
-    return (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-        >
-            <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M6 18L18 6M6 6l12 12"
-            />
-        </svg>
-    );
-};

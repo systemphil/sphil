@@ -7,7 +7,10 @@ import {
     bucketGenerateSignedUploadUrl,
 } from "lib/bucket/bucketFuncs";
 import { dbUpsertLessonById } from "lib/database/dbFuncs";
-import { ctrlCreateOrUpdateCourse } from "lib/server/ctrl";
+import {
+    ctrlCreateOrUpdateCourse,
+    ctrlDeleteModelEntry,
+} from "lib/server/ctrl";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
 
@@ -130,5 +133,35 @@ export async function actionDeleteVideoFile(input: ActionDeleteVideoFileInput) {
         return { error: `Bad request ${parsedInput.error.message}` };
     }
     const data = await bucketDeleteVideoFile(input);
+    return { data };
+}
+
+const deleteModelEntrySchema = z.object({
+    id: z.string(),
+    modelName: z.enum([
+        "LessonTranscript",
+        "LessonContent",
+        "Video",
+        "CourseDetails",
+        "Lesson",
+        "Course",
+    ]),
+});
+type ActionDeleteModelEntryInput = z.infer<typeof deleteModelEntrySchema>;
+
+export async function actionDeleteModelEntry(
+    input: ActionDeleteModelEntryInput
+) {
+    const isAdmin = await validateAdminAccess();
+    if (!isAdmin) {
+        return { error: "Unauthorized" };
+    }
+    const parsedInput = deleteModelEntrySchema.safeParse(input);
+    if (!parsedInput.success) {
+        return { error: `Bad request ${parsedInput.error.message}` };
+    }
+    const data = await ctrlDeleteModelEntry(input);
+    revalidatePath("/(admin)/admin", "layout");
+    revalidateTag("allPublicCurses");
     return { data };
 }

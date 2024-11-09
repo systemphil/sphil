@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Heading } from "lib/components/ui/Heading";
 import { GlowBoundary } from "lib/components/animations/GlowBoundary";
+import { auth } from "lib/auth/authConfig";
+import { CourseCardDeleteButton } from "./CourseCardDeleteButton";
 
 type CourseCardProps = {
     course: Course;
@@ -13,6 +15,10 @@ export async function CourseCard({ course, isAdmin = false }: CourseCardProps) {
     const href = isAdmin
         ? `/admin/courses/${course.id}`
         : `/symposia/courses/${course.slug}`;
+
+    const session = await auth();
+
+    const isSudo = session?.user.role === "SUPERADMIN";
 
     return (
         <GlowBoundary>
@@ -42,6 +48,14 @@ export async function CourseCard({ course, isAdmin = false }: CourseCardProps) {
                         <p className="text-slate-700">{course.description}</p>
                     </div>
                 </Link>
+                {isSudo && (
+                    <div className="flex justify-center py-1">
+                        <CourseCardDeleteButton
+                            id={course.id}
+                            modelName="Course"
+                        />
+                    </div>
+                )}
             </div>
         </GlowBoundary>
     );

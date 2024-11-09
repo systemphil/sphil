@@ -96,7 +96,7 @@ export async function bucketDeleteVideoFile({
             .file(filePath)
             .delete()
             .then(() => {
-                console.info(`☑️ OBJECT DELETED->${filePath}`);
+                console.info(`☑️ bucket|object deleted: ${filePath}`);
             })
             .catch((err) => {
                 console.error(`Failed to delete object ${filePath}`);
