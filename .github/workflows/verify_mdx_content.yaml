@@ -30,7 +30,7 @@ jobs:
 
     - name: Run prepyrus script in verification mode
       id: prepyrus-run
-      run: target/release/prepyrus_runner absolute_bibliography.bib src/pages verify
+      run: target/release/prepyrus_runner absolute_bibliography.bib content verify
 
     - name: Save Prepyrus to cache
       id: prepyrus-cache-save

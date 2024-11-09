@@ -24,7 +24,7 @@ jobs:
       run: cargo build --release --package prepyrus_runner
 
     - name: Run prepyrus script in VERIFY mode
-      run: target/release/prepyrus_runner absolute_bibliography.bib src/pages verify
+      run: target/release/prepyrus_runner absolute_bibliography.bib content verify
 
     - name: Upload prepyrus for next job
       uses: actions/upload-artifact@v4
