@@ -1,10 +1,9 @@
-name: Deploy to Development
+name: CD Production 🚀
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  release:
+    types: [created]
 
 jobs:
   prepyrus_verify:
@@ -46,13 +45,41 @@ jobs:
   build_and_deploy:
     needs: prepyrus_verify
     if: github.repository_owner == 'systemphil'
-    environment: dev
+    environment: prod
     runs-on: ubuntu-latest
     env:
-      PROJECT_ID: ${{ secrets.PROJECT_ID }}
       SERVICE: ${{ secrets.SERVICE }}
+      BUILD_PATH:
+      SECRETS: >-
+        DATABASE_URL
+        AUTH_SECRET
+        AUTH_GITHUB_ID
+        AUTH_GITHUB_SECRET
+        AUTH_GOOGLE_ID
+        AUTH_GOOGLE_SECRET
+        AUTH_EMAIL_SERVER_USER
+        AUTH_EMAIL_SERVER_PASSWORD
+        AUTH_EMAIL_SERVER_HOST
+        AUTH_EMAIL_SERVER_PORT
+        AUTH_EMAIL_FROM
+        GCP_PRIMARY_BUCKET_NAME
+        GCP_SECONDARY_BUCKET_NAME
+        STRIPE_API_KEY
+        STRIPE_WEBHOOK_SECRET
+        RESEND_API_KEY
+        EMAIL_SEND
+        EMAIL_RECEIVE
+      PROJECT_ID: ${{ secrets.PROJECT_ID }}
+      PROJECT_NUMBER: ${{ secrets.PROJECT_NUMBER }}
       REGION: ${{ secrets.REGION }}
       TAG: latest
+      DEPLOY_CONFIG: >-
+        port:8080
+        execution-environment:gen2
+        concurrency:80
+        service-min-instances:default
+        min-instances:default
+        max-instances:1
 
     steps:
     - name: Check if running in the parent repository
@@ -79,7 +106,7 @@ jobs:
       run: chmod +x target/release/prepyrus_runner/prepyrus_runner
 
     - name: Run prepyrus in PROCESS mode
-      run: target/release/prepyrus_runner/prepyrus_runner absolute_bibliography.bib src/pages process
+      run: target/release/prepyrus_runner/prepyrus_runner absolute_bibliography.bib content process
 
     - name: GCP Auth
       uses: "google-github-actions/auth@v2"
@@ -88,6 +115,8 @@ jobs:
 
     - name: Set up Cloud SDK
       uses: "google-github-actions/setup-gcloud@v2"
+      with:
+        install_components: beta
 
     - name: Docker Auth
       id: docker-auth
@@ -96,6 +125,25 @@ jobs:
         username: _json_key
         password: "${{ secrets.GOOGLE_CREDENTIALS }}"
         registry: "${{ env.REGION }}-docker.pkg.dev"
+
+    - name: Verify Artifact Registry
+      # Verify artifact registry exists, otherwise create one
+      run: |
+        set +e  # Temporarily allow errors
+        gcloud artifacts repositories describe ${{ env.SERVICE }} --location=${{ env.REGION }} --format='value(name)' > /dev/null 2>&1
+        STATUS=$?  # Capture the exit status
+        set -e  # Re-enable exit on error
+        if [ $STATUS -ne 0 ]; then
+          echo "🏗️ Artifact Registry not found. Attempting to create one..."
+          gcloud artifacts repositories create ${{ env.SERVICE }} \
+            --repository-format=docker \
+            --location=${{ env.REGION }}
+          gcloud artifacts repositories set-cleanup-policies ${{ env.SERVICE }} \
+            --location=${{ env.REGION }} \
+            --policy=.github/artifact_repository_cleanup_policy.json
+        else
+          echo "✅ Artifact Registry already exists."
+        fi
 
     - name: Build and Push Container
       # NEXT_PUBLIC_ env variables have to be set during the build phase.
@@ -109,9 +157,12 @@ jobs:
 
     - name: Deploy to Cloud Run
       run: |
-        gcloud run deploy ${{env.SERVICE}} \
-          --platform=managed \
-          --region=${{ env.REGION }} \
-          --max-instances=1 \
-          --min-instances=default \
-          --image="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"
+        chmod +x .github/deploy_script.sh
+        .github/deploy_script.sh \
+          ${{ env.PROJECT_ID }} \
+          ${{ env.PROJECT_NUMBER }} \
+          ${{ env.REGION }} \
+          ${{ env.SERVICE }} \
+          ${{ env.TAG }} \
+          "${{ env.SECRETS }}" \
+          "${{ env.DEPLOY_CONFIG }}"
