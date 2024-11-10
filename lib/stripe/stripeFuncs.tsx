@@ -1,5 +1,5 @@
 import type Stripe from "stripe";
-import { stripe } from "./stripeInit";
+import { getStripe } from "./stripeInit";
 import { dbUpdateUserPurchases } from "lib/database/dbFuncs";
 import { resend } from "lib/email/emailInit";
 import { PurchaseReceiptEmail } from "lib/components/email/PurchaseReceipt";
@@ -16,6 +16,7 @@ export async function stripeCreateProduct({
     description,
     imageUrl,
 }: StripeCreateProductProps) {
+    const stripe = getStripe();
     const product = await stripe.products.create({
         name: name,
         description: description ?? undefined,
@@ -37,6 +38,7 @@ export async function stripeUpdateProduct({
     description,
     imageUrl,
 }: StripeUpdateProductProps) {
+    const stripe = getStripe();
     const product = await stripe.products.update(stripeProductId, {
         name: name ?? undefined,
         description: description ?? undefined,
@@ -50,6 +52,7 @@ export async function stripeArchiveProduct({
 }: {
     stripeProductId: string;
 }) {
+    const stripe = getStripe();
     const product = await stripe.products.update(stripeProductId, {
         active: false,
     });
@@ -67,6 +70,7 @@ export async function stripeCreatePrice({
     unitPrice,
     currency = "usd",
 }: StripeCreatePriceProps) {
+    const stripe = getStripe();
     const price = await stripe.prices.create({
         unit_amount: unitPrice,
         currency: currency,
@@ -80,6 +84,7 @@ export async function stripeRetrievePrice({
 }: {
     stripePriceId: string;
 }) {
+    const stripe = getStripe();
     const price = await stripe.prices.retrieve(stripePriceId);
     return price;
 }
@@ -91,6 +96,7 @@ export async function stripeArchivePrice({
     unitPrice?: number;
     currency?: string;
 }) {
+    const stripe = getStripe();
     const price = await stripe.prices.update(stripePriceId, {
         active: false,
     });
@@ -102,6 +108,7 @@ export async function stripeDeleteProduct({
 }: {
     stripeProductId: string;
 }) {
+    const stripe = getStripe();
     const product = await stripe.products.del(stripeProductId);
     return product;
 }
@@ -149,6 +156,7 @@ export async function stripeCreateCheckoutSession({
     const baseUrl = process.env.NEXTAUTH_URL;
     if (!baseUrl) throw new Error("NEXTAUTH_URL is not defined");
 
+    const stripe = getStripe();
     const stripeSession = await stripe.checkout.sessions.create({
         customer_email: customerEmail,
         client_reference_id: userId,
@@ -195,6 +203,7 @@ export async function stripeCreateCustomer({
     userId: string;
     name?: string;
 }) {
+    const stripe = getStripe();
     const customer = await stripe.customers.create({
         name: name,
         email: email,
@@ -210,6 +219,7 @@ export async function stripeGetCustomerEmail({
 }: {
     customerId: string;
 }) {
+    const stripe = getStripe();
     const customer = await stripe.customers.retrieve(customerId);
     // TODO typescript isn't picking up the type here for some reason
     // @ts-expect-error

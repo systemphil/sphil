@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stripe } from "lib/stripe/stripeInit";
+import { getStripe } from "lib/stripe/stripeInit";
 import { handleSessionCompleted } from "lib/stripe/stripeFuncs";
 
 export const dynamic = "force-dynamic";
@@ -7,6 +7,7 @@ export const dynamic = "force-dynamic";
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET ?? "";
 
 export async function POST(req: NextRequest) {
+    const stripe = getStripe();
     const event = await stripe.webhooks.constructEvent(
         await req.text(),
         req.headers.get("stripe-signature") as string,
