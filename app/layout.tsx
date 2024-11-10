@@ -44,6 +44,8 @@ const COLOR = {
 
 export const viewport: Viewport = Head.viewport;
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
     description: "Make beautiful websites with Next.js & MDX.",
     metadataBase: new URL(SITE_ROOT),
