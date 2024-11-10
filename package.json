@@ -59,6 +59,7 @@
     },
     "devDependencies": {
         "@svgr/webpack": "^8.0.1",
-        "daisyui": "^4.12.13"
+        "daisyui": "^4.12.13",
+        "pagefind": "^1.1.1"
     }
 }
