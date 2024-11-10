@@ -3,7 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { dbGetCourseBySlug } from "lib/database/dbFuncs";
 import { MDXRenderer } from "lib/components/MDXRenderer";
-import { cache, CACHE_REVALIDATION_INTERVAL } from "lib/server/cache";
+import {
+    cache,
+    CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS,
+} from "lib/server/cache";
 import { CourseEnroll } from "./CourseEnroll";
 import { errorMessages } from "lib/config/errorMessages";
 import { TableOfLessons } from "./TableOfLessons";
@@ -20,7 +23,7 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
             return await dbGetCourseBySlug(slug);
         },
         ["/courses", slug],
-        { revalidate: CACHE_REVALIDATION_INTERVAL }
+        { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
     );
     const course = await getCourseBySlug(slug);
 

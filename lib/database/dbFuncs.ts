@@ -11,7 +11,10 @@ import { prisma } from "./dbInit";
 import { exclude } from "lib/utils";
 import { mdxCompiler } from "lib/server/mdxCompiler";
 import { withAdmin, withUser } from "lib/auth/authFuncs";
-import { cache, CACHE_REVALIDATION_INTERVAL } from "lib/server/cache";
+import {
+    cache,
+    CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS,
+} from "lib/server/cache";
 
 /**
  * Calls the database to retrieve all courses.
@@ -33,7 +36,7 @@ export const dbGetAllPublishedCourses = async () => {
             });
         },
         ["allPublicCurses"],
-        { revalidate: CACHE_REVALIDATION_INTERVAL }
+        { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
     );
     return await getAllCourses();
 };

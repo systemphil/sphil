@@ -5,6 +5,10 @@ import { Loading } from "lib/components/animations/Loading";
 import { CourseFrontPage } from "features/courses/components/CourseFrontPage";
 import { errorMessages } from "lib/config/errorMessages";
 
+export const metadata = {};
+
+export const dynamic = "force-dynamic";
+
 export default async function CourseFrontPageRoute({
     params,
 }: {
