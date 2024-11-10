@@ -7,11 +7,10 @@ import {
 } from "nextra-theme-docs";
 import { Banner as NextraBanner, Head } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
-import { Suspense, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { SessionProvider } from "next-auth/react";
 import { ThemeConfigProps } from "node_modules/nextra-theme-docs/dist/layout.mjs";
 import { UserMenu } from "lib/components/navigation/UserMenu";
-import { Loading } from "lib/components/animations/Loading";
 import { Toaster } from "react-hot-toast";
 import { Footer } from "lib/components/navigation/Footer";
 import { Analytics } from "lib/components/Analytics";
@@ -44,10 +43,8 @@ const COLOR = {
 
 export const viewport: Viewport = Head.viewport;
 
-export const dynamic = "force-dynamic";
-
 export const metadata: Metadata = {
-    description: "Make beautiful websites with Next.js & MDX.",
+    description: "sPhil",
     metadataBase: new URL(SITE_ROOT),
     keywords: [
         "sphil",
@@ -154,9 +151,7 @@ export default async function RootLayout({
                                 projectLink={PROJECT_LINK}
                             >
                                 <div className="w-[70px] flex justify-center">
-                                    <Suspense fallback={<Loading.RingMd />}>
-                                        <UserMenu />
-                                    </Suspense>
+                                    <UserMenu />
                                 </div>
                             </NextraNavbar>
                         }
