@@ -32,12 +32,12 @@ export function SPhilLanding() {
                             tagline={
                                 "Discover the power of dialectical thought and immanent critique!"
                             }
-                            href={"/hegel"}
+                            href={"/docs/hegel"}
                             buttons={[
-                                { title: "Guides", href: "/hegel/guides" },
+                                { title: "Guides", href: "/docs/hegel/guides" },
                                 {
                                     title: "Reference",
-                                    href: "/hegel/reference",
+                                    href: "/docs/hegel/reference",
                                 },
                             ]}
                         />
@@ -46,10 +46,13 @@ export function SPhilLanding() {
                             tagline={
                                 "Learn why Kant is the philosopher of the enlightenment bar none!"
                             }
-                            href={"/kant"}
+                            href={"/docs/kant"}
                             buttons={[
-                                { title: "Guides", href: "/kant/guides" },
-                                { title: "Reference", href: "/kant/reference" },
+                                { title: "Guides", href: "/docs/kant/guides" },
+                                {
+                                    title: "Reference",
+                                    href: "/docs/kant/reference",
+                                },
                             ]}
                         />
                     </FadeIn>
@@ -126,7 +129,7 @@ export function SPhilLanding() {
                             </Paragraph>
                         </FadeIn>
                         <FadeIn className="mt-6">
-                            <Link href="/contributing">
+                            <Link href="/docs/contributing">
                                 <Button>How to contribute</Button>
                             </Link>
                         </FadeIn>
