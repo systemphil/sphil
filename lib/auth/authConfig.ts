@@ -1,5 +1,7 @@
 import NextAuth, { Account, Session, UserWithRole } from "next-auth";
 import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
+import Resend from "next-auth/providers/resend";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "lib/database/dbInit";
 import { type DefaultSession } from "next-auth";
@@ -27,7 +29,13 @@ declare module "next-auth" {
 export const { handlers, signIn, signOut, auth } = NextAuth({
     trustHost: true,
     adapter: PrismaAdapter(prisma),
-    providers: [GitHub],
+    providers: [
+        GitHub,
+        Google,
+        Resend({
+            from: process.env.AUTH_EMAIL_FROM,
+        }),
+    ],
     callbacks: {
         session: ({
             session,
@@ -71,6 +79,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         colorScheme: "light",
         brandColor: "#AA336A",
         // TODO fix logo source
-        logo: "https://avatars.githubusercontent.com/u/147748257?s=200&v=4",
+        logo: "/sphil_owl.webp",
     },
 });

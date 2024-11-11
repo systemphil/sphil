@@ -29,7 +29,6 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
     if (!course) {
         return <div className="badge badge-error">n/a</div>;
     }
-    // TODO remove casting
     const baseAvailable = course.baseAvailability! > new Date();
     const seminarAvailable = course.seminarAvailability > new Date();
     const dialogueAvailable = course.dialogueAvailability > new Date();

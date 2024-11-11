@@ -75,7 +75,6 @@ export const LessonForm = ({
                     name="description"
                     options={{ required: true }}
                 />
-                {/* // TODO Add selection for partId here */}
                 <SubmitInput
                     value={`${lesson ? "Update" : "Create"} lesson`}
                     isLoading={submitLoading}
