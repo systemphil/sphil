@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
     TextRevealCardDescription,
     TextRevealCardTitle,
@@ -7,6 +8,17 @@ import {
 } from "./TextRevealCard";
 
 export function SymposiaCard() {
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    // Prevent hydration mismatch by only rendering once mounted
+    if (!isMounted) {
+        return null;
+    }
+
     return (
         <TextRevealCard
             text="Learn"

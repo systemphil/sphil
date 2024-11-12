@@ -22,12 +22,12 @@ export const SubdirectoryLanding = ({
                                 <Cards.Card
                                     icon={" 📄 " as any}
                                     title="Guides"
-                                    href={`/${subdirectory}/guides`}
+                                    href={`/docs/${subdirectory}/guides`}
                                 />
                                 <Cards.Card
                                     icon={" 📄 " as any}
                                     title="Reference"
-                                    href={`/${subdirectory}/reference`}
+                                    href={`/docs/${subdirectory}/reference`}
                                 />
                             </Cards>
                         </div>

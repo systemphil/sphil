@@ -7,21 +7,18 @@ import {
 } from "nextra-theme-docs";
 import { Banner as NextraBanner, Head } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
-import { type ReactNode } from "react";
-import { SessionProvider } from "next-auth/react";
-import { ThemeConfigProps } from "node_modules/nextra-theme-docs/dist/layout.mjs";
+import { type ThemeConfigProps } from "node_modules/nextra-theme-docs/dist/layout.mjs";
 import { UserMenu } from "lib/components/navigation/UserMenu";
-import { Toaster } from "react-hot-toast";
 import { Footer } from "lib/components/navigation/Footer";
-import { Analytics } from "lib/components/Analytics";
 import { NavbarHeader } from "lib/components/navigation/NavbarHeader";
 import { TableOfContentsExtra } from "lib/components/navigation/TableOfContentsExtra";
+import { ArticleWrapper } from "lib/components/ui/ArticleWrapper";
+import { Providers } from "lib/components/context/Providers";
 
 // CSS
-import "nextra-theme-docs/style.css";
 import "./globals.css";
+import "nextra-theme-docs/style.css";
 import "@mdxeditor/editor/style.css";
-import { ArticleWrapper } from "lib/components/ui/ArticleWrapper";
 
 const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub →";
 const PROJECT_LINK = "https://github.com/systemphil/sphil";
@@ -90,7 +87,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({
     children,
 }: {
-    children: ReactNode;
+    children: React.ReactNode;
 }) {
     const toc: Partial<ThemeConfigProps["toc"]> = {
         extraContent: <TableOfContentsExtra />,
@@ -138,7 +135,7 @@ export default async function RootLayout({
                 />
             </Head>
             <body>
-                <SessionProvider>
+                <Providers>
                     <NextraLayout
                         pageMap={await getPageMap()}
                         docsRepositoryBase={DOCS_REPOSITORY_BASE}
@@ -157,23 +154,21 @@ export default async function RootLayout({
                             </NextraNavbar>
                         }
                         footer={
-                            <>
+                            <div className="relative">
+                                <div
+                                    data-name="footer-flair"
+                                    className="absolute h-20 w-full -top-[80px] bg-gradient-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
+                                />
                                 <NextraFooter className="flex-col items-center md:items-start relative">
-                                    <div
-                                        data-name="footer-flair"
-                                        className="absolute h-20 w-full -top-[81px] left-0 bg-gradient-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
-                                    />
                                     <Footer />
                                 </NextraFooter>
-                            </>
+                            </div>
                         }
                         toc={toc}
                     >
                         <ArticleWrapper>{children}</ArticleWrapper>
-                        <Toaster position="bottom-right" />
                     </NextraLayout>
-                </SessionProvider>
-                <Analytics />
+                </Providers>
             </body>
         </html>
     );
@@ -181,9 +176,9 @@ export default async function RootLayout({
 
 const Banner = () => {
     return (
-        <NextraBanner storageKey="4.0-release" dismissible>
+        <NextraBanner storageKey="release_key" dismissible>
             <div className='before:content-["🎉_"]'>
-                Nextra 4.0 is released.{" "}
+                BannerText{" "}
                 <NextraLink href="#" className='after:content-["_→"]'>
                     Read more
                 </NextraLink>
