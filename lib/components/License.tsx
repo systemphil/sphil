@@ -12,7 +12,7 @@ export const License = () => {
         return (
             <div className="has-tooltip">
                 <div className="flex justify-center -translate-y-20">
-                    <span className="tooltip rounded shadow-lg p-1 bg-gray-100  dark:bg-slate-900 text-center">
+                    <span className="tooltip rounded shadow-lg p-1 bg-gray-100  dark:bg-slate-900 text-center max-w-lg">
                         You&apos;re allowed to freely share, remix, adapt, and
                         build upon the work non-commercially, as long as credit
                         is given to the author(s), a link to the source is

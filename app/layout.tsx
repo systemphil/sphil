@@ -21,6 +21,7 @@ import { TableOfContentsExtra } from "lib/components/navigation/TableOfContentsE
 import "nextra-theme-docs/style.css";
 import "./globals.css";
 import "@mdxeditor/editor/style.css";
+import { ArticleWrapper } from "lib/components/ui/ArticleWrapper";
 
 const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub →";
 const PROJECT_LINK = "https://github.com/systemphil/sphil";
@@ -157,18 +158,18 @@ export default async function RootLayout({
                         }
                         footer={
                             <>
-                                <div
-                                    data-name="footer-flair"
-                                    className=" h-20 w-full  bg-gradient-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
-                                />
-                                <NextraFooter className="flex-col items-center md:items-start">
+                                <NextraFooter className="flex-col items-center md:items-start relative">
+                                    <div
+                                        data-name="footer-flair"
+                                        className="absolute h-20 w-full -top-[81px] left-0 bg-gradient-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
+                                    />
                                     <Footer />
                                 </NextraFooter>
                             </>
                         }
                         toc={toc}
                     >
-                        {children}
+                        <ArticleWrapper>{children}</ArticleWrapper>
                         <Toaster position="bottom-right" />
                     </NextraLayout>
                 </SessionProvider>

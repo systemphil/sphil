@@ -15,8 +15,13 @@ _TODO_
 ## 🧑‍💻 Local Development
 
 The web app requires a number of API keys to function properly. However, not all
-these are required for most development. Below is first a minimal subset to run
-most functionality, followed by a full scope.
+these are required for most development. If you'd like to gain access to our
+shared development environment, please get in touch service@systemphil.com or
+[join our discord](https://discord.gg/2T4mPCCYhu) with an introduction of
+yourself.
+
+The remainder of this guide assumes you want to set up your own development
+environment.
 
 After you have forked and cloned the repository to your machine, begin by
 creating a `.env` in the project root. Observe `.env.example` for a list of key
@@ -35,6 +40,10 @@ Minimal environment will require these env vars:
 -   `GCP_PRIMARY_BUCKET_NAME`
 -   `GCP_SECONDARY_BUCKET_NAME`
 -   `GCP_BUCKET_HANDLER_KEY`
+-   `STRIPE_API_KEY`
+
+Note: without Stripe access, you won't be able to create or fully update
+courses.
 
 #### 🐱 Git prerequisites
 
@@ -53,6 +62,9 @@ Minimal environment will require these env vars:
    This will create the `/node_modules` folder.
 
 #### 🗃️ Setting up a database instance for local development (cockroachdb)
+
+You can either [sign up on cockroachdb](https://www.cockroachlabs.com) to get a
+serverless instance on the free tier or set up one locally.
 
 1. To download and install cockroachdb locally, follow these guides for your
    system:
@@ -73,7 +85,7 @@ Minimal environment will require these env vars:
 5. With the db instance running, you can check if Prisma is able to connect with
    it and migrate its schemas. Run `npx prisma db push`.
 
-#### Authentication setup
+#### 🔐 Authentication setup
 
 1. `AUTH_SECRET` can be any random string. You can use `openssl rand -base64 32`
    to generate one.
@@ -85,3 +97,52 @@ Minimal environment will require these env vars:
     - Authorization callback URL:
       `http://localhost:3000/api/auth/callback/github`
 5. Once created, retrieve the Github ID and Secret and define the Github keys.
+
+#### 🪣 Buckets
+
+Buckets are used for storage. We use GCP and they will likely incur some cost
+for usage.
+
+-   ⚠️ The information in this section is sparse.
+
+1. Two buckets are needed, one public and one restricted. However, both of these
+   need to be handled by the same service account.
+2. Start by [signing up to Google Cloud](https://cloud.google.com/).
+3. Create a project.
+4. Inside the project, navigate to storage (or search for it in the console).
+5. Create two buckets, each _standard_, _single-region_ (preferably near you or
+   near the database). For the bucket that will be public, turn off prevent
+   public access.
+6. Go to the bucket that is going to be public, and go to `permissions`, click
+   `Grant Access`, input `allUsers` under "New principals" and for the role
+   assign `Storage Object Viewer`. If you get a warning that you're making the
+   bucket public, you're on the right track.
+7. Put the names of the buckets as the local environment variables: the primary
+   is the restricted one while the secondary is the public.
+8. Now navigate to `Service Accounts` and create a new service account. Name it
+   something recognizable and give it the following roles:
+   `Service Account Token Creator`, `Service Account User` and
+   `Storage Object Admin` (you can also assign these roles under `IAM` page).
+9. With the service account created and ready, click on it and go to the `keys`
+   tab where you will `add key`->`Create new key`. Select `JSON` and click
+   `Create`. This will download a `.json` file. **DO NOT SHARE THIS WITH
+   ANYONE**
+10. Find the key file and base64 encode it. (On linux,
+    `base64 key.json > key_base64.txt`). Copy the contents into the
+    `GCP_BUCKET_HANDLER_KEY` env var (be sure to remove empty carriage returns
+    and enclose the contents in quotes just in case).
+11. That should be it! 🥳
+
+#### 💵 Stripe
+
+-   ⚠️ The information in this section is sparse.
+
+In order to create and fully update courses, a Stripe connection is needed. Sign
+up an account on Stripe and set up a test environment. Get the API key and
+populate the `STRIPE_API_KEY` env vars.
+
+If you want to test checkouts, you must also create a webhook connection. To
+test these locally, you must have the
+[Stripe CLI](https://docs.stripe.com/stripe-cli) running simultaneously with
+your app. Once you have the Stripe CLI installed and authenticated, we have a
+shortcut you can use from the project: `npm run stripe:listen`.

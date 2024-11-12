@@ -89,10 +89,9 @@
     ([Apache version 2 license](https://www.apache.org/licenses/LICENSE-2.0.txt))
       <details>
 
-    All code apart of what is inside `src/pages/**` (excluding
-    `/contributing/**`, `_app.mdx`, `_document.tsx`, `_meta.json`,
-    `acknowledgements.mdx`, `index.mdx`, `privacy.mdx`, `team.mdx`, `terms.mdx`)
-    is subject to Apache version 2 license. Basically, anything outside of
-    content, literature, philosophy.
+    All code apart of what is inside `content/**` (excluding `/contributing/**`,
+    `_meta.ts`, `acknowledgements.mdx`, `index.mdx`, `privacy.mdx`, `team.mdx`,
+    `terms.mdx`) is subject to Apache version 2 license. Basically, anything
+    outside of content, literature, philosophy.
 
       </details>
