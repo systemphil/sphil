@@ -58,7 +58,6 @@ folder (excluding `/contributing/**`, `_meta.ts`, `acknowledgements.mdx`,
 `index.mdx`, `privacy.mdx`, `team.mdx`, `terms.mdx`). This primarily covers
 technical implementations rather than content, literature, or philosophy.
 
-
 </details>
 
 <details>
