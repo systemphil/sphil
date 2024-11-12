@@ -9,6 +9,7 @@ import { type JWT } from "next-auth/jwt";
 import { type Role, User } from "@prisma/client";
 import type { AdapterUser } from "@auth/core/adapters";
 
+const isProduction = process.env.NODE_ENV === "production";
 declare module "next-auth" {
     interface Session extends DefaultSession {
         user: {
@@ -30,11 +31,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     trustHost: true,
     adapter: PrismaAdapter(prisma),
     providers: [
-        GitHub,
-        Google,
-        Resend({
-            from: process.env.AUTH_EMAIL_FROM,
-        }),
+        ...(isProduction
+            ? [
+                  GitHub,
+                  Google,
+                  Resend({
+                      from: process.env.AUTH_EMAIL_FROM,
+                  }),
+              ]
+            : [GitHub]),
     ],
     callbacks: {
         session: ({
