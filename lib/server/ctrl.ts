@@ -157,23 +157,7 @@ async function ctrlDeleteCourse(id: string) {
     // Main function execution
     const validId = z.string().parse(id);
     const course = await dbGetCourseAndDetailsAndLessonsById(validId);
-    if (!course)
-        throw new Error("orderDeleteCourse Func: Course not found at db call");
-    /**
-     * Delete all related lessons and resources.
-     */
-    if (course.lessons.length > 0) {
-        /**
-         * Using `forEach()` will not work here, as it will not wait for the async function to finish.
-         * Instead we use `map()` to create an array of promises, and then use `Promise.all()`
-         * to wait for all promises to resolve.
-         */
-        const deleteLessonPromises = course.lessons.map(async (lesson) => {
-            const deletedLesson = await ctrlDeleteLesson(lesson.id);
-            console.info(`☑️ LESSON DELETED: ${deletedLesson.id}`);
-        });
-        await Promise.all(deleteLessonPromises);
-    }
+    if (!course) throw new Error("Course not found at db call");
     /**
      * Archive related Stripe resources if they exist.
      */
@@ -197,6 +181,21 @@ async function ctrlDeleteCourse(id: string) {
         throw new Error(
             "orderDeleteCourse Func: Could not archive all stripe resources. Terminating delete process."
         );
+    }
+    /**
+     * Delete all related lessons and resources.
+     */
+    if (course.lessons.length > 0) {
+        /**
+         * Using `forEach()` will not work here, as it will not wait for the async function to finish.
+         * Instead we use `map()` to create an array of promises, and then use `Promise.all()`
+         * to wait for all promises to resolve.
+         */
+        const deleteLessonPromises = course.lessons.map(async (lesson) => {
+            const deletedLesson = await ctrlDeleteLesson(lesson.id);
+            console.info(`☑️ LESSON DELETED: ${deletedLesson.id}`);
+        });
+        await Promise.all(deleteLessonPromises);
     }
     /**
      * Finally, delete course entry.

@@ -153,8 +153,8 @@ export async function stripeCreateCheckoutSession({
     description,
     customerEmail,
 }: StripeCreateCheckoutSessionProps) {
-    const baseUrl = process.env.NEXTAUTH_URL;
-    if (!baseUrl) throw new Error("NEXTAUTH_URL is not defined");
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_ROOT;
+    if (!baseUrl) throw new Error("Base URL is not defined");
 
     const stripe = getStripe();
     const stripeSession = await stripe.checkout.sessions.create({
