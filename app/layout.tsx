@@ -151,9 +151,9 @@ export default async function RootLayout({
                                 projectLink={PROJECT_LINK}
                             >
                                 <div className="w-[70px] flex justify-center">
-                                    <Suspense fallback={<Loading.RingMd />}>
-                                        <UserMenu />
-                                    </Suspense>
+                                    {/* <Suspense fallback={<Loading.RingMd />}> */}
+                                    <UserMenu />
+                                    {/* </Suspense> */}
                                 </div>
                             </NextraNavbar>
                         }

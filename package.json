@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev",
+        "dev": "next dev --turbo",
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
@@ -32,7 +32,7 @@
         "eslint": "8.49.0",
         "eslint-config-next": "13.4.19",
         "framer-motion": "^10.18.0",
-        "next": "^15.0.1",
+        "next": "^15.0.3",
         "next-auth": "^5.0.0-beta.25",
         "nextra": "4.0.0-app-router.24",
         "nextra-theme-docs": "4.0.0-app-router.24",

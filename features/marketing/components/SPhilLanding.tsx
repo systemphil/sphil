@@ -9,7 +9,7 @@ import { HeroBackground } from "./HeroBackground";
 
 export function SPhilLanding() {
     return (
-        <>
+        <div>
             <section className="relative flex flex-col items-center justify-start w-full h-full overflow-hidden">
                 <HeroBackground />
                 <div className="relative flex flex-col items-center justify-center z-10 py-28">
@@ -143,6 +143,6 @@ export function SPhilLanding() {
                     message="This is a very early release of sPhil and we are continuously working to improve it. If you encounter any issues or want to get involved, please visit our GitHub repository."
                 />
             </section>
-        </>
+        </div>
     );
 }
