@@ -5,7 +5,6 @@ import { CreativeCommonsLogo } from "./icons/CreativeCommonsLogo";
 
 export const License = () => {
     const { normalizePagesResult } = useConfig();
-    // @ts-ignore
     const frontMatter = normalizePagesResult?.activePath?.at(-1)?.frontMatter;
 
     if (frontMatter && frontMatter.isArticle === true) {

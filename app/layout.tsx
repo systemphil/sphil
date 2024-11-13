@@ -14,6 +14,8 @@ import { NavbarHeader } from "lib/components/navigation/NavbarHeader";
 import { TableOfContentsExtra } from "lib/components/navigation/TableOfContentsExtra";
 import { ArticleWrapper } from "lib/components/ui/ArticleWrapper";
 import { Providers } from "lib/components/context/Providers";
+import { Suspense } from "react";
+import { Loading } from "lib/components/animations/Loading";
 
 // CSS
 import "./globals.css";
@@ -149,7 +151,9 @@ export default async function RootLayout({
                                 projectLink={PROJECT_LINK}
                             >
                                 <div className="w-[70px] flex justify-center">
-                                    <UserMenu />
+                                    <Suspense fallback={<Loading.RingMd />}>
+                                        <UserMenu />
+                                    </Suspense>
                                 </div>
                             </NextraNavbar>
                         }

@@ -1,3 +1,5 @@
+"use client";
+
 import {
     AutoFixHighOutlined,
     ConstructionOutlined,
@@ -6,6 +8,7 @@ import {
     WarningAmberOutlined,
 } from "@mui/icons-material";
 import { FadeIn } from "../animations/FadeIn";
+import { useEffect, useState } from "react";
 
 type SeverityProps = "info" | "warning" | "critical" | "success" | "beta";
 
@@ -16,6 +19,17 @@ export function MaintenanceStatic({
     severity: SeverityProps;
     message: string;
 }) {
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    // Prevent hydration mismatch by only rendering once mounted
+    if (!isMounted) {
+        return null;
+    }
+
     const title = getMaintenanceTitle(severity);
     const classes = getMaintenanceClasses(severity);
 

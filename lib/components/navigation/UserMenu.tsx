@@ -1,21 +1,29 @@
-"use client";
-
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { FadeIn } from "../animations/FadeIn";
-import { Loading } from "../animations/Loading";
-import { SignInButtonClient } from "../auth/SignInButtonClient";
-import { SignOutButtonClient } from "../auth/SignOutButtonClient";
+// import { useSession } from "next-auth/react";
+// import { Loading } from "../animations/Loading";
+// import { SignInButtonClient } from "../auth/SignInButtonClient";
+// import { SignOutButtonClient } from "../auth/SignOutButtonClient";
+import { auth } from "lib/auth/authConfig";
+import { SignInButton } from "../auth/SignInButton";
+import { SignOutButton } from "../auth/SignOutButton";
 
-export function UserMenu() {
-    const { data: session, status } = useSession();
+export async function UserMenu() {
+    // TODO remove after testing
+    // const { data: session, status } = useSession();
 
-    if (status === "loading") {
-        return <Loading.RingMd />;
-    }
+    // if (status === "loading") {
+    //     return <Loading.RingMd />;
+    // }
 
-    if (status === "unauthenticated") {
-        return <SignInButtonClient className="btn btn-primary btn-sm" />;
+    // if (status === "unauthenticated") {
+    //     return <SignInButtonClient className="btn btn-primary btn-sm" />;
+    // }
+
+    const session = await auth();
+
+    if (!session || !session.user) {
+        return <SignInButton className="btn btn-primary btn-sm" />;
     }
 
     return (
@@ -73,7 +81,7 @@ export function UserMenu() {
                 </li>
                 <li className="border-t my-1" />
                 <li className="dark:hover:bg-acid-green/50 rounded-md duration-75 transition-colors">
-                    <SignOutButtonClient className="w-[157px] flex" />
+                    <SignOutButton className="w-[157px] flex" />
                 </li>
             </ul>
         </div>
