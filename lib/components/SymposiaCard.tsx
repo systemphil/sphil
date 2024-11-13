@@ -23,7 +23,7 @@ export function SymposiaCard() {
         <TextRevealCard
             text="Learn"
             revealText="Master"
-            url="https://symposia.sphil.xyz"
+            url="https://sphil.xyz/symposia"
             className="bg-gradient-to-b from-indigo-400 from-50% via-purple-400 via-75%  to-pink-400 to-90% dark:from-purple-950 dark:to-purple-800"
         >
             <TextRevealCardTitle>

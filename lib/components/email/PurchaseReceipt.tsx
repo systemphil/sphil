@@ -44,7 +44,7 @@ export function PurchaseReceiptEmail({
                     <Container className="max-w-xl">
                         <Section>
                             <Img
-                                src="https://storage.googleapis.com/symposia-prod-images/images/sphil_owl.png"
+                                src="https://storage.googleapis.com/sphil-prod-images/images/sphil_owl.png"
                                 alt="sphil_owl"
                                 width="200"
                                 height="200"
