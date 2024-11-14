@@ -6,27 +6,20 @@ import { useSession } from "next-auth/react";
 import { Loading } from "../animations/Loading";
 import { SignInButtonClient } from "../auth/SignInButtonClient";
 import { SignOutButtonClient } from "../auth/SignOutButtonClient";
-// import { auth } from "lib/auth/authConfig";
-// import { SignInButton } from "../auth/SignInButton";
-// import { SignOutButton } from "../auth/SignOutButton";
 
 export function UserMenu() {
-    // TODO Server-side auth is apparently causing webpack errors. Use client for now.
+    // Server-side auth is apparently causing webpack errors. Using client for now.
     const { data: session, status } = useSession();
 
     if (status === "loading") {
+        return null; // TODO temporary
         return <Loading.RingMd />;
     }
 
     if (status === "unauthenticated") {
+        return null; // TODO temporary
         return <SignInButtonClient className="btn btn-primary btn-sm" />;
     }
-
-    // const session = await auth();
-
-    // if (!session || !session.user) {
-    //     return <SignInButton className="btn btn-primary btn-sm" />;
-    // }
 
     return (
         <div className="dropdown dropdown-bottom dropdown-end">
