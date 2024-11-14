@@ -1,11 +1,11 @@
 {
     "ignore_paths": [
-        "src/pages/privacy.mdx",
-        "src/pages/team.mdx",
-        "src/pages/acknowledgements.mdx",
-        "src/pages/_app.mdx",
-        "src/pages/index.mdx",
-        "src/pages/terms.mdx",
-        "src/pages/contributing/"
+        "content/privacy.mdx",
+        "content/team.mdx",
+        "content/acknowledgements.mdx",
+        "content/_app.mdx",
+        "content/index.mdx",
+        "content/terms.mdx",
+        "content/contributing/"
     ]
 }
