@@ -11,7 +11,7 @@ jobs:
     if: github.repository_owner == 'systemphil'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: actions/cache/restore@v4
       id: prepyrus-cache-restore
       with:
@@ -51,9 +51,9 @@ jobs:
     env:
       SERVICE: ${{ secrets.SERVICE }}
       BUILD_PATH:
+      # AUTH_URL is manually set for staging
       SECRETS: >-
         DATABASE_URL
-        AUTH_URL
         AUTH_SECRET
         AUTH_GITHUB_ID
         AUTH_GITHUB_SECRET

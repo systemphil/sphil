@@ -1,4 +1,4 @@
-name: Verify MDX Content
+name: Verify MDX Content 🔍
 
 on:
   workflow_dispatch:
