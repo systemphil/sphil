@@ -13,12 +13,12 @@ export function UserMenu() {
 
     if (status === "loading") {
         return null; // TODO temporary
-        return <Loading.RingMd />;
+        // return <Loading.RingMd />;
     }
 
     if (status === "unauthenticated") {
         return null; // TODO temporary
-        return <SignInButtonClient className="btn btn-primary btn-sm" />;
+        // return <SignInButtonClient className="btn btn-primary btn-sm" />;
     }
 
     return (
