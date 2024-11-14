@@ -51,12 +51,13 @@ jobs:
     env:
       SERVICE: ${{ secrets.SERVICE }}
       BUILD_PATH:
-      # AUTH_URL is manually set for staging
+      # These are set manually for staging:
+      # AUTH_URL
+      # AUTH_GITHUB_ID
+      # AUTH_GITHUB_SECRET
       SECRETS: >-
         DATABASE_URL
         AUTH_SECRET
-        AUTH_GITHUB_ID
-        AUTH_GITHUB_SECRET
         AUTH_GOOGLE_ID
         AUTH_GOOGLE_SECRET
         AUTH_RESEND_KEY
