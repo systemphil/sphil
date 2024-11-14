@@ -8,7 +8,7 @@ jobs:
     if: github.repository_owner == 'systemphil'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: actions/cache/restore@v4
       id: prepyrus-cache-restore
       with:

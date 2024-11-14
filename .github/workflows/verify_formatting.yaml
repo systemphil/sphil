@@ -1,4 +1,4 @@
-name: Verify formatting
+name: Verify formatting 🎨
 
 on:
   workflow_dispatch:
