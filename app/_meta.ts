@@ -1,6 +1,6 @@
 export default {
-    docs: {
-        title: "Docs",
+    articles: {
+        title: "Articles",
         type: "page",
         display: "children",
     },
