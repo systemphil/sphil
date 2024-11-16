@@ -67,8 +67,8 @@ contents. From here you can look around and open any file to view and edit its
 contents. At its core, VS Code is really just a text editor, so you can use it
 to edit any text file, which is what programming source files largely are.
 
-The content of the sPhil is stored in the `pages` folder under `src`. Inside the
-`pages` folder, you will find a folder for each page of the website.
+The content of the sPhil is stored in the `content` folder. Here you will find a
+folder for each article of the website.
 
 <Callout type="info" emoji="ℹ️">
     VS Code will likely prompt you about installing some extensions based on the
@@ -144,21 +144,9 @@ If you use VS Code, some extensions you might want to install are:
 
 #### Running the Site Locally
 
-To run the site locally, navigate to your local `sphil` repository in a terminal
-and type `npm run dev` (this will occupy the terminal in which this is
-launched). This will start a local development server and open a browser window
-with the site running (or navigate to `https://localhost:3000` in your browser).
-You can now make changes to the content and see them instantly reflected in the
-browser!
-
-<Callout type="info" emoji="ℹ️">
-    Normally when you make changes to the content, the site will automatically
-    reload in the browser. However, sometimes it doesn't or it crashes. If
-    either happens, try refreshing the page. The missing `useRef` error is a
-    common one that causes the site to crash, which has to do with how Nextra
-    loads and transpiles `.mdx` files. If you see this error, nothing to worry
-    about, just refresh the page.
-</Callout>
+In order to run sPhil locally, you require a number of environmental variables.
+See the
+[technical contributing guide](https://github.com/systemphil/sphil/blob/main/CONTRIBUTING.md).
 
 ### Troubleshooting
 

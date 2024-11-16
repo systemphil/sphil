@@ -24,7 +24,7 @@ export const MDXRenderer = ({ data }: { data: MDXCompilerReturnType }) => {
      * The `;` at the start of the code in the useEffect below is used to ensure correct interpretation by the JS parser.
      * The `(() => {})()` is an immediately invoked function expression (IIFE). Creates a self-contained scope for variables and
      * execution without polluting the surrounding scope.
-     * @docs {@link https://developer.mozilla.org/en-US/docs/Glossary/IIFE | About IIFE }
+     * @docs {@link https://developer.mozilla.org/en-US/articles/Glossary/IIFE | About IIFE }
      */
     useEffect(() => {
         (async () => {

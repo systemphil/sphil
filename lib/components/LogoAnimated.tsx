@@ -26,7 +26,7 @@ export function LogoAnimated({ animation = true }: { animation?: boolean }) {
                 </g>
                 {/* 
                     Thanks to the developers at Nextra for this really cool effect!
-                    https://github.com/shuding/nextra/blob/main/docs/theme.config.tsx 
+                    https://github.com/shuding/nextra/blob/main/articles/theme.config.tsx 
                 */}
                 <style jsx>{`
                     svg {

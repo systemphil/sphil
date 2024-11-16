@@ -48,17 +48,17 @@ export function SiteSwitcher() {
             />
             <span className="z-50 absolute p-1 text-sm flex justify-between text-center w-[200px] text-[#666666] dark:text-[#888888]">
                 <SiteSwitcherLink
-                    href="/docs/hegel"
+                    href="/articles/hegel"
                     text="Hegel"
                     isActive={site === "hegel"}
                 />
                 <SiteSwitcherLink
-                    href="/docs/kant"
+                    href="/articles/kant"
                     text="Kant"
                     isActive={site === "kant"}
                 />
                 <SiteSwitcherLink
-                    href="/docs/spinoza"
+                    href="/articles/spinoza"
                     text="Spinoza"
                     isActive={site === "spinoza"}
                 />

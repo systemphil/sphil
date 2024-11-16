@@ -22,7 +22,7 @@ const SECONDARY_BUCKET_NAME = env.GCP_SECONDARY_BUCKET_NAME ?? "invalid";
 
 /**
  * Storage bucket reference instance. Call methods on this object to interact with the bucket.
- * @see https://cloud.google.com/nodejs/docs/reference/storage/latest
+ * @see https://cloud.google.com/nodejs/articles/reference/storage/latest
  */
 export const primaryBucket = storage.bucket(PRIMARY_BUCKET_NAME);
 export const secondaryBucket = storage.bucket(SECONDARY_BUCKET_NAME);

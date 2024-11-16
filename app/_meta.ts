@@ -1,21 +1,9 @@
 export default {
     articles: {
-        title: "Articles",
+        title: "Contributing", // For main navbar display, this route will go directly to contributing index
         type: "page",
         display: "children",
     },
-    // hegel: {
-    //     title: "Hegel",
-    //     type: "menu",
-    //     items: {
-    //         guides: {
-    //             href: "/docs/hegel/guides",
-    //         },
-    //         reference: {
-    //             href: "/docs/hegel/reference",
-    //         },
-    //     },
-    // },
     symposia: {
         title: "Symposia 🏺",
         type: "menu",

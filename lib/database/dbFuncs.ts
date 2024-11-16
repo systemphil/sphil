@@ -778,8 +778,8 @@ export const dbUpdateMdxByModelId = async ({
          * prisma returns the number of rows affected by the query instead of an error in the usual prisma.update().
          * First we try to update one table where there is an id match, and, then, we check how many rows were affected.
          * If 1, then proceed to compile mdx string for user consumption and return, otherwise proceed to check the next table until ID hit.
-         * @see {@link https://www.prisma.io/docs/concepts/components/prisma-client/raw-database-access#executeraw PrismaExecuteRaw}
-         * @see {@link https://www.cockroachlabs.com/docs/stable/sql-statements SQL@CockroachDB}
+         * @see {@link https://www.prisma.io/articles/concepts/components/prisma-client/raw-database-access#executeraw PrismaExecuteRaw}
+         * @see {@link https://www.cockroachlabs.com/articles/stable/sql-statements SQL@CockroachDB}
          */
         let result: number =
             await prisma.$executeRaw`UPDATE "LessonContent" SET mdx = ${contentAsBuffer} WHERE id = ${validId};`;

@@ -32,12 +32,15 @@ export function SPhilLanding() {
                             tagline={
                                 "Discover the power of dialectical thought and immanent critique!"
                             }
-                            href={"/docs/hegel"}
+                            href={"/articles/hegel"}
                             buttons={[
-                                { title: "Guides", href: "/docs/hegel/guides" },
+                                {
+                                    title: "Guides",
+                                    href: "/articles/hegel/guides",
+                                },
                                 {
                                     title: "Reference",
-                                    href: "/docs/hegel/reference",
+                                    href: "/articles/hegel/reference",
                                 },
                             ]}
                         />
@@ -46,12 +49,15 @@ export function SPhilLanding() {
                             tagline={
                                 "Learn why Kant is the philosopher of the enlightenment bar none!"
                             }
-                            href={"/docs/kant"}
+                            href={"/articles/kant"}
                             buttons={[
-                                { title: "Guides", href: "/docs/kant/guides" },
+                                {
+                                    title: "Guides",
+                                    href: "/articles/kant/guides",
+                                },
                                 {
                                     title: "Reference",
-                                    href: "/docs/kant/reference",
+                                    href: "/articles/kant/reference",
                                 },
                             ]}
                         />
@@ -129,7 +135,7 @@ export function SPhilLanding() {
                             </Paragraph>
                         </FadeIn>
                         <FadeIn className="mt-6">
-                            <Link href="/docs/contributing">
+                            <Link href="/articles/contributing">
                                 <Button>How to contribute</Button>
                             </Link>
                         </FadeIn>

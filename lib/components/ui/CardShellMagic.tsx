@@ -9,7 +9,7 @@ import { cn } from "lib/utils";
  * which is not available(?) in TailwindCSS.
  * Therefore, a special CSS class "card-magic" was made to achieve this. This class only does the fancy animation
  * styling, leaving the rest, such as size and background, to be handled by Tailwind as per usual.
- * @See {@Link https://developer.mozilla.org/en-US/docs/Web/Guide/Houdini CSS Houdini}
+ * @See {@Link https://developer.mozilla.org/en-US/articles/Web/Guide/Houdini CSS Houdini}
  */
 export function CardShellMagic({ children }: { children?: ReactNode }) {
     return (

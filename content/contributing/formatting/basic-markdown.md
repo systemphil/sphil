@@ -260,10 +260,10 @@ website. For example, if you want to link to the article on _mechanical object_
 in the Hegel Reference section, you would write:
 
 ```md
-[Link to Mechanical Object](/hegel/reference/mechanical-object)
+[Link to Mechanical Object](/articles/hegel/reference/mechanical-object)
 ```
 
-[Link to Mechanical Object](/hegel/reference/mechanical-object)
+[Link to Mechanical Object](/articles/hegel/reference/mechanical-object)
 
 ### Image
 

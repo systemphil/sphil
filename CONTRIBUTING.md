@@ -2,7 +2,7 @@
 
 > 💡 This contributing guide is coding related. For philosophy and other
 > literary related matters, see
-> [our contributing guide](https://sphil.xyz/docs/contributing)
+> [our contributing guide](https://sphil.xyz/articles/contributing)
 
 Welcome to the sPhil repository. We're happy you're here and would like to
 contribute to the project! We hope this guide will get you up to speed with the
@@ -68,8 +68,8 @@ serverless instance on the free tier or set up one locally.
 
 1. To download and install cockroachdb locally, follow these guides for your
    system:
-    - [Download latest stable production release](https://www.cockroachlabs.com/docs/releases)
-    - [Installation instructions](https://www.cockroachlabs.com/docs/v24.2/install-cockroachdb)
+    - [Download latest stable production release](https://www.cockroachlabs.com/articles/releases)
+    - [Installation instructions](https://www.cockroachlabs.com/articles/v24.2/install-cockroachdb)
 2. Verify installation was successful, running `cockroach demo` and inputting
    `SELECT ST_IsValid(ST_MakePoint(1,2));` into the interactive shell.
 3. In a new terminal, start a single-node local instance (commands for Windows

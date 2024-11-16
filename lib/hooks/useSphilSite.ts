@@ -6,15 +6,15 @@ export type SphilSite = "hegel" | "kant" | "spinoza";
 
 export function useSphilSite(): SphilSite | undefined {
     const pathname = usePathname();
-    if (pathname.startsWith("/docs/hegel")) {
+    if (pathname.startsWith("/articles/hegel")) {
         return "hegel";
     }
 
-    if (pathname.startsWith("/docs/kant")) {
+    if (pathname.startsWith("/articles/kant")) {
         return "kant";
     }
 
-    if (pathname.startsWith("/docs/spinoza")) {
+    if (pathname.startsWith("/articles/spinoza")) {
         return "spinoza";
     }
 
