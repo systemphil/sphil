@@ -14,8 +14,6 @@ import { NavbarHeader } from "lib/components/navigation/NavbarHeader";
 import { TableOfContentsExtra } from "lib/components/navigation/TableOfContentsExtra";
 import { ArticleWrapper } from "lib/components/ui/ArticleWrapper";
 import { Providers } from "lib/components/context/Providers";
-import { Suspense } from "react";
-import { Loading } from "lib/components/animations/Loading";
 
 // CSS
 import "./globals.css";
@@ -44,7 +42,12 @@ const COLOR = {
 export const viewport: Viewport = Head.viewport;
 
 export const metadata: Metadata = {
-    description: "sPhil",
+    title: {
+        absolute: "sPhil",
+        template: "%s | sPhil",
+    },
+    robots: "index, follow",
+    description: "Where Philosophy Meets Open Collaboration",
     metadataBase: new URL(SITE_ROOT),
     keywords: [
         "sphil",
@@ -60,11 +63,20 @@ export const metadata: Metadata = {
     appleWebApp: {
         title: "sPhil",
     },
-    title: {
-        absolute: "sPhil",
-        template: "%s | sPhil",
+    alternates: {
+        canonical: SITE_ROOT,
     },
     icons: {
+        apple: [
+            {
+                media: "(prefers-color-scheme: dark)",
+                url: "/images/favicon-dark/apple-touch-icon.png",
+            },
+            {
+                media: "(prefers-color-scheme: light)",
+                url: "/images/favicon-light/apple-touch-icon.png",
+            },
+        ],
         icon: [
             {
                 media: "(prefers-color-scheme: dark)",
@@ -83,6 +95,58 @@ export const metadata: Metadata = {
     },
     twitter: {
         site: SITE_ROOT,
+        description: "Where Philosophy Meets Open Collaboration",
+        title: "sPhil",
+        images: [
+            {
+                url: "/images/og-image-sphil.avif",
+                width: 1200,
+                height: 630,
+                alt: "sPhil",
+            },
+            {
+                url: "/images/og-image-sphil.webp",
+                width: 1200,
+                height: 630,
+                alt: "sPhil",
+            },
+            {
+                url: "/images/og-image-sphil.png",
+                width: 1200,
+                height: 630,
+                alt: "sPhil",
+            },
+        ],
+    },
+    authors: {
+        name: "sPhil",
+    },
+    openGraph: {
+        title: "sPhil",
+        type: "website",
+        locale: "en_US",
+        siteName: "sPhil",
+        description: "Where Philosophy Meets Open Collaboration",
+        images: [
+            {
+                url: "/images/og-image-sphil.avif",
+                width: 1200,
+                height: 630,
+                alt: "sPhil",
+            },
+            {
+                url: "/images/og-image-sphil.webp",
+                width: 1200,
+                height: 630,
+                alt: "sPhil",
+            },
+            {
+                url: "/images/og-image-sphil.png",
+                width: 1200,
+                height: 630,
+                alt: "sPhil",
+            },
+        ],
     },
 };
 
@@ -102,40 +166,7 @@ export default async function RootLayout({
             className="nextra-scrollbar"
             data-theme="fantasy"
         >
-            <Head
-                color={COLOR}
-                // faviconGlyph="✦"
-                // backgroundColor={BACKGROUND_COLOR}
-            >
-                <meta
-                    // TODO fix titles to be dynamic
-                    name="title"
-                    property="og:title"
-                    content="sPhil"
-                />
-                <title>sPhil</title>
-                <link
-                    rel="shortcut icon"
-                    href="/images/favicon-light/favicon.ico"
-                />
-                <link
-                    rel="apple-touch-icon"
-                    sizes="180x180"
-                    href="/images/favicon-light/apple-touch-icon.png"
-                />
-                <link
-                    rel="icon"
-                    type="image/png"
-                    sizes="32x32"
-                    href="/images/favicon-light/favicon-32x32.png"
-                />
-                <link
-                    rel="icon"
-                    type="image/png"
-                    sizes="16x16"
-                    href="/images/favicon-light/favicon-16x16.png"
-                />
-            </Head>
+            <Head color={COLOR}></Head>
             <body>
                 <Providers>
                     <NextraLayout
@@ -151,9 +182,7 @@ export default async function RootLayout({
                                 projectLink={PROJECT_LINK}
                             >
                                 <div className="w-[70px] flex justify-center">
-                                    {/* <Suspense fallback={<Loading.RingMd />}> */}
                                     <UserMenu />
-                                    {/* </Suspense> */}
                                 </div>
                             </NextraNavbar>
                         }
