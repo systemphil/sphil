@@ -1,0 +1,20 @@
+[
+    {
+        "name": "delete-older-than-2-days",
+        "action": {
+            "type": "Delete"
+        },
+        "condition": {
+            "olderThan": "2d"
+        }
+    },
+    {
+        "name": "keep-latest-5-images",
+        "action": {
+            "type": "Keep"
+        },
+        "mostRecentVersions": {
+            "keepCount": 5
+        }
+    }
+]
