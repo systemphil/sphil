@@ -38,7 +38,7 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
                     <div className="flex flex-col">
                         <Link
                             href={links.courses}
-                            className="text-base self-start  text-primary opacity-70 transition hover:opacity-100 p-2"
+                            className="text-base self-start text-primary dark:text-gray-300 opacity-70 transition hover:opacity-100 p-2"
                         >
                             {`<- Back to courses`}
                         </Link>
@@ -49,13 +49,14 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
                     </div>
 
                     {course.imageUrl && (
-                        <Image
-                            className="mask mask-hexagon"
-                            src={course.imageUrl}
-                            alt={`Course preview ${course.name}`}
-                            width={340}
-                            height={240}
-                        />
+                        <div className="mask mask-hexagon">
+                            <Image
+                                src={course.imageUrl}
+                                alt={`Course preview ${course.name}`}
+                                width={340}
+                                height={240}
+                            />
+                        </div>
                     )}
                 </div>
                 <div className="flex justify-center gap-20 flex-wrap-reverse mt-10 md:mt-1">

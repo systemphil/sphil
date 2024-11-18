@@ -169,7 +169,7 @@ export async function stripeCreateCheckoutSession({
         success_url: `${baseUrl}/purchase-success?p=${
             purchase.price.split("_")[1]
         }&s=${slug}`,
-        cancel_url: `${baseUrl}/courses/${slug}?canceled=true`,
+        cancel_url: `${baseUrl}/symposia/courses/${slug}?canceled=true`,
         metadata: {
             stripeCustomerId: customerId,
             userId: userId,
@@ -183,7 +183,7 @@ export async function stripeCreateCheckoutSession({
                 "https://avatars.githubusercontent.com/u/147748257?s=200&v=4",
             name: name,
             description: description,
-            courseLink: `${baseUrl}/courses/${slug}`,
+            courseLink: `${baseUrl}/symposia/courses/${slug}`,
         } satisfies StripeCheckoutSessionMetadata,
     });
 

@@ -65,7 +65,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                 action={handleEnroll}
                 className="flex flex-col gap-2 justify-center  grow"
             >
-                <p className="text-slate-800 font-bold">
+                <p className="text-slate-800 dark:text-gray-300 font-bold">
                     Select your course tier
                 </p>
 
@@ -84,12 +84,12 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                             disabled={!baseAvailable}
                         />
                         {!baseAvailable && (
-                            <span className="absolute text-xs text-slate-500 top-0 right-0">
+                            <span className="absolute text-xs text-slate-500  top-0 right-0">
                                 &nbsp;Currently unavailable
                             </span>
                         )}
                         <span
-                            className={`label-text ${
+                            className={`label-text dark:text-gray-300 ${
                                 !baseAvailable && "line-through"
                             }`}
                         >
@@ -121,7 +121,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                             </span>
                         )}
                         <span
-                            className={`label-text ${
+                            className={`label-text dark:text-gray-300 ${
                                 !seminarAvailable && "line-through"
                             }`}
                         >
@@ -153,7 +153,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                             </span>
                         )}
                         <span
-                            className={`label-text ${
+                            className={`label-text dark:text-gray-300 ${
                                 !dialogueAvailable && "line-through"
                             }`}
                         >
@@ -193,10 +193,15 @@ function TierDescription({
                 <sup className="text-3xl font-extrabold">US</sup>${price / 100}
                 <sup className="text-3xl font-semibold">00</sup>
             </p>
-            <Heading as="h4" replacementClasses="text-primary">
+            <Heading
+                as="h4"
+                replacementClasses="text-primary dark:text-acid-green"
+            >
                 {title}
             </Heading>
-            <p className="text-xs text-slate-600 px-2">{text}</p>
+            <p className="text-xs text-slate-600 dark:text-gray-300 px-2">
+                {text}
+            </p>
         </div>
     );
 }

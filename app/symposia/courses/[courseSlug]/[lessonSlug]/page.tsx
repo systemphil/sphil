@@ -1,6 +1,8 @@
+import { CourseEnrollNowPage } from "features/courses/components/CourseEnrollNowPage";
 import { LessonFrontPage } from "features/courses/components/LessonFrontPage";
 import { auth } from "lib/auth/authConfig";
 import { Loading } from "lib/components/animations/Loading";
+import { AuthViews } from "lib/components/auth/AuthViews";
 import { errorMessages } from "lib/config/errorMessages";
 import { dbGetUserPurchasedCourses } from "lib/database/dbFuncs";
 import { redirect } from "next/navigation";
@@ -16,7 +18,7 @@ export default async function LessonFrontPageRoute({
     params: { lessonSlug: string; courseSlug: string };
 }) {
     const { lessonSlug, courseSlug } = await params;
-    const notPurchasedRedirect = `/courses/${courseSlug}?error=${errorMessages.courseNotPurchased}`;
+    const notPurchasedRedirect = `/symposia/courses/${courseSlug}?error=${errorMessages.courseNotPurchased}`;
 
     if (typeof lessonSlug !== "string") {
         return redirect(`/?error=${errorMessages.missingParams}`);
@@ -24,20 +26,18 @@ export default async function LessonFrontPageRoute({
 
     const session = await auth();
     if (!session) {
-        return redirect(
-            `/courses/${courseSlug}?error=${errorMessages.mustBeLoggedIn}`
-        );
+        return <AuthViews.MustBeLoggedIn />;
     }
 
     const purchasedCourses = await dbGetUserPurchasedCourses(session.user.id);
     if (!purchasedCourses) {
-        return redirect(notPurchasedRedirect);
+        return <CourseEnrollNowPage slug={courseSlug} />;
     }
     const hasPurchased = purchasedCourses.some((purchasedCourse) => {
         return purchasedCourse.slug === courseSlug;
     });
     if (!hasPurchased) {
-        return redirect(notPurchasedRedirect);
+        return <CourseEnrollNowPage slug={courseSlug} />;
     }
 
     return (

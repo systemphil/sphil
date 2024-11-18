@@ -16,9 +16,9 @@ import { ArticleWrapper } from "lib/components/ui/ArticleWrapper";
 import { Providers } from "lib/components/context/Providers";
 
 // CSS
-import "./globals.css";
 import "nextra-theme-docs/style.css";
 import "@mdxeditor/editor/style.css";
+import "./globals.css";
 
 const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub →";
 const PROJECT_LINK = "https://github.com/systemphil/sphil";

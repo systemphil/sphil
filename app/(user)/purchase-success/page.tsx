@@ -12,7 +12,7 @@ export default async function PublishedCourses({
 }: {
     searchParams: { p: string; s: string };
 }) {
-    const { p: purchasePriceId, s: slug } = searchParams;
+    const { p: purchasePriceId, s: slug } = await searchParams;
     if (!purchasePriceId || !slug) {
         return redirect("/?error=missing-params");
     }

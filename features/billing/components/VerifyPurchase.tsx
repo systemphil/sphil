@@ -100,13 +100,13 @@ export const VerifyPurchase = ({
                         </div>
                         <div className="flex justify-center m-10">
                             <button className="btn btn-primary">
-                                <Link href={`/courses/${data}`}>
+                                <Link href={`/symposia/courses/${data}`}>
                                     Click to go to the course
                                 </Link>
                             </button>
                         </div>
                         <div className="flex justify-center">
-                            <p className="mt-12 text-gray-500 max-w-md">
+                            <p className="mt-12 text-gray-500 dark:text-gray-300 max-w-md">
                                 A receipt has been sent to the email address
                                 attached to the account in which the purchase
                                 was made.

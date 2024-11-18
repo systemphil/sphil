@@ -20,7 +20,7 @@ export function TableOfLessons({
 }: CourseLessonContentsProps) {
     if (lessons.length > 0) {
         return (
-            <div className="mt-4 md:py-8 bg-slate-100/90 max-w-[320px]">
+            <div className="mt-4 md:py-8 max-w-[320px]">
                 <div className="hidden md:block">
                     <Heading as="h3">Lessons</Heading>
                     <LessonsMap lessons={lessons} courseSlug={courseSlug} />

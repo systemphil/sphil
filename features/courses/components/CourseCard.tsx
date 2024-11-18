@@ -22,11 +22,11 @@ export async function CourseCard({ course, isAdmin = false }: CourseCardProps) {
 
     return (
         <GlowBoundary>
-            <div className="w-full rounded border bg-gradient-to-b from-neutral-50/90 to-neutral-100/90 transition duration-300 dark:from-neutral-950/90 dark:to-neutral-800/90 md:hover:border-transparent md:bg-gradient-to-bl">
+            <div className="w-full rounded-lg border bg-gradient-to-b from-neutral-50/90 to-neutral-100/90 transition duration-300 dark:from-neutral-950/90 dark:to-neutral-800/90 md:hover:border-transparent md:bg-gradient-to-bl">
                 <Link href={href}>
                     {course.imageUrl && (
                         <Image
-                            className="max-h-[300px] w-full rounded-t-lg"
+                            className="max-h-[300px] w-full rounded-t-md"
                             src={course.imageUrl}
                             alt={`Video thumbnail preview for ${course.name}`}
                             width={340}
@@ -45,10 +45,12 @@ export async function CourseCard({ course, isAdmin = false }: CourseCardProps) {
                             </div>
                         )}
                         <Heading as="h3">{course.name}</Heading>
-                        <p className="text-slate-700">{course.description}</p>
+                        <p className="text-slate-700 dark:text-gray-300/90 text-center">
+                            {course.description}
+                        </p>
                     </div>
                 </Link>
-                {isSudo && (
+                {isAdmin && isSudo && (
                     <div className="flex justify-center py-1">
                         <CourseCardDeleteButton
                             id={course.id}
