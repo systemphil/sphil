@@ -66,30 +66,6 @@ export const metadata: Metadata = {
     alternates: {
         canonical: SITE_ROOT,
     },
-    icons: {
-        apple: [
-            {
-                media: "(prefers-color-scheme: dark)",
-                url: "/images/favicon-dark/apple-touch-icon.png",
-            },
-            {
-                media: "(prefers-color-scheme: light)",
-                url: "/images/favicon-light/apple-touch-icon.png",
-            },
-        ],
-        icon: [
-            {
-                media: "(prefers-color-scheme: dark)",
-                url: "/images/favicon-dark/favicon-dark.svg",
-                type: "image/svg+xml",
-            },
-            {
-                media: "(prefers-color-scheme: light)",
-                url: "/images/favicon-light/favicon.svg",
-                type: "image/svg+xml",
-            },
-        ],
-    },
     other: {
         "msapplication-TileColor": "#fff",
     },
