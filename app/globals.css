@@ -9,3 +9,13 @@
 .has-tooltip:hover .tooltip {
     @apply visible z-50;
 }
+
+/* Overrides for MDX Editor classes*/
+._nestedEditor_uazmk_963 {
+    @apply dark:bg-gray-900;
+}
+
+/* Overrides for daisyUI classes */
+.btn-primary {
+    @apply dark:bg-dark-green-hsl dark:hover:bg-emerald-700 duration-300 dark:border-acid-green/20 dark:hover:border-acid-green/70;
+}

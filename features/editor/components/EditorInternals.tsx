@@ -121,7 +121,7 @@ export default function EditorInternals({ material, title }: EditorProps) {
                     className="border-2 border-gray-200 rounded-lg"
                     ref={editorRef}
                     markdown={material.mdx}
-                    contentEditableClassName="prose max-w-none"
+                    contentEditableClassName="prose dark:prose-invert max-w-none"
                     plugins={[
                         listsPlugin(),
                         quotePlugin(),

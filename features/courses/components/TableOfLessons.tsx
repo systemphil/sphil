@@ -47,6 +47,7 @@ function LessonsMap({ lessons, courseSlug }: CourseLessonContentsProps) {
                 return (
                     <li key={lesson.slug}>
                         <Link
+                            className="dark:hover:bg-dark-green-hsl transition-colors duration-300"
                             href={`${links.courses}/${courseSlug}/${lesson.slug}`}
                         >
                             <svg

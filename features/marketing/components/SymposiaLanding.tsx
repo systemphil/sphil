@@ -178,14 +178,14 @@ function VisitCourses() {
             <Heading as="h3" additionalClasses="max-w-xl mt-10 md:mt-32">
                 Look through the eyes of{" "}
                 <span className="dark:text-acid-green text-[#6b0072]">
-                    millenia
+                    millennia
                 </span>
             </Heading>
             <p className="text-lg text-slate-500 dark:text-slate-300 py-4">
                 Discover and partake in philosophical discourses that stretches
                 beyond empires, generations and time.
             </p>
-            <Link href="/courses">
+            <Link href="/symposia/courses">
                 <button className="btn btn-primary">See our courses</button>
             </Link>
         </>
