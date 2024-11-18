@@ -6,6 +6,7 @@
         "content/_app.mdx",
         "content/index.mdx",
         "content/terms.mdx",
+        "content/article/",
         "content/contributing/"
     ]
 }
