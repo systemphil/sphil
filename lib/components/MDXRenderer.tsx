@@ -38,7 +38,7 @@ export const MDXRenderer = ({ data }: { data: MDXCompilerReturnType }) => {
                 <article className="mdxeditor _editorRoot_uazmk_53 _editorWrapper_uazmk_154">
                     <div className="mdxeditor-rich-text-editor block">
                         <div className="_rootContentEditableWrapper_uazmk_1097 mdxeditor-root-contenteditable">
-                            <div className="_contentEditable_uazmk_379 prose max-w-none w-full">
+                            <div className="_contentEditable_uazmk_379 prose dark:prose-invert max-w-none w-full">
                                 <Content />
                             </div>
                         </div>
