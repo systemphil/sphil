@@ -1,16 +1,21 @@
 export default {
+    article: {
+        title: "Article",
+        type: "page",
+        display: "hidden",
+    },
     contributing: {
         title: "Contributing",
         display: "children",
         type: "page",
     },
-    kant: {
-        title: "Kant",
+    hegel: {
+        title: "Hegel",
         display: "children",
         type: "page",
     },
-    hegel: {
-        title: "Hegel",
+    kant: {
+        title: "Kant",
         display: "children",
         type: "page",
     },

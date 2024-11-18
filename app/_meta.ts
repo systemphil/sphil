@@ -1,9 +1,10 @@
 export default {
     articles: {
-        title: "Contributing", // For main navbar display, this route will go directly to contributing index
+        title: "‎", // Invisible character, this won't display on navbar
         type: "page",
         display: "children",
     },
+
     symposia: {
         title: "Symposia 🏺",
         type: "menu",
@@ -15,6 +16,11 @@ export default {
                 href: "/symposia/courses",
             },
         },
+    },
+    contributing: {
+        title: "Contributing",
+        type: "page",
+        href: "/articles/contributing",
     },
     billing: {
         display: "hidden",

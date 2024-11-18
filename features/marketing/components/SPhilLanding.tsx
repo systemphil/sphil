@@ -12,7 +12,7 @@ export function SPhilLanding() {
         <div>
             <section className="relative flex flex-col items-center justify-start w-full h-full overflow-hidden">
                 <HeroBackground />
-                <div className="relative flex flex-col items-center justify-center z-10 py-28">
+                <div className="relative flex flex-col items-center justify-center z-2 py-28">
                     <FadeIn>
                         <Heading>Open Source Philosophy</Heading>
                     </FadeIn>

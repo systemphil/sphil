@@ -11,7 +11,7 @@ export function Paragraph({
     style = "base",
     className,
 }: ParagraphProps) {
-    const baseClasses = `mx-6 z-10 text-[#666666] dark:text-[#888888]`;
+    const baseClasses = `mx-6 z-2 text-[#666666] dark:text-[#888888]`;
 
     switch (style) {
         case "grotesk":

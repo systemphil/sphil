@@ -20,4 +20,7 @@ export default {
     "mechanical-object": {
         title: "Mechanical Object",
     },
+    "mechanical-process": {
+        title: "Mechanical Process",
+    },
 };

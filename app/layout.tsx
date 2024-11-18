@@ -179,7 +179,7 @@ export default async function RootLayout({
                         pageMap={await getPageMap()}
                         docsRepositoryBase={DOCS_REPOSITORY_BASE}
                         editLink={EDIT_LINK_DESCRIPTION}
-                        sidebar={{ defaultMenuCollapseLevel: 1 }}
+                        sidebar={{ defaultMenuCollapseLevel: 2 }}
                         // banner={<Banner />}
                         navbar={
                             <NextraNavbar
