@@ -17,6 +17,9 @@ export default {
     becoming: {
         title: "Becoming",
     },
+    existence: {
+        title: "Existence",
+    },
     "mechanical-object": {
         title: "Mechanical Object",
     },
