@@ -75,7 +75,7 @@ jobs:
       TAG: latest
       DEPLOY_CONFIG: >-
         port:8080
-        execution-environment:gen2
+        execution-environment:gen1
         concurrency:80
         service-min-instances:default
         min-instances:default
