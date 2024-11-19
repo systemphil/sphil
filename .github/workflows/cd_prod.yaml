@@ -78,6 +78,7 @@ jobs:
         service-min-instances:default
         min-instances:default
         max-instances:1
+        memory:1024Mi
 
     steps:
     - name: Check if running in the parent repository
