@@ -16,7 +16,9 @@ export function CardShellMagic({ children }: { children?: ReactNode }) {
         <div
             className={cn(
                 styles["card-magic"],
-                "h-[35vh] aspect-[4/3] card-magic border hover:border-hidden dark:border-slate-900 bg-gradient-to-b from-gray-50/90 to-gray-100/90 dark:from-neutral-950/90 dark:to-neutral-800/90 rounded-md flex flex-col items-center justify-center"
+                "h-[35vh] aspect-[4/3] card-magic border hover:border-hidden rounded-md flex flex-col items-center justify-center",
+                "dark:border-slate-900 bg-gradient-to-b from-gray-50/90 to-gray-100/90 dark:from-neutral-950/90 dark:to-neutral-800/90",
+                "hover:from-gray-50 hover:to-gray-100 hover:dark:from-neutral-950  hover:dark:to-neutral-800"
             )}
         >
             {children}
