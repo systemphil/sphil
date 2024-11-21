@@ -26,4 +26,7 @@ export default {
     "mechanical-process": {
         title: "Mechanical Process",
     },
+    _annotations: {
+        title: "Annotations",
+    },
 };
