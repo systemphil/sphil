@@ -31,6 +31,11 @@ jobs:
       run: |
         PRETTIER_VERSION=$(grep -m 1 'prettier' package-lock.json | cut -d '"' -f 4 | cut -c 2-)
         echo $PRETTIER_VERSION
+    
+    - name: Debug Prettier configuration
+      run: |
+        npx prettier --version
+        cat .prettierrc
 
     - name: Check formatting
       run: |
