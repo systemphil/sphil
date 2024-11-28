@@ -1,6 +1,7 @@
 {
     "version": "0.2",
     "ignorePaths": [
+        "content/acknowledgements.mdx",
         "package.json",
         "package-lock.json",
         "node_modules",
