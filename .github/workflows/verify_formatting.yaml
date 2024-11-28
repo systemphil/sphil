@@ -23,6 +23,9 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 20
+
+    - name: Clear npm cache
+      run: npm cache clean --force
     
     - name: Get Prettier version from package-lock.json
       run: |
