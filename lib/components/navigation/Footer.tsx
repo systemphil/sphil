@@ -4,6 +4,7 @@ import Link from "next/link";
 import { LogoOwl } from "../LogoOwl";
 import { LogoAnimated } from "../LogoAnimated";
 import { SymposiaCard } from "../SymposiaCard";
+import { SocialIcons } from "../icons/SocialIcons";
 
 const footerLinkClasses =
     "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 hover:dark:text-gray-200 transition";
@@ -67,7 +68,7 @@ function FooterContent() {
             { name: "Reference", href: "/articles/kant/reference" },
         ],
         company: [
-            { name: "Team", href: "/articles/team" },
+            { name: "Team", href: "/team" },
             { name: "Contributing", href: "/articles/contributing" },
             { name: "Methodology", href: "/articles/contributing/methodology" },
             {
@@ -175,19 +176,11 @@ function FooterContent() {
                                 </ul>
                             </div>
                             <div className="mt-12 md:!mt-0">
-                                <FooterHeader>Support</FooterHeader>
-                                <ul
-                                    role="list"
-                                    className="mt-4 space-y-1.5 list-none ml-0"
-                                >
-                                    {navigation.support.map((item) => (
-                                        <li key={item.name}>
-                                            <FooterLink href={item.href}>
-                                                {item.name}
-                                            </FooterLink>
-                                        </li>
-                                    ))}
-                                </ul>
+                                <FooterHeader>Social</FooterHeader>
+                                <div className="flex gap-3 flex-wrap mt-4">
+                                    <SocialIcons.Bluesky href="https://bsky.app/profile/sphil.xyz" />
+                                    <SocialIcons.Facebook href="https://www.facebook.com/profile.php?id=61564840656103" />
+                                </div>
                             </div>
                         </div>
                     </div>
