@@ -4,7 +4,7 @@ import Link from "next/link";
 import { LogoOwl } from "../LogoOwl";
 import { LogoAnimated } from "../LogoAnimated";
 import { SymposiaCard } from "../SymposiaCard";
-import { SocialIcons } from "../icons/SocialIcons";
+import { SocialIcon } from "../icons/SocialIcon";
 
 const footerLinkClasses =
     "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 hover:dark:text-gray-200 transition";
@@ -178,8 +178,18 @@ function FooterContent() {
                             <div className="mt-12 md:!mt-0">
                                 <FooterHeader>Social</FooterHeader>
                                 <div className="flex gap-3 flex-wrap mt-4">
-                                    <SocialIcons.Bluesky href="https://bsky.app/profile/sphil.xyz" />
-                                    <SocialIcons.Facebook href="https://www.facebook.com/profile.php?id=61564840656103" />
+                                    <SocialIcon
+                                        icon="bluesky"
+                                        href="https://bsky.app/profile/sphil.xyz"
+                                    />
+                                    <SocialIcon
+                                        icon="facebook"
+                                        href="https://www.facebook.com/profile.php?id=61564840656103"
+                                    />
+                                    <SocialIcon
+                                        icon="youtube"
+                                        href="https://www.youtube.com/@sphildotxyz"
+                                    />
                                 </div>
                             </div>
                         </div>
