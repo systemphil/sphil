@@ -34,4 +34,7 @@ export default {
     admin: {
         display: "hidden",
     },
+    team: {
+        display: "hidden",
+    },
 };

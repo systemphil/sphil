@@ -48,13 +48,4 @@ export default {
             typesetting: "article",
         },
     },
-    team: {
-        title: "Team",
-        display: "hidden",
-        theme: {
-            layout: "default",
-            sidebar: false,
-            toc: true,
-        },
-    },
 };
