@@ -10,7 +10,7 @@ workings of the web application and help you set up your own local development.
 
 ## Overview
 
-_TODO_
+Wip
 
 ## 🧑‍💻 Local Development
 
