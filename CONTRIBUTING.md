@@ -10,7 +10,103 @@ workings of the web application and help you set up your own local development.
 
 ## Overview
 
-_TODO_
+sPhil is a monolithic web app that uses Nextra.js to build its MDX contents and
+Next.js to bundle and run the server. React.js is used both on the frontend and
+backend, with Next's server actions to primarily handle client-server
+communication.
+
+Besides these and many other libraries, the code is structured according to
+"feature based folder" paradigm to improve long-term maintainability and
+developer sanity. There are three main groups at play:
+
+-   `/app` folder that deals with routing (special Next.js folder)
+-   `/lib` folder that contains code to be freely shared across the codebase.
+-   `/features` folder that contains specific feature-based code.
+
+The idea is that `/app` can import from `/lib` and `/features`, but `/lib` does
+not import from either, and `/features` can _only_ import from `/lib`.
+
+```
+Example of feature based folder structure with import paths flow
+
+┌─────────────────────────┐           ┌──────────────────────────┐
+│                         │           │                          │
+│         /lib            │           │          /app            │
+│   ┌─────────────────┐   │           │  ┌────────────────────┐  │
+│   │   /components   │   ├──────────►│  │    /<routes>       │  │
+│   └─────────────────┘   │           │  └────────────────────┘  │
+│   ┌─────────────────┐   │           │                          │
+│   │   /auth         │   │           │                          │
+│   └─────────────────┘   │           └──────────────────────────┘
+│   ┌─────────────────┐   │                        ▲
+│   │   /server       │   │                        │
+│   └─────────────────┘   │                        │
+│   ┌─────────────────┐   │           ┌────────────┴─────────────┐
+│   │   /hooks        │   │           │                          │
+│   └─────────────────┘   │           │         /features        │
+│   ┌─────────────────┐   │           │  ┌───────────────────┐   │
+│   │   /utils        │   ├──────────►│  │     /courses      │   │
+│   └─────────────────┘   │           │  └───────────────────┘   │
+│   ┌─────────────────┐   │           │  ┌───────────────────┐   │
+│   │   /database     │   │           │  │     /billing      │   │
+│   └─────────────────┘   │           │  └───────────────────┘   │
+│                         │           │                          │
+└─────────────────────────┘           └──────────────────────────┘
+```
+
+Individual feature folders mimic the folder structure found in `/lib`, but
+sometimes may have different requirements.
+
+```
+Example of a single feature folder (marketing) with its sub-folders
+
+┌────────────────────────────┐
+│         /marketing         │
+│ ┌────────────────────────┐ │
+│ │    /components         │ │
+│ └────────────────────────┘ │
+│ ┌────────────────────────┐ │
+│ │    /data               │ │
+│ └────────────────────────┘ │
+│ ┌────────────────────────┐ │
+│ │    /server             │ │
+│ └────────────────────────┘ │
+│ ┌────────────────────────┐ │
+│ │    /utils              │ │
+│ └────────────────────────┘ │
+│                            │
+└────────────────────────────┘
+```
+
+The idea is that at any given time, when a developer is working on a feature,
+she should _only_ have to deal with the logic internal to that feature and
+whatever needed from the lib folder. When the feature is ready to be implemented
+into the app, it should be a matter of relatively few imports into the app
+folder.
+
+Sharing code between features is **disallowed**! If it is discovered that a
+piece of code from a feature should be shared with another, then it needs to be
+elevated to the lib folder and imported back into the feature (e.g. as a
+callback). Features should ever only concern themselves with their own internals
+and what they need from the shared lib.
+
+## Further Organizational Guidelines
+
+-   Server components, server cache and server actions are to be preferred over
+    traditional client component and query hooks. Not only is this a faster way
+    to implement code, but it comes with end-to-end type safety and is more
+    performant. Where high interactivity is required, we will consider the
+    traditional approach.
+-   Nextra.js is used to generate HTML out of the MDX files from the `/content`
+    folder as well as handle routing and a majority of the styling.
+    Additionally, we use DaisyUI, TailwindCSS and MUI but try to keep it in
+    style with Nextra's. Ideally, we'd want less dependencies in the UI
+    department, but we're open to new ideas.
+-   Prisma is used to interface with the database and to provide up-to-date type
+    safety across the app. The major downside with Prisma is that it is
+    query-heavy and not very performant. Currently, the DX is worth it but we
+    may look into replacing it in the future with a more direct hands-on
+    interface with the database.
 
 ## 🧑‍💻 Local Development
 
@@ -146,3 +242,10 @@ test these locally, you must have the
 [Stripe CLI](https://docs.stripe.com/stripe-cli) running simultaneously with
 your app. Once you have the Stripe CLI installed and authenticated, we have a
 shortcut you can use from the project: `npm run stripe:listen`.
+
+#### 📧 Resend
+
+-   ⚠️ The information in this section is sparse.
+
+We use Resend to handle emails. You will need to set up an account there and
+generate API keys. Possibly you may need a domain as well.
