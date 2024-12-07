@@ -30,7 +30,7 @@ jobs:
 
     - name: Check formatting
       run: |
-        npx --yes prettier@$PRETTIER_VERSION . --check --config .prettierrc --list-different
+        npx --yes prettier@$PRETTIER_VERSION . --config .prettierrc --list-different
 
     - name: Fail if formatting check failed
       if: failure()
