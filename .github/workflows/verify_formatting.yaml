@@ -21,10 +21,16 @@ jobs:
       with:
         node-version: 20
     
+    # - name: Get Prettier version from package-lock.json
+    #   run: |
+    #     PRETTIER_VERSION=$(grep -m 1 'prettier' package-lock.json | cut -d '"' -f 4 | cut -c 2-)
+    #     echo $PRETTIER_VERSION
+
     - name: Get Prettier version from package-lock.json
       run: |
-        PRETTIER_VERSION=$(grep -m 1 'prettier' package-lock.json | cut -d '"' -f 4 | cut -c 2-)
-        echo $PRETTIER_VERSION
+        PRETTIER_VERSION=$(npm list prettier --json | jq -r '.dependencies.prettier.version')
+        echo "Detected Prettier version: $PRETTIER_VERSION"
+        echo "PRETTIER_VERSION=$PRETTIER_VERSION" >> $GITHUB_ENV
 
     - name: Check formatting
       run: |
