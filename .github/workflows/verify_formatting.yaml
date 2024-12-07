@@ -26,8 +26,8 @@ jobs:
     #     PRETTIER_VERSION=$(grep -m 1 'prettier' package-lock.json | cut -d '"' -f 4 | cut -c 2-)
     #     echo $PRETTIER_VERSION
 
-    - name: Install Prettier
-      run: npm install prettier
+    # - name: Install Prettier
+    #   run: npm install prettier
 
     # - name: Get Prettier version from package-lock.json
     #   run: |
@@ -35,9 +35,15 @@ jobs:
     #     echo "Detected Prettier version: $PRETTIER_VERSION"
     #     echo "PRETTIER_VERSION=$PRETTIER_VERSION" >> $GITHUB_ENV
 
-    - name: Check formatting
-      run: |
-        npx prettier --check --config .prettierrc .
+    # - name: Check formatting
+    #   run: |
+    #     npx prettier --check --config .prettierrc .
+
+    - name: Prettify code
+      uses: creyD/prettier_action@v4.3
+      with:
+        dry: True
+        prettier_options: --check --config .prettierrc .
 
     - name: Fail if formatting check failed
       if: failure()
