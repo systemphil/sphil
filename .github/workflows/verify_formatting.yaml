@@ -21,14 +21,21 @@ jobs:
       with:
         node-version: 22
     
-    - name: Get Prettier version from package-lock.json
-      run: |
-        PRETTIER_VERSION=$(grep -m 1 'prettier' package-lock.json | cut -d '"' -f 4 | cut -c 2-)
-        echo $PRETTIER_VERSION
+    - name: Install dependencies
+      run: npm install
 
     - name: Check formatting
       run: |
-        npx --yes prettier@$PRETTIER_VERSION . --check --config ./.prettierrc
+        npm run prettier:check
+
+    # - name: Get Prettier version from package-lock.json
+    #   run: |
+    #     PRETTIER_VERSION=$(grep -m 1 'prettier' package-lock.json | cut -d '"' -f 4 | cut -c 2-)
+    #     echo $PRETTIER_VERSION
+
+    # - name: Check formatting
+    #   run: |
+    #     npx --yes prettier@$PRETTIER_VERSION . --check --config ./.prettierrc
 
     - name: Fail if formatting check failed
       if: failure()
