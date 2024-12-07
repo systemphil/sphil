@@ -28,7 +28,7 @@ jobs:
 
     - name: Check formatting
       run: |
-        npx --yes prettier@$PRETTIER_VERSION . --check
+        npx --yes prettier@$PRETTIER_VERSION . --check --config ./.prettierrc
 
     - name: Fail if formatting check failed
       if: failure()
