@@ -7,12 +7,20 @@ _Than unswept stone besmeared with sluttish time._
 
 &mdash;Shakespeare
 
-## 🚧 This is a work in progress
+## Welcome! 🌞
 
-If you'd like to be part of the development of sPhil, kindly follow the
-[contributions guide](https://github.com/systemphil/sphil/blob/main/CONTRIBUTING.md).
-If you have any further questions or would like to get involved,
-[get in touch with Filip (Firgrep) here](mailto:service@systemphil.com).
+Thank you for visiting the sPhil repository. We hope you'll find something of
+interest here, whether it's philosophy or programming, or both! If you're
+looking to get involved with literature and philosophy, check our out
+[contributions guide](https://sphil.xyz/articles/contributing) or join our
+[discussions board](https://github.com/systemphil/sphil/discussions).
+
+For more coding related stuff, have a look at our
+[contributing document](https://github.com/systemphil/sphil/blob/main/CONTRIBUTING.md).
+
+If you have any further questions, get in touch with Firgrep on
+[our discord](https://discord.gg/2T4mPCCYhu) or
+[by email](mailto:service@systemphil.com).
 
 ## License
 
