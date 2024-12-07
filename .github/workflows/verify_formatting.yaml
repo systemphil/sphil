@@ -21,14 +21,14 @@ jobs:
       with:
         node-version: 20
     
-    - name: Get Prettier version from package-lock.json
-      run: |
-        PRETTIER_VERSION=$(grep -m 1 'prettier' package-lock.json | cut -d '"' -f 4 | cut -c 2-)
-        echo $PRETTIER_VERSION
+    # This installs all dependencies, but if we use "npm install -g prettier", 
+    # then prettier won't pick up the project's .prettierrc file.
+    - name: Install dependencies
+      run: npm ci
 
     - name: Check formatting
       run: |
-        npx --yes prettier@$PRETTIER_VERSION --check --config .prettierrc .
+        npm run prettier:check
 
     - name: Fail if formatting check failed
       if: failure()
