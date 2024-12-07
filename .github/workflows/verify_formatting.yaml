@@ -26,14 +26,9 @@ jobs:
         PRETTIER_VERSION=$(grep -m 1 'prettier' package-lock.json | cut -d '"' -f 4 | cut -c 2-)
         echo $PRETTIER_VERSION
 
-    - name: Format and Commit
-      run: |
-        npx prettier --write --config .prettierrc .
-        git diff
-
     - name: Check formatting
       run: |
-        npx --yes prettier@$PRETTIER_VERSION . --config .prettierrc --list-different
+        npx --yes prettier@$PRETTIER_VERSION . --check
 
     - name: Fail if formatting check failed
       if: failure()
