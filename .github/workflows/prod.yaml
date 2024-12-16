@@ -78,10 +78,13 @@ jobs:
     - name: Run prepyrus in PROCESS mode
       run: target/release/prepyrus_runner/prepyrus_runner absolute_bibliography.bib src/pages process
 
-    - name: Auth
+    - name: GCP Auth
       uses: "google-github-actions/auth@v2"
       with:
         credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
+
+    - name: Set up Cloud SDK
+      uses: "google-github-actions/setup-gcloud@v2"
 
     - name: Docker Auth
       id: docker-auth

@@ -1,0 +1,75 @@
+name: PR Labeler
+on: [pull_request]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+
+          function getFileExtensions(files) {
+            return files.map(file => path.extname(file).toLowerCase()).filter(ext => ext !== '');
+          }
+
+          async function addLabels(extensions) {
+            let labels = [];
+            let hasContentChanges = false;
+            let hasCodeChanges = false;
+
+            extensions.forEach(ext => {
+              if (ext === '.mdx') {
+                hasContentChanges = true;
+              } else {
+                hasCodeChanges = true;
+              }
+            })
+
+            if (hasContentChanges) {
+              labels.push('CONTENT');
+            }
+
+            if (hasCodeChanges) {
+              labels.push('CODE');
+            }
+
+            // Get current labels
+            const { data: currentLabels } = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            });
+            
+            const currentLabelNames = currentLabels.map(label => label.name);
+            
+            // cross-reference current PR labels with the up-to-date label list
+            if (labels.length > 0 && labels.some(label => !currentLabelNames.includes(label))) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: labels
+              });
+            }
+      
+          }
+
+          const { data: files } = await github.rest.pulls.listFiles({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number
+          });
+
+          const changedFiles = files.map(f => f.filename);
+          const extensions = getFileExtensions(changedFiles);
+          await addLabels(extensions);
