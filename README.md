@@ -1,60 +1,32 @@
-# 🚧 This is a work in progress
+# sPhil
 
-If you'd like to be part of the development of sPhil, kindly follow the
-instructions below. If you have any further questions or would like to get
-involved,
-[get in touch with Filip (Firgrep) here](mailto:service@systemphil.com).
+_Not marble nor the gilded monuments_  
+_Of princes shall outlive this powerful rhyme,_  
+_But you shall shine more bright in these contents_  
+_Than unswept stone besmeared with sluttish time._
 
-## Setting up your local environment and branch
+&mdash;Shakespeare
 
-0.0. Once you have access to the repo on github, fork and/or clone it into a
-folder where you keep your projects.
+## Welcome! 🌞
 
-0.1. Then `cd sphil` to get into the project directory.
+Thank you for visiting the sPhil repository. We hope you'll find something of
+interest here, whether it's philosophy or programming, or both! If you're
+looking to get involved with literature and philosophy, check our out
+[contributions guide](https://sphil.xyz/articles/contributing) or join our
+[discussions board](https://github.com/systemphil/sphil/discussions).
 
-0.2. Make your own development branch `git branch dev-<your-name>` (example:
-`git branch dev-tim`).
+For more coding related stuff, have a look at our
+[contributing document](https://github.com/systemphil/sphil/blob/main/CONTRIBUTING.md).
 
-0.3. Set the newly made development branch as the current active branch, run
-`git checkout <your-branch-name>`.
-
-0.4. In future, when getting the latest changes from the main development
-branch, run `git merge dev` whilst on your development branch to incorporate the
-changes into your branch.
-
-### Packages Installation
-
-1.0. Once inside, run `npm i` (alias `npm install`) to install all the packages.
-This will create the `/node_modules` folder.
-
-### Environmental Variables
-
-2.0. There are no environmental variables! This is a static website. (Caveat: we
-defined some public variables depending on where the site is hosted.)
-
-### Running the Server
-
-9.9. Finally, to start a local development server, run `npm run dev` and open up
-`http://localhost:3000` on your favorite browser.
-
--   Whenever you make any edits to the source files while the server is running,
-    the server will pick up those changes and output them immediately. This is
-    extremely handy during development, as you can input code and hit `ctrl` +
-    `k` then `s` (save-all) and view directly your latest changes.
--   To terminate the server, hit `ctrl` + `c` on your keyboard whilst in the
-    terminal where the server runs, input `y` when prompted to terminate batch
-    job.
-
-> ❗ You may get an error (e.g. `useRef` is `null`) as your development server
-> refreshes. This is likely due to how `nextra` processes the `mdx` files.
-> Perform a hard refresh (hit `F5`) to resolve this.
+If you have any further questions, get in touch with Firgrep on
+[our discord](https://discord.gg/2T4mPCCYhu) or
+[by email](mailto:service@systemphil.com).
 
 ## License
 
-All files and content under `/src/pages`, with the exception of
-`/src/pages/_app.mdx`, `/src/pages/_document.tsx`,
-`/src/pages/acknowledgements.tsx`, `/src/pages/index.mdx`,
-`/src/pages/privacy.tsx`, `/src/pages/team.mdx`, `/src/pages/terms.mdx`, any
-files within `src/pages/contributing` folder and any `_meta.json` files, are
-subject to Attribution-NonCommercial-ShareAlike 4.0 International License. The
-rest follows Apache License Version 2.0, January 2004.
+All files and content under `content` folder, with the exception of
+`/content/acknowledgements.tsx`, `/content/privacy.tsx`, `/content/team.mdx`,
+`/content/terms.mdx`, any files within `content/contributing/**` folder and any
+`_meta.ts` files, are subject to Attribution-NonCommercial-ShareAlike 4.0
+International License. All other files in the codebase follows Apache License
+Version 2.0, January 2004.

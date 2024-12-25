@@ -1,0 +1,45 @@
+canvas {
+    height: 75vh;
+    width: 75vw;
+    position: relative;
+    z-index: 9;
+}
+
+#logo {
+    display: flex;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    opacity: 0.08;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+#logo > img {
+    height: 3.2vmin;
+}
+
+#background-image,
+#background-filter {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+}
+
+#background-image {
+    z-index: 1;
+    background-image: url("https://assets.codepen.io/1468070/Lofi+Rainy+Loft+Interior.jpg?format=webp&quality=90");
+    background-size: cover;
+    background-position: center;
+    opacity: 0.6;
+    filter: blur(4px) grayscale(30%);
+}
+
+#background-filter {
+    z-index: 2;
+    background: radial-gradient(rgb(0 0 0 / 60%) 50%, transparent);
+}

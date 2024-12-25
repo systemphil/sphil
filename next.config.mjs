@@ -1,23 +1,63 @@
-/** @type {import('next').NextConfig} */
-
 import nextra from "nextra";
 
-const nextConfig = {
-    output: "export",
-    reactStrictMode: true,
-    images: {
-        unoptimized: true,
-    },
-    distDir: "build",
-};
-
 const withNextra = nextra({
-    theme: "nextra-theme-docs",
-    themeConfig: "./theme.config.tsx",
-    // options
-    // flexsearch: true,
-    // staticImage: true,
-    // defaultShowCopyCode: true,
+    latex: true,
+    defaultShowCopyCode: true,
+    contentDirBasePath: "/articles",
 });
 
-export default withNextra(nextConfig);
+const nextConfig = withNextra({
+    output: "standalone",
+    reactStrictMode: true,
+    // webpack(config) {
+    //     // rule.exclude doesn't work starting from Next.js 15
+    //     const { test: _test, ...imageLoaderOptions } = config.module.rules.find(
+    //         (rule) => rule.test?.test?.(".svg")
+    //     );
+    //     config.module.rules.push({
+    //         test: /\.svg$/,
+    //         oneOf: [
+    //             {
+    //                 resourceQuery: /svgr/,
+    //                 use: ["@svgr/webpack"],
+    //             },
+    //             imageLoaderOptions,
+    //         ],
+    //     });
+    //     return config;
+    // },
+    images: {
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "storage.googleapis.com",
+                port: "",
+                pathname: `/sphil-dev-images/**`,
+            },
+            {
+                protocol: "https",
+                hostname: "storage.googleapis.com",
+                port: "",
+                pathname: `/sphil-prod-images/**`,
+            },
+        ],
+    },
+    // experimental: {
+    //     turbo: {
+    //         rules: {
+    //             "./app/_icons/*.svg": {
+    //                 loaders: ["@svgr/webpack"],
+    //                 as: "*.js",
+    //             },
+    //         },
+    //     },
+    //     optimizePackageImports: [
+    //         // '@app/_icons'
+    //         // Provoke error
+    //         // Could not find the module in the React Client Manifest. This is probably a bug in the React Server Components bundler
+    //         // 'nextra/components'
+    //     ],
+    // },
+});
+
+export default nextConfig;

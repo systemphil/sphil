@@ -1,0 +1,337 @@
+---
+overridingTitle: "Contributing"
+description: "Learn about how to contribute to the sPhil philosophy platform"
+searchable: false
+---
+
+import { FileTree } from "nextra/components";
+import { Callout } from "nextra/components";
+
+# Contributing to sPhil
+
+## Welcome
+
+Welcome! Thank you for considering contributing to sPhil. We're grateful for all
+contributions, whether it's helping us with typos, issues with our articles,
+issues with our code, suggesting new ideas and features, contributing content or
+just joining the discussion. As you have landed on this page, you'll soon be
+ready to join in the fun of building the future of philosophy with us - and
+we're excited to have you with us on this journey!
+
+Whether or not you have prior experience with philosophy or with coding, we've
+created an easy overview of the essential things you need in order to get
+started contributing ideas or code to sPhil as well as a
+[Code of Conduct](/contributing/code-of-conduct) for contributing to the
+development of sPhil.
+
+We warmly encourage you to join our community on the
+[discussion boards](https://github.com/systemphil/sphil/discussions).
+
+<br/ >
+
+import { EmbedYT } from "lib/components/ui/EmbedYT";
+
+<EmbedYT src="https://www.youtube.com/embed/hZVStcn2750?si=P1K7e2btT9Cwe5xO">
+    How to contribute to sPhil on GitHub
+</EmbedYT>
+
+### General Division of the Encyclopaedia
+
+In designing our encyclopedia, we first separate each system of philosophy (or
+the philosophy of a particular philosopher) into its own subdirectory. Then,
+within each philosophical system, we have adopted a further division into
+'Guides' and 'Reference' inspired by industry practices in software
+documentation. We believe this division will enhance the accessibility and
+comprehensiveness of our content.
+
+-   **Guides**: These are designed to facilitate easy onboarding and provide a
+    user-friendly introduction to complex topics. They aim to offer a clear and
+    pedagogical approach for users who are new to the subject.
+-   **Reference**: In this section, we delve deep into specific concepts,
+    providing exhaustive details and comprehensive explanations. It serves as a
+    resource for those seeking in-depth knowledge and understanding.
+
+In the Guides section to Hegel, for example, you'll find introductory articles
+such as 'Presuppositionless Thinking' and 'Beginning Philosophy'. These articles
+are designed to help beginners grasp the fundamental concepts quickly. In the
+Reference section, by contrast, you can explore detailed articles on logical
+categories like _being_, _nothing_, _becoming_, _existence_, _finitude_,
+_infinity_ and many others. These articles provide extensive insights into
+specific philosophical concepts.
+
+Whether you're a newcomer to philosophy or an experienced philosopher, our
+encyclopedia aims to provide valuable insights. We invite you to explore both
+the Guides and Reference sections to tailor your learning experience to your
+needs. Together, they offer a comprehensive resource for anyone interested in
+the world of philosophy.
+
+## Contributing Philosophy (Quick start)
+
+We use [GitHub](https://github.com/) to coordinate and edit both the philosophy
+and the code on sPhil. In fact, the contents of philosophy are directly written
+into the source code! To get started, you need a GitHub account. You can sign up
+[here](https://github.com/signup).
+
+Next you'll need to make your way to the
+[sPhil code repository](https://github.com/systemphil/sphil).
+
+<Callout type="info">
+    The contents of this particular guide is intended to get you ready to
+    contribute as quickly as possible to the codebase on GitHub and will
+    therefore have omitted explaining many concepts about that platform. If you
+    feel like you need an overview of just what GitHub is and how it works, see
+    our [conceptual overview]().
+</Callout>
+
+### Understanding the Relevant File Structure
+
+In the repository, you should see a several directories (folders) and a dozen
+files. The file structure is important not only in organizing the contents
+conceptually, but _also in determining the routing behavior_ of the website.
+Essentially, the HTTP address of an article will mirror the location of a file
+under certain directories. For example, the location an article
+`/content/hegel/reference/being.mdx` will translate to
+`https://systemphil.com/articles/hegel/reference/being`. Below is a quick
+rundown of the relevant file structure for philosophical contributions (the
+actual pages and articles may be subject to change).
+
+<Callout emoji="🕹️">
+    You can close and open the directories in the panel below
+</Callout>
+
+<FileTree>
+        <FileTree.Folder name="content" defaultOpen>
+
+            <FileTree.Folder name="hegel" defaultOpen>
+                <FileTree.Folder name="guides" defaultOpen>
+                    <FileTree.File name="_meta.json" />
+                    <FileTree.File name="index.mdx" />
+                    <FileTree.File name="presuppositionless-thinking.mdx" />
+                    <FileTree.File name="beginning-philosophy.mdx" />
+                </FileTree.Folder>
+                <FileTree.Folder name="reference" defaultOpen>
+                    <FileTree.File name="_meta.json" />
+                    <FileTree.File name="index.mdx" />
+                    <FileTree.File name="being.mdx" />
+                    <FileTree.File name="nothing.mdx" />
+                </FileTree.Folder>
+                <FileTree.File name="_meta.json" />
+                <FileTree.File name="index.mdx" />
+            </FileTree.Folder>
+
+            <FileTree.Folder name="kant" defaultOpen>
+                <FileTree.Folder name="guides" defaultOpen>
+                    <FileTree.File name="_meta.json" />
+                    <FileTree.File name="index.mdx" />
+                    <FileTree.File name="root-of-knowledge.mdx" />
+                    <FileTree.File name="copernican-turn.mdx" />
+                </FileTree.Folder>
+                <FileTree.Folder name="reference" defaultOpen>
+                    <FileTree.File name="_meta.json" />
+                    <FileTree.File name="index.mdx" />
+                    <FileTree.File name="intuitions.mdx" />
+                    <FileTree.File name="categories-of-the-understanding.mdx" />
+                </FileTree.Folder>
+                <FileTree.File name="_meta.json" />
+                <FileTree.File name="index.mdx" />
+            </FileTree.Folder>
+
+        </FileTree.Folder>
+
+</FileTree>
+
+All the actual contents of the encyclopaedia are in `.mdx` files-including what
+you are reading right now. These `.mdx` are like regular Markdown (`.md`) files
+but enhanced with JSX (which means it basically allows us to inject and run
+programmatic code within these files, in contrast to regular markdown which are
+simple read-only text files). If you're not familiar with Markdown, here is a
+[guide](https://www.markdownguide.org/getting-started/) and a
+[cheat sheet](https://www.markdownguide.org/cheat-sheet/). Markdown is great
+because of its easy and simplicity, yet it can be extended with powerful
+functionality and elaborate syntax when needed. The core idea with Markdown is
+that we concern ourselves with the contents of the text, while the outwards form
+(font, style, etc.) is handled by other parts of the site.
+
+<Callout type="info" emoji="🗃️">
+    The website router uses a file-based system to create routes, this means
+    that the location of files under `/content` will determine the address after
+    the domain (after the `.com/articles/`).
+</Callout>
+
+In our file structure, alongside the `.mdx` files, you'll also notice the
+presence of special `_meta.ts` files. These files play a crucial role in
+customizing the appearance and behavior of pages. Normally, if you mainly work
+on existing articles, you should not need to attend to these `_meta.ts` files.
+However, more information about them can be found
+[here](https://nextra.site/articles/guide/organize-files).
+
+<Callout emoji="⚙️">
+    All `.mdx` filenames should be lower-case and where there are multiple
+    words, these should be separated by a hyphen "-". *Unless further
+    specified*, the website builder will automatically capitalize each
+    individual word and replace the hyphen with a space in the actual output.
+    For example, a file named `beginning-philosophy.mdx` will appear as
+    `Beginning Philosophy` in the navigation menu. Note, however, that the HTTP
+    address will still be `/beginning-philosophy`.
+</Callout>
+
+Further and more detailed information and the file structure and files will be
+provided elsewhere.
+
+### Viewing Articles (Source Code)
+
+To view the source code of articles on GitHub is a straightforward process and
+doesn't actually require a GitHub account! Below we've outlined how you might
+navigate to view the source code of a particular article.
+
+1. Assuming you are in the
+   [sPhil repository](https://github.com/systemphil/sphil) landing page, click
+   on the `content` directory. (When you click on a directory from the initial
+   repository landing page, you will be taken to a different interface that
+   allows you to view individual files as well as a map of the directories and
+   files on your left).
+1. You are now in the file structure outlined above. Everything in `/content`
+   directory concerns routing and content concerning our articles. From here,
+   you would to navigate to the philosophical system (or philosopher) of
+   interest. Let's go to `hegel`.
+1. You are now in the directory for a specific philosophical system (or
+   philosopher) and will usually find the two `/guides` and `/reference`
+   directories as well as a `_meta.ts` and an `index.mdx` file that acts as a
+   particular landing page. Let's continue to `reference`.
+1. You should now be in the Reference directory of Hegel's philosophical system.
+   From here you can view any existing file. Click on `being.mdx`.
+1. The web editor on GitHub should now open the file
+   `sphil/content/hegel/reference/being.mdx` and you should be able to view the
+   file's contents.
+
+### Editing Articles
+
+Editing files on GitHub is a relatively easy procedure, but there are a few
+steps required before you can make changes to any file. See the section above
+for navigating through the file structure. Assuming you have found an article
+you would want to edit, continue with the steps below.
+
+1. Provided you are viewing an article and you are logged in to GitHub, you can
+   click the pencil icon to the right in the navigation bar just above the code
+   display. Alternatively, hit `e` on your keyboard. Or, hit `.` to open the web
+   code editor.
+1. If this is the first time committing changes to this repository, you will be
+   asked to _fork it_. Forking a repository means that you make a copy of
+   someone else's repository (a project's codebase) into your own GitHub
+   account. In order to contribute to another repository, you must first fork
+   it. The default branch should be selected, but it not, please select it and
+   `Create fork`.
+
+<Callout emoji="🔱">
+    When you fork a repository, you create a separate and independent copy of
+    the original repository. This copy is stored in your GitHub account and is
+    under your control. Forking is commonly used for collaborative and
+    open-source development. It allows you to contribute to someone else's
+    project without having write access to their original repository. See
+    [forking
+    repositories](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
+</Callout>
+
+3. After the fork has been created, a `branch` should automatically be made for
+   you. A `branch` is like a separate path on a project's journey - and in your
+   case the project is on a journey with you! If you need to make a new
+   `branch`, you can click on the `main ▼` branch button and type into the input
+   box the name of the new branch you will create. If you type in a branch name
+   that does not yet exist, you should have an option
+   `Create new branch: <your-new-branch-name>`.
+4. Once the branch is set, you should be in live editing mode where you can
+   freely write and make changes.
+5. When you are satisfied with the changes you have made to the file, hit the
+   green `Commit changes...` button towards the top right.
+6. You should now be at the `pull request` interface where you have the
+   opportunity to give a description to the changes you propose in a comment box
+   (it is encouraged to make use of it for lengthy or complex commits). This is
+   your chance to speak with other collaborators to let you know of your thought
+   process.
+
+<Callout emoji="✅" type="info">
+    We include a checklist of the most up-to-date information and requirements
+    on every pull request that is opened on our repository.
+</Callout>
+
+7. Finally, initiate the `pull request` to the main codebase with your changes.
+   This is a formal request whereby you ask the owners and collaborators in
+   charge of a codebase to review and accept your changes. If accepted, your
+   changes are integrated to the main codebase and should appear on the next
+   deployment of the website. However, it is not uncommon for there to be
+   additional comments and feedback during a pull request, whereby further
+   details or changes may be required before the pull request is accepted - but
+   this is all part of the collaborative process!
+
+A few other things to notice. When you are editing a file, you can click the
+`Preview` button towards to the top left of the navigation bar just above the
+code to view a comparison of the changes you are making to the file. During a
+`pull request` it is common to receive feedback from collaborators and this may
+include requests to further develop your changes, such that you may need to edit
+your own changes before they are accepted. Here you do not need to make a new
+`pull request` but simply return to the file you have been editing (from the
+`pull request` menu) and make the necessary changes. Once you
+`Commit changes...` again, these will update your `pull request` and the
+collaborators will be notified. If the latest changes are accepted, the
+`pull request` becomes `merged` and you will be given the option to
+`delete your branch`. This is recommended as this particular "path" of the
+project's journey has effectively ended and when you want to make further
+contributions you would make a new `branch`.
+
+### Creating New Articles
+
+Creating a new file in a repository on GitHub is nearly identical to the the
+editing procedure above, except that instead of working from an existing file,
+you navigate to a specific folder and from there create a new file.
+
+1. Assuming you are in the directory where you want to create a new article, say
+   `/content/hegel/reference` (see steps in Viewing Articles), click the
+   `Add file` button to the top right. This will open a menu. Select
+   `Create a new file`.
+1. The interface for creating a new file is nearly identical to that of editing
+   one, except you also specify the filename. You should see above the top of
+   the main editing body that there is a small input field where you can type in
+   the filename. Make sure to add the correct extensions, namely, `.mdx`. Let's
+   say you're creating a new article concerning the category `ground` (assuming
+   it doesn't already exist), the new name for this file should be `ground.mdx`.
+1. In the main editing body, you can use the standard Markdown formatting as
+   well as some additional extensions provided by the website.
+1. Once you are satisfied with your contribution, hit the `Commit changes...`
+   button (and from here follow steps 4-7 from the Editing Articles section
+   above).
+
+### Previewing Markdown
+
+Unless you are working with a code editor on local development, you may want to
+check how your markdown code looks like when it has been parsed before
+committing your changes. There are several online editors available. For
+example: [markdown-it demo](https://markdown-it.github.io/),
+[Markdown Live Preview](https://markdownlivepreview.com/), or
+[Dillinger Markdown Editor](https://dillinger.io/). Choose one and copy-paste
+your contents to preview the result to see if it appears as expected. Note that
+not all functionality may overlap between these online editors and this website,
+but the basic markdown formatting should.
+
+### Summary of Article Handling
+
+In this section we have briefly touched on the basics of using GitHub to create
+and edit files on a codebase. There are many more advanced features to uncover,
+but these operations should get you going for the majority of tasks. You may
+next want to consider looking more in-depth at
+[formatting](/articles/contributing/formatting) or, if you plan on collaborating
+extensively with sPhil, consider setting up your
+[local development](/articles/contributing/local-development).
+
+## Other Details
+
+There are many more things to consider when writing quality articles, such as
+citation style, bibliographical properties, contribution information, and much
+else. For a more up-to-date list of these things, review our
+[pull request checklist](https://github.com/systemphil/sphil/blob/main/.github/PULL_REQUEST_TEMPLATE.md).
+
+## Contributing Code
+
+If you're looking to get involved on the technical side of things, such as the
+functionality of the website or CI/CD pipelines, the best approach is to head
+straight to the [sPhil repository](https://github.com/systemphil/sphil) and
+start from the readme.
