@@ -2,6 +2,10 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
     content: [
+        "./features/**/*.{js,ts,jsx,tsx,md,mdx}",
+        "./app/**/*.{js,ts,jsx,tsx,md,mdx}",
+        "./lib/components/**/*.{js,ts,jsx,tsx,md,mdx}",
+        "./components/**/*.{js,ts,jsx,tsx,md,mdx}",
         "./src/pages/**/*.{js,ts,jsx,tsx,md,mdx}",
         "./src/components/**/*.{js,ts,jsx,tsx,md,mdx}",
         "./src/app/**/*.{js,ts,jsx,tsx,md,mdx}",
@@ -32,10 +36,17 @@ const config: Config = {
             },
             colors: {
                 "dark-green-hsl": "hsl(155, 100%, 66%, 0.17)",
+                "acid-green": "#0bda84",
             },
         },
     },
     darkMode: "class",
-    plugins: [],
+    plugins: [require("daisyui"), require("@tailwindcss/typography")],
+    daisyui: {
+        darkTheme: "dark",
+        base: false, // necessary to not conflict with Nextra styles
+        logs: false,
+        themes: ["light", "emerald", "pastel", "fantasy"], // the curret theme is set in the top-level html element
+    },
 };
 export default config;

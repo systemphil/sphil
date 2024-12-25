@@ -1,0 +1,235 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "cockroachdb"
+    url      = env("DATABASE_URL")
+}
+
+// === SECTION 1 ==============================================
+// * User Access and Permissions (necessary for NextAuth)
+// ============================================================
+model Account {
+    id                       String  @id @default(cuid())
+    userId                   String
+    type                     String
+    provider                 String
+    providerAccountId        String
+    refresh_token            String?
+    access_token             String?
+    expires_at               Int?
+    token_type               String?
+    scope                    String?
+    id_token                 String?
+    session_state            String?
+    refresh_token_expires_in Int?
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+    id                String               @id @default(cuid())
+    name              String?
+    email             String?              @unique
+    emailVerified     DateTime?
+    image             String?
+    role              Role                 @default(BASIC)
+    accounts          Account[]
+    sessions          Session[]
+    stripeCustomerId  String?              @unique
+    coursesPurchased  Course[]
+    productsPurchased String[]
+    lessonsCompleted  UserLessonProgress[]
+}
+
+enum Role {
+    BASIC
+    ADMIN
+    SUPERADMIN
+}
+
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+}
+
+// === SECTION 2 ==============================================
+// * Course, Lessons and Content related data
+// ============================================================
+model Course {
+    id                    String         @id @default(cuid())
+    name                  String
+    description           String
+    slug                  String         @unique
+    stripeProductId       String?
+    basePrice             Float
+    stripeBasePriceId     String?
+    seminarPrice          Float
+    stripeSeminarPriceId  String?
+    dialoguePrice         Float
+    stripeDialoguePriceId String?
+    owners                User[]
+    imageUrl              String?
+    parts                 Part[]
+    lessons               Lesson[]
+    details               CourseDetails?
+    author                String?
+    baseAvailability      DateTime       @default(now())
+    seminarAvailability   DateTime       @default(now())
+    dialogueAvailability  DateTime       @default(now())
+    published             Boolean        @default(false)
+    createdAt             DateTime       @default(now())
+    updatedAt             DateTime       @updatedAt
+}
+
+enum MdxCategory {
+    CONTENT
+    TRANSCRIPT
+    DETAILS
+}
+
+model CourseDetails {
+    id          String      @id @default(cuid())
+    course      Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+    courseId    String      @unique
+    mdxCategory MdxCategory @default(DETAILS)
+    mdx         Bytes
+    mdxCompiled String?
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+}
+
+model Part {
+    id       String   @id @default(cuid())
+    name     String
+    slug     String
+    course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+    courseId String
+    lessons  Lesson[]
+}
+
+model Lesson {
+    id             String               @id @default(cuid())
+    name           String
+    description    String
+    slug           String
+    part           Part?                @relation(fields: [partId], references: [id])
+    partId         String?
+    course         Course               @relation(fields: [courseId], references: [id], onDelete: Cascade)
+    courseId       String
+    content        LessonContent?
+    transcript     LessonTranscript?
+    video          Video?
+    usersCompleted UserLessonProgress[]
+    createdAt      DateTime             @default(now())
+    updatedAt      DateTime             @updatedAt
+}
+
+model LessonContent {
+    id          String      @id @default(cuid())
+    lesson      Lesson      @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+    lessonId    String      @unique
+    mdxCategory MdxCategory @default(CONTENT)
+    mdx         Bytes
+    mdxCompiled String?
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+}
+
+model LessonTranscript {
+    id          String      @id @default(cuid())
+    lesson      Lesson      @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+    lessonId    String      @unique
+    mdxCategory MdxCategory @default(TRANSCRIPT)
+    mdx         Bytes
+    mdxCompiled String?
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
+}
+
+model Video {
+    id        String  @id @default(cuid())
+    lesson    Lesson? @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+    lessonId  String? @unique
+    fileName  String
+    duration  Float?
+    posterUrl String?
+}
+
+model UserLessonProgress {
+    user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId      String
+    lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+    lessonId    String
+    completedAt DateTime @default(now())
+
+    @@id([userId, lessonId])
+}
+
+// === SECTION 3 ==============================================
+// * Stripe related data
+// ============================================================
+model StripeEvent {
+    id               String   @id @unique
+    api_version      String?
+    data             Json?
+    request          Json?
+    type             String
+    object           String
+    account          String?
+    created          DateTime
+    livemode         Boolean
+    pending_webhooks Int
+}
+
+// === SECTION 4 ==============================================
+// * Miscellaneous internal data
+// ============================================================
+
+enum MaintenanceArea {
+    global
+    user
+}
+
+enum MaintenanceSeverity {
+    success
+    info
+    warning
+    critical
+    beta
+}
+
+model MaintenanceMessage {
+    id        String              @id @default(cuid())
+    area      MaintenanceArea     @unique
+    severity  MaintenanceSeverity
+    published Boolean             @default(false)
+    message   String
+    createdAt DateTime            @default(now())
+    updatedAt DateTime            @updatedAt
+}
+
+model NewsletterEmail {
+    id         String   @id @default(cuid())
+    email      String   @unique
+    subscribed Boolean  @default(true)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+}

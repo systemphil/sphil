@@ -1,4 +1,5 @@
 <!-- Thank you for wanting to contribute to sPhil! 🧙 🦉 -->
+<!-- We would like to keep our code and writing as neat and tidy as possible, and would appreciate if you could verify the following checklist if you are submitting philosophical or literary content -->
 
 ## Author's Note
 
@@ -52,10 +53,10 @@ Consider adding the Stub component to encourage further contributions.
 
 ### License Scope
 
-The Apache License 2.0 applies to all code except content within `src/pages/**`
-(with specific exclusions like `/contributing/**`, `_app.mdx`, `_document.tsx`,
-etc.). This primarily covers technical implementations rather than content,
-literature, or philosophy.
+The Apache License 2.0 applies to all code except content within `content/**`
+folder (excluding `/contributing/**`, `_meta.ts`, `acknowledgements.mdx`,
+`index.mdx`, `privacy.mdx`, `team.mdx`, `terms.mdx`). This primarily covers
+technical implementations rather than content, literature, or philosophy.
 
 </details>
 
