@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+'use client'
+import React, { useState } from 'react';
 import { Modal, useTheme } from '@mui/material';
 
-const RedirectModal = () => {
+const ContributionModal = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleRedirect = () => {
@@ -32,4 +33,4 @@ const RedirectModal = () => {
   );
 };
 
-export default RedirectModal;
+export default ContributionModal;
