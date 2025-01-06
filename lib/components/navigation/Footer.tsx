@@ -179,16 +179,28 @@ function FooterContent() {
                                 <FooterHeader>Social</FooterHeader>
                                 <div className="flex gap-3 flex-wrap mt-4">
                                     <SocialIcon
-                                        icon="bluesky"
-                                        href="https://bsky.app/profile/sphil.xyz"
+                                        icon="gmail"
+                                        href="mailto:service@systemphil.com"
+                                    />
+                                    <SocialIcon
+                                        icon="youtube"
+                                        href="https://www.youtube.com/@sphildotxyz"
                                     />
                                     <SocialIcon
                                         icon="facebook"
                                         href="https://www.facebook.com/profile.php?id=61564840656103"
                                     />
                                     <SocialIcon
-                                        icon="youtube"
-                                        href="https://www.youtube.com/@sphildotxyz"
+                                        icon="bluesky"
+                                        href="https://bsky.app/profile/sphil.xyz"
+                                    />
+                                    <SocialIcon
+                                        icon="twitter"
+                                        href="https://twitter.com/sphildotxyz"
+                                    />
+                                    <SocialIcon
+                                        icon="github"
+                                        href="https://github.com/systemphil"
                                     />
                                 </div>
                             </div>
