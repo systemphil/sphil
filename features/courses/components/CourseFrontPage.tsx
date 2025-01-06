@@ -49,7 +49,7 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
                     </div>
 
                     {course.imageUrl && (
-                        <div className="mask mask-hexagon">
+                        <div className="custom-mask custom-mask-hexagon">
                             <Image
                                 src={course.imageUrl}
                                 alt={`Course preview ${course.name}`}

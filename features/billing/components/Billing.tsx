@@ -32,7 +32,7 @@ export function Billing({
                                             <div className="flex">
                                                 {course.imageUrl && (
                                                     <Image
-                                                        className="mask mask-parallelogram"
+                                                        className="custom-mask custom-mask-parallelogram"
                                                         src={course.imageUrl}
                                                         height={200}
                                                         width={200}
