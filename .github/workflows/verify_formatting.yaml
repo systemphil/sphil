@@ -15,28 +15,24 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
       with:
-       fetch-depth: 0
-       clean: true
+        node-version: 20
     
-       # ! currently bugged! Will throw false negatives.
-    # - name: Set up Node.js
-    #   uses: actions/setup-node@v4
-    #   with:
-    #     node-version: 22
+    # This installs all dependencies, but if we use "npm install -g prettier", 
+    # then prettier won't pick up the project's .prettierrc file.
+    - name: Install dependencies
+      run: npm ci
 
-    # - name: Get Prettier version from package-lock.json
-    #   run: |
-    #     PRETTIER_VERSION=$(grep -m 1 'prettier' package-lock.json | cut -d '"' -f 4 | cut -c 2-)
-    #     echo $PRETTIER_VERSION
-    
-    # - name: Check formatting
-    #   run: |
-    #     npx --yes prettier@$PRETTIER_VERSION --check --config .prettierrc .
+    - name: Check formatting
+      run: |
+        npm run prettier:check
 
-    # - name: Fail if formatting check failed
-    #   if: failure()
-    #   run: |
-    #     echo "Formatting check failed. Please format your code according to the project's Prettier configuration."
-    #     exit 1
+    - name: Fail if formatting check failed
+      if: failure()
+      run: |
+        echo "Formatting check failed. Please format your code according to the project's Prettier configuration."
+        exit 1
 
