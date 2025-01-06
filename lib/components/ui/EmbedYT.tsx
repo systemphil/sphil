@@ -1,7 +1,10 @@
+"use client";
+
 export const EmbedYT = (props: any) => {
     const {
         children,
         src,
+        title,
         minWidth = "400px",
         maxWidth = "800px",
         ...otherProps
@@ -34,7 +37,7 @@ export const EmbedYT = (props: any) => {
                         width="560"
                         height="315"
                         src={src}
-                        title="Video player"
+                        title={title ?? "YouTube video"}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         {...otherProps}
                     >
