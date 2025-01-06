@@ -1,5 +1,6 @@
 import { CardShell } from "lib/components/ui/CardShell";
 import { Heading } from "lib/components/ui/Heading";
+import { cn } from "lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -25,11 +26,12 @@ export async function InfoCard({
             {imgUrl && (
                 <figure className="mt-4">
                     <Image
-                        className={`mask ${
-                            (maskType === "diamond" && "mask-diamond") ||
-                            (maskType === "triangle" && "mask-triangle") ||
-                            (maskType === "squircle" && "mask-squircle")
-                        }`}
+                        className={cn(
+                            "custom-mask",
+                            maskType === "diamond" && "custom-mask-diamond",
+                            maskType === "triangle" && "custom-mask-triangle",
+                            maskType === "squircle" && "custom-mask-squircle"
+                        )}
                         src={imgUrl}
                         alt="Movie"
                         width={200}
