@@ -14,21 +14,22 @@ const ContributionModal = ({
 }: ContributeModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleClick = (evt) => {
-    evt.stopPropagation();
-    const newIsOpen = !isOpen;
-    setIsOpen(newIsOpen);
-  }
-
-  const githubEditUrl = `${docsRepositoryBase}/${filePath || ""}`;
+  const handleClickOpen = (e) => {
+    e.preventDefault();
+    setIsOpen(true);
+  };
+  const handleClose = () => {
+    setIsOpen(false);
+  };
 
   const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub →";
 
   return (
     <>
-      <p onClick={handleClick}>{EDIT_LINK_DESCRIPTION}</p>
+      <a onClick={handleClickOpen}>{EDIT_LINK_DESCRIPTION}</a>
       <Dialog
         open={isOpen}
+        onClose={(evt, reason) => {return handleClose()}}
         sx={{
           display: 'flex',
           alignItems: 'center',
@@ -47,11 +48,11 @@ const ContributionModal = ({
           </DialogContent>
           <DialogActions>
             <a
-                href={githubEditUrl}
+                href={docsRepositoryBase}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-4 py-2 rounded nx-font-semibold nx-text-primary-800"
-                onClick={handleClick}
+                onClick={handleClose}
             >
                 <GitHub className="w-4 h-4 mr-2" />
                 Continue to GitHub
