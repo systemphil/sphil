@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Modal, useTheme } from '@mui/material';
 import { GitHub } from '@mui/icons-material';
+import { Link } from 'nextra-theme-docs';
 
 interface ContributeModalProps {
   docsRepositoryBase: string;
@@ -22,11 +23,11 @@ const ContributionModal = ({
     setIsOpen(false);
   };
 
-  const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub →";
+  const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub ✏️";
 
   return (
     <>
-      <a onClick={handleClickOpen}>{EDIT_LINK_DESCRIPTION}</a>
+      <p onClick={handleClickOpen}>{EDIT_LINK_DESCRIPTION}</p>
       <Dialog
         open={isOpen}
         onClose={(evt, reason) => {return handleClose()}}
@@ -36,7 +37,10 @@ const ContributionModal = ({
           justifyContent: 'center',
         }}
       >
-        <div
+        <div style={{
+          backgroundColor: "#111111",
+          color: "white",
+        }}
         >
           <DialogTitle
               className="nx-text-xs nx-font-medium nx-text-gray-500 hover:nx-text-gray-900 dark:nx-text-gray-400 dark:hover:nx-text-gray-100 contrast-more:nx-text-gray-800 contrast-more:dark:nx-text-gray-50"
@@ -44,7 +48,42 @@ const ContributionModal = ({
               Edit this page on GitHub ✏️
           </DialogTitle>
           <DialogContent>
-            <p>Work in progress</p>
+            <h4 className="text-sm font-medium mb-2">
+                You might want to
+            </h4>
+            <ul className="list-disc pl-5 space-y-1 text-sm">
+                <li>
+                    <a
+                        href="https://docs.github.com/en/get-started/quickstart/hello-world"
+                        className="hover:underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={handleClose}
+                    >
+                        Familiarize yourself with the basics of GitHub
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href="https://www.markdownguide.org/basic-syntax/"
+                        className="hover:underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={handleClose}
+                    >
+                        Learn Markdown syntax
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href="/contributing"
+                        className="hover:underline"
+                        onClick={handleClose}
+                    >
+                        Read our contribution guidelines
+                    </a>
+                </li>
+            </ul>
           </DialogContent>
           <DialogActions>
             <a
