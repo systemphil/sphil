@@ -19,6 +19,7 @@ import { Providers } from "lib/components/context/Providers";
 import "nextra-theme-docs/style.css";
 import "@mdxeditor/editor/style.css";
 import "./globals.css";
+import { cinzel } from "lib/utils/fonts";
 
 const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub";
 const PROJECT_LINK = "https://github.com/systemphil/sphil";
@@ -149,7 +150,7 @@ export default async function RootLayout({
             data-theme="fantasy"
         >
             <Head color={COLOR}></Head>
-            <body>
+            <body className={` ${cinzel.variable}`}>
                 <Providers>
                     <NextraLayout
                         pageMap={await getPageMap()}

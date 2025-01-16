@@ -3,6 +3,8 @@
     themes:
         fantasy --default,
         dark --prefersdark;
+    exclude: rootcolor;
+    logs: false;
 }
 
 @variant dark (&:is(.dark *));
