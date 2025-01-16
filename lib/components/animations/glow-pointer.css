@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 .animated-glow::before {
     @apply absolute rounded-lg opacity-0 transition-opacity duration-300 hover:opacity-100;
     background: radial-gradient(

@@ -44,7 +44,7 @@ export function UserMenu() {
             </label>
             <ul
                 tabIndex={0}
-                className="menu dropdown-content p-2 shadow bg-white dark:bg-neutral-900 z-50 rounded-box w-52 drop-shadow-2xl"
+                className="menu dropdown-content p-2 shadow-sm bg-white dark:bg-neutral-900 z-50 rounded-box w-52 drop-shadow-2xl"
             >
                 <li>
                     <a className="pointer-events-none cursor-default opacity-75 text-lg pb-0">

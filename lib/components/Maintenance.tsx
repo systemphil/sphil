@@ -52,7 +52,7 @@ export async function Maintenance({
             return (
                 <div className="md:px-10 max-w-[900px] mt-10 md:mt-32">
                     <div
-                        className={`card rounded shadow-xl bg-gradient-to-b ${classes} transition duration-300  md:bg-gradient-to-bl`}
+                        className={`card rounded-sm shadow-xl bg-linear-to-b ${classes} transition duration-300  md:bg-linear-to-bl`}
                     >
                         <div className="card-body">
                             <div className="card-title justify-center">
@@ -70,7 +70,7 @@ export async function Maintenance({
             <FadeIn>
                 <div className="md:px-10 max-w-[900px] mt-10 md:mt-32">
                     <div
-                        className={`card rounded shadow-xl bg-gradient-to-b ${classes} transition duration-300  md:bg-gradient-to-bl`}
+                        className={`card rounded-sm shadow-xl bg-linear-to-b ${classes} transition duration-300  md:bg-linear-to-bl`}
                     >
                         <div className="card-body">
                             <div className="card-title justify-center">

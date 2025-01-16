@@ -44,7 +44,7 @@ function Hero() {
             </div>
             <div className="translate-y-2 md:translate-y-1 lg:-translate-y-1 flex flex-col items-center justify-center">
                 <div className="font-bold text-center relative z-20 bg-clip-text tracking-widest text-transparent">
-                    <Heading replacementClasses="pb-4 text-transparent bg-gradient-to-b from-black/80 to-black dark:from-white dark:to-[#AAAAAA]">
+                    <Heading replacementClasses="pb-4 text-transparent bg-linear-to-b from-black/80 to-black dark:from-white dark:to-[#AAAAAA]">
                         Discover & Reflect
                     </Heading>
                 </div>
@@ -53,10 +53,10 @@ function Hero() {
                 </h3>
                 <div className="w-[40rem] h-40 relative">
                     {/* Gradients */}
-                    <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-purple-400 to-transparent h-[2px] w-3/4 blur-sm" />
-                    <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-purple-400 to-transparent h-px w-3/4" />
-                    <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-pink-400 to-transparent h-[5px] w-1/4 blur-sm" />
-                    <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-pink-400 to-transparent h-px w-1/4" />
+                    <div className="absolute inset-x-20 top-0 bg-linear-to-r from-transparent via-purple-400 to-transparent h-[2px] w-3/4 blur-xs" />
+                    <div className="absolute inset-x-20 top-0 bg-linear-to-r from-transparent via-purple-400 to-transparent h-px w-3/4" />
+                    <div className="absolute inset-x-60 top-0 bg-linear-to-r from-transparent via-pink-400 to-transparent h-[5px] w-1/4 blur-xs" />
+                    <div className="absolute inset-x-60 top-0 bg-linear-to-r from-transparent via-pink-400 to-transparent h-px w-1/4" />
                 </div>
             </div>
         </div>

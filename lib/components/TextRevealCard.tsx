@@ -108,7 +108,7 @@ export const TextRevealCard = ({
                             style={{
                                 textShadow: "4px 4px 15px rgba(0,0,0,0.2)",
                             }}
-                            className="text-base sm:text-[2.5rem] py-10 font-bold text-black dark:text-white bg-clip-text text-transparent bg-gradient-to-b from-slate-900 to-slate-700 dark:from-white dark:to-neutral-300"
+                            className="text-base sm:text-[2.5rem] py-10 font-bold text-black dark:text-white bg-clip-text text-transparent bg-linear-to-b from-slate-900 to-slate-700 dark:from-white dark:to-neutral-300"
                         >
                             {revealText}
                         </p>
@@ -122,7 +122,7 @@ export const TextRevealCard = ({
                         transition={
                             isMouseOver ? { duration: 0 } : { duration: 0.4 }
                         }
-                        className="h-40 w-[8px] bg-gradient-to-b from-transparent via-neutral-800 to-transparent absolute z-50 will-change-transform"
+                        className="h-40 w-[8px] bg-linear-to-b from-transparent via-neutral-800 to-transparent absolute z-50 will-change-transform"
                     ></motion.div>
 
                     <div className=" overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,white,transparent)]">

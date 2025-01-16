@@ -69,7 +69,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                     Select your course tier
                 </p>
 
-                <div className="form-control has-[:checked]:bg-indigo-50 rounded-md">
+                <div className="form-control has-checked:bg-indigo-50 rounded-md">
                     <label
                         className={`label ${
                             baseAvailable && "cursor-pointer"
@@ -102,7 +102,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                         price={course.basePrice}
                     />
                 </div>
-                <div className="form-control has-[:checked]:bg-indigo-50 rounded-md">
+                <div className="form-control has-checked:bg-indigo-50 rounded-md">
                     <label
                         className={`label ${
                             seminarAvailable && "cursor-pointer"
@@ -134,7 +134,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                         price={course.seminarPrice}
                     />
                 </div>
-                <div className="form-control has-[:checked]:bg-indigo-50 rounded-md">
+                <div className="form-control has-checked:bg-indigo-50 rounded-md">
                     <label
                         className={`label ${
                             dialogueAvailable && "cursor-pointer"

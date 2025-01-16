@@ -34,14 +34,14 @@ export function SiteSwitcher() {
         <div className="relative flex items-center justify-between p-2 text-xl group">
             <span
                 className={cn(
-                    "flex h-[34px] w-[206px] flex-shrink-0 items-center rounded-[8px] border border-[#dedfde] dark:border-[#333333] p-1 duration-300 ease-in-out",
-                    "after:h-[24px] after:w-[50px] after:rounded-md dark:after:bg-dark-green-hsl after:shadow-sm after:duration-300 after:border dark:after:border-[#333333] after:border-[#666666]/100 after:bg-gradient-to-b after:from-[#32a1f1] after:to-[#40b44e] after:opacity-20 dark:after:opacity-100 dark:after:bg-none",
+                    "flex h-[34px] w-[206px] shrink-0 items-center rounded-[8px] border border-[#dedfde] dark:border-[#333333] p-1 duration-300 ease-in-out",
+                    "after:h-[24px] after:w-[50px] after:rounded-md dark:after:bg-dark-green-hsl after:shadow-xs after:duration-300 after:border dark:after:border-[#333333] after:border-[#666666]/100 after:bg-linear-to-b after:from-[#32a1f1] after:to-[#40b44e] after:opacity-20 dark:after:opacity-100 dark:after:bg-none",
                     "indeterminate:after:hidden",
                     {
                         "after:hidden": !site,
-                        "after:translate-x-[72px] after:w-[46px] after:bg-gradient-to-r after:from-[#334ff3] after:to-[#c34879]":
+                        "after:translate-x-[72px] after:w-[46px] after:bg-linear-to-r after:from-[#334ff3] after:to-[#c34879]":
                             site === "kant",
-                        "after:translate-x-[136px] after:w-[59px] after:bg-gradient-to-b after:from-[#ebc031] after:to-[#cf464f]":
+                        "after:translate-x-[136px] after:w-[59px] after:bg-linear-to-b after:from-[#ebc031] after:to-[#cf464f]":
                             site === "spinoza",
                     }
                 )}

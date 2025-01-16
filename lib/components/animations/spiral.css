@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 canvas {
     height: 75vh;
     width: 75vw;
