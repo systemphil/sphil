@@ -77,7 +77,7 @@ export async function Maintenance({
                                 {getMaintenanceIcon(maintenance.severity)}
                                 <Heading as="h3">{title}</Heading>
                             </div>
-                            <p className="text-slate-900 dark:text-slate-400 pt-4 text-justify">
+                            <p className="text-slate-900 dark:text-slate-300 text-md pt-4 text-justify">
                                 {maintenance.message}
                             </p>
                             {maintenance.severity === "beta" && (
