@@ -14,7 +14,7 @@ export function Heading({
     additionalClasses,
 }: HeadingProps) {
     const baseClasses = `${
-        cinzel.variable
+        cinzel.className
     } font-serif z-10 font-extrabold py-1 leading-tight text-center bg-clip-text ${
         !replacementClasses &&
         "text-transparent bg-linear-to-b from-black/80 to-black dark:from-white dark:to-[#AAAAAA]"

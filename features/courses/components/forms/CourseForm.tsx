@@ -228,7 +228,7 @@ export const CourseForm = ({ course }: { course?: Course }) => {
             </form>
             <div className="my-12">
                 <button
-                    className="btn btn-warning btn-xs m-2 border-dotted border-2 border-black hover:border-solid hover:border-black hover:border-2 duration-200"
+                    className="d-btn d-btn-warning d-btn-xs m-2 border-dotted border-2 border-black hover:border-solid hover:border-black hover:border-2 duration-200"
                     onClick={() => {
                         console.info(methods.getValues());
                     }}

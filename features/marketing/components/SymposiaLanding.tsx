@@ -42,7 +42,7 @@ function Hero() {
                     <PolyRhythmicSpiral />
                 </FadeIn>
             </div>
-            <div className="translate-y-2 md:translate-y-1 lg:-translate-y-1 flex flex-col items-center justify-center">
+            <div className="translate-y-[7px] md:-translate-y-[2px] lg:-translate-y-3 flex flex-col items-center justify-center">
                 <div className="font-bold text-center relative z-20 bg-clip-text tracking-widest text-transparent">
                     <Heading replacementClasses="pb-4 text-transparent bg-linear-to-b from-black/80 to-black dark:from-white dark:to-[#AAAAAA]">
                         Discover & Reflect
@@ -186,7 +186,9 @@ function VisitCourses() {
                 beyond empires, generations and time.
             </p>
             <Link href="/symposia/courses">
-                <button className="btn btn-primary">See our courses</button>
+                <button className="d-btn d-btn-primary ">
+                    See our courses
+                </button>
             </Link>
         </>
     );

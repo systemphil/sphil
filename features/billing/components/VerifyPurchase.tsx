@@ -99,7 +99,7 @@ export const VerifyPurchase = ({
                             <span>Thank you for your purchase! 🙏</span>
                         </div>
                         <div className="flex justify-center m-10">
-                            <button className="btn btn-primary">
+                            <button className="d-btn d-btn-primary">
                                 <Link href={`/symposia/courses/${data}`}>
                                     Click to go to the course
                                 </Link>

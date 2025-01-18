@@ -75,10 +75,10 @@ function Review({
 }) {
     return (
         <CardShell className="w-72">
-            <div className="card-body">
+            <div className="d-card-body">
                 <a href={url ? url : undefined} target="_blank">
                     <div className="flex gap-3 items-center">
-                        <div className="avatar">
+                        <div className="d-avatar">
                             <div className="w-12 rounded-full">
                                 <Image
                                     src={imgUrl}

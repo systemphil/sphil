@@ -38,7 +38,7 @@ export default async function AdminLayout({
 function AdminBtn(props: { href: string; children: React.ReactNode }) {
     return (
         <Link href={props.href}>
-            <button className="btn btn-primary btn-outline btn-sm">
+            <button className="d-btn d-btn-primary d-btn-outline d-btn-sm">
                 {props.children}
             </button>
         </Link>

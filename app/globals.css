@@ -1,9 +1,11 @@
 @import "tailwindcss";
+@plugin '@tailwindcss/typography';
 @plugin "daisyui" {
     themes:
         fantasy --default,
         dark --prefersdark;
     exclude: rootcolor;
+    prefix: "d-";
     logs: false;
 }
 
@@ -71,7 +73,7 @@
 }
 
 /* Overrides for daisyUI classes */
-.btn-primary {
+.d-btn-primary {
     @apply dark:bg-dark-green-hsl dark:hover:bg-emerald-700 duration-300 dark:border-acid-green/20 dark:hover:border-acid-green/70;
 }
 
@@ -250,6 +252,40 @@
     100% {
         --magic-angle: 360deg;
     }
+}
+
+.animated-glow::before {
+    position: absolute;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    background: radial-gradient(
+        1000px circle at var(--x) var(--y),
+        #d53af8 0,
+        #dc5290 25%,
+        rgba(255, 255, 255, 0) 50%,
+        transparent 80%
+    );
+    z-index: -1;
+    content: "";
+    top: -1px;
+    right: -1px;
+    bottom: -1px;
+    left: -1px;
+}
+
+.animated-glow:hover::before {
+    opacity: 1;
+}
+
+.dark .animated-glow::before {
+    background: radial-gradient(
+        1000px circle at var(--x) var(--y),
+        var(--color-acid-green) 0,
+        var(--color-dark-green-hsl) 25%,
+        rgba(255, 255, 255, 0) 50%,
+        transparent 80%
+    );
 }
 
 /* The regular daisyUI mask classes are not working in production, likely due to being overwritten by something. So here is a workaround */

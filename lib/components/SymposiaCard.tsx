@@ -24,7 +24,7 @@ export function SymposiaCard() {
             text="Learn"
             revealText="Master"
             url="https://sphil.xyz/symposia"
-            className="bg-linear-to-b from-indigo-400 from-50% via-purple-400 via-75%  to-pink-400 to-90% dark:from-purple-950 dark:to-purple-800"
+            className="bg-linear-to-b from-indigo-400 from-50%  to-pink-400 to-90% dark:from-purple-950 dark:to-purple-800"
         >
             <TextRevealCardTitle>
                 &nbsp;Searching for Extra Guidance?

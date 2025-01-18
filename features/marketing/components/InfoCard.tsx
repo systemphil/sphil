@@ -39,16 +39,16 @@ export async function InfoCard({
                     />
                 </figure>
             )}
-            <div className="card-body">
-                <div className="card-title justify-center">
-                    <Heading as="h3">{title}</Heading>
+            <div className="d-card-body">
+                <div className="d-card-title justify-center">
+                    <Heading as="h4">{title}</Heading>
                 </div>
                 <p
                     className="text-slate-700 dark:text-slate-300 pt-4 text-justify"
                     dangerouslySetInnerHTML={{ __html: text }}
                 ></p>
                 {url && urlDescription && (
-                    <div className="card-actions justify-end">
+                    <div className="d-card-actions justify-end">
                         <Link href={url}>
                             <button className="btn btn-primary">
                                 {urlDescription}
