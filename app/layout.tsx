@@ -172,7 +172,7 @@ export default async function RootLayout({
                             <div className="relative">
                                 <div
                                     data-name="footer-flair"
-                                    className="absolute h-20 w-full -top-[80px] bg-gradient-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
+                                    className="absolute h-20 w-full -top-[80px] bg-linear-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
                                 />
                                 <NextraFooter className="flex-col items-center md:items-start relative">
                                     <Footer />

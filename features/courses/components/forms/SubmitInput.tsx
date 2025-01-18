@@ -9,9 +9,9 @@ type Props = {
 
 export const SubmitInput = ({ value, isLoading }: Props) => {
     const classes = clsx({
-        "btn btn-primary": true,
+        "d-btn d-btn-primary": true,
         "": !isLoading,
-        "btn-disabled": isLoading,
+        "d-btn-disabled": isLoading,
     });
 
     const label = isLoading ? "Loading..." : value;

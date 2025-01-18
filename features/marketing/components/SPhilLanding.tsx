@@ -65,7 +65,7 @@ export function SPhilLanding() {
                 </div>
             </section>
             <section className="relative flex flex-col items-center justify-start w-full h-full">
-                <div className="absolute top-0 h-36 w-full -translate-y-full bg-gradient-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10" />
+                <div className="absolute top-0 h-36 w-full -translate-y-full bg-linear-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10" />
                 <div className="py-20 flex flex-col items-center justify-center">
                     <FadeIn>
                         <Heading>What is sPhil?</Heading>
@@ -75,8 +75,8 @@ export function SPhilLanding() {
                             aria-hidden="true"
                             className="absolute inset-48 grid grid-cols-4 -space-x-52 opacity-40 dark:opacity-20"
                         >
-                            <div className="blur-[106px] col-span-1 h-64 bg-gradient-to-br from-purple-700 to-purple-400 dark:from-blue-700" />
-                            <div className="blur-[106px] col-span-1 col-start-4 h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600" />
+                            <div className="blur-[106px] col-span-1 h-64 bg-linear-to-br from-purple-700 to-purple-400 dark:from-blue-700" />
+                            <div className="blur-[106px] col-span-1 col-start-4 h-32 bg-linear-to-r from-cyan-400 to-sky-300 dark:to-indigo-600" />
                         </div>
                         <FadeIn className="flex flex-col items-center gap-6 max-w-2xl">
                             <Paragraph>

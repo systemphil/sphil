@@ -27,7 +27,7 @@ const DIALOGUE_TIER_TEXT =
 export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
     const course = await dbGetCourseBySlug(slug);
     if (!course) {
-        return <div className="badge badge-error">n/a</div>;
+        return <div className="d-badge d-badge-error">n/a</div>;
     }
     const baseAvailable = course.baseAvailability! > new Date();
     const seminarAvailable = course.seminarAvailability > new Date();
@@ -42,7 +42,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
             !!userCourses &&
             userCourses.find((course) => course.slug === slug)
         ) {
-            return <div className="badge badge-success">Owned</div>;
+            return <div className="d-badge d-badge-success">Owned</div>;
         }
     }
 
@@ -69,7 +69,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                     Select your course tier
                 </p>
 
-                <div className="form-control has-[:checked]:bg-indigo-50 rounded-md">
+                <div className="form-control has-checked:bg-indigo-50 rounded-md">
                     <label
                         className={`label ${
                             baseAvailable && "cursor-pointer"
@@ -102,7 +102,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                         price={course.basePrice}
                     />
                 </div>
-                <div className="form-control has-[:checked]:bg-indigo-50 rounded-md">
+                <div className="form-control has-checked:bg-indigo-50 rounded-md">
                     <label
                         className={`label ${
                             seminarAvailable && "cursor-pointer"
@@ -134,7 +134,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                         price={course.seminarPrice}
                     />
                 </div>
-                <div className="form-control has-[:checked]:bg-indigo-50 rounded-md">
+                <div className="form-control has-checked:bg-indigo-50 rounded-md">
                     <label
                         className={`label ${
                             dialogueAvailable && "cursor-pointer"

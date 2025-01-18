@@ -54,7 +54,7 @@ export function CourseMaterialCard({
                 </div>
             </Link>
             <button
-                className="btn btn-square mr-2 hover:bg-red-500"
+                className="d-btn d-btn-square mr-2 "
                 disabled={isPending}
                 onClick={() => setIsDialogOpen(true)}
             >
@@ -67,7 +67,7 @@ export function CourseMaterialCard({
                 </DialogContent>
                 <DialogActions>
                     <button
-                        className="btn btn-error"
+                        className="d-btn d-btn-error"
                         disabled={isPending}
                         onClick={handleDeleteEntry}
                     >

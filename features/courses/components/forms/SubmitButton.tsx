@@ -9,7 +9,7 @@ export function SubmitButton({ children }: { children: React.ReactNode }) {
         <button
             type="submit"
             aria-disabled={pending}
-            className="btn btn-primary"
+            className="d-btn d-btn-primary"
             disabled={pending}
         >
             {children}

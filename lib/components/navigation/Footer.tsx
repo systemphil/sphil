@@ -7,7 +7,7 @@ import { SymposiaCard } from "../SymposiaCard";
 import { SocialIcon } from "../icons/SocialIcon";
 
 const footerLinkClasses =
-    "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 hover:dark:text-gray-200 transition";
+    "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 dark:hover:text-gray-200 transition";
 
 export function Footer(): React.ReactElement {
     return (
@@ -100,7 +100,7 @@ function FooterContent() {
                 <div className="">
                     <div className="grid grid-cols-1 gap-8 xl:col-span-2">
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 md:gap-8">
-                            <div className="mt-12 md:!mt-0">
+                            <div className="mt-12 md:mt-0!">
                                 <FooterHeader>Resources</FooterHeader>
                                 <ul
                                     role="list"
@@ -115,7 +115,7 @@ function FooterContent() {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="mt-12 md:!mt-0">
+                            <div className="mt-12 md:mt-0!">
                                 <FooterHeader>Hegel</FooterHeader>
                                 <ul
                                     role="list"
@@ -130,7 +130,7 @@ function FooterContent() {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="mt-12 md:!mt-0">
+                            <div className="mt-12 md:mt-0!">
                                 <FooterHeader>Kant</FooterHeader>
                                 <ul
                                     role="list"
@@ -145,7 +145,7 @@ function FooterContent() {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="mt-12 md:!mt-0">
+                            <div className="mt-12 md:mt-0!">
                                 <FooterHeader>About</FooterHeader>
                                 <ul
                                     role="list"
@@ -160,7 +160,7 @@ function FooterContent() {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="mt-12 md:!mt-0">
+                            <div className="mt-12 md:mt-0!">
                                 <FooterHeader>Legal</FooterHeader>
                                 <ul
                                     role="list"
@@ -175,7 +175,7 @@ function FooterContent() {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="mt-12 md:!mt-0">
+                            <div className="mt-12 md:mt-0!">
                                 <FooterHeader>Social</FooterHeader>
                                 <div className="flex gap-3 flex-wrap mt-4">
                                     <SocialIcon
