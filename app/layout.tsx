@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import {
     Footer as NextraFooter,
     Layout as NextraLayout,
@@ -38,8 +38,6 @@ const COLOR = {
         light: 90,
     },
 };
-
-export const viewport: Viewport = Head.viewport;
 
 export const metadata: Metadata = {
     title: {
