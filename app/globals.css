@@ -59,6 +59,11 @@
     }
 }
 
+/* Override Nextra all-italicizing on blockquote */
+blockquote {
+    @apply not-italic;
+}
+
 .tooltip {
     @apply invisible absolute;
 }
