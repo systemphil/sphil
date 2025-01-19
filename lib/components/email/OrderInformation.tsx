@@ -60,7 +60,7 @@ export function OrderInformation({
                     <Column align="right">
                         <Button
                             href={courseLink}
-                            className="bg-[#6b0072] text-white px-6 py-4 rounded text-lg"
+                            className="bg-[#6b0072] text-white px-6 py-4 rounded-sm text-lg"
                         >
                             LINK
                         </Button>

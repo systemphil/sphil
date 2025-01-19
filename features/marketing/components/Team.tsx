@@ -60,7 +60,7 @@ const CardTeamMember = ({
     children,
 }: CardTeamMemberProps) => {
     return (
-        <div className="flex flex-col w-72 md:w-[450px] min-h-[600px] rounded-md shadow-lg bg-gradient-to-b from-gray-100 to-gray-300 dark:from-neutral-950/90 dark:to-neutral-800/90 dark:outline-1 dark:outline-solid dark:outline-dark-green-hsl outline outline-1 outline-gray-300">
+        <div className="flex flex-col w-72 md:w-[450px] min-h-[600px] rounded-md shadow-lg bg-linear-to-b from-gray-100 to-gray-300 dark:from-neutral-950/90 dark:to-neutral-800/90 dark:outline-1 dark:outline-solid dark:outline-dark-green-hsl outline outline-1 outline-gray-300">
             <div className="flex p-8">
                 <Image
                     height={125}

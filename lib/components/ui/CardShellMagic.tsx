@@ -1,7 +1,6 @@
 "use client";
 
 import { ReactNode } from "react";
-import styles from "./card.module.css";
 import { cn } from "lib/utils";
 
 /**
@@ -15,10 +14,10 @@ export function CardShellMagic({ children }: { children?: ReactNode }) {
     return (
         <div
             className={cn(
-                styles["card-magic"],
-                "h-[35vh] aspect-[4/3] card-magic border hover:border-hidden rounded-md flex flex-col items-center justify-center",
-                "dark:border-slate-900 bg-gradient-to-b from-gray-50/90 to-gray-100/90 dark:from-neutral-950/90 dark:to-neutral-800/90",
-                "hover:from-gray-50 hover:to-gray-100 hover:dark:from-neutral-950  hover:dark:to-neutral-800"
+                "card-magic",
+                "h-[35vh] aspect-4/3 card-magic border hover:border-hidden rounded-md flex flex-col items-center justify-center",
+                "dark:border-slate-900 bg-linear-to-b from-gray-50/90 to-gray-100/90 dark:from-neutral-950/90 dark:to-neutral-800/90",
+                "hover:from-gray-50 hover:to-gray-100 dark:hover:from-neutral-950  dark:hover:to-neutral-800"
             )}
         >
             {children}

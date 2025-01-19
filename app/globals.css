@@ -1,6 +1,63 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin '@tailwindcss/typography';
+@plugin "daisyui" {
+    themes:
+        fantasy --default,
+        dark --prefersdark;
+    exclude: rootcolor;
+    prefix: "d-";
+    logs: false;
+}
+
+@variant dark (&:is(.dark *));
+
+@theme {
+    --background-image-radial-gradient: radial-gradient(
+        #ffffff 25%,
+        rgb(255 255 255),
+        transparent
+    );
+    --background-image-radial-gradient-dark: radial-gradient(
+        rgb(40 40 40) 40%,
+        rgb(175 185 159) 50%,
+        transparent,
+        rgb(20 20 20)
+    );
+
+    --font-serif: var(--font-cinzel);
+
+    --color-dark-green-hsl: hsl(155, 100%, 66%, 0.17);
+    --color-acid-green: #0bda84;
+}
+
+@utility container {
+    margin-inline: auto;
+    padding-inline: 2rem;
+    @media (width >= --theme(--breakpoint-sm)) {
+        max-width: none;
+    }
+    @media (width >= 1400px) {
+        max-width: 1400px;
+    }
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+}
 
 .tooltip {
     @apply invisible absolute;
@@ -16,8 +73,219 @@
 }
 
 /* Overrides for daisyUI classes */
-.btn-primary {
+.d-btn-primary {
     @apply dark:bg-dark-green-hsl dark:hover:bg-emerald-700 duration-300 dark:border-acid-green/20 dark:hover:border-acid-green/70;
+}
+
+.card-root {
+    --background-rgb: transparent;
+    --background-light-rgb: 30 41 59;
+
+    --border-rgb: 255 255 255;
+    --border: 1px solid rgb(var(--border-rgb) / 20%);
+
+    --hyperplexed-main-rgb: 41 121 255;
+    --hyperplexed-main-light-rgb: 56 182 255;
+    --hyperplexed-secondary-rgb: 42 252 152;
+
+    --card-size: 480px;
+    --font-size: 0.8rem;
+    --logo-size: calc(var(--card-size) * 0.3);
+
+    background: rgb(var(--background-rgb));
+    display: flex;
+    flex-grow: 1;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    overflow: hidden;
+    font-family: "Noto Sans", sans-serif;
+}
+
+.card-track {
+    height: 100%;
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.card-wrapper {
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card {
+    margin: 20px;
+    padding: 30px;
+    height: 75vh;
+    flex-grow: 0.8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 1rem;
+    border-radius: 2rem;
+    overflow: hidden;
+    cursor: default;
+}
+
+.card-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 4;
+}
+
+.card-center > img {
+    width: var(--logo-size);
+}
+
+.card-gradient {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    pointer-events: none;
+    z-index: 3;
+    mix-blend-mode: darken;
+}
+
+.card-letters {
+    --x: 0px;
+    --y: 0px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    font-size: var(--font-size);
+    font-weight: 500;
+    word-wrap: break-word;
+    opacity: 0;
+    transition: opacity 800ms;
+    mask-image: radial-gradient(
+        calc(var(--card-size) * 0.8) circle at var(--x) var(--y),
+        rgb(255, 255, 255) 20%,
+        rgba(255, 255, 255, 0.25),
+        transparent
+    );
+    -webkit-mask-image: radial-gradient(
+        calc(var(--card-size) * 0.8) circle at var(--x) var(--y),
+        rgb(255, 255, 255) 20%,
+        rgb(255 255 255 / 25%),
+        transparent
+    );
+    scale: 1.03;
+}
+/* 
+*/
+
+.card:hover .card-letters {
+    opacity: 1;
+}
+
+/* -- Extra Styles -- */
+
+.card-track:before,
+.card-track:after {
+    content: "";
+    height: 100vh;
+    width: 1px;
+    position: absolute;
+    top: 50%;
+    translate: 0% -50%;
+}
+
+.card-wrapper:before,
+.card-wrapper:after {
+    content: "";
+    width: 100vw;
+    position: absolute;
+    left: 50%;
+    translate: -50%;
+}
+
+@property --magic-angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+.card-magic {
+    position: relative;
+    --slate-500: #64748b;
+    --cyan-500: #06b6d4;
+    --fuchsia-500: #d946ef;
+}
+.card-magic::before,
+.card-magic::after {
+    content: "";
+    position: absolute;
+    inset: -0.1rem;
+    z-index: -1;
+    border-radius: inherit;
+    background: conic-gradient(
+        from var(--magic-angle),
+        var(--fuchsia-500),
+        var(--cyan-500),
+        var(--fuchsia-500)
+    );
+    animation: rotate 3s linear infinite;
+    opacity: 0;
+    transition: opacity 1s;
+}
+.card-magic::after {
+    filter: blur(3.5rem);
+}
+.card-magic:hover:before,
+.card-magic:hover:after {
+    opacity: 1;
+}
+@keyframes rotate {
+    0% {
+        --magic-angle: 0deg;
+    }
+    100% {
+        --magic-angle: 360deg;
+    }
+}
+
+.animated-glow::before {
+    position: absolute;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    background: radial-gradient(
+        1000px circle at var(--x) var(--y),
+        #d53af8 0,
+        #dc5290 25%,
+        rgba(255, 255, 255, 0) 50%,
+        transparent 80%
+    );
+    z-index: -1;
+    content: "";
+    top: -1px;
+    right: -1px;
+    bottom: -1px;
+    left: -1px;
+}
+
+.animated-glow:hover::before {
+    opacity: 1;
+}
+
+.dark .animated-glow::before {
+    background: radial-gradient(
+        1000px circle at var(--x) var(--y),
+        var(--color-acid-green) 0,
+        var(--color-dark-green-hsl) 25%,
+        rgba(255, 255, 255, 0) 50%,
+        transparent 80%
+    );
 }
 
 /* The regular daisyUI mask classes are not working in production, likely due to being overwritten by something. So here is a workaround */

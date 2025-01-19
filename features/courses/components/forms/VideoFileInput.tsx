@@ -22,7 +22,7 @@ export const VideoFileInput = ({ name, label, options }: Props) => {
             <input
                 type="file"
                 accept="video/*"
-                className="border border-gray-200 p-2 rounded mb-2 text-slate-700"
+                className="border border-gray-200 p-2 rounded-sm mb-2 text-slate-700"
                 {...register(name, options)}
             />
             {errors[name] && (

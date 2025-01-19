@@ -21,7 +21,7 @@ export const TextAreaInput = ({ name, label, options }: Props) => {
         <Field>
             <Label htmlFor={name}>{label}</Label>
             <TextareaAutosize
-                className="border border-gray-200 p-2 rounded mb-2 text-slate-700"
+                className="border border-gray-200 p-2 rounded-sm mb-2 text-slate-700"
                 {...register(name, options)}
             />
             {errors[name] && (

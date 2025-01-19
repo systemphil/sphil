@@ -36,7 +36,7 @@ export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
     return (
         <FadeIn>
             <div
-                className={`flex flex-col justify-center items-center gap-2 ${md} ${lg} ${xl} ${xxl}`}
+                className={`flex flex-col justify-center items-center gap-2 ${md} ${lg} ${xl} ${xxl} mb-20`}
             >
                 <div className="min-h-[500px] flex w-full md:col-span-3 md:order-2">
                     {lessonData.video ? (
