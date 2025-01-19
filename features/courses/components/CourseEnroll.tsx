@@ -69,27 +69,28 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                     Select your course tier
                 </p>
 
-                <div className="form-control has-checked:bg-indigo-50 rounded-md">
+                <div className="form-control has-checked:bg-indigo-50 has-checked:dark:bg-green-700/20 rounded-md relative">
+                    {!baseAvailable && (
+                        <span className="absolute text-xs text-slate-500  top-0 right-0">
+                            &nbsp;Currently unavailable
+                        </span>
+                    )}
                     <label
-                        className={`label ${
+                        className={`d-label ${
                             baseAvailable && "cursor-pointer"
                         } relative`}
                     >
                         <input
                             type="radio"
                             name="price-tier"
-                            className="radio checked:bg-red-500"
+                            className="d-radio checked:bg-red-500"
                             defaultChecked={baseAvailable}
                             value="base"
                             disabled={!baseAvailable}
                         />
-                        {!baseAvailable && (
-                            <span className="absolute text-xs text-slate-500  top-0 right-0">
-                                &nbsp;Currently unavailable
-                            </span>
-                        )}
+
                         <span
-                            className={`label-text dark:text-gray-300 ${
+                            className={`d-label-text dark:text-gray-300 ${
                                 !baseAvailable && "line-through"
                             }`}
                         >
@@ -102,26 +103,27 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                         price={course.basePrice}
                     />
                 </div>
-                <div className="form-control has-checked:bg-indigo-50 rounded-md">
+                <div className="form-control has-checked:bg-indigo-50 has-checked:dark:bg-green-700/20 rounded-md relative">
+                    {!seminarAvailable && (
+                        <span className="absolute text-xs text-slate-500 top-0 right-0">
+                            &nbsp;Currently unavailable
+                        </span>
+                    )}
                     <label
-                        className={`label ${
+                        className={`d-label ${
                             seminarAvailable && "cursor-pointer"
                         } relative`}
                     >
                         <input
                             type="radio"
                             name="price-tier"
-                            className="radio checked:bg-blue-500"
+                            className="d-radio checked:bg-blue-500"
                             value="seminar"
                             disabled={!seminarAvailable}
                         />
-                        {!seminarAvailable && (
-                            <span className="absolute text-xs text-slate-500 top-0 right-0">
-                                &nbsp;Currently unavailable
-                            </span>
-                        )}
+
                         <span
-                            className={`label-text dark:text-gray-300 ${
+                            className={`d-label-text dark:text-gray-300 ${
                                 !seminarAvailable && "line-through"
                             }`}
                         >
@@ -134,26 +136,27 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                         price={course.seminarPrice}
                     />
                 </div>
-                <div className="form-control has-checked:bg-indigo-50 rounded-md">
+                <div className="form-control has-checked:bg-indigo-50 has-checked:dark:bg-green-700/20 rounded-md relative">
+                    {!dialogueAvailable && (
+                        <span className="absolute text-xs text-slate-500 top-0 right-0">
+                            &nbsp;Currently unavailable
+                        </span>
+                    )}
                     <label
-                        className={`label ${
+                        className={`d-label ${
                             dialogueAvailable && "cursor-pointer"
                         } relative`}
                     >
                         <input
                             type="radio"
                             name="price-tier"
-                            className="radio checked:bg-green-600"
+                            className="d-radio checked:bg-green-600"
                             value="dialogue"
                             disabled={!dialogueAvailable}
                         />
-                        {!dialogueAvailable && (
-                            <span className="absolute text-xs text-slate-500 top-0 right-0">
-                                &nbsp;Currently unavailable
-                            </span>
-                        )}
+
                         <span
-                            className={`label-text dark:text-gray-300 ${
+                            className={`d-label-text dark:text-gray-300 ${
                                 !dialogueAvailable && "line-through"
                             }`}
                         >

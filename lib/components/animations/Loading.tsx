@@ -1,13 +1,13 @@
 function RingLg() {
-    return <span className="loading loading-ring loading-lg"></span>;
+    return <span className="d-loading d-loading-ring d-loading-lg"></span>;
 }
 
 function RingMd() {
-    return <span className="loading loading-ring loading-md"></span>;
+    return <span className="d-loading d-loading-ring d-loading-md"></span>;
 }
 
 function RingXs() {
-    return <span className="loading loading-ring loading-xs"></span>;
+    return <span className="d-loading d-loading-ring d-loading-xs"></span>;
 }
 
 function RingFullPage() {
@@ -19,7 +19,7 @@ function RingFullPage() {
 }
 
 function SkeletonFullPage() {
-    return <div className="skeleton w-full h-full"></div>;
+    return <div className="d-skeleton w-full h-full"></div>;
 }
 
 const Loading = {
