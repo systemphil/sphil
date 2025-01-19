@@ -17,6 +17,9 @@ export default {
     becoming: {
         title: "Becoming",
     },
+    quality: {
+        title: "Quality",
+    },
     "mechanical-object": {
         title: "Mechanical Object",
     },
