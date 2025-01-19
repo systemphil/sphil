@@ -8,6 +8,7 @@ FROM node:20-bullseye as builder
 WORKDIR /app
 COPY --from=installer /app/node_modules/ /app/node_modules
 COPY . .
+COPY .git ./.git 
 ENV NEXT_TELEMETRY_DISABLED 1
 
 ARG NEXT_PUBLIC_GA_ID
