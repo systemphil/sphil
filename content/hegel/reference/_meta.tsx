@@ -17,6 +17,9 @@ export default {
     becoming: {
         title: "Becoming",
     },
+    existence: {
+        title: "Existence",
+    },
     quality: {
         title: "Quality",
     },
@@ -25,5 +28,8 @@ export default {
     },
     "mechanical-process": {
         title: "Mechanical Process",
+    },
+    _annotations: {
+        title: "Annotations",
     },
 };
