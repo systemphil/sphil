@@ -17,10 +17,16 @@ export default {
     becoming: {
         title: "Becoming",
     },
+    existence: {
+        title: "Existence",
+    },
     "mechanical-object": {
         title: "Mechanical Object",
     },
     "mechanical-process": {
         title: "Mechanical Process",
+    },
+    _annotations: {
+        title: "Annotations",
     },
 };
