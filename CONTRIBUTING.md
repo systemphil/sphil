@@ -19,9 +19,9 @@ Besides these and many other libraries, the code is structured according to
 "feature based folder" paradigm to improve long-term maintainability and
 developer sanity. There are three main groups at play:
 
--   `/app` folder that deals with routing (special Next.js folder)
--   `/lib` folder that contains code to be freely shared across the codebase.
--   `/features` folder that contains specific feature-based code.
+- `/app` folder that deals with routing (special Next.js folder)
+- `/lib` folder that contains code to be freely shared across the codebase.
+- `/features` folder that contains specific feature-based code.
 
 The idea is that `/app` can import from `/lib` and `/features`, but `/lib` does
 not import from either, and `/features` can _only_ import from `/lib`.
@@ -92,21 +92,21 @@ and what they need from the shared lib.
 
 ## Further Organizational Guidelines
 
--   Server components, server cache and server actions are to be preferred over
-    traditional client component and query hooks. Not only is this a faster way
-    to implement code, but it comes with end-to-end type safety and is more
-    performant. Where high interactivity is required, we will consider the
-    traditional approach.
--   Nextra.js is used to generate HTML out of the MDX files from the `/content`
-    folder as well as handle routing and a majority of the styling.
-    Additionally, we use DaisyUI, TailwindCSS and MUI but try to keep it in
-    style with Nextra's. Ideally, we'd want less dependencies in the UI
-    department, but we're open to new ideas.
--   Prisma is used to interface with the database and to provide up-to-date type
-    safety across the app. The major downside with Prisma is that it is
-    query-heavy and not very performant. Currently, the DX is worth it but we
-    may look into replacing it in the future with a more direct hands-on
-    interface with the database.
+- Server components, server cache and server actions are to be preferred over
+  traditional client component and query hooks. Not only is this a faster way to
+  implement code, but it comes with end-to-end type safety and is more
+  performant. Where high interactivity is required, we will consider the
+  traditional approach.
+- Nextra.js is used to generate HTML out of the MDX files from the `/content`
+  folder as well as handle routing and a majority of the styling. Additionally,
+  we use DaisyUI, TailwindCSS and MUI but try to keep it in style with Nextra's.
+  Ideally, we'd want less dependencies in the UI department, but we're open to
+  new ideas.
+- Prisma is used to interface with the database and to provide up-to-date type
+  safety across the app. The major downside with Prisma is that it is
+  query-heavy and not very performant. Currently, the DX is worth it but we may
+  look into replacing it in the future with a more direct hands-on interface
+  with the database.
 
 ## 🧑‍💻 Local Development
 
@@ -127,16 +127,16 @@ names and copy over at least the minimal set.
 
 Minimal environment will require these env vars:
 
--   `NEXT_PUBLIC_SITE_ROOT` Copy this from `env.example`
--   `NEXT_PUBLIC_GA_ID` Copy this from `env.example`
--   `DATABASE_URL`
--   `AUTH_SECRET`
--   `AUTH_GITHUB_ID`
--   `AUTH_GITHUB_SECRET`
--   `GCP_PRIMARY_BUCKET_NAME`
--   `GCP_SECONDARY_BUCKET_NAME`
--   `GCP_BUCKET_HANDLER_KEY`
--   `STRIPE_API_KEY`
+- `NEXT_PUBLIC_SITE_ROOT` Copy this from `env.example`
+- `NEXT_PUBLIC_GA_ID` Copy this from `env.example`
+- `DATABASE_URL`
+- `AUTH_SECRET`
+- `AUTH_GITHUB_ID`
+- `AUTH_GITHUB_SECRET`
+- `GCP_PRIMARY_BUCKET_NAME`
+- `GCP_SECONDARY_BUCKET_NAME`
+- `GCP_BUCKET_HANDLER_KEY`
+- `STRIPE_API_KEY`
 
 Note: without Stripe access, you won't be able to create or fully update
 courses.
@@ -199,7 +199,7 @@ serverless instance on the free tier or set up one locally.
 Buckets are used for storage. We use GCP and they will likely incur some cost
 for usage.
 
--   ⚠️ The information in this section is sparse.
+- ⚠️ The information in this section is sparse.
 
 1. Two buckets are needed, one public and one restricted. However, both of these
    need to be handled by the same service account.
@@ -231,7 +231,7 @@ for usage.
 
 #### 💵 Stripe
 
--   ⚠️ The information in this section is sparse.
+- ⚠️ The information in this section is sparse.
 
 In order to create and fully update courses, a Stripe connection is needed. Sign
 up an account on Stripe and set up a test environment. Get the API key and
@@ -245,7 +245,7 @@ shortcut you can use from the project: `npm run stripe:listen`.
 
 #### 📧 Resend
 
--   ⚠️ The information in this section is sparse.
+- ⚠️ The information in this section is sparse.
 
 We use Resend to handle emails. You will need to set up an account there and
 generate API keys. Possibly you may need a domain as well.
