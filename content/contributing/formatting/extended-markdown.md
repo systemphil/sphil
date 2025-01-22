@@ -47,14 +47,14 @@ To make a list of tasks, use the following format. Note, these are not
 interactive!
 
 ```md
--   [x] Write the contributing docs
--   [ ] Update the website
--   [ ] Drink coffee
+- [x] Write the contributing docs
+- [ ] Update the website
+- [ ] Drink coffee
 ```
 
--   [x] Write the contributing docs
--   [ ] Update the website
--   [ ] Drink coffee
+- [x] Write the contributing docs
+- [ ] Update the website
+- [ ] Drink coffee
 
 ### Emoji 😊
 
@@ -105,7 +105,7 @@ is a fancy box</span>
 >
 ```
 
-Normally, it shouldn't be necessary to do any additonal styling, and if we
+Normally, it shouldn't be necessary to do any additional styling, and if we
 would, we would do it by other means
 
 ### Heading IDs
@@ -119,4 +119,4 @@ will see the section link popup in the `#` to the right of the heading.
 You can add comments to the file by enclosing the text with `<!-- -->`, which
 will not appear in the rendered Markdown. Such as this one:
 
-<!-- Hahah you cannot see me! -->
+<!-- Ha-ha you cannot see me! -->
