@@ -90,7 +90,7 @@ jobs:
       with:
         repository: ${{ github.repository }}
         ref: ${{ github.ref }}
-        fetch-depth: 1
+        fetch-depth: 0
 
     - name: Download prepyrus artifact
       uses: actions/download-artifact@v4

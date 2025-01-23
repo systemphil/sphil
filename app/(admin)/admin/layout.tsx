@@ -24,7 +24,7 @@ export default async function AdminLayout({
 
     return (
         <section>
-            <div className="w-full bg-purple-200 z-10 fixed shadow flex justify-center items-center py-1 gap-3">
+            <div className="w-full bg-purple-200 z-10 fixed shadow-sm flex justify-center items-center py-1 gap-3">
                 <span className="text-purple-300">ADMIN AREA</span>
                 <AdminBtn href="/admin">Main</AdminBtn>
                 <AdminBtn href="/admin/mng">Management</AdminBtn>
@@ -38,7 +38,7 @@ export default async function AdminLayout({
 function AdminBtn(props: { href: string; children: React.ReactNode }) {
     return (
         <Link href={props.href}>
-            <button className="btn btn-primary btn-outline btn-sm">
+            <button className="d-btn d-btn-primary d-btn-outline d-btn-sm">
                 {props.children}
             </button>
         </Link>

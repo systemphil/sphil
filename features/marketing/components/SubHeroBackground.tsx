@@ -19,7 +19,6 @@
  */
 
 import { useEffect, useState } from "react";
-import styles from "./sub-hero-background.module.css";
 import { cn } from "lib/utils";
 
 export const SubHeroBackground = ({
@@ -77,23 +76,21 @@ export const SubHeroBackground = ({
     }, [screenSize]);
 
     return (
-        <div className={styles["card-root"]}>
-            <div className={styles["card-track"]}>
-                <div className={styles["card-wrapper"]}>
-                    <div id="targetCard" className={styles["card"]}>
-                        <div className={cn(styles["card-center"])}>
-                            {children}
-                        </div>
+        <div className="card-root">
+            <div className="card-track">
+                <div className="card-wrapper">
+                    <div id="targetCard" className="card">
+                        <div className="card-center">{children}</div>
                         <div
                             className={cn(
-                                styles["card-gradient"],
+                                "card-gradient",
                                 "bg-radial-gradient dark:bg-radial-gradient-dark"
                             )}
                         ></div>
                         <div
                             id="targetLetters"
                             className={cn(
-                                styles["card-letters"],
+                                "card-letters",
                                 "text-black dark:text-green-100"
                             )}
                         ></div>

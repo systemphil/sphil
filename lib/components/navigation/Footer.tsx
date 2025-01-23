@@ -4,9 +4,10 @@ import Link from "next/link";
 import { LogoOwl } from "../LogoOwl";
 import { LogoAnimated } from "../LogoAnimated";
 import { SymposiaCard } from "../SymposiaCard";
+import { SocialIcon } from "../icons/SocialIcon";
 
 const footerLinkClasses =
-    "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 hover:dark:text-gray-200 transition";
+    "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 dark:hover:text-gray-200 transition";
 
 export function Footer(): React.ReactElement {
     return (
@@ -67,7 +68,7 @@ function FooterContent() {
             { name: "Reference", href: "/articles/kant/reference" },
         ],
         company: [
-            { name: "Team", href: "/articles/team" },
+            { name: "Team", href: "/team" },
             { name: "Contributing", href: "/articles/contributing" },
             { name: "Methodology", href: "/articles/contributing/methodology" },
             {
@@ -99,7 +100,7 @@ function FooterContent() {
                 <div className="">
                     <div className="grid grid-cols-1 gap-8 xl:col-span-2">
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 md:gap-8">
-                            <div className="mt-12 md:!mt-0">
+                            <div className="mt-12 md:mt-0!">
                                 <FooterHeader>Resources</FooterHeader>
                                 <ul
                                     role="list"
@@ -114,7 +115,7 @@ function FooterContent() {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="mt-12 md:!mt-0">
+                            <div className="mt-12 md:mt-0!">
                                 <FooterHeader>Hegel</FooterHeader>
                                 <ul
                                     role="list"
@@ -129,7 +130,7 @@ function FooterContent() {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="mt-12 md:!mt-0">
+                            <div className="mt-12 md:mt-0!">
                                 <FooterHeader>Kant</FooterHeader>
                                 <ul
                                     role="list"
@@ -144,7 +145,7 @@ function FooterContent() {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="mt-12 md:!mt-0">
+                            <div className="mt-12 md:mt-0!">
                                 <FooterHeader>About</FooterHeader>
                                 <ul
                                     role="list"
@@ -159,7 +160,7 @@ function FooterContent() {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="mt-12 md:!mt-0">
+                            <div className="mt-12 md:mt-0!">
                                 <FooterHeader>Legal</FooterHeader>
                                 <ul
                                     role="list"
@@ -174,20 +175,34 @@ function FooterContent() {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="mt-12 md:!mt-0">
-                                <FooterHeader>Support</FooterHeader>
-                                <ul
-                                    role="list"
-                                    className="mt-4 space-y-1.5 list-none ml-0"
-                                >
-                                    {navigation.support.map((item) => (
-                                        <li key={item.name}>
-                                            <FooterLink href={item.href}>
-                                                {item.name}
-                                            </FooterLink>
-                                        </li>
-                                    ))}
-                                </ul>
+                            <div className="mt-12 md:mt-0!">
+                                <FooterHeader>Social</FooterHeader>
+                                <div className="flex gap-3 flex-wrap mt-4">
+                                    <SocialIcon
+                                        icon="mail"
+                                        href="mailto:service@systemphil.com"
+                                    />
+                                    <SocialIcon
+                                        icon="facebook"
+                                        href="https://www.facebook.com/profile.php?id=61564840656103"
+                                    />
+                                    <SocialIcon
+                                        icon="youtube"
+                                        href="https://www.youtube.com/@sphildotxyz"
+                                    />
+                                    <SocialIcon
+                                        icon="bluesky"
+                                        href="https://bsky.app/profile/sphil.xyz"
+                                    />
+                                    <SocialIcon
+                                        icon="twitter"
+                                        href="https://twitter.com/sphildotxyz"
+                                    />
+                                    <SocialIcon
+                                        icon="github"
+                                        href="https://github.com/systemphil"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -20,7 +20,7 @@ export const DateInput = ({ name, label, options }: Props) => {
             <Label htmlFor={name}>{label}</Label>
             <input
                 type="datetime-local"
-                className="border border-gray-200 p-2 rounded mb-2 text-slate-700"
+                className="border border-gray-200 p-2 rounded-sm mb-2 text-slate-700"
                 {...register(name, options)}
             />
             {errors[name] && (

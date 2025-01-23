@@ -44,7 +44,7 @@ export const SubscribeToNewsletter = () => {
     };
 
     return (
-        <div className="card py-2">
+        <div className="d-card py-2">
             <CardShell>
                 <div className="p-10">
                     <form
@@ -75,9 +75,9 @@ export const SubscribeToNewsletter = () => {
                             disabled={isPending || status === "success"}
                             type="submit"
                             className={`
-                ${status === "error" ? "bg-red-500" : "bg-blue-500"}
+                ${status === "error" ? "bg-red-500" : "bg-blue-500 hover:bg-blue-600"}
                 w-32
-                text-white p-2 rounded-r-md
+                text-white p-2 rounded-r-md cursor-pointer duration-300
               `}
                         >
                             {status === "error" && "Error. Retry"}

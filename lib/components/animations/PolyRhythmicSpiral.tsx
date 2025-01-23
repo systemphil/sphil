@@ -308,5 +308,15 @@ export const PolyRhythmicSpiral = () => {
         draw();
     }, []);
 
-    return <canvas id="paper"></canvas>;
+    return (
+        <canvas
+            id="paper"
+            style={{
+                height: "75vh",
+                width: "75vw",
+                position: "relative",
+                zIndex: 9,
+            }}
+        ></canvas>
+    );
 };

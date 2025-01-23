@@ -24,7 +24,7 @@ export const VerifyPurchase = ({
                 {loading && (
                     <div
                         role="alert"
-                        className={`alert alert-info md:min-w-[600px] ${commonAlertClasses}`}
+                        className={`d-alert d-alert-info md:min-w-[600px] ${commonAlertClasses}`}
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -43,13 +43,13 @@ export const VerifyPurchase = ({
                             Please wait while your purchase is being
                             confirmed...
                         </span>
-                        <span className="loading loading-dots loading-md"></span>
+                        <span className="d-loading d-loading-dots d-loading-md"></span>
                     </div>
                 )}
                 {error && (
                     <div
                         role="alert"
-                        className={`alert alert-error ${commonAlertClasses}`}
+                        className={`d-alert d-alert-error ${commonAlertClasses}`}
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +69,7 @@ export const VerifyPurchase = ({
                             Please contact support{" "}
                             <a
                                 href="mailto:support@systemphil.com"
-                                className="text-blue-400 underline hover:text-blue-700"
+                                className="text-blue-500 underline hover:text-blue-700 font-bold"
                             >
                                 at this email
                             </a>
@@ -81,7 +81,7 @@ export const VerifyPurchase = ({
                     <>
                         <div
                             role="alert"
-                            className={`alert alert-success ${commonAlertClasses}`}
+                            className={`d-alert d-alert-success ${commonAlertClasses}`}
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -99,7 +99,7 @@ export const VerifyPurchase = ({
                             <span>Thank you for your purchase! 🙏</span>
                         </div>
                         <div className="flex justify-center m-10">
-                            <button className="btn btn-primary">
+                            <button className="d-btn d-btn-primary">
                                 <Link href={`/symposia/courses/${data}`}>
                                     Click to go to the course
                                 </Link>
