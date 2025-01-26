@@ -66,8 +66,7 @@ technical implementations rather than content, literature, or philosophy.
 - Philosophical/literary content: Licensed under CC BY-NC-SA 4.0
 - Code contributions: Licensed under Apache License 2.0
 - Please sign your contribution in the metadata under Authors, Editors, or
-Contributors
-    </details>
+  Contributors </details>
 
 ## License Agreement
 
