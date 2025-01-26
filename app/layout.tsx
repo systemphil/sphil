@@ -155,7 +155,7 @@ export default async function RootLayout({
                         editLink={
                             <ContributionModal
                                 docsRepositoryBase={DOCS_REPOSITORY_BASE}
-                                filePath={PROJECT_LINK}
+                                filePath={'/content/contributing'}
                             />
                         }
                         sidebar={{ defaultMenuCollapseLevel: 2 }}

@@ -15,6 +15,8 @@ const ContributionModal = ({
 }: ContributeModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const githubEditUrl = `${docsRepositoryBase}/${filePath || ""}`;
+
   const handleClickOpen = (e) => {
     e.preventDefault();
     setIsOpen(true);
@@ -87,7 +89,7 @@ const ContributionModal = ({
           </DialogContent>
           <DialogActions>
             <a
-                href={docsRepositoryBase}
+                href={githubEditUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-4 py-2 rounded nx-font-semibold nx-text-primary-800"
