@@ -142,56 +142,56 @@ the same number and the program will assign the correct order.
 To make an unordered list, start a line with with a hyphen `-` or an asterisk
 `*`.
 
--   Kant
--   Hume
--   Rousseau
+- Kant
+- Hume
+- Rousseau
 
 ```md
--   Kant
--   Hume
--   Rousseau
+- Kant
+- Hume
+- Rousseau
 ```
 
 #### Nested Lists
 
 To make items nested in a list, you add two spaces before the bullet item.
 
--   Kant's Table of Judgments
-    -   Quantity
-        -   Universal
-        -   Particular
-        -   Singular
-    -   Quality
-        -   Affirmative
-        -   Negative
-        -   Infinite
-    -   Relation
-        -   Categorical
-        -   Hypothetical
-        -   Disjunctive
-    -   Modality
-        -   Problematical
-        -   Assertoric
-        -   Apodictic
+- Kant's Table of Judgments
+    - Quantity
+        - Universal
+        - Particular
+        - Singular
+    - Quality
+        - Affirmative
+        - Negative
+        - Infinite
+    - Relation
+        - Categorical
+        - Hypothetical
+        - Disjunctive
+    - Modality
+        - Problematical
+        - Assertoric
+        - Apodictic
 
 ```md
--   Kant's Table of Judgments
-    -   Quantity
-        -   Universal
-        -   Particular
-        -   Singular
-    -   Quality
-        -   Affirmative
-        -   Negative
-        -   Infinite
-    -   Relation
-        -   Categorical
-        -   Hypothetical
-        -   Disjunctive
-    -   Modality
-        -   Problematical
-        -   Assertoric
-        -   Apodictic
+- Kant's Table of Judgments
+    - Quantity
+        - Universal
+        - Particular
+        - Singular
+    - Quality
+        - Affirmative
+        - Negative
+        - Infinite
+    - Relation
+        - Categorical
+        - Hypothetical
+        - Disjunctive
+    - Modality
+        - Problematical
+        - Assertoric
+        - Apodictic
 ```
 
 ### Horizontal Rule
