@@ -65,7 +65,7 @@ technical implementations rather than content, literature, or philosophy.
 - Code contributions: Licensed under Apache License 2.0
 - Please sign your contribution in the metadata under Authors, Editors, or
 
-  Contributors
+    Contributors
 
 </details>
 
