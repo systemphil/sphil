@@ -35,4 +35,3 @@ jobs:
       run: |
         echo "Formatting check failed. Please format your code according to the project's Prettier configuration."
         exit 1
-

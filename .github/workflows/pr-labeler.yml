@@ -28,7 +28,7 @@ jobs:
             let hasCodeChanges = false;
 
             extensions.forEach(ext => {
-              if (ext === '.mdx') {
+              if (ext === '.mdx' || ext === '.md' || ext === '.bib') {
                 hasContentChanges = true;
               } else {
                 hasCodeChanges = true;
