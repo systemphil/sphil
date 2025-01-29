@@ -118,7 +118,7 @@ export default function EditorInternals({ material, title }: EditorProps) {
             </Heading>
             <EditorContext.Provider value={isLoading}>
                 <MDXEditor
-                    className="border-2 border-gray-200 rounded-lg"
+                    className="border-2 border-gray-200 rounded-lg full-demo-mdxeditor"
                     ref={editorRef}
                     markdown={material.mdx}
                     contentEditableClassName="prose dark:prose-invert max-w-none"

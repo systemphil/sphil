@@ -69,6 +69,10 @@ blockquote {
     @apply visible z-50;
 }
 
+.full-demo-mdxeditor [role="toolbar"] {
+    top: 105px;
+}
+
 /* Overrides for MDX Editor classes*/
 ._nestedEditor_uazmk_963 {
     @apply dark:bg-gray-900;

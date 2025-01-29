@@ -15,6 +15,7 @@ import {
     cache,
     CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS,
 } from "lib/server/cache";
+import { Text } from "lib/utils/textEncoding";
 
 /**
  * Calls the database to retrieve all courses.
@@ -268,7 +269,7 @@ export const dbGetLessonAndRelationsBySlug = async (slug: string) => {
 };
 /**
  * Calls the database to retrieve mdx field by id of the model as identifier.
- * Converts binary content of found record to string so that it can pass the tRPC network boundary
+ * Converts binary content of found record to string
  * and/or be passed down to Client Components from Server Components.
  * @supports LessonContent | LessonTranscript | CourseDetails
  * TODO fixme! Auth guard this
@@ -314,7 +315,7 @@ export const dbGetMdxByModelId = async (id: string) => {
             /**
              * Resolve third attempt if query successful.
              */
-            const courseDetailsContentAsString = courseDetails.mdx.toString();
+            const courseDetailsContentAsString = Text.Decode(courseDetails.mdx);
             const newResult = {
                 ...courseDetails,
                 mdx: courseDetailsContentAsString,
@@ -324,7 +325,7 @@ export const dbGetMdxByModelId = async (id: string) => {
         /**
          * Resolve second attempt if query successful.
          */
-        const transcriptAsString = lessonTranscript.mdx.toString();
+        const transcriptAsString = Text.Decode(lessonTranscript.mdx);
         const newResult = {
             ...lessonTranscript,
             mdx: transcriptAsString,
@@ -334,7 +335,7 @@ export const dbGetMdxByModelId = async (id: string) => {
     /**
      * Resolve first attempt if query successful.
      */
-    const contentAsString = lessonContent.mdx.toString();
+    const contentAsString = Text.Decode(lessonContent.mdx);
     const newResult = {
         ...lessonContent,
         mdx: contentAsString,
@@ -717,7 +718,7 @@ export const dbUpsertLessonContentById = async ({
         const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
         const validLessonId = z.string().parse(lessonId);
 
-        const contentAsBuffer = Uint8Array.from(content);
+        const contentAsBuffer = Text.Encode(content);
 
         const result = await prisma.lessonContent.upsert({
             where: {
@@ -755,7 +756,7 @@ export const dbUpsertLessonTranscriptById = async ({
         const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
         const validLessonId = z.string().parse(lessonId);
 
-        const contentAsBuffer = Uint8Array.from(transcript);
+        const contentAsBuffer = Text.Encode(transcript);
 
         const result = await prisma.lessonTranscript.upsert({
             where: {
@@ -792,7 +793,7 @@ export const dbUpsertCourseDetailsById = async ({
         const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
         const validCourseId = z.string().parse(courseId);
 
-        const contentAsBuffer = Uint8Array.from(content);
+        const contentAsBuffer = Text.Encode(content);
 
         const result = await prisma.courseDetails.upsert({
             where: {
@@ -827,7 +828,7 @@ export const dbUpdateMdxByModelId = async ({
         const validId = z.string().parse(id);
         const validContent = z.string().parse(content);
 
-        const contentAsBuffer = Buffer.from(validContent, "utf-8");
+        const contentAsBuffer = Text.Encode(validContent);
         /**
          * Prisma does not allow us to traverse two tables at once, so we made SQL executions directly with $executeRaw where
          * prisma returns the number of rows affected by the query instead of an error in the usual prisma.update().
