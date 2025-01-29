@@ -34,12 +34,12 @@ export function TableOfLessons({
 
 function LessonsMap({ lessons, courseSlug }: CourseLessonContentsProps) {
     return (
-        <ul className="d-menu max-w-xs">
+        <ul className="max-w-xs">
             {lessons.map((lesson: any, index) => {
                 return (
                     <li key={lesson.slug}>
                         <Link
-                            className="dark:hover:bg-dark-green-hsl transition-colors duration-300 flex p-1 hover:rounded-sm"
+                            className="dark:hover:bg-dark-green-hsl hover:bg-slate-200/90 transition-all duration-300 flex p-1 rounded-md"
                             href={`${links.courses}/${courseSlug}/${lesson.slug}`}
                         >
                             <svg
