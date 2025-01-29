@@ -47,14 +47,15 @@ export function CourseMaterialCard({
     };
 
     return (
-        <div className="flex border border-gray-200 rounded-lg mb-6 hover:bg-slate-200 duration-300 justify-between items-center">
-            <Link className="flex grow" href={href}>
-                <div className="flex p-2">
-                    <Heading as="h6">{heading}</Heading>
-                </div>
+        <div className="flex w-full border border-gray-200 rounded-lg hover:bg-slate-100 duration-300 justify-between items-center">
+            <div className="flex grow p-2">
+                <Heading as="h6">{heading}</Heading>
+            </div>
+            <Link className="flex" href={href}>
+                <button className="d-btn d-btn-accent mr-2 ">Edit</button>
             </Link>
             <button
-                className="d-btn d-btn-square mr-2 "
+                className="d-btn d-btn-square mr-2 hover:bg-red-500"
                 disabled={isPending}
                 onClick={() => setIsDialogOpen(true)}
             >
