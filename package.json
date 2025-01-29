@@ -10,8 +10,11 @@
         "prettier:check": "npx prettier --check .",
         "postbuild": "pagefind --site .next/standalone/.next/server/app/articles --output-path public/_pagefind",
         "stripe:listen": "stripe listen --forward-to 127.0.0.1:3000/api/stripe-webhook",
+        "db:studio": "dotenv -e .env -- npx prisma studio",
+        "db:studio:prod": "dotenv -e .env.production -- npx prisma studio",
         "db:regen": "npx prisma generate",
-        "db:push": "npx prisma db push"
+        "db:push": "npx prisma db push",
+        "db:push:prod": "dotenv -e .env.production -- npx prisma db push"
     },
     "dependencies": {
         "@auth/prisma-adapter": "^2.7.2",
@@ -63,6 +66,7 @@
     "devDependencies": {
         "@svgr/webpack": "^8.0.1",
         "daisyui": "^5.0.0-beta.1",
+        "dotenv-cli": "^8.0.0",
         "pagefind": "^1.1.1"
     }
 }
