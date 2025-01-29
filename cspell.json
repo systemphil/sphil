@@ -11,7 +11,9 @@
         "public",
         "package-lock.json",
         "package.json",
-        "next.config.mjs"
+        "next.config.mjs",
+        ".env",
+        ".env.*"
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
@@ -30,6 +32,7 @@
         "Clientside",
         "clsx",
         "cockroachdb",
+        "cuid",
         "Daseiendes",
         "Dasein",
         "defaultdb",
@@ -52,6 +55,7 @@
         "itselfness",
         "Keon",
         "lccn",
+        "livemode",
         "lxviii",
         "mctaggart",
         "mdxeditor",

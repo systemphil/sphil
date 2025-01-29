@@ -29,7 +29,7 @@ export default async function AdminLessonEdit({
     const video = await dbGetVideoByLessonId(lessonId);
 
     return (
-        <div className="grid md:grid-cols-2">
+        <div className="grid md:grid-cols-2 p-4">
             <div>
                 <Heading as="h2">{lesson.name}</Heading>
                 <LessonForm lesson={lesson} courseId={courseId} />

@@ -130,6 +130,7 @@ model Lesson {
     name           String
     description    String
     slug           String
+    order          Int
     part           Part?                @relation(fields: [partId], references: [id])
     partId         String?
     course         Course               @relation(fields: [courseId], references: [id], onDelete: Cascade)

@@ -6,7 +6,7 @@ import {
     bucketGenerateReadSignedUrl,
     bucketGenerateSignedUploadUrl,
 } from "lib/bucket/bucketFuncs";
-import { dbUpsertLessonById } from "lib/database/dbFuncs";
+import { dbReorderLessons, dbUpsertLessonById } from "lib/database/dbFuncs";
 import {
     ctrlCreateOrUpdateCourse,
     ctrlDeleteModelEntry,
@@ -164,4 +164,28 @@ export async function actionDeleteModelEntry(
     revalidatePath("/(admin)/admin", "layout");
     revalidateTag("allPublicCurses");
     return { data };
+}
+
+const reorderModelsSchema = z.array(z.string());
+
+type ActionUpdateLessonsOrder = z.infer<typeof reorderModelsSchema>;
+
+export async function actionUpdateLessonOrder(input: ActionUpdateLessonsOrder) {
+    const isAdmin = await validateAdminAccess();
+    if (!isAdmin) {
+        return { error: true, message: "Unauthorized" };
+    }
+    const parsedInput = reorderModelsSchema.safeParse(input);
+    if (!parsedInput.success) {
+        return {
+            error: true,
+            message: `Bad request ${parsedInput.error.message}`,
+        };
+    }
+
+    await dbReorderLessons({ orderedLessonIds: input });
+
+    revalidatePath("/(admin)/admin", "layout");
+    revalidateTag("allPublicCurses");
+    return { error: false, message: "Successfully reordered your lessons" };
 }

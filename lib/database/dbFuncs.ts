@@ -55,6 +55,9 @@ export const dbGetCourseBySlug = async (slug: string) => {
                     slug: true,
                     name: true,
                 },
+                orderBy: {
+                    order: "asc",
+                },
             },
             details: {
                 select: {
@@ -173,7 +176,11 @@ export async function dbGetCourseAndDetailsAndLessonsById(id: string) {
                 id: validId,
             },
             include: {
-                lessons: true,
+                lessons: {
+                    orderBy: {
+                        order: "asc",
+                    },
+                },
                 details: {
                     select: {
                         id: true,
@@ -250,6 +257,9 @@ export const dbGetLessonAndRelationsBySlug = async (slug: string) => {
                             slug: true,
                             name: true,
                         },
+                        orderBy: {
+                            order: "asc",
+                        },
                     },
                 },
             },
@@ -304,8 +314,7 @@ export const dbGetMdxByModelId = async (id: string) => {
             /**
              * Resolve third attempt if query successful.
              */
-            const courseDetailsContentAsString =
-                courseDetails.mdx.toString("utf-8");
+            const courseDetailsContentAsString = courseDetails.mdx.toString();
             const newResult = {
                 ...courseDetails,
                 mdx: courseDetailsContentAsString,
@@ -315,7 +324,7 @@ export const dbGetMdxByModelId = async (id: string) => {
         /**
          * Resolve second attempt if query successful.
          */
-        const transcriptAsString = lessonTranscript.mdx.toString("utf-8");
+        const transcriptAsString = lessonTranscript.mdx.toString();
         const newResult = {
             ...lessonTranscript,
             mdx: transcriptAsString,
@@ -325,7 +334,7 @@ export const dbGetMdxByModelId = async (id: string) => {
     /**
      * Resolve first attempt if query successful.
      */
-    const contentAsString = lessonContent.mdx.toString("utf-8");
+    const contentAsString = lessonContent.mdx.toString();
     const newResult = {
         ...lessonContent,
         mdx: contentAsString,
@@ -616,34 +625,80 @@ export const dbUpsertLessonById = async ({
     partId?: string | null;
     courseId: string | null;
 }) => {
+    async function findExistingLesson(id?: string) {
+        if (!id) return null;
+
+        const validId = z.string().parse(id);
+
+        return prisma.lesson.findFirst({
+            where: {
+                id: validId,
+            },
+        });
+    }
+
     async function task() {
-        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
         const validName = z.string().parse(name);
         const validDescription = z.string().parse(description);
         const validSlug = z.string().toLowerCase().parse(slug);
         const validPartId = partId ? z.string().parse(partId) : undefined;
         const validCourseId = z.string().parse(courseId);
 
-        return await prisma.lesson.upsert({
-            where: {
-                id: validId,
-            },
-            update: {
-                name: validName,
-                slug: validSlug,
-                description: validDescription,
-                partId: validPartId,
-            },
-            create: {
-                name: validName,
-                description: validDescription,
-                slug: validSlug,
-                courseId: validCourseId,
-                partId: validPartId,
-            },
-        });
+        const existingLesson = await findExistingLesson(id);
+
+        if (existingLesson) {
+            return await prisma.lesson.update({
+                where: {
+                    id: existingLesson.id,
+                },
+                data: {
+                    name: validName,
+                    slug: validSlug,
+                    description: validDescription,
+                    partId: validPartId,
+                },
+            });
+        } else {
+            const allLessons = await prisma.lesson.findMany({
+                select: {
+                    id: true,
+                },
+            });
+            const totalLessonsPlusOne = allLessons.length + 1;
+
+            return await prisma.lesson.create({
+                data: {
+                    name: validName,
+                    description: validDescription,
+                    slug: validSlug,
+                    courseId: validCourseId,
+                    partId: validPartId,
+                    order: totalLessonsPlusOne,
+                },
+            });
+        }
     }
     return withAdmin(task);
+};
+/**
+ * Reorders lessons by their position in the input array.
+ */
+export const dbReorderLessons = async ({
+    orderedLessonIds,
+}: {
+    orderedLessonIds: string[];
+}) => {
+    await prisma.$transaction(async (tx) => {
+        await Promise.all(
+            orderedLessonIds.map((id, index) =>
+                tx.lesson.updateMany({
+                    where: { id },
+                    data: { order: index + 1 },
+                })
+            )
+        );
+    });
+    return;
 };
 /**
  * Updates an existing lessonContent details by id as identifier or creates a new one if id is not provided.
@@ -662,7 +717,7 @@ export const dbUpsertLessonContentById = async ({
         const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
         const validLessonId = z.string().parse(lessonId);
 
-        const contentAsBuffer = Buffer.from(content, "utf-8");
+        const contentAsBuffer = Uint8Array.from(content);
 
         const result = await prisma.lessonContent.upsert({
             where: {
@@ -700,7 +755,7 @@ export const dbUpsertLessonTranscriptById = async ({
         const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
         const validLessonId = z.string().parse(lessonId);
 
-        const contentAsBuffer = Buffer.from(transcript, "utf-8");
+        const contentAsBuffer = Uint8Array.from(transcript);
 
         const result = await prisma.lessonTranscript.upsert({
             where: {
@@ -737,7 +792,7 @@ export const dbUpsertCourseDetailsById = async ({
         const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
         const validCourseId = z.string().parse(courseId);
 
-        const contentAsBuffer = Buffer.from(content, "utf-8");
+        const contentAsBuffer = Uint8Array.from(content);
 
         const result = await prisma.courseDetails.upsert({
             where: {
@@ -934,23 +989,48 @@ export const dbDeleteCourseDetailsById = async ({
 };
 /**
  * Deletes entry from the Lesson model (and all related models). Returns only id of deleted model.
- * @warning Does NOT delete video from storage. Consider using `orderDeleteVideo()` or `orderDeleteLesson()` instead.
+ * @warning Does NOT delete video from storage. Consider using `ctrlDeleteVideo()` or `ctrlDeleteLesson()` instead.
  * @access ADMIN
  */
 export const dbDeleteLesson = async ({ id }: { id: Lesson["id"] }) => {
     async function task() {
         const validId = z.string().parse(id);
-        return await prisma.lesson.delete({
-            where: { id: validId },
-            select: { id: true },
+        const deletedLesson = await prisma.$transaction(async (tx) => {
+            // First, get the order and courseId of the lesson to be deleted
+            const lessonToDelete = await tx.lesson.findUnique({
+                where: { id: validId },
+                select: { order: true, courseId: true, id: true },
+            });
+
+            if (!lessonToDelete) {
+                throw new Error("Lesson not found");
+            }
+
+            // Delete the lesson
+            await tx.lesson.delete({
+                where: { id: validId },
+            });
+
+            // Update the order of remaining lessons
+            await tx.lesson.updateMany({
+                where: {
+                    courseId: lessonToDelete.courseId,
+                    order: { gt: lessonToDelete.order },
+                },
+                data: {
+                    order: { decrement: 1 },
+                },
+            });
+            return lessonToDelete;
         });
+        return deletedLesson;
     }
     return withAdmin(task);
 };
 
 /**
  * Deletes entry from the Course model (and all related models, including CourseDetails). Returns only id of deleted model.
- * @warning Does NOT delete video from storage. Consider using `orderDeleteVideo()` or `orderDeleteLesson()` instead.
+ * @warning Does NOT delete video from storage. Consider using `ctrlDeleteVideo()` or `ctrlDeleteLesson()` instead.
  * @access ADMIN
  */
 export const dbDeleteCourse = async ({ id }: { id: Course["id"] }) => {
