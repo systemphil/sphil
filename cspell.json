@@ -11,7 +11,9 @@
         "public",
         "package-lock.json",
         "package.json",
-        "next.config.mjs"
+        "next.config.mjs",
+        ".env",
+        ".env.*"
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
