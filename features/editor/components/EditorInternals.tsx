@@ -173,13 +173,6 @@ export default function EditorInternals({ material, title }: EditorProps) {
                     ]}
                 />
             </EditorContext.Provider>
-
-            <button
-                className="d-btn d-btn-warning d-btn-xs mt-4"
-                onClick={() => console.info(editorRef.current?.getMarkdown())}
-            >
-                DEBUG:Print markdown to console
-            </button>
         </div>
     );
 }

@@ -314,8 +314,7 @@ export const dbGetMdxByModelId = async (id: string) => {
             /**
              * Resolve third attempt if query successful.
              */
-            const courseDetailsContentAsString =
-                courseDetails.mdx.toString("utf-8");
+            const courseDetailsContentAsString = courseDetails.mdx.toString();
             const newResult = {
                 ...courseDetails,
                 mdx: courseDetailsContentAsString,
@@ -325,7 +324,7 @@ export const dbGetMdxByModelId = async (id: string) => {
         /**
          * Resolve second attempt if query successful.
          */
-        const transcriptAsString = lessonTranscript.mdx.toString("utf-8");
+        const transcriptAsString = lessonTranscript.mdx.toString();
         const newResult = {
             ...lessonTranscript,
             mdx: transcriptAsString,
@@ -335,7 +334,7 @@ export const dbGetMdxByModelId = async (id: string) => {
     /**
      * Resolve first attempt if query successful.
      */
-    const contentAsString = lessonContent.mdx.toString("utf-8");
+    const contentAsString = lessonContent.mdx.toString();
     const newResult = {
         ...lessonContent,
         mdx: contentAsString,
@@ -718,7 +717,7 @@ export const dbUpsertLessonContentById = async ({
         const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
         const validLessonId = z.string().parse(lessonId);
 
-        const contentAsBuffer = Buffer.from(content, "utf-8");
+        const contentAsBuffer = Uint8Array.from(content);
 
         const result = await prisma.lessonContent.upsert({
             where: {
@@ -756,7 +755,7 @@ export const dbUpsertLessonTranscriptById = async ({
         const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
         const validLessonId = z.string().parse(lessonId);
 
-        const contentAsBuffer = Buffer.from(transcript, "utf-8");
+        const contentAsBuffer = Uint8Array.from(transcript);
 
         const result = await prisma.lessonTranscript.upsert({
             where: {
@@ -793,7 +792,7 @@ export const dbUpsertCourseDetailsById = async ({
         const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
         const validCourseId = z.string().parse(courseId);
 
-        const contentAsBuffer = Buffer.from(content, "utf-8");
+        const contentAsBuffer = Uint8Array.from(content);
 
         const result = await prisma.courseDetails.upsert({
             where: {

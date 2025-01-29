@@ -21,20 +21,9 @@ export function TableOfLessons({
     if (lessons.length > 0) {
         return (
             <div className="mt-4 md:py-8 max-w-[320px]">
-                <div className="hidden md:block">
+                <div>
                     <Heading as="h3">Lessons</Heading>
                     <LessonsMap lessons={lessons} courseSlug={courseSlug} />
-                </div>
-                <div
-                    tabIndex={0}
-                    className="md:hidden d-collapse d-collapse-arrow"
-                >
-                    <div className="d-collapse-title text-xl font-medium">
-                        <Heading as="h3">Lessons</Heading>
-                    </div>
-                    <div className="d-collapse-content">
-                        <LessonsMap lessons={lessons} courseSlug={courseSlug} />
-                    </div>
                 </div>
             </div>
         );
@@ -45,7 +34,7 @@ export function TableOfLessons({
 
 function LessonsMap({ lessons, courseSlug }: CourseLessonContentsProps) {
     return (
-        <ul className="menu max-w-xs">
+        <ul className="d-menu max-w-xs">
             {lessons.map((lesson: any, index) => {
                 return (
                     <li key={lesson.slug}>
