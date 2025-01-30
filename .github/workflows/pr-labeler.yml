@@ -22,7 +22,8 @@ jobs:
             return files.map(file => path.extname(file).toLowerCase()).filter(ext => ext !== '');
           }
 
-          async function addLabels(extensions) {
+          async function addLabels(changedFiles) {
+            const extensions = getFileExtensions(changedFiles);
             let labels = [];
             let hasContentChanges = false;
             let hasCodeChanges = false;
@@ -31,7 +32,11 @@ jobs:
               if (ext === '.mdx' || ext === '.md' || ext === '.bib') {
                 hasContentChanges = true;
               } else {
-                hasCodeChanges = true;
+                if (changedFiles[index].name === '_meta.ts' || changedFiles[index].name === '_meta.tsx' || changedFiles[index].name === 'cspell.json') {
+                  hasContentChanges = true;
+                } else {
+                  hasCodeChanges = true;
+                }
               }
             })
 
@@ -71,5 +76,4 @@ jobs:
           });
 
           const changedFiles = files.map(f => f.filename);
-          const extensions = getFileExtensions(changedFiles);
-          await addLabels(extensions);
+          await addLabels(changedFiles);
