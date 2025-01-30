@@ -19,7 +19,7 @@ import { Providers } from "lib/components/context/Providers";
 import "nextra-theme-docs/style.css";
 import "@mdxeditor/editor/style.css";
 import "./globals.css";
-import ContributionModal from "../lib/components/ui/ContributionModal";
+import { ContributionModal} from "../lib/components/ui/ContributionModal";
 
 const PROJECT_LINK = "https://github.com/systemphil/sphil";
 const DOCS_REPOSITORY_BASE = "https://github.com/systemphil/sphil/tree/main";

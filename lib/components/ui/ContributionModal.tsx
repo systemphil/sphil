@@ -9,14 +9,13 @@ import {
     useTheme,
 } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
-import { Link } from "nextra-theme-docs";
 
 interface ContributeModalProps {
     docsRepositoryBase: string;
     filePath?: string;
 }
 
-const ContributionModal = ({
+export const ContributionModal = ({
     docsRepositoryBase,
     filePath,
 }: ContributeModalProps) => {
@@ -48,14 +47,10 @@ const ContributionModal = ({
                     justifyContent: "center",
                 }}
             >
-                <div
-                    style={{
-                        backgroundColor: "#111111",
-                        color: "white",
-                    }}
+                <div className="nx-text-xs nx-font-medium nx-text-gray-500 hover:nx-text-gray-900 dark:nx-text-gray-400 dark:hover:nx-text-gray-100 contrast-more:nx-text-gray-800 contrast-more:dark:nx-text-gray-50"
                 >
                     <DialogTitle className="nx-text-xs nx-font-medium nx-text-gray-500 hover:nx-text-gray-900 dark:nx-text-gray-400 dark:hover:nx-text-gray-100 contrast-more:nx-text-gray-800 contrast-more:dark:nx-text-gray-50">
-                        Edit this page on GitHub ✏️
+                        You are about to be taken to GitHub
                     </DialogTitle>
                     <DialogContent>
                         <h4 className="text-sm font-medium mb-2">
@@ -113,5 +108,3 @@ const ContributionModal = ({
         </>
     );
 };
-
-export default ContributionModal;
