@@ -32,9 +32,9 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
     }
 
     return (
-        <FadeIn>
+        <FadeIn className="w-full">
             <div className="flex flex-col justify-center items-center py-10">
-                <div className="flex justify-center gap-20 flex-wrap">
+                <div className="flex justify-center gap-10 flex-wrap">
                     <div className="flex flex-col">
                         <Link
                             href={links.courses}
@@ -49,22 +49,26 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
                     </div>
 
                     {course.imageUrl && (
-                        <div className="mask mask-hexagon">
+                        <div className="">
                             <Image
+                                className="rounded-md"
                                 src={course.imageUrl}
                                 alt={`Course preview ${course.name}`}
-                                width={340}
+                                width={800}
                                 height={240}
                             />
                         </div>
                     )}
                 </div>
-                <div className="flex justify-center gap-20 flex-wrap-reverse mt-10 md:mt-1">
-                    {course?.details?.mdxCompiled ? (
-                        <MDXRenderer data={course.details.mdxCompiled} />
-                    ) : (
-                        <div>No course details</div>
-                    )}
+
+                <div className="flex justify-center gap-20 flex-wrap-reverse mt-10 md:mt-5">
+                    <div className="max-w-[800px]">
+                        {course?.details?.mdxCompiled ? (
+                            <MDXRenderer data={course.details.mdxCompiled} />
+                        ) : (
+                            <div>No course details</div>
+                        )}
+                    </div>
 
                     <div className="flex flex-col justify-start items-center md:items-end md:pt-8">
                         <CourseEnroll slug={slug} />

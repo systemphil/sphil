@@ -26,7 +26,7 @@ viewing this page and a legion of other such matters to another domain.
 
 > 👉 The following guide is rather verbose. If you would like something quick
 > and straight the point, consider visiting
-> [this cheatsheet](https://www.markdownguide.org/cheat-sheet/).
+> [this cheat-sheet](https://www.markdownguide.org/cheat-sheet/).
 
 With that said, let's get to it!
 
@@ -49,7 +49,7 @@ your words don't fall of the edge of the page.
 Notice how the line actually keeps extending (such that you have to scroll to
 see it). When we write - in virtually _any_ program - there is the option to
 "wrap" the text, such that the program automatically pushes any words on the
-margin down a line. When we are really done with our line, or pargraph, we hit
+margin down a line. When we are really done with our line, or paragraph, we hit
 enter on our keyboard and find ourselves on the next paragraph.
 
 In markdown, however, we must hit enter twice to make an empty line between the

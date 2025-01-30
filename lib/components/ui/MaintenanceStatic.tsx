@@ -37,7 +37,7 @@ export function MaintenanceStatic({
         <FadeIn>
             <div className="md:px-10 max-w-[900px]">
                 <div
-                    className={`relative flex flex-col radius-md rounded shadow-xl bg-gradient-to-b ${classes} transition duration-300  md:bg-gradient-to-bl`}
+                    className={`relative flex flex-col radius-md rounded-sm shadow-xl bg-linear-to-b ${classes} transition duration-300  md:bg-linear-to-bl`}
                 >
                     <div className="flex flex-col items-center justify-center p-6 gap-1">
                         <div className="flex items-center text-lg justify-center">

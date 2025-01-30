@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import {
     Footer as NextraFooter,
     Layout as NextraLayout,
@@ -20,7 +20,7 @@ import "nextra-theme-docs/style.css";
 import "@mdxeditor/editor/style.css";
 import "./globals.css";
 
-const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub →";
+const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub";
 const PROJECT_LINK = "https://github.com/systemphil/sphil";
 const DOCS_REPOSITORY_BASE = "https://github.com/systemphil/sphil/tree/main";
 const SITE_ROOT = process.env.NEXT_PUBLIC_SITE_ROOT as string;
@@ -38,8 +38,6 @@ const COLOR = {
         light: 90,
     },
 };
-
-export const viewport: Viewport = Head.viewport;
 
 export const metadata: Metadata = {
     title: {
@@ -172,7 +170,7 @@ export default async function RootLayout({
                             <div className="relative">
                                 <div
                                     data-name="footer-flair"
-                                    className="absolute h-20 w-full -top-[80px] bg-gradient-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
+                                    className="absolute h-20 w-full -top-[80px] bg-linear-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
                                 />
                                 <NextraFooter className="flex-col items-center md:items-start relative">
                                     <Footer />

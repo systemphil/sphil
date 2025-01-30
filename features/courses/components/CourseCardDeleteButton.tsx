@@ -39,7 +39,7 @@ export function CourseCardDeleteButton({
     return (
         <>
             <button
-                className="btn btn-error btn-sm"
+                className="d-btn d-btn-error d-btn-sm hover:bg-red-600"
                 disabled={isPending}
                 onClick={() => setIsDialogOpen(true)}
             >
@@ -56,7 +56,7 @@ export function CourseCardDeleteButton({
                 </Alert>
                 <DialogActions>
                     <button
-                        className="btn btn-error"
+                        className="d-btn d-btn-error"
                         disabled={isPending}
                         onClick={handleDeleteEntry}
                     >

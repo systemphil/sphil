@@ -8,7 +8,6 @@ import {
     type MotionValue,
 } from "framer-motion";
 import { useEffect, useState } from "react";
-import "./glow-pointer.css";
 
 type WrapperStyle = MotionStyle & {
     "--x": MotionValue<string>;
@@ -41,7 +40,7 @@ export const GlowBoundary = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <motion.div
-            className="animated-glow relative w-full drop-shadow-[0_0_15px_rgba(49,49,49,0.2)] dark:drop-shadow-[0_0_15px_rgba(49,49,49,0.2)]"
+            className="animated-glow dark:animated-glow relative w-full drop-shadow-[0_0_15px_rgba(49,49,49,0.2)] dark:drop-shadow-[0_0_15px_rgba(49,49,49,0.2)]"
             // @ts-ignore
             onMouseMove={handleMouseMove}
             style={

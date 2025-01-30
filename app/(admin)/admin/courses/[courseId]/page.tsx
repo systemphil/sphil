@@ -5,6 +5,7 @@ import { CourseForm } from "features/courses/components/forms/CourseForm";
 import { dbGetCourseAndDetailsAndLessonsById } from "lib/database/dbFuncs";
 import { CourseMaterialCard } from "features/courses/components/CourseMaterialCard";
 import { errorMessages } from "lib/config/errorMessages";
+import { CourseLessonsSortable } from "features/courses/components/CourseLessonsSortable";
 
 export const metadata = {};
 
@@ -32,50 +33,51 @@ export default async function AdminCourseEdit({
                     <CourseForm course={course} />
                 </div>
 
-                <div>
-                    <Heading as="h4">Course Details</Heading>
-                    {course.details ? (
-                        <CourseMaterialCard
-                            href={`/admin/courses/${courseId}/course-details/${course.details.id}`}
-                            heading="General details of the course"
-                            id={course.details.id}
-                            modelName="CourseDetails"
-                        />
-                    ) : (
-                        <div>
-                            <p>None yet.</p>
-                            <Link
-                                href={`/admin/courses/${courseId}/course-details/new`}
-                            >
-                                <button className="btn btn-primary">
-                                    Add details
-                                </button>
-                            </Link>
-                        </div>
-                    )}
-                    <Heading as="h4">Lessons</Heading>
-                    {course.lessons.length > 0 ? (
-                        <>
-                            {course.lessons.map((lesson) => (
-                                <CourseMaterialCard
-                                    key={lesson.id}
-                                    href={`/admin/courses/${course.id}/lessons/${lesson.id}`}
-                                    heading={lesson.name}
-                                    id={lesson.id}
-                                    modelName="Lesson"
-                                />
-                            ))}
-                        </>
-                    ) : (
-                        <div>
-                            <p>None yet.</p>
-                        </div>
-                    )}
-                    <Link href={`/admin/courses/${course.id}/lessons/new`}>
-                        <button className="btn btn-primary">
-                            Add a lesson
-                        </button>
-                    </Link>
+                <div className="flex flex-col gap-6">
+                    <div>
+                        <Heading as="h4">Course Details</Heading>
+                        {course.details ? (
+                            <CourseMaterialCard
+                                href={`/admin/courses/${courseId}/course-details/${course.details.id}`}
+                                heading="General details of the course"
+                                id={course.details.id}
+                                modelName="CourseDetails"
+                            />
+                        ) : (
+                            <div>
+                                <p>None yet.</p>
+                                <Link
+                                    href={`/admin/courses/${courseId}/course-details/new`}
+                                >
+                                    <button className="d-btn d-btn-primary">
+                                        Add details
+                                    </button>
+                                </Link>
+                            </div>
+                        )}
+                    </div>
+
+                    <div>
+                        <Heading as="h4">Lessons</Heading>
+                        {course.lessons.length > 0 ? (
+                            <CourseLessonsSortable
+                                courseId={course.id}
+                                lessons={course.lessons}
+                            />
+                        ) : (
+                            <div>
+                                <p>None yet.</p>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex justify-center">
+                        <Link href={`/admin/courses/${course.id}/lessons/new`}>
+                            <button className="d-btn d-btn-primary">
+                                Add a lesson
+                            </button>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

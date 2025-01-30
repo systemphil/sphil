@@ -1,9 +1,7 @@
 <!-- Thank you for wanting to contribute to sPhil! 🧙 🦉 -->
 <!-- We would like to keep our code and writing as neat and tidy as possible, and would appreciate if you could verify the following checklist if you are submitting philosophical or literary content -->
 
-## Author's Note
-
-<!-- Briefly describe your changes and their purpose -->
+## Guidelines and Checklists (click to expand)
 
 <details>
 <summary>📝 Guidelines for Philosophical/Literary Contributions</summary>
@@ -66,7 +64,9 @@ technical implementations rather than content, literature, or philosophy.
 - Philosophical/literary content: Licensed under CC BY-NC-SA 4.0
 - Code contributions: Licensed under Apache License 2.0
 - Please sign your contribution in the metadata under Authors, Editors, or
-  Contributors </details>
+  Contributors
+
+</details>
 
 ## License Agreement
 

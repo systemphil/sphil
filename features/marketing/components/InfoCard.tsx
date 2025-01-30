@@ -1,5 +1,6 @@
 import { CardShell } from "lib/components/ui/CardShell";
 import { Heading } from "lib/components/ui/Heading";
+import { cn } from "lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -25,11 +26,12 @@ export async function InfoCard({
             {imgUrl && (
                 <figure className="mt-4">
                     <Image
-                        className={`mask ${
-                            (maskType === "diamond" && "mask-diamond") ||
-                            (maskType === "triangle" && "mask-triangle") ||
-                            (maskType === "squircle" && "mask-squircle")
-                        }`}
+                        className={cn(
+                            "custom-mask",
+                            maskType === "diamond" && "custom-mask-diamond",
+                            maskType === "triangle" && "custom-mask-triangle",
+                            maskType === "squircle" && "custom-mask-squircle"
+                        )}
                         src={imgUrl}
                         alt="Movie"
                         width={200}
@@ -37,18 +39,17 @@ export async function InfoCard({
                     />
                 </figure>
             )}
-            <div className="card-body">
-                <div className="card-title justify-center">
-                    <Heading as="h3">{title}</Heading>
+            <div className="d-card-body">
+                <div className="d-card-title justify-center">
+                    <Heading as="h4">{title}</Heading>
                 </div>
-                <p
-                    className="text-slate-700 dark:text-slate-300 pt-4 text-justify"
-                    dangerouslySetInnerHTML={{ __html: text }}
-                ></p>
+                <p className="text-slate-700 dark:text-slate-300 pt-4 text-justify text-lg">
+                    {text}
+                </p>
                 {url && urlDescription && (
-                    <div className="card-actions justify-end">
+                    <div className="d-card-actions justify-end">
                         <Link href={url}>
-                            <button className="btn btn-primary">
+                            <button className="d-btn d-btn-primary">
                                 {urlDescription}
                             </button>
                         </Link>

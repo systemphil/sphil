@@ -21,17 +21,9 @@ export function TableOfLessons({
     if (lessons.length > 0) {
         return (
             <div className="mt-4 md:py-8 max-w-[320px]">
-                <div className="hidden md:block">
+                <div>
                     <Heading as="h3">Lessons</Heading>
                     <LessonsMap lessons={lessons} courseSlug={courseSlug} />
-                </div>
-                <div tabIndex={0} className="md:hidden collapse collapse-arrow">
-                    <div className="collapse-title text-xl font-medium">
-                        <Heading as="h3">Lessons</Heading>
-                    </div>
-                    <div className="collapse-content">
-                        <LessonsMap lessons={lessons} courseSlug={courseSlug} />
-                    </div>
                 </div>
             </div>
         );
@@ -42,12 +34,12 @@ export function TableOfLessons({
 
 function LessonsMap({ lessons, courseSlug }: CourseLessonContentsProps) {
     return (
-        <ul className="menu max-w-xs">
+        <ul className="max-w-xs">
             {lessons.map((lesson: any, index) => {
                 return (
                     <li key={lesson.slug}>
                         <Link
-                            className="dark:hover:bg-dark-green-hsl transition-colors duration-300"
+                            className="dark:hover:bg-dark-green-hsl hover:bg-slate-200/90 transition-all duration-300 flex p-1 rounded-md"
                             href={`${links.courses}/${courseSlug}/${lesson.slug}`}
                         >
                             <svg
@@ -64,7 +56,9 @@ function LessonsMap({ lessons, courseSlug }: CourseLessonContentsProps) {
                                     d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
                                 />
                             </svg>
-                            {`${romanize(index + 1)}. ${lesson.name}`}
+                            <span className="ml-1">
+                                {`${romanize(index + 1)}. ${lesson.name}`}
+                            </span>
                         </Link>
                     </li>
                 );

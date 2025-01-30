@@ -52,10 +52,10 @@ export async function Maintenance({
             return (
                 <div className="md:px-10 max-w-[900px] mt-10 md:mt-32">
                     <div
-                        className={`card rounded shadow-xl bg-gradient-to-b ${classes} transition duration-300  md:bg-gradient-to-bl`}
+                        className={`d-card rounded-sm shadow-xl bg-linear-to-b ${classes} transition duration-300  md:bg-linear-to-bl`}
                     >
-                        <div className="card-body">
-                            <div className="card-title justify-center">
+                        <div className="d-card-body">
+                            <div className="d-card-title justify-center">
                                 {getMaintenanceIcon(maintenance.severity)}
                                 <Heading as="h3">{title}</Heading>
                             </div>
@@ -70,14 +70,14 @@ export async function Maintenance({
             <FadeIn>
                 <div className="md:px-10 max-w-[900px] mt-10 md:mt-32">
                     <div
-                        className={`card rounded shadow-xl bg-gradient-to-b ${classes} transition duration-300  md:bg-gradient-to-bl`}
+                        className={`d-card rounded-sm shadow-xl bg-linear-to-b ${classes} transition duration-300  md:bg-linear-to-bl`}
                     >
-                        <div className="card-body">
-                            <div className="card-title justify-center">
+                        <div className="d-card-body">
+                            <div className="d-card-title justify-center">
                                 {getMaintenanceIcon(maintenance.severity)}
                                 <Heading as="h3">{title}</Heading>
                             </div>
-                            <p className="text-slate-900 dark:text-slate-400 pt-4 text-justify">
+                            <p className="text-slate-900 dark:text-slate-300 text-md pt-4 text-justify">
                                 {maintenance.message}
                             </p>
                             {maintenance.severity === "beta" && (
