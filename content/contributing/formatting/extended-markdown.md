@@ -47,14 +47,14 @@ To make a list of tasks, use the following format. Note, these are not
 interactive!
 
 ```md
--   [x] Write the contributing docs
--   [ ] Update the website
--   [ ] Drink coffee
+- [x] Write the contributing docs
+- [ ] Update the website
+- [ ] Drink coffee
 ```
 
--   [x] Write the contributing docs
--   [ ] Update the website
--   [ ] Drink coffee
+- [x] Write the contributing docs
+- [ ] Update the website
+- [ ] Drink coffee
 
 ### Emoji 😊
 

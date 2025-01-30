@@ -63,11 +63,11 @@ technical implementations rather than content, literature, or philosophy.
 <details>
 <summary>ℹ️ Additional Information</summary>
 
--   Philosophical/literary content: Licensed under CC BY-NC-SA 4.0
--   Code contributions: Licensed under Apache License 2.0
--   Please sign your contribution in the metadata under Authors, Editors, or
+- Philosophical/literary content: Licensed under CC BY-NC-SA 4.0
+- Code contributions: Licensed under Apache License 2.0
+- Please sign your contribution in the metadata under Authors, Editors, or
 Contributors
-</details>
+  </details>
 
 ## License Agreement
 
