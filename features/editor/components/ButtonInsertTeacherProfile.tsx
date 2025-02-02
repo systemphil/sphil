@@ -7,9 +7,10 @@ export const ButtonInsertTeacherProfile = () => {
 
     return (
         <DialogButton
+            autocompleteSuggestions={["filip", "ahilleas"]}
             tooltipTitle="Insert teacher profile"
             submitButtonTitle="Insert teacher"
-            dialogInputPlaceholder="filip or ahilleas"
+            dialogInputPlaceholder="name:optional-title"
             buttonContent="🧑‍🏫"
             onSubmit={(input) => {
                 const inputLowercase = input.toLocaleLowerCase();
