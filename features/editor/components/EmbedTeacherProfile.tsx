@@ -40,21 +40,27 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
                 title={title ? title : "Tech Lead"}
                 image="/images/team/filip.jpg"
             >
-                Filip Niklas, Ph.D., is a co-founder and the tech lead of sPhil.
-                By day he works as a software developer, and by night he works
-                on sPhil, writes poetry and teaches philosophy. He completed his
-                PhD in philosophy in 2022 under the supervision of Professor
-                Stephen Houlgate at the University of Warwick. The title of his
-                thesis was Hegel&apos;s{" "}
-                <em>
-                    Critique of Determinism: Justifying Unfreedom as a Moment of
-                    Freedom
-                </em>
-                . Filip&apos;s main research areas are systematic philosophy,
+                Filip Niklas, Ph.D., completed his PhD in philosophy in 2022
+                under the supervision of Professor Stephen Houlgate at the
+                University of Warwick. The title of his thesis was{" "}
+                <i>
+                    Hegel&apos;s Critique of Determinism: Justifying Unfreedom
+                    as a Moment of Freedom
+                </i>
+                . Filip has published articles, edited journals, given talks and
+                organized numerous{" "}
+                <a href="https://hegelwarwick.wordpress.com/" target="_blank">
+                    conferences
+                </a>{" "}
+                around Hegel, Aristotle, Collingwood, Kant, Blake and others.
+                Filip has previously created and given courses at Bishop&apos;s
+                University, the University of Warwick and the Halkyon Academy.
+                Filip&apos;s main research areas are systematic philosophy,
                 metaphysics, ontology, essence, freedom, determinism, and
                 maintains an otherwise broad interest in all the dimensions of
-                intelligence and reason. Filip is also an incurable fan of the
-                art and poetry of William Blake.
+                intelligence and reason. Filip is a co-founder sPhil, engineers
+                the web platform and writes articles for the sPhil
+                Encyclopaedia.
             </CardTeamMember>
         );
     };
