@@ -11,25 +11,26 @@ export const ButtonInsertTeacherProfile = () => {
             submitButtonTitle="Insert teacher"
             dialogInputPlaceholder="filip or ahilleas"
             buttonContent="🧑‍🏫"
-            onSubmit={(name) => {
-                const nameLowercase = name.toLocaleLowerCase();
+            onSubmit={(input) => {
+                const inputLowercase = input.toLocaleLowerCase();
                 if (
-                    nameLowercase &&
-                    (nameLowercase === "filip" || nameLowercase === "ahilleas")
+                    inputLowercase &&
+                    (inputLowercase.includes("filip") ||
+                        inputLowercase.includes("ahilleas"))
                 ) {
                     insertJsx({
                         name: "EmbedTeacherProfile",
                         kind: "text",
-                        props: { teacher: nameLowercase },
+                        props: { teacherInput: inputLowercase },
                         children: [
                             {
                                 type: "text",
-                                value: `Teacher profile ${nameLowercase}`,
+                                value: `Teacher profile ${inputLowercase}`,
                             },
                         ],
                     });
                 } else {
-                    alert("Invalid YouTube URL");
+                    alert("Unsupported teacher name");
                 }
             }}
         />

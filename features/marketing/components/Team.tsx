@@ -16,10 +16,10 @@ export const Team = () => {
                     completed his PhD in philosophy in 2022 under the
                     supervision of Professor Stephen Houlgate at the University
                     of Warwick. The title of his thesis was Hegel&apos;s{" "}
-                    <em>
+                    <i>
                         Critique of Determinism: Justifying Unfreedom as a
                         Moment of Freedom
-                    </em>
+                    </i>
                     . Filip&apos;s main research areas are systematic
                     philosophy, metaphysics, ontology, essence, freedom,
                     determinism, and maintains an otherwise broad interest in
@@ -35,8 +35,8 @@ export const Team = () => {
                     of sPhil. He completed his PhD thesis in philosophy in 2022
                     under the supervision of Professor Stephen Houlgate at the
                     University of Warwick. His thesis aimed to give an account
-                    of the much-debated move from the <em>Science of Logic</em>{" "}
-                    to the <em>Philosophy of Nature</em> in Hegel&apos;s system.
+                    of the much-debated move from the <i>Science of Logic</i> to
+                    the <i>Philosophy of Nature</i> in Hegel&apos;s system.
                     Ahilleas&apos;s main research concerns are Hegel&apos;s
                     logic, philosophy of nature, philosophy of science, and
                     aesthetics.

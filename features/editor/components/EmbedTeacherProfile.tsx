@@ -1,19 +1,43 @@
 import { CardTeamMember } from "lib/components/CardTeamProfile";
 
-export const EmbedTeacherProfile = (props: any) => {
-    const {
-        children,
-        teacher,
-        minWidth = "400px",
-        maxWidth = "800px",
-        ...otherProps
-    } = props;
+type EmbedTEacherProfileProps = {
+    children?: React.ReactNode;
+    teacherInput: string;
+    maxWidth?: string;
+    minWidth?: string;
+};
 
-    const renderFilip = () => {
+export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
+    const { teacherInput, minWidth = "400px", maxWidth = "800px" } = props;
+
+    const getTeacherAndTitle = (teacherInput: string) => {
+        if (!teacherInput.includes(":")) {
+            return {
+                teacher: teacherInput,
+                title: undefined,
+            };
+        }
+        const teacher = teacherInput.split(":")[0];
+
+        const title = teacherInput
+            .split(":")[1]
+            .split(" ")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+
+        return {
+            teacher,
+            title,
+        };
+    };
+
+    const { teacher, title } = getTeacherAndTitle(teacherInput);
+
+    const renderFilip = (title?: string) => {
         return (
             <CardTeamMember
                 name="Filip Niklas"
-                title="Tech Lead"
+                title={title ? title : "Tech Lead"}
                 image="/images/team/filip.jpg"
             >
                 Filip Niklas, Ph.D., is a co-founder and the tech lead of sPhil.
@@ -46,9 +70,10 @@ export const EmbedTeacherProfile = (props: any) => {
                     width: "100%",
                     overflow: "hidden",
                     paddingTop: "56.25%",
+                    padding: "16px",
                 }}
             >
-                {teacher === "filip" && renderFilip()}
+                {teacher === "filip" && renderFilip(title)}
             </div>
         </section>
     );
