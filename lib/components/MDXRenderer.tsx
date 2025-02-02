@@ -6,6 +6,8 @@ import * as runtime from "react/jsx-runtime";
 import { type MDXModule } from "mdx/types";
 import { MDXCompilerReturnType } from "lib/server/mdxCompiler";
 import { Loading } from "./animations/Loading";
+import { EmbedTeacherProfile } from "features/editor/components/EmbedTeacherProfile";
+import { EmbedYT } from "./ui/EmbedYT";
 
 /* cSpell:disable */
 
@@ -39,7 +41,20 @@ export const MDXRenderer = ({ data }: { data: MDXCompilerReturnType }) => {
                     <div className="mdxeditor-rich-text-editor block">
                         <div className="_rootContentEditableWrapper_uazmk_1097 mdxeditor-root-contenteditable">
                             <div className="_contentEditable_uazmk_379 prose dark:prose-invert max-w-none w-full">
-                                <Content />
+                                <Content
+                                    components={{
+                                        EmbedTeacherProfile(props) {
+                                            return (
+                                                <EmbedTeacherProfile
+                                                    {...props}
+                                                />
+                                            );
+                                        },
+                                        EmbedYT(props) {
+                                            return <EmbedYT {...props} />;
+                                        },
+                                    }}
+                                />
                             </div>
                         </div>
                     </div>
