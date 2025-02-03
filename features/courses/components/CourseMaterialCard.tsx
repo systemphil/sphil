@@ -61,7 +61,7 @@ export function CourseMaterialCard({
             >
                 <ButtonDeleteCross />
             </button>
-            <Dialog open={isDialogOpen} onClose={onClose}>
+            <Dialog open={isDialogOpen} onClose={onClose} disableScrollLock>
                 <DialogContent>
                     Are you sure you want to delete this {modelName} item? This
                     action cannot be undone.
