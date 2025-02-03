@@ -65,6 +65,25 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
         );
     };
 
+    const renderAhilleas = (title?: string) => {
+        return (
+            <CardTeamMember
+                name="Ahilleas Rokni"
+                title="Business Lead"
+                image="/images/team/ahilleas.jpg"
+            >
+                Ahilleas Rokni completed his PhD thesis in philosophy in 2022
+                under the supervision of Professor Stephen Houlgate at the
+                University of Warwick. His thesis aimed to give an account of
+                the much-debated move from the <i>Science of Logic</i> to the{" "}
+                <i>Philosophy of Nature</i> in Hegel&apos;s system.
+                Ahilleas&apos;s main research concerns are Hegel&apos;s logic,
+                philosophy of nature, philosophy of science, and aesthetics.
+                Ahilleas is a co-founder and the business lead of sPhil.
+            </CardTeamMember>
+        );
+    };
+
     return (
         <section
             style={{ width: "100%", minWidth: minWidth, maxWidth: maxWidth }}
@@ -80,6 +99,7 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
                 }}
             >
                 {teacher === "filip" && renderFilip(title)}
+                {teacher === "ahilleas" && renderAhilleas(title)}
             </div>
         </section>
     );

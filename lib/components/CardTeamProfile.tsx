@@ -35,7 +35,7 @@ export const CardTeamMember = ({
                 </div>
             </div>
             <div className="px-6 pb-6">
-                <p className="text-justify">{children}</p>
+                <p className="text-justify dark:text-slate-200">{children}</p>
             </div>
         </div>
     );
