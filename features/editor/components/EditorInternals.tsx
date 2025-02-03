@@ -16,12 +16,14 @@ import {
     CreateLink,
     DiffSourceToggleWrapper,
     EditorInFocus,
+    GenericJsxEditor,
     InsertAdmonition,
     InsertCodeBlock,
     InsertFrontmatter,
     InsertImage,
     InsertTable,
     InsertThematicBreak,
+    JsxComponentDescriptor,
     ListsToggle,
     MDXEditor,
     MDXEditorMethods,
@@ -36,6 +38,7 @@ import {
     frontmatterPlugin,
     headingsPlugin,
     imagePlugin,
+    jsxPlugin,
     linkDialogPlugin,
     linkPlugin,
     listsPlugin,
@@ -52,6 +55,8 @@ import { Loading } from "lib/components/animations/Loading";
 import { actionUploadImage } from "lib/server/actions";
 import { sleep } from "lib/utils";
 import { actionUpdateMdxModelById } from "../server/actions";
+import { ButtonInsertYouTube } from "./ButtonInsertYouTube";
+import { ButtonInsertTeacherProfile } from "./ButtonInsertTeacherProfile";
 
 /**
  * Context to hold the state of mutation loading as passing props did not work with the MDXEditor Toolbar.
@@ -71,6 +76,26 @@ export type EditorProps = {
 export default function EditorInternals({ material, title }: EditorProps) {
     const editorRef = React.useRef<MDXEditorMethods>(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    /**
+     * Custom JSX components used in Markdown must be registered here.
+     */
+    const jsxComponentDescriptors: JsxComponentDescriptor[] = [
+        {
+            name: "EmbedYT",
+            kind: "text",
+            props: [{ name: "src", type: "string" }],
+            hasChildren: true,
+            Editor: GenericJsxEditor,
+        },
+        {
+            name: "EmbedTeacherProfile",
+            kind: "text",
+            props: [{ name: "teacher", type: "string" }],
+            hasChildren: true,
+            Editor: GenericJsxEditor,
+        },
+    ];
 
     const handleSave = async () => {
         const markdownValue = editorRef.current?.getMarkdown();
@@ -121,8 +146,9 @@ export default function EditorInternals({ material, title }: EditorProps) {
                     className="border-2 border-gray-200 rounded-lg full-demo-mdxeditor"
                     ref={editorRef}
                     markdown={material.mdx}
-                    contentEditableClassName="prose dark:prose-invert max-w-none"
+                    contentEditableClassName="!prose dark:!prose-invert max-w-none"
                     plugins={[
+                        jsxPlugin({ jsxComponentDescriptors }),
                         listsPlugin(),
                         quotePlugin(),
                         headingsPlugin(),
@@ -270,6 +296,9 @@ const DefaultToolbar: React.FC<DefaultToolbarProps> = ({
                                         },
                                     ]}
                                 />
+
+                                <ButtonInsertTeacherProfile />
+                                <ButtonInsertYouTube />
 
                                 <Separator />
                                 <TooltipWrap title="Debug: Print to console">
