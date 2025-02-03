@@ -69,7 +69,7 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
         return (
             <CardTeamMember
                 name="Ahilleas Rokni"
-                title="Business Lead"
+                title={title ? title : "Business Lead"}
                 image="/images/team/ahilleas.jpg"
             >
                 Ahilleas Rokni completed his PhD thesis in philosophy in 2022
