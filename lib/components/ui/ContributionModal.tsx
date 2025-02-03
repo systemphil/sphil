@@ -37,6 +37,7 @@ export const ContributionModal = ({
         <>
             <p onClick={handleClickOpen}>{EDIT_LINK_DESCRIPTION}</p>
             <Dialog
+				disableScrollLock
                 open={isOpen}
                 onClose={(evt, reason) => {
                     return handleClose();
