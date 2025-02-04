@@ -14,7 +14,7 @@ export const CardTeamMember = ({
     children,
 }: CardTeamMemberProps) => {
     return (
-        <div className="flex flex-col w-72 md:w-[450px] min-h-[600px] rounded-md shadow-lg bg-linear-to-b from-gray-100 to-gray-300 dark:from-neutral-950/90 dark:to-neutral-800/90 dark:outline-1 dark:outline-solid dark:outline-dark-green-hsl outline-1 outline-gray-300">
+        <div className="flex flex-col max-w-[500px] rounded-md shadow-lg bg-linear-to-b from-gray-100 to-gray-300 dark:from-neutral-950/90 dark:to-neutral-800/90 dark:outline-1 dark:outline-solid dark:outline-dark-green-hsl outline-1 outline-gray-300">
             <div className="flex px-8 pt-8 pb-6">
                 <Image
                     height={125}
