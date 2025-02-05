@@ -51,6 +51,7 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
                     {course.imageUrl && (
                         <div className="">
                             <Image
+                                priority={true}
                                 className="rounded-md"
                                 src={course.imageUrl}
                                 alt={`Course preview ${course.name}`}

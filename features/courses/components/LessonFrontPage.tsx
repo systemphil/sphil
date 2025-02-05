@@ -12,7 +12,6 @@ import { Heading } from "lib/components/ui/Heading";
 import { VideoDataLoader } from "lib/components/VideoDataLoader";
 import { Suspense } from "react";
 import { Loading } from "lib/components/animations/Loading";
-import { FadeIn } from "lib/components/animations/FadeIn";
 import { Paragraph } from "lib/components/ui/Paragraph";
 
 export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
@@ -34,53 +33,51 @@ export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
     const xxl = "2xl:gap-8 2xl:px-20";
 
     return (
-        <FadeIn>
-            <div
-                className={`flex flex-col justify-center items-center gap-2 ${md} ${lg} ${xl} ${xxl} mb-20`}
-            >
-                <div className="min-h-[500px] flex w-full md:col-span-3 md:order-2">
-                    {lessonData.video ? (
-                        <Suspense fallback={<Loading.SkeletonFullPage />}>
-                            <VideoDataLoader videoEntry={lessonData.video} />
-                        </Suspense>
-                    ) : (
-                        <div>No video content</div>
-                    )}
-                </div>
-                <div className="md:col-span-1 md:p-2 md:order-1 lg:row-span-2">
-                    <div className="flex flex-col justify-start">
-                        <Link
-                            href={`/symposia/courses/${lessonData.course.slug}`}
-                            className="text-base self-center md:self-start text-primary dark:text-gray-500 opacity-70 transition hover:opacity-100 p-2"
-                        >
-                            {`<- Back to ${lessonData.course.name}`}
-                        </Link>
-                        <TableOfLessons
-                            lessons={lessonData.course.lessons}
-                            courseSlug={lessonData.course.slug}
-                        />
-                    </div>
-                </div>
-                <div className="w-full px-2 md:px-0 md:w-auto md:col-span-4 md:m-4 md:order-3 lg:col-span-2 lg:row-span-2">
-                    <div className="py-3">
-                        <Heading as="h3">{lessonData.name}</Heading>
-                        <Paragraph>{lessonData.description}</Paragraph>
-                    </div>
-
-                    {lessonData?.content?.mdxCompiled ? (
-                        <MDXRenderer data={lessonData.content.mdxCompiled} />
-                    ) : (
-                        <div>No lesson content</div>
-                    )}
-                </div>
-                <div className="md:col-span-4 md:m-4 md:order-4 lg:col-start-2 lg:col-span-3">
-                    {lessonData?.transcript?.mdxCompiled ? (
-                        <MDXRenderer data={lessonData.transcript.mdxCompiled} />
-                    ) : (
-                        <div>No transcript</div>
-                    )}
+        <div
+            className={`flex flex-col justify-center items-center gap-2 ${md} ${lg} ${xl} ${xxl} mb-20`}
+        >
+            <div className="min-h-[500px] flex w-full md:col-span-3 md:order-2">
+                {lessonData.video ? (
+                    <Suspense fallback={<Loading.SkeletonFullPage />}>
+                        <VideoDataLoader videoEntry={lessonData.video} />
+                    </Suspense>
+                ) : (
+                    <div>No video content</div>
+                )}
+            </div>
+            <div className="md:col-span-1 md:p-2 md:order-1 lg:row-span-2">
+                <div className="flex flex-col justify-start">
+                    <Link
+                        href={`/symposia/courses/${lessonData.course.slug}`}
+                        className="text-base self-center md:self-start text-primary dark:text-gray-500 opacity-70 transition hover:opacity-100 p-2"
+                    >
+                        {`<- Back to ${lessonData.course.name}`}
+                    </Link>
+                    <TableOfLessons
+                        lessons={lessonData.course.lessons}
+                        courseSlug={lessonData.course.slug}
+                    />
                 </div>
             </div>
-        </FadeIn>
+            <div className="w-full px-2 md:px-0 md:w-auto md:col-span-4 md:m-4 md:order-3 lg:col-span-2 lg:row-span-2">
+                <div className="py-3">
+                    <Heading as="h3">{lessonData.name}</Heading>
+                    <Paragraph>{lessonData.description}</Paragraph>
+                </div>
+
+                {lessonData?.content?.mdxCompiled ? (
+                    <MDXRenderer data={lessonData.content.mdxCompiled} />
+                ) : (
+                    <div>No lesson content</div>
+                )}
+            </div>
+            <div className="md:col-span-4 md:m-4 md:order-4 lg:col-start-2 lg:col-span-3">
+                {lessonData?.transcript?.mdxCompiled ? (
+                    <MDXRenderer data={lessonData.transcript.mdxCompiled} />
+                ) : (
+                    <div>No transcript</div>
+                )}
+            </div>
+        </div>
     );
 }
