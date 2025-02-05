@@ -65,4 +65,49 @@ arrangement.
 > existence is thus _being-in-itself_; it is _existent_, _something_ (Hegel
 > 2010, 89/21.103).
 
-TODO
+The distinction of `quality` is undermined inasmuch as this distinction is to
+hold absolutely. The distinction, rather, has sublated itself into a moment.
+Now, Hegel then warns that this does not yield a return to the beginning of
+`existence` as such. The distinction has proved to necessarily follow from
+`existence`. What remains, then is to understand precisely this movement of
+_return_.
+
+```md
+existence in general, distinction in it, and the sublation of this distinction;
+the existence, not void of distinction as at the beginning, but as _again_
+self-equal _through the sublation of the distinction_
+```
+
+`Existence` is returned to through the sublation of distinction (or
+determinateness), but it is important to emphasize exactly that it is _through_
+the developments of `quality` that this occurs. This differs from `existence` as
+such, and implies that either there are two forms of `existence` or that the
+`existence` returned to is not merely `existence`.
+
+```mermaid
+flowchart LR
+ subgraph Reality["Reality"]
+    direction RL
+        N["N"]
+  end
+ subgraph Negation["Negation"]
+    direction BT
+        R["R"]
+  end
+ subgraph Quality["Quality"]
+    direction LR
+        Reality
+        Negation
+  end
+    E --> Quality --> Existence["Existence"]
+    Reality --> R
+    Negation --> N
+
+    style N fill:#FFCDD2
+    style R fill:#BBDEFB
+    style Reality fill:#BBDEFB
+    style Negation fill:#FFCDD2
+    style Quality fill:transparent,stroke:#000000
+    style Existence fill:#FFF9C4,stroke:#000000
+
+```
