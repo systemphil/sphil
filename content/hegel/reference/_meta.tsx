@@ -20,6 +20,9 @@ export default {
     existence: {
         title: "Existence",
     },
+    quality: {
+        title: "Quality",
+    },
     "mechanical-object": {
         title: "Mechanical Object",
     },
