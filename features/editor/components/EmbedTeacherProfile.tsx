@@ -8,7 +8,7 @@ type EmbedTEacherProfileProps = {
 };
 
 export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
-    const { teacherInput, minWidth = "400px", maxWidth = "800px" } = props;
+    const { teacherInput, maxWidth = "800px" } = props;
 
     const getTeacherAndTitle = (teacherInput: string) => {
         if (!teacherInput.includes(":")) {
@@ -86,7 +86,7 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
 
     return (
         <section
-            style={{ width: "100%", minWidth: minWidth, maxWidth: maxWidth }}
+            style={{ width: "100%", maxWidth: maxWidth }}
             aria-label="Teacher profile"
         >
             <div
