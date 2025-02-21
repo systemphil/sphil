@@ -1,5 +1,5 @@
 import * as z from "zod";
-import {
+import type {
     Course,
     CourseDetails,
     Lesson,
@@ -22,6 +22,23 @@ import { Text } from "lib/utils/textEncoding";
  * @access ADMIN
  */
 export const dbGetAllCourses = () => withAdmin(() => prisma.course.findMany());
+
+/**
+ * Calls the database to retrieve all courses by owner userId.
+ * @access ADMIN
+ */
+export const dbGetAllCoursesByOwner = (userId: string) =>
+    withAdmin(() =>
+        prisma.course.findMany({
+            where: {
+                owners: {
+                    some: {
+                        id: userId,
+                    },
+                },
+            },
+        })
+    );
 
 /**
  * Calls the database to retrieve all published courses.
@@ -659,25 +676,24 @@ export const dbUpsertLessonById = async ({
                     partId: validPartId,
                 },
             });
-        } else {
-            const allLessons = await prisma.lesson.findMany({
-                select: {
-                    id: true,
-                },
-            });
-            const totalLessonsPlusOne = allLessons.length + 1;
-
-            return await prisma.lesson.create({
-                data: {
-                    name: validName,
-                    description: validDescription,
-                    slug: validSlug,
-                    courseId: validCourseId,
-                    partId: validPartId,
-                    order: totalLessonsPlusOne,
-                },
-            });
         }
+        const allLessons = await prisma.lesson.findMany({
+            select: {
+                id: true,
+            },
+        });
+        const totalLessonsPlusOne = allLessons.length + 1;
+
+        return await prisma.lesson.create({
+            data: {
+                name: validName,
+                description: validDescription,
+                slug: validSlug,
+                courseId: validCourseId,
+                partId: validPartId,
+                order: totalLessonsPlusOne,
+            },
+        });
     }
     return withAdmin(task);
 };
@@ -1052,7 +1068,7 @@ export async function dbVerifyUserPurchase(userId: string, priceId: string) {
     async function task() {
         const validUserId = z.string().parse(userId);
         const validPriceId = z.string().parse(priceId);
-        const completePriceId = "price_" + validPriceId;
+        const completePriceId = `price_${validPriceId}`;
         const user = await prisma.user.findUnique({
             where: {
                 id: validUserId,
