@@ -1,3 +1,4 @@
 *.yml
 *.yaml
 cspell.json
+*.bib
