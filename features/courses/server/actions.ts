@@ -127,7 +127,7 @@ export async function actionDeleteVideoFile(input: ActionDeleteVideoFileInput) {
     if (!isAdmin) {
         return { error: "Unauthorized" };
     }
-    const parsedInput = createSignedPostUrlSchema.safeParse(input);
+    const parsedInput = deleteVideoFileSchema.safeParse(input);
 
     if (!parsedInput.success) {
         return { error: `Bad request ${parsedInput.error.message}` };
