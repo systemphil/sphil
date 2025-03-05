@@ -543,11 +543,6 @@ export async function ctrlCreateCheckout(slug: string, priceTier: string) {
     if (!userData.stripeCustomerId)
         throw new Error("User does not have a stripeCustomerId");
 
-    const customerEmail = await stripeGetCustomerEmail({
-        customerId: userData.stripeCustomerId,
-    });
-    if (!customerEmail) throw new Error("Could not retrieve customer email");
-
     const checkout = await stripeCreateCheckoutSession({
         customerId: userData.stripeCustomerId,
         userId: userData.id,
@@ -563,7 +558,6 @@ export async function ctrlCreateCheckout(slug: string, priceTier: string) {
         imageUrl: course.imageUrl,
         name: course.name,
         description: course.description,
-        customerEmail: customerEmail,
     });
 
     return { url: checkout.url };
