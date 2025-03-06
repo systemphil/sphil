@@ -130,7 +130,6 @@ type StripeCreateCheckoutSessionProps = {
     imageUrl: string | null | undefined;
     name: string;
     description: string;
-    customerEmail: string;
     priceTier: PriceTier;
 };
 
@@ -155,15 +154,15 @@ export async function stripeCreateCheckoutSession({
     imageUrl,
     name,
     description,
-    customerEmail,
     priceTier,
 }: StripeCreateCheckoutSessionProps) {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_ROOT;
     if (!baseUrl) throw new Error("Base URL is not defined");
 
     const stripe = getStripe();
-    const stripeSession = await stripe.checkout.sessions.create({
-        customer_email: customerEmail,
+
+    const params = {
+        customer: customerId,
         client_reference_id: userId,
         payment_method_types: ["card", "paypal"],
         mode: "payment",
@@ -175,6 +174,7 @@ export async function stripeCreateCheckoutSession({
             purchase.price.split("_")[1]
         }&s=${slug}`,
         cancel_url: `${baseUrl}/symposia/courses/${slug}?canceled=true`,
+        allow_promotion_codes: true,
         metadata: {
             stripeCustomerId: customerId,
             userId: userId,
@@ -190,8 +190,12 @@ export async function stripeCreateCheckoutSession({
             description: description,
             courseLink: `${baseUrl}/symposia/courses/${slug}`,
             priceTier,
-        } satisfies StripeCheckoutSessionMetadata,
-    });
+        },
+    } satisfies Stripe.Checkout.SessionCreateParams & {
+        metadata: StripeCheckoutSessionMetadata;
+    };
+
+    const stripeSession = await stripe.checkout.sessions.create(params);
 
     if (!stripeSession) {
         throw new Error("Could not create checkout session");

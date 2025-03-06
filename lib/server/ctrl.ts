@@ -25,7 +25,6 @@ import {
     stripeCreateCustomer,
     stripeCreatePrice,
     stripeCreateProduct,
-    stripeGetCustomerEmail,
     stripeUpdateProduct,
 } from "lib/stripe/stripeFuncs";
 import * as z from "zod";
@@ -548,11 +547,6 @@ export async function ctrlCreateCheckout(slug: string, priceTier: PriceTier) {
     if (!userData.stripeCustomerId)
         throw new Error("User does not have a stripeCustomerId");
 
-    const customerEmail = await stripeGetCustomerEmail({
-        customerId: userData.stripeCustomerId,
-    });
-    if (!customerEmail) throw new Error("Could not retrieve customer email");
-
     const checkout = await stripeCreateCheckoutSession({
         customerId: userData.stripeCustomerId,
         userId: userData.id,
@@ -568,7 +562,6 @@ export async function ctrlCreateCheckout(slug: string, priceTier: PriceTier) {
         imageUrl: course.imageUrl,
         name: course.name,
         description: course.description,
-        customerEmail: customerEmail,
         priceTier,
     });
 
