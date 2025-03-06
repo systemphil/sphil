@@ -16,7 +16,7 @@ type CourseEnrollButtonProps = {
 
 const BASE_TIER_TITLE = "Solo Learner";
 const BASE_TIER_TEXT =
-    "Base tier grants access to the course and all its digital contents, including any future updates.";
+    "Base tier grants lifetime access to the course and all its digital contents, including any future updates.";
 const SEMINAR_TIER_TITLE = "Peer";
 const SEMINAR_TIER_TEXT =
     "Seminar tier includes base tier as well as one-time access to live seminars, valid only for the season in which your course is held.";
@@ -60,7 +60,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
     }
 
     return (
-        <div className="border w-[320px] flex flex-col justify-center items-center p-3 gap-2">
+        <div className="border w-[280px] flex flex-col justify-center items-center p-3 gap-2">
             <form
                 action={handleEnroll}
                 className="flex flex-col gap-2 justify-center  grow"
