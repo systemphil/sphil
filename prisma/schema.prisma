@@ -91,6 +91,7 @@ model Course {
     lessons               Lesson[]
     details               CourseDetails?
     author                String?
+    seminarLink           String?
     baseAvailability      DateTime       @default(now())
     seminarAvailability   DateTime       @default(now())
     dialogueAvailability  DateTime       @default(now())

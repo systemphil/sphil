@@ -28,6 +28,7 @@ const upsertCourseSchema = z.object({
     baseAvailability: z.date(),
     seminarAvailability: z.date(),
     dialogueAvailability: z.date(),
+    seminarLink: z.string().nullable(),
 });
 type ActionUpsertCourseInput = z.infer<typeof upsertCourseSchema>;
 

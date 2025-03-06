@@ -229,6 +229,7 @@ export async function ctrlCreateOrUpdateCourse({
     baseAvailability,
     seminarAvailability,
     dialogueAvailability,
+    seminarLink,
 }: OrderCreateOrUpdateCourseProps) {
     // Locally scoped helper functions
     async function updateStripePriceIfNeeded({
@@ -404,6 +405,7 @@ export async function ctrlCreateOrUpdateCourse({
             baseAvailability,
             seminarAvailability,
             dialogueAvailability,
+            seminarLink,
         };
         const course = await dbUpsertCourseById(dbPayload);
         return course;
@@ -466,13 +468,16 @@ export async function ctrlCreateOrUpdateCourse({
         baseAvailability,
         seminarAvailability,
         dialogueAvailability,
+        seminarLink,
     };
     const course = await dbUpsertCourseById(dbPayload);
 
     return course;
 }
 
-export async function ctrlCreateCheckout(slug: string, priceTier: string) {
+export type PriceTier = "base" | "seminar" | "dialogue";
+
+export async function ctrlCreateCheckout(slug: string, priceTier: PriceTier) {
     const COURSE_DEADLINE_WITH_GRACE_PERIOD = new Date(
         new Date().getTime() + 5 * 60 * 1000
     );
@@ -564,6 +569,7 @@ export async function ctrlCreateCheckout(slug: string, priceTier: string) {
         name: course.name,
         description: course.description,
         customerEmail: customerEmail,
+        priceTier,
     });
 
     return { url: checkout.url };

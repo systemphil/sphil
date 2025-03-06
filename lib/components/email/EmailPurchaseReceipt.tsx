@@ -24,7 +24,7 @@ type PurchaseReceiptEmailProps = {
 // ! BUG where is this coming from??
 // Warning: Each child in a list should have a unique "key" prop. See https://reactjs.org/link/warning-keys for more information.
 
-export function PurchaseReceiptEmail({
+export function EmailPurchaseReceipt({
     product,
     order,
     courseLink,
