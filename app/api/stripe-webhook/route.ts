@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Record the event in the database (unless development mode)
-    // All details are recorded on Stripe so this is superflous for our purposes.
+    // All details are recorded on Stripe so this is superfluous for our purposes.
     // if (process.env.NODE_ENV !== "development") {
     //     await dbCreateStripeEventRecord(event);
     // }

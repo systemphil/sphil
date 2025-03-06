@@ -22,7 +22,7 @@ type PurchaseReceiptEmailProps = {
     user: User;
 };
 
-export function PurchaseNotification({
+export function EmailPurchaseNotification({
     user,
     product,
     order,

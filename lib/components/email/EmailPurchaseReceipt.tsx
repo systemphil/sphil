@@ -10,6 +10,8 @@ import {
     Tailwind,
 } from "@react-email/components";
 import { OrderInformation } from "./OrderInformation";
+import { imgCenterStyle } from "./emailUtils";
+import { ContactSupport } from "./ContactSupport";
 
 type PurchaseReceiptEmailProps = {
     product: {
@@ -24,17 +26,21 @@ type PurchaseReceiptEmailProps = {
 // ! BUG where is this coming from??
 // Warning: Each child in a list should have a unique "key" prop. See https://reactjs.org/link/warning-keys for more information.
 
-export function PurchaseReceiptEmail({
-    product,
-    order,
-    courseLink,
+export function EmailPurchaseReceipt({
+    product = {
+        name: "DummyProduct",
+        imagePath:
+            "https://cdn.indiabioscience.org/imager/articles/411714/Aniruddha_feature-image_4b32b63c5c28c858e051e9d1a2a717a1.png",
+        description:
+            "Experience crystal-clear audio with our Wireless Noise-Canceling Headphones. Designed for comfort and superior sound quality, these headphones offer up to 40 hours of battery life, deep bass, and active noise cancellation for immersive listening. Perfect for travel, work, or relaxation. ",
+    },
+    order = {
+        createdAt: new Date(),
+        id: "id",
+        pricePaidInCents: 10000,
+    },
+    courseLink = "https://google.com",
 }: PurchaseReceiptEmailProps) {
-    const owlImg = {
-        margin: "0 auto",
-        marginBottom: "16px",
-        borderRadius: "50%",
-    };
-
     return (
         <Html>
             <Preview>Access {product.name} and view receipt</Preview>
@@ -48,7 +54,7 @@ export function PurchaseReceiptEmail({
                                 alt="sphil_owl"
                                 width="200"
                                 height="200"
-                                style={owlImg}
+                                style={imgCenterStyle}
                             />
                         </Section>
                         <Section>
@@ -73,19 +79,7 @@ export function PurchaseReceiptEmail({
                             product={product}
                             courseLink={courseLink}
                         />
-                        <Section>
-                            <p className="text-gray-500 my-4">
-                                If there are any issues, please contact support
-                                at{" "}
-                                <a
-                                    href="mailto:support@systemphil.com"
-                                    className="text-gray-600 underline hover:text-blue-700"
-                                >
-                                    support@systemphil.com
-                                </a>
-                                .
-                            </p>
-                        </Section>
+                        <ContactSupport />
                     </Container>
                 </Body>
             </Tailwind>

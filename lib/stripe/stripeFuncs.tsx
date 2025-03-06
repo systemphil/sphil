@@ -1,9 +1,11 @@
 import type Stripe from "stripe";
 import { getStripe } from "./stripeInit";
-import { dbUpdateUserPurchases } from "lib/database/dbFuncs";
+import { dbGetCourseById, dbUpdateUserPurchases } from "lib/database/dbFuncs";
 import { resend } from "lib/email/emailInit";
-import { PurchaseReceiptEmail } from "lib/components/email/PurchaseReceipt";
-import { PurchaseNotification } from "lib/components/email/PurchaseNotification";
+import { EmailPurchaseReceipt } from "lib/components/email/EmailPurchaseReceipt";
+import { EmailPurchaseNotification } from "lib/components/email/EmailPurchaseNotification";
+import { PriceTier } from "lib/server/ctrl";
+import { EmailSeminarNotification } from "lib/components/email/EmailSeminarNotification";
 
 type StripeCreateProductProps = {
     name: string;
@@ -128,6 +130,8 @@ type StripeCreateCheckoutSessionProps = {
     imageUrl: string | null | undefined;
     name: string;
     description: string;
+    priceTier: PriceTier;
+    customerEmail: string;
 };
 
 export type StripeCheckoutSessionMetadata = {
@@ -139,6 +143,8 @@ export type StripeCheckoutSessionMetadata = {
     description: string;
     courseLink: string;
     stripeCustomerId: string;
+    priceTier: PriceTier;
+    customerEmail: string;
 };
 
 export async function stripeCreateCheckoutSession({
@@ -150,6 +156,8 @@ export async function stripeCreateCheckoutSession({
     imageUrl,
     name,
     description,
+    priceTier,
+    customerEmail,
 }: StripeCreateCheckoutSessionProps) {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_ROOT;
     if (!baseUrl) throw new Error("Base URL is not defined");
@@ -184,6 +192,8 @@ export async function stripeCreateCheckoutSession({
             name: name,
             description: description,
             courseLink: `${baseUrl}/symposia/courses/${slug}`,
+            priceTier,
+            customerEmail,
         },
     } satisfies Stripe.Checkout.SessionCreateParams & {
         metadata: StripeCheckoutSessionMetadata;
@@ -230,6 +240,12 @@ export async function stripeGetCustomerEmail({
     return customer.email;
 }
 
+export type Product = {
+    name: string;
+    imagePath: string;
+    description: string;
+};
+
 export async function handleSessionCompleted(
     event: Stripe.CheckoutSessionCompletedEvent
 ) {
@@ -248,7 +264,7 @@ export async function handleSessionCompleted(
         purchasePriceId: sessionMetadata.purchase,
     });
 
-    const customerEmail = event.data.object.customer_email;
+    const customerEmail = sessionMetadata.customerEmail;
     if (!customerEmail) {
         console.error(
             `❌ No customer email found in session metadata. Session id ${event.data.object.id}`
@@ -278,7 +294,7 @@ export async function handleSessionCompleted(
         to: customerEmail,
         subject: `Order Confirmation - ${product.name}`,
         react: (
-            <PurchaseReceiptEmail
+            <EmailPurchaseReceipt
                 key={order.id}
                 order={order}
                 product={product}
@@ -286,6 +302,18 @@ export async function handleSessionCompleted(
             />
         ),
     });
+
+    if (
+        sessionMetadata.priceTier === "seminar" ||
+        sessionMetadata.priceTier === "dialogue"
+    ) {
+        await handleSeminarEmail({
+            sessionMetadata,
+            customerEmail,
+            senderEmail,
+            product,
+        });
+    }
 
     const receiverEmail = process.env.EMAIL_RECEIVE;
     if (receiverEmail) {
@@ -296,7 +324,7 @@ export async function handleSessionCompleted(
                 product.name
             } - ${updatedUser.email}`,
             react: (
-                <PurchaseNotification
+                <EmailPurchaseNotification
                     user={updatedUser}
                     key={order.id}
                     order={order}
@@ -310,6 +338,37 @@ export async function handleSessionCompleted(
     }
 
     return updatedUser;
+}
+
+async function handleSeminarEmail({
+    sessionMetadata,
+    senderEmail,
+    customerEmail,
+    product,
+}: {
+    sessionMetadata: StripeCheckoutSessionMetadata;
+    senderEmail: string;
+    customerEmail: string;
+    product: Product;
+}) {
+    const course = await dbGetCourseById(sessionMetadata.courseId);
+    if (!course) {
+        return;
+    }
+    const seminarLink = course.seminarLink;
+
+    await resend.emails.send({
+        from: `No Reply <${senderEmail}>`,
+        to: customerEmail,
+        subject: `Seminar Information - ${product.name}`,
+        react: (
+            <EmailSeminarNotification
+                courseLink={sessionMetadata.courseLink}
+                product={product}
+                seminarLink={seminarLink}
+            />
+        ),
+    });
 }
 
 // interface CreateStripeRefundProps {
