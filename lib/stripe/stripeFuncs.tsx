@@ -131,6 +131,7 @@ type StripeCreateCheckoutSessionProps = {
     name: string;
     description: string;
     priceTier: PriceTier;
+    customerEmail: string;
 };
 
 export type StripeCheckoutSessionMetadata = {
@@ -143,6 +144,7 @@ export type StripeCheckoutSessionMetadata = {
     courseLink: string;
     stripeCustomerId: string;
     priceTier: PriceTier;
+    customerEmail: string;
 };
 
 export async function stripeCreateCheckoutSession({
@@ -155,6 +157,7 @@ export async function stripeCreateCheckoutSession({
     name,
     description,
     priceTier,
+    customerEmail,
 }: StripeCreateCheckoutSessionProps) {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_ROOT;
     if (!baseUrl) throw new Error("Base URL is not defined");
@@ -190,6 +193,7 @@ export async function stripeCreateCheckoutSession({
             description: description,
             courseLink: `${baseUrl}/symposia/courses/${slug}`,
             priceTier,
+            customerEmail,
         },
     } satisfies Stripe.Checkout.SessionCreateParams & {
         metadata: StripeCheckoutSessionMetadata;
@@ -260,7 +264,7 @@ export async function handleSessionCompleted(
         purchasePriceId: sessionMetadata.purchase,
     });
 
-    const customerEmail = event.data.object.customer_email;
+    const customerEmail = sessionMetadata.customerEmail;
     if (!customerEmail) {
         console.error(
             `❌ No customer email found in session metadata. Session id ${event.data.object.id}`

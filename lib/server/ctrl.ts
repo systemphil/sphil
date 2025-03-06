@@ -563,6 +563,7 @@ export async function ctrlCreateCheckout(slug: string, priceTier: PriceTier) {
         name: course.name,
         description: course.description,
         priceTier,
+        customerEmail: userData.email,
     });
 
     return { url: checkout.url };

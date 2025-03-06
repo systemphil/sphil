@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "next dev --turbo",
+        "email:dev": "email dev",
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
@@ -67,6 +68,7 @@
         "@svgr/webpack": "^8.0.1",
         "daisyui": "^5.0.0-beta.1",
         "dotenv-cli": "^8.0.0",
-        "pagefind": "^1.1.1"
+        "pagefind": "^1.1.1",
+        "react-email": "3.0.7"
     }
 }
