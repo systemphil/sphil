@@ -167,7 +167,7 @@ export async function stripeCreateCheckoutSession({
     const params = {
         customer: customerId,
         client_reference_id: userId,
-        payment_method_types: ["card", "paypal"],
+        payment_method_types: ["card", "link"],
         mode: "payment",
         line_items: [purchase],
         /**
