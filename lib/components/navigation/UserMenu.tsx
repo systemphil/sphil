@@ -23,7 +23,7 @@ export function UserMenu() {
     }
 
     if (status === "unauthenticated") {
-        return <SignInButtonClient className="btn btn-primary btn-sm" />;
+        return <SignInButtonClient className="d-btn d-btn-primary d-btn-sm" />;
     }
 
     return (
