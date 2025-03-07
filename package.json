@@ -16,7 +16,9 @@
         "db:studio:prod": "dotenv -e .env.production -- npx prisma studio",
         "db:regen": "npx prisma generate",
         "db:push": "npx prisma db push",
-        "db:push:prod": "dotenv -e .env.production -- npx prisma db push"
+        "db:push:prod": "dotenv -e .env.production -- npx prisma db push",
+        "email:send-news": "dotenv -e .env -- bun run scripts/email/send-newsletter.ts",
+        "email:send-news:prod": "dotenv -e .env.production -- bun run scripts/email/send-newsletter.ts"
     },
     "dependencies": {
         "@auth/prisma-adapter": "^2.8.0",
