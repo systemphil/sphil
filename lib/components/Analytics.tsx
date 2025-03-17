@@ -101,7 +101,7 @@ function CookieBanner() {
                 This site uses cookies to analyze traffic for marketing purposes
                 and to improve your experience. To learn more, visit our{" "}
                 <a
-                    href="/privacy"
+                    href="/articles/privacy"
                     className="text-blue-400 underline hover:text-blue-300"
                 >
                     Privacy Policy
