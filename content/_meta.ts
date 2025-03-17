@@ -29,6 +29,8 @@ export default {
         display: "hidden",
         type: "page",
         theme: {
+            sidebar: false,
+            toc: false,
             typesetting: "article",
         },
     },
@@ -37,6 +39,8 @@ export default {
         display: "hidden",
         type: "page",
         theme: {
+            sidebar: false,
+            toc: false,
             typesetting: "article",
         },
     },
@@ -45,6 +49,8 @@ export default {
         display: "hidden",
         type: "page",
         theme: {
+            sidebar: false,
+            toc: false,
             typesetting: "article",
         },
     },
