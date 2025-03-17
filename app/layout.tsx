@@ -138,6 +138,10 @@ export default async function RootLayout({
     const toc: Partial<ThemeConfigProps["toc"]> = {
         extraContent: <TableOfContentsExtra />,
     };
+    const feedbackOptions = {
+        content: null, // disables the feedback link to github issues
+    };
+
     return (
         <html
             lang="en"
@@ -150,6 +154,7 @@ export default async function RootLayout({
             <body>
                 <Providers>
                     <NextraLayout
+                        feedback={feedbackOptions}
                         pageMap={await getPageMap()}
                         docsRepositoryBase={DOCS_REPOSITORY_BASE}
                         editLink={EDIT_LINK_DESCRIPTION}
