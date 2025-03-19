@@ -76,7 +76,10 @@ export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
                 </div>
 
                 {lessonData?.content?.mdxCompiled ? (
-                    <MDXRenderer data={lessonData.content.mdxCompiled} />
+                    <MDXRenderer
+                        data={lessonData.content.mdxCompiled}
+                        isFullWidth
+                    />
                 ) : (
                     <div>Lesson content not ready. Please come back later</div>
                 )}
