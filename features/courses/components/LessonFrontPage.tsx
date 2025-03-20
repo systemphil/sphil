@@ -55,7 +55,7 @@ export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
                     )}
                 </div>
             </div>
-            <div className="md:col-span-1 md:p-2 md:order-1 lg:row-span-2">
+            <div className="md:col-span-1 md:p-2 md:order-1">
                 <div className="flex flex-col justify-start">
                     <Link
                         href={`/symposia/courses/${lessonData.course.slug}`}
@@ -69,10 +69,12 @@ export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
                     />
                 </div>
             </div>
-            <div className="w-full px-2 md:px-0 md:w-auto md:col-span-4 md:m-4 md:order-3 lg:col-span-2 lg:row-span-2">
+            <div className="w-full px-2 md:px-0 md:w-auto md:col-span-4 md:m-4 md:order-3 lg:col-span-2">
                 <div className="py-3">
                     <Heading as="h3">{lessonData.name}</Heading>
-                    <Paragraph>{lessonData.description}</Paragraph>
+                    <Paragraph className="!text-center">
+                        {lessonData.description}
+                    </Paragraph>
                 </div>
 
                 {lessonData?.content?.mdxCompiled ? (
