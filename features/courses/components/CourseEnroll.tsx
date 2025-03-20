@@ -9,6 +9,7 @@ import { Heading } from "lib/components/ui/Heading";
 import { SubmitButton } from "lib/components/forms/SubmitButton";
 import { SignInToBuyBtn } from "./SignInToBuyBtn";
 import { ctrlCreateCheckout } from "lib/server/ctrl";
+import Link from "next/link";
 
 type CourseEnrollButtonProps = {
     slug: string;
@@ -177,6 +178,12 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
             <p className="text-center text-sm text-slate-500">
                 30-Day Money-Back Guarantee
             </p>
+            <Link
+                href="/articles/terms-symposia"
+                className="text-center text-sm text-slate-500 underline hover:text-slate-600 dark:hover:text-slate-300 transition duration-300"
+            >
+                Terms Apply
+            </Link>
         </div>
     );
 }

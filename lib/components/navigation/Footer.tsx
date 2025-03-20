@@ -81,6 +81,10 @@ function FooterContent() {
         legal: [
             { name: "Privacy Policy", href: "/articles/privacy" },
             { name: "Terms of Use", href: "/articles/terms" },
+            {
+                name: "Terms for Online Courses",
+                href: "/articles/terms-symposia",
+            },
         ],
         support: [
             { name: "GitHub", href: "https://github.com/systemphil/" },

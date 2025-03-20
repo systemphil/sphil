@@ -34,6 +34,16 @@ export default {
             typesetting: "article",
         },
     },
+    "terms-symposia": {
+        title: "Terms of Use",
+        display: "hidden",
+        type: "page",
+        theme: {
+            sidebar: false,
+            toc: false,
+            typesetting: "article",
+        },
+    },
     privacy: {
         title: "Privacy Policy",
         display: "hidden",
