@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import remarkDirective from "remark-directive";
 import { visit } from "unist-util-visit";
 import type { Root } from "mdast";
+import rehypeExternalLinks from "rehype-external-links";
 
 /**
  * Compiles MDX strings into JavaScript. Configure additional plugins here.
@@ -21,6 +22,12 @@ export const mdxCompiler = async (mdxSource: string) => {
                 // `false` if you use `/jsx-runtime` on client, `true` if you use
                 // `/jsx-dev-runtime`.
                 remarkPlugins: [remarkGfm, remarkDirective, adminitionPlugin],
+                rehypePlugins: [
+                    [
+                        rehypeExternalLinks,
+                        { target: "_blank", rel: ["noopener", "noreferrer"] },
+                    ],
+                ],
             })
         );
         return mdxCompiled;

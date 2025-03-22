@@ -15,6 +15,7 @@ import {
 import { Product } from "lib/stripe/stripeFuncs";
 import { imgCenterStyle } from "./emailUtils";
 import { ContactSupport } from "./ContactSupport";
+import { TermsApply } from "./TermsApply";
 
 type PurchaseReceiptEmailProps = {
     product: Product;
@@ -105,6 +106,7 @@ export function EmailSeminarNotification({
                             </Row>
                         </Section>
                         <ContactSupport />
+                        <TermsApply />
                     </Container>
                 </Body>
             </Tailwind>

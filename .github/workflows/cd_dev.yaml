@@ -146,7 +146,6 @@ jobs:
       run: |-
         docker build \
           --build-arg NEXT_PUBLIC_SITE_ROOT=${{secrets.NEXT_PUBLIC_SITE_ROOT}} \
-          --build-arg NEXT_PUBLIC_GA_ID=${{secrets.NEXT_PUBLIC_GA_ID}} \
           -f Dockerfile \
           -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}" ./
         docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"

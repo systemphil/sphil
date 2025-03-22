@@ -29,23 +29,33 @@ export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
 
     const md = "md:grid md:grid-cols-4 md:items-start";
     const lg = "lg:grid-cols-6";
-    const xl = "gap-0";
-    const xxl = "2xl:gap-8 2xl:px-20";
+    const xl = "";
+    const xxl = "2xl:px-20";
 
     return (
         <div
-            className={`flex flex-col justify-center items-center gap-2 ${md} ${lg} ${xl} ${xxl} mb-20`}
+            className={`flex flex-col justify-center items-center ${md} ${lg} ${xl} ${xxl} mb-20`}
         >
-            <div className="min-h-[500px] flex w-full md:col-span-3 md:order-2">
+            <div className="min-h-[500px] flex flex-col w-full md:col-span-3 md:order-2">
                 {lessonData.video ? (
                     <Suspense fallback={<Loading.SkeletonFullPage />}>
                         <VideoDataLoader videoEntry={lessonData.video} />
                     </Suspense>
                 ) : (
-                    <div>No video content</div>
+                    <div>Video content not ready. Please come back later</div>
                 )}
+                <div className="max-h-[300px] md:max-h-[500px] lg:max-h-full mt-2 overflow-auto">
+                    {lessonData?.transcript?.mdxCompiled ? (
+                        <MDXRenderer
+                            data={lessonData.transcript.mdxCompiled}
+                            isFullWidth
+                        />
+                    ) : (
+                        <div>No transcript available</div>
+                    )}
+                </div>
             </div>
-            <div className="md:col-span-1 md:p-2 md:order-1 lg:row-span-2">
+            <div className="md:col-span-1 md:p-2 md:order-1">
                 <div className="flex flex-col justify-start">
                     <Link
                         href={`/symposia/courses/${lessonData.course.slug}`}
@@ -59,23 +69,21 @@ export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
                     />
                 </div>
             </div>
-            <div className="w-full px-2 md:px-0 md:w-auto md:col-span-4 md:m-4 md:order-3 lg:col-span-2 lg:row-span-2">
+            <div className="w-full px-2 md:px-0 md:w-auto md:col-span-4 md:m-4 md:order-3 lg:col-span-2">
                 <div className="py-3">
                     <Heading as="h3">{lessonData.name}</Heading>
-                    <Paragraph>{lessonData.description}</Paragraph>
+                    <Paragraph className="!text-center">
+                        {lessonData.description}
+                    </Paragraph>
                 </div>
 
                 {lessonData?.content?.mdxCompiled ? (
-                    <MDXRenderer data={lessonData.content.mdxCompiled} />
+                    <MDXRenderer
+                        data={lessonData.content.mdxCompiled}
+                        isFullWidth
+                    />
                 ) : (
-                    <div>No lesson content</div>
-                )}
-            </div>
-            <div className="md:col-span-4 md:m-4 md:order-4 lg:col-start-2 lg:col-span-3">
-                {lessonData?.transcript?.mdxCompiled ? (
-                    <MDXRenderer data={lessonData.transcript.mdxCompiled} />
-                ) : (
-                    <div>No transcript</div>
+                    <div>Lesson content not ready. Please come back later</div>
                 )}
             </div>
         </div>

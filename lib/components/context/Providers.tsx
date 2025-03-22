@@ -1,15 +1,16 @@
 "use client";
 
 import { SessionProvider } from "next-auth/react";
-import { Analytics } from "../Analytics";
 import { Toaster } from "react-hot-toast";
+import { Analytics } from "../Analytics";
 
 export const Providers = ({ children }) => {
     return (
         <SessionProvider>
-            {children}
-            <Analytics />
-            <Toaster position="bottom-right" />
+            <Analytics>
+                {children}
+                <Toaster position="bottom-right" />
+            </Analytics>
         </SessionProvider>
     );
 };

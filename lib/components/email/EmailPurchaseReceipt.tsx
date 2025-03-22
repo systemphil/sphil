@@ -12,6 +12,7 @@ import {
 import { OrderInformation } from "./OrderInformation";
 import { imgCenterStyle } from "./emailUtils";
 import { ContactSupport } from "./ContactSupport";
+import { TermsApply } from "./TermsApply";
 
 type PurchaseReceiptEmailProps = {
     product: {
@@ -80,6 +81,7 @@ export function EmailPurchaseReceipt({
                             courseLink={courseLink}
                         />
                         <ContactSupport />
+                        <TermsApply />
                     </Container>
                 </Body>
             </Tailwind>
