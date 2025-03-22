@@ -21,17 +21,18 @@ async function sendNewsletter() {
         process.exit(1);
     }
     try {
+        // TODO
         // const subscribers = await prisma.newsletterEmail.findMany({
         //     select: { email: true },
         // });
         const subscribers = [{ email: "awdeegrays@gmail.com" }];
 
         const subject =
-            "sPhil 🦉 Enrollment Now Open: Unlock the Power of Hegel's Science of Logic 🏛️";
+            "Enrollment Now Open: Unlock the Power of Hegel's Science of Logic 🏛️";
 
         for (const { email } of subscribers) {
             await resend.emails.send({
-                from: `sPhil Newsletter <${senderEmail}>`,
+                from: `sPhil Newsletter 🦉 <${senderEmail}>`,
                 to: email,
                 subject,
                 react: <NewsletterCourseAnnouncement />,
