@@ -5,6 +5,8 @@ import { LogoOwl } from "../LogoOwl";
 import { LogoAnimated } from "../LogoAnimated";
 import { SymposiaCard } from "../SymposiaCard";
 import { SocialIcon } from "../icons/SocialIcon";
+import { Button } from "../ui/Button";
+import { resetCookieConsentValue } from "react-cookie-consent";
 
 const footerLinkClasses =
     "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 dark:hover:text-gray-200 transition";
@@ -79,6 +81,10 @@ function FooterContent() {
         legal: [
             { name: "Privacy Policy", href: "/articles/privacy" },
             { name: "Terms of Use", href: "/articles/terms" },
+            {
+                name: "Terms for Online Courses",
+                href: "/articles/terms-symposia",
+            },
         ],
         support: [
             { name: "GitHub", href: "https://github.com/systemphil/" },
@@ -89,6 +95,28 @@ function FooterContent() {
                 href: "https://www.facebook.com/profile.php?id=61564840656103",
             },
         ],
+    };
+
+    const handleClearCookies = () => {
+        if (typeof window === "undefined") {
+            return;
+        }
+        resetCookieConsentValue();
+        const dialog = document.getElementById(
+            "cookie-dialog"
+        ) as HTMLDialogElement;
+        if (dialog) {
+            dialog.show();
+        }
+    };
+
+    const handleCloseDialog = () => {
+        const dialog = document.getElementById(
+            "cookie-dialog"
+        ) as HTMLDialogElement;
+        if (dialog) {
+            dialog.close();
+        }
     };
 
     return (
@@ -166,6 +194,25 @@ function FooterContent() {
                                     role="list"
                                     className="mt-4 space-y-1.5 list-none ml-0"
                                 >
+                                    <div className="absolute w-[250px]">
+                                        <dialog id="cookie-dialog">
+                                            <div className="flex flex-col items-center justify-center max-w-md shadow p-4 rounded-md">
+                                                <span className="p-2 text-xs">
+                                                    All cookies should now be
+                                                    deleted and you will be
+                                                    asked upon next visit to
+                                                    accept or decline cookies.
+                                                </span>
+                                                <Button
+                                                    onClick={() =>
+                                                        handleCloseDialog()
+                                                    }
+                                                >
+                                                    Close
+                                                </Button>
+                                            </div>
+                                        </dialog>
+                                    </div>
                                     {navigation.legal.map((item) => (
                                         <li key={item.name}>
                                             <FooterLink href={item.href}>
@@ -173,6 +220,14 @@ function FooterContent() {
                                             </FooterLink>
                                         </li>
                                     ))}
+                                    <li
+                                        key="cookie-removal"
+                                        onClick={() => handleClearCookies()}
+                                    >
+                                        <button className={footerLinkClasses}>
+                                            Delete Cookies
+                                        </button>
+                                    </li>
                                 </ul>
                             </div>
                             <div className="mt-12 md:mt-0!">

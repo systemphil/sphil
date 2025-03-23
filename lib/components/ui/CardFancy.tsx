@@ -26,7 +26,7 @@ export function CardFancy({
                 <p className="text-5xl font-bold text-center hover:text-slate-600 duration-300">
                     {title}
                 </p>
-                <p className="w-[300px] text-center mt-2 text-lg text-stone-500">
+                <p className="max-w-[300px] text-center mt-2 text-lg text-stone-500">
                     {tagline}
                 </p>
             </Link>

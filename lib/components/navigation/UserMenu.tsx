@@ -19,13 +19,11 @@ export function UserMenu() {
     };
 
     if (status === "loading") {
-        return null; // TODO temporary
-        // return <Loading.RingMd />;
+        return <Loading.RingMd />;
     }
 
     if (status === "unauthenticated") {
-        return null; // TODO temporary
-        // return <SignInButtonClient className="btn btn-primary btn-sm" />;
+        return <SignInButtonClient className="d-btn d-btn-primary d-btn-sm" />;
     }
 
     return (

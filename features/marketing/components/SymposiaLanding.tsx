@@ -44,11 +44,11 @@ function Hero() {
             </div>
             <div className="translate-y-[7px] md:-translate-y-[2px] lg:-translate-y-3 flex flex-col items-center justify-center">
                 <div className="font-bold text-center relative z-20 bg-clip-text tracking-widest text-transparent">
-                    <Heading replacementClasses="pb-4 text-transparent bg-linear-to-b from-black/80 to-black dark:from-white dark:to-[#AAAAAA]">
+                    <Heading replacementClasses="pb-4 text-transparent bg-linear-to-b from-black/80 to-black dark:from-white dark:to-[#AAAAAA] max-w-[300px] sm:max-w-none">
                         Discover & Reflect
                     </Heading>
                 </div>
-                <h3 className="text-xl my-1.5 md:text-2xl lg:text-3xl text-stone-600 dark:text-stone-300/90 font-light inter-var text-center">
+                <h3 className="text-xl my-1.5 md:text-2xl lg:text-3xl text-stone-600 dark:text-stone-300/90 font-light inter-var text-center max-w-[250px] sm:max-w-none">
                     In-depth learning courses on philosophy
                 </h3>
                 <div className="w-[40rem] h-40 relative">
@@ -210,7 +210,7 @@ function Instructors() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
                 <InfoCard
                     title="Filip Niklas, PhD"
-                    text="Filip completed his PhD in philosophy in 2022 under the supervision of Professor Stephen Houlgate at the University of Warwick. The title of his thesis was Hegel's <em>Critique of Determinism: Justifying Unfreedom as a Moment of Freedom</em>. Filip has given papers and organized numerous conferences on philosophy. He has taught extensively both at universiy, at the Halkyon Academy and privately. Filip's main research areas are systematic philosophy, metaphysics, ontology, essence, freedom, determinism, and maintains an otherwise broad interest in all the dimensions of intelligence and reason. Filip is also an incurable fan of the art and poetry of William Blake."
+                    text="Filip completed his PhD in philosophy in 2022 under the supervision of Professor Stephen Houlgate at the University of Warwick. The title of his thesis was Hegel's Critique of Determinism: Justifying Unfreedom as a Moment of Freedom. Filip has given papers and organized numerous conferences on philosophy. He has taught extensively both at university, at the Halkyon Academy and privately. Filip's main research areas are systematic philosophy, metaphysics, ontology, essence, freedom, determinism, and maintains an otherwise broad interest in all the dimensions of intelligence and reason. Filip is also an incurable fan of the art and poetry of William Blake."
                     maskType="squircle"
                     imgUrl="/static/images/people/filip.jpg"
                 />

@@ -16,7 +16,13 @@ import { EmbedYT } from "./ui/EmbedYT";
  * To configure MDX plugins, please see the compiler.
  * @docs {@link https://mdxjs.com/guides/mdx-on-demand/ | MDX on-demand}
  */
-export const MDXRenderer = ({ data }: { data: MDXCompilerReturnType }) => {
+export const MDXRenderer = ({
+    data,
+    isFullWidth = false,
+}: {
+    data: MDXCompilerReturnType;
+    isFullWidth?: boolean;
+}) => {
     const [mdxModule, setMdxModule] = useState<MDXModule | undefined>(
         undefined
     );
@@ -34,13 +40,17 @@ export const MDXRenderer = ({ data }: { data: MDXCompilerReturnType }) => {
         })();
     }, [data]);
 
+    const fullWidth = isFullWidth ? "!max-w-none" : "";
+
     return (
         <>
             {mdxModule ? (
                 <article className="mdxeditor _editorRoot_uazmk_53 _editorWrapper_uazmk_154">
                     <div className="mdxeditor-rich-text-editor block">
                         <div className="_rootContentEditableWrapper_uazmk_1097 mdxeditor-root-contenteditable">
-                            <div className="_contentEditable_uazmk_379 !prose dark:!prose-invert max-w-none w-full">
+                            <div
+                                className={`_contentEditable_uazmk_379 !prose dark:!prose-invert ${fullWidth} !min-w-none`}
+                            >
                                 <Content
                                     components={{
                                         EmbedTeacherProfile(props) {

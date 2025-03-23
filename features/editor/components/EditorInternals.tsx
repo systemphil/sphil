@@ -146,7 +146,7 @@ export default function EditorInternals({ material, title }: EditorProps) {
                     className="border-2 border-gray-200 rounded-lg full-demo-mdxeditor"
                     ref={editorRef}
                     markdown={material.mdx}
-                    contentEditableClassName="!prose dark:!prose-invert max-w-none"
+                    contentEditableClassName="!prose dark:!prose-invert !max-w-none"
                     plugins={[
                         jsxPlugin({ jsxComponentDescriptors }),
                         listsPlugin(),

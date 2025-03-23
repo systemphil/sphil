@@ -42,14 +42,13 @@ export const SubscribeToNewsletter = () => {
             }
         });
     };
-
     return (
-        <div className="d-card py-2">
+        <div className="py-2">
             <CardShell>
-                <div className="p-10">
+                <div className="p-2 sm:p-10">
                     <form
                         onSubmit={handleSubmit(onSubmit)}
-                        className="flex justify-center"
+                        className="flex justify-center flex-wrap"
                     >
                         <div className="form-group">
                             <input
@@ -76,8 +75,8 @@ export const SubscribeToNewsletter = () => {
                             type="submit"
                             className={`
                 ${status === "error" ? "bg-red-500" : "bg-blue-500 hover:bg-blue-600"}
-                w-32
-                text-white p-2 rounded-r-md cursor-pointer duration-300
+                w-18 md:w-32
+                text-white p-2 rounded-r-md cursor-pointer duration-300 text-sm
               `}
                         >
                             {status === "error" && "Error. Retry"}

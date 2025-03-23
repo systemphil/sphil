@@ -33,7 +33,7 @@ export function OrderInformation({
                     </Column>
                     <Column>
                         <Text className="mb-0 text-gray-500 whitespace-nowrap text-nowrap mr-4">
-                            Purchased On
+                            Date
                         </Text>
                         <Text className="mt-0 mr-4">
                             {dateFormatter.format(order.createdAt)}
@@ -41,7 +41,7 @@ export function OrderInformation({
                     </Column>
                     <Column>
                         <Text className="mb-0 text-gray-500 whitespace-nowrap text-nowrap mr-4">
-                            Price Paid
+                            Price
                         </Text>
                         <Text className="mt-0 mr-4">
                             {formatCurrency(order.pricePaidInCents / 100)}
@@ -60,9 +60,9 @@ export function OrderInformation({
                     <Column align="right">
                         <Button
                             href={courseLink}
-                            className="bg-[#6b0072] text-white px-6 py-4 rounded-sm text-lg"
+                            className="bg-[#6b0072] text-white p-2 rounded-sm text-lg text-center"
                         >
-                            LINK
+                            COURSE PAGE
                         </Button>
                     </Column>
                 </Row>

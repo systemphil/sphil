@@ -158,28 +158,22 @@ export async function dbUpdateUserPurchases({
     purchasePriceId: string;
 }) {
     const validUserId = z.string().parse(userId);
-    const existingUser = await prisma.user.findUnique({
-        where: { id: validUserId },
-    });
-    if (!existingUser) throw new Error("User not found");
 
     const purchasePriceIdWithTimeStamp = `${purchasePriceId}:${Date.now()}`;
-
-    const updatedPurchases = [
-        ...existingUser.productsPurchased,
-        purchasePriceIdWithTimeStamp,
-    ];
     const updatedUser = await prisma.user.update({
         where: {
             id: validUserId,
         },
         data: {
+            productsPurchased: {
+                push: purchasePriceIdWithTimeStamp,
+            },
             coursesPurchased: {
                 connect: { id: courseId },
             },
-            productsPurchased: updatedPurchases,
         },
     });
+
     return updatedUser;
 }
 /**
@@ -548,6 +542,7 @@ export const dbUpsertCourseById = async ({
     baseAvailability,
     seminarAvailability,
     dialogueAvailability,
+    seminarLink,
 }: DbUpsertCourseByIdProps) => {
     async function task() {
         const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
@@ -579,6 +574,9 @@ export const dbUpsertCourseById = async ({
         const validBaseAvailability = z.date().parse(baseAvailability);
         const validSeminarAvailability = z.date().parse(seminarAvailability);
         const validDialogueAvailability = z.date().parse(dialogueAvailability);
+        const validSeminarLink = seminarLink
+            ? z.string().parse(seminarLink)
+            : null;
 
         return await prisma.course.upsert({
             where: {
@@ -601,6 +599,7 @@ export const dbUpsertCourseById = async ({
                 baseAvailability: validBaseAvailability,
                 seminarAvailability: validSeminarAvailability,
                 dialogueAvailability: validDialogueAvailability,
+                seminarLink: validSeminarLink,
             },
             create: {
                 name: validName,
@@ -619,6 +618,7 @@ export const dbUpsertCourseById = async ({
                 baseAvailability: validBaseAvailability,
                 seminarAvailability: validSeminarAvailability,
                 dialogueAvailability: validDialogueAvailability,
+                seminarLink: validSeminarLink,
             },
         });
     }

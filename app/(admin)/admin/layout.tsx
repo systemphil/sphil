@@ -24,7 +24,7 @@ export default async function AdminLayout({
 
     return (
         <section>
-            <div className="w-full bg-purple-200 z-50 fixed shadow-sm flex justify-center items-center py-1 gap-3">
+            <div className="w-full bg-purple-200 z-20 fixed shadow-sm flex justify-center items-center py-1 gap-3">
                 <span className="text-purple-300">ADMIN AREA</span>
                 <AdminBtn href="/admin">Main</AdminBtn>
                 <AdminBtn href="/admin/mng">Management</AdminBtn>

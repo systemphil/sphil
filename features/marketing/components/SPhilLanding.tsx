@@ -73,11 +73,12 @@ export function SPhilLanding() {
                     <div className="flex flex-col items-center">
                         <div
                             aria-hidden="true"
-                            className="absolute inset-48 grid grid-cols-4 -space-x-52 opacity-40 dark:opacity-20"
+                            className="absolute inset-48 grid grid-cols-4 -space-x-2 sm:-space-x-24 md:-space-x-52 opacity-40 dark:opacity-20"
                         >
                             <div className="blur-[106px] col-span-1 h-64 bg-linear-to-br from-purple-700 to-purple-400 dark:from-blue-700" />
                             <div className="blur-[106px] col-span-1 col-start-4 h-32 bg-linear-to-r from-cyan-400 to-sky-300 dark:to-indigo-600" />
                         </div>
+
                         <FadeIn className="flex flex-col items-center gap-6 max-w-2xl">
                             <Paragraph>
                                 Introducing the platform where the realms of

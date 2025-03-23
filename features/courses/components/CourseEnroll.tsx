@@ -9,6 +9,7 @@ import { Heading } from "lib/components/ui/Heading";
 import { SubmitButton } from "lib/components/forms/SubmitButton";
 import { SignInToBuyBtn } from "./SignInToBuyBtn";
 import { ctrlCreateCheckout } from "lib/server/ctrl";
+import Link from "next/link";
 
 type CourseEnrollButtonProps = {
     slug: string;
@@ -16,7 +17,7 @@ type CourseEnrollButtonProps = {
 
 const BASE_TIER_TITLE = "Solo Learner";
 const BASE_TIER_TEXT =
-    "Base tier grants access to the course and all its digital contents, including any future updates.";
+    "Base tier grants lifetime access to the course and all its digital contents, including any future updates.";
 const SEMINAR_TIER_TITLE = "Peer";
 const SEMINAR_TIER_TEXT =
     "Seminar tier includes base tier as well as one-time access to live seminars, valid only for the season in which your course is held.";
@@ -60,7 +61,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
     }
 
     return (
-        <div className="border w-[320px] flex flex-col justify-center items-center p-3 gap-2">
+        <div className="border w-[280px] flex flex-col justify-center items-center p-3 gap-2">
             <form
                 action={handleEnroll}
                 className="flex flex-col gap-2 justify-center  grow"
@@ -177,6 +178,12 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
             <p className="text-center text-sm text-slate-500">
                 30-Day Money-Back Guarantee
             </p>
+            <Link
+                href="/articles/terms-symposia"
+                className="text-center text-sm text-slate-500 underline hover:text-slate-600 dark:hover:text-slate-300 transition duration-300"
+            >
+                Terms Apply
+            </Link>
         </div>
     );
 }

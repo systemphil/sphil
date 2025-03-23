@@ -72,14 +72,22 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
                 title={title ? title : "Business Lead"}
                 image="/images/team/ahilleas.jpg"
             >
-                Ahilleas Rokni completed his PhD thesis in philosophy in 2022
-                under the supervision of Professor Stephen Houlgate at the
-                University of Warwick. His thesis aimed to give an account of
-                the much-debated move from the <i>Science of Logic</i> to the{" "}
-                <i>Philosophy of Nature</i> in Hegel&apos;s system.
-                Ahilleas&apos;s main research concerns are Hegel&apos;s logic,
-                philosophy of nature, philosophy of science, and aesthetics.
-                Ahilleas is a co-founder and the business lead of sPhil.
+                Ahilleas Rokni, Ph.D., completed his PhD in 2022 under the
+                supervision of Professor Stephen Houlgate at the University of
+                Warwick. The title of his thesis is{" "}
+                <i>
+                    From Logic to Nature: A study of Objectivity and the Idea in
+                    Hegel&apos;s Science of Logic
+                </i>
+                . Ahilleas has published articles, edited journals, given talks,
+                and organized numerous conferences around Hegel, aesthetics, and
+                the history of philosophy more generally. Ahilleas has
+                previously given courses at the University of Warwick on topics
+                ranging from political philosophy to contemporary debates in
+                metaphysics. Ahilleas&apos; main research areas are metaphysics,
+                ontology, philosophy of nature, philosophy of science,
+                aesthetics, and systematic philosophy. Ahilleas is a co-founder
+                of sPhil and writes articles for the sPhil Encyclopaedia.
             </CardTeamMember>
         );
     };
@@ -95,7 +103,8 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
                     width: "100%",
                     overflow: "hidden",
                     paddingTop: "56.25%",
-                    padding: "16px",
+                    padding: "2px",
+                    marginTop: "16px",
                 }}
             >
                 {teacher === "filip" && renderFilip(title)}
