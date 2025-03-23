@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
+        "view": "jq '.scripts' package.json",
         "dev": "next dev --turbo",
         "email:dev": "email dev",
         "build": "next build",
