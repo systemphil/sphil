@@ -21,11 +21,11 @@ async function sendNewsletter() {
         process.exit(1);
     }
     try {
-        // TODO
-        // const subscribers = await prisma.newsletterEmail.findMany({
-        //     select: { email: true },
-        // });
-        const subscribers = [{ email: "awdeegrays@gmail.com" }];
+        // TODO add ID for the unsubscribe link when that is implemented
+
+        const subscribers = await prisma.newsletterEmail.findMany({
+            select: { email: true },
+        });
 
         const subject =
             "Enrollment Now Open: Unlock the Power of Hegel's Science of Logic 🏛️";
