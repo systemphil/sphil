@@ -49,7 +49,7 @@ export const MDXRenderer = ({
                     <div className="mdxeditor-rich-text-editor block">
                         <div className="_rootContentEditableWrapper_uazmk_1097 mdxeditor-root-contenteditable">
                             <div
-                                className={`_contentEditable_uazmk_379 !prose dark:!prose-invert ${fullWidth}`}
+                                className={`_contentEditable_uazmk_379 !prose dark:!prose-invert ${fullWidth} !min-w-none`}
                             >
                                 <Content
                                     components={{

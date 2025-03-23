@@ -12,7 +12,7 @@ export const EmbedYT = (props: any) => {
 
     return (
         <section
-            style={{ width: "100%", minWidth: minWidth, maxWidth: maxWidth }}
+            style={{ width: "100%", maxWidth: maxWidth }}
             aria-label="YouTube video"
         >
             <div
@@ -34,8 +34,6 @@ export const EmbedYT = (props: any) => {
                             height: "100%",
                             border: "none",
                         }}
-                        width="560"
-                        height="315"
                         src={src}
                         title={title ?? "YouTube video"}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

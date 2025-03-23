@@ -43,7 +43,7 @@ export async function InfoCard({
                 <div className="d-card-title justify-center">
                     <Heading as="h4">{title}</Heading>
                 </div>
-                <p className="text-slate-700 dark:text-slate-300 pt-4 text-justify text-lg">
+                <p className="text-slate-700 dark:text-slate-300 pt-4 text-justify sm:text-lg">
                     {text}
                 </p>
                 {url && urlDescription && (
