@@ -17,8 +17,8 @@ export const CardTeamMember = ({
         <div className="flex flex-col max-w-[500px] rounded-md shadow-lg bg-linear-to-b from-gray-100 to-gray-300 dark:from-neutral-950/90 dark:to-neutral-800/90 dark:outline-1 dark:outline-solid dark:outline-dark-green-hsl outline-1 outline-gray-300">
             <div className="flex px-8 pt-8 pb-6">
                 <Image
-                    height={125}
-                    width={125}
+                    height={100}
+                    width={100}
                     src={image}
                     alt={name}
                     priority

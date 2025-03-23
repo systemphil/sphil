@@ -11,7 +11,9 @@ export default async function AdminPage() {
             <Heading as="h2">Courses</Heading>
             <CoursesDisplay isAdmin />
             <Link href="/admin/courses/new">
-                <button className="d-btn d-btn-primary">Create a course</button>
+                <button type="button" className="d-btn d-btn-primary">
+                    Create a course
+                </button>
             </Link>
         </PageWrapper>
     );

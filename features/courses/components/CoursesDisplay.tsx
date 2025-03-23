@@ -1,10 +1,11 @@
 import {
     dbGetAllCourses,
+    dbGetAllCoursesByOwner,
     dbGetAllPublishedCourses,
 } from "lib/database/dbFuncs";
 import { CourseCard } from "./CourseCard";
 import { Heading } from "lib/components/ui/Heading";
-import { Course } from "@prisma/client";
+import type { Course } from "@prisma/client";
 import { auth } from "lib/auth/authConfig";
 
 export async function CoursesDisplay({
@@ -23,12 +24,23 @@ export async function CoursesDisplay({
         ) {
             return <Heading as="h6">Authentication error.</Heading>;
         }
-        courses = await dbGetAllCourses();
+        if (session.user.role === "SUPERADMIN") {
+            courses = await dbGetAllCourses();
+        } else {
+            courses = await dbGetAllCoursesByOwner(session.user.id);
+        }
     } else {
         courses = await dbGetAllPublishedCourses();
     }
 
     if (courses.length === 0) {
+        if (isAdmin) {
+            return (
+                <Heading as="h6">
+                    No courses. Click below to create one!
+                </Heading>
+            );
+        }
         return (
             <Heading as="h6">
                 No courses available. Please check in at a later time.

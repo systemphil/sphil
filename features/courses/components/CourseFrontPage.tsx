@@ -62,7 +62,7 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
                     )}
                 </div>
 
-                <div className="flex justify-center gap-20 flex-wrap-reverse mt-10 md:mt-5">
+                <div className="flex justify-center gap-10 flex-wrap mt-5">
                     <div className="max-w-[800px]">
                         {course?.details?.mdxCompiled ? (
                             <MDXRenderer data={course.details.mdxCompiled} />
@@ -71,12 +71,12 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
                         )}
                     </div>
 
-                    <div className="flex flex-col justify-start items-center md:items-end md:pt-8">
-                        <CourseEnroll slug={slug} />
+                    <div className="flex flex-col justify-start items-center md:items-end md:pt-8 gap-4">
                         <TableOfLessons
                             lessons={course.lessons}
                             courseSlug={slug}
                         />
+                        <CourseEnroll slug={slug} />
                     </div>
                 </div>
             </div>

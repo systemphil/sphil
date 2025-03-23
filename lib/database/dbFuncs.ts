@@ -1,5 +1,5 @@
 import * as z from "zod";
-import {
+import type {
     Course,
     CourseDetails,
     Lesson,
@@ -22,6 +22,23 @@ import { Text } from "lib/utils/textEncoding";
  * @access ADMIN
  */
 export const dbGetAllCourses = () => withAdmin(() => prisma.course.findMany());
+
+/**
+ * Calls the database to retrieve all courses by owner userId.
+ * @access ADMIN
+ */
+export const dbGetAllCoursesByOwner = (userId: string) =>
+    withAdmin(() =>
+        prisma.course.findMany({
+            where: {
+                owners: {
+                    some: {
+                        id: userId,
+                    },
+                },
+            },
+        })
+    );
 
 /**
  * Calls the database to retrieve all published courses.
@@ -141,28 +158,22 @@ export async function dbUpdateUserPurchases({
     purchasePriceId: string;
 }) {
     const validUserId = z.string().parse(userId);
-    const existingUser = await prisma.user.findUnique({
-        where: { id: validUserId },
-    });
-    if (!existingUser) throw new Error("User not found");
 
     const purchasePriceIdWithTimeStamp = `${purchasePriceId}:${Date.now()}`;
-
-    const updatedPurchases = [
-        ...existingUser.productsPurchased,
-        purchasePriceIdWithTimeStamp,
-    ];
     const updatedUser = await prisma.user.update({
         where: {
             id: validUserId,
         },
         data: {
+            productsPurchased: {
+                push: purchasePriceIdWithTimeStamp,
+            },
             coursesPurchased: {
                 connect: { id: courseId },
             },
-            productsPurchased: updatedPurchases,
         },
     });
+
     return updatedUser;
 }
 /**
@@ -531,6 +542,7 @@ export const dbUpsertCourseById = async ({
     baseAvailability,
     seminarAvailability,
     dialogueAvailability,
+    seminarLink,
 }: DbUpsertCourseByIdProps) => {
     async function task() {
         const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
@@ -562,6 +574,9 @@ export const dbUpsertCourseById = async ({
         const validBaseAvailability = z.date().parse(baseAvailability);
         const validSeminarAvailability = z.date().parse(seminarAvailability);
         const validDialogueAvailability = z.date().parse(dialogueAvailability);
+        const validSeminarLink = seminarLink
+            ? z.string().parse(seminarLink)
+            : null;
 
         return await prisma.course.upsert({
             where: {
@@ -584,6 +599,7 @@ export const dbUpsertCourseById = async ({
                 baseAvailability: validBaseAvailability,
                 seminarAvailability: validSeminarAvailability,
                 dialogueAvailability: validDialogueAvailability,
+                seminarLink: validSeminarLink,
             },
             create: {
                 name: validName,
@@ -602,6 +618,7 @@ export const dbUpsertCourseById = async ({
                 baseAvailability: validBaseAvailability,
                 seminarAvailability: validSeminarAvailability,
                 dialogueAvailability: validDialogueAvailability,
+                seminarLink: validSeminarLink,
             },
         });
     }
@@ -659,25 +676,24 @@ export const dbUpsertLessonById = async ({
                     partId: validPartId,
                 },
             });
-        } else {
-            const allLessons = await prisma.lesson.findMany({
-                select: {
-                    id: true,
-                },
-            });
-            const totalLessonsPlusOne = allLessons.length + 1;
-
-            return await prisma.lesson.create({
-                data: {
-                    name: validName,
-                    description: validDescription,
-                    slug: validSlug,
-                    courseId: validCourseId,
-                    partId: validPartId,
-                    order: totalLessonsPlusOne,
-                },
-            });
         }
+        const allLessons = await prisma.lesson.findMany({
+            select: {
+                id: true,
+            },
+        });
+        const totalLessonsPlusOne = allLessons.length + 1;
+
+        return await prisma.lesson.create({
+            data: {
+                name: validName,
+                description: validDescription,
+                slug: validSlug,
+                courseId: validCourseId,
+                partId: validPartId,
+                order: totalLessonsPlusOne,
+            },
+        });
     }
     return withAdmin(task);
 };
@@ -1052,7 +1068,7 @@ export async function dbVerifyUserPurchase(userId: string, priceId: string) {
     async function task() {
         const validUserId = z.string().parse(userId);
         const validPriceId = z.string().parse(priceId);
-        const completePriceId = "price_" + validPriceId;
+        const completePriceId = `price_${validPriceId}`;
         const user = await prisma.user.findUnique({
             where: {
                 id: validUserId,

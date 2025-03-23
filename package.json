@@ -3,7 +3,9 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
+        "view": "jq '.scripts' package.json",
         "dev": "next dev --turbo",
+        "email:dev": "email dev",
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
@@ -18,7 +20,7 @@
         "db:push:prod": "dotenv -e .env.production -- npx prisma db push"
     },
     "dependencies": {
-        "@auth/prisma-adapter": "^2.7.4",
+        "@auth/prisma-adapter": "^2.8.0",
         "@dnd-kit/core": "^6.3.1",
         "@dnd-kit/sortable": "^10.0.0",
         "@emotion/react": "^11.13.0",
@@ -27,7 +29,7 @@
         "@mdxeditor/editor": "3.14.0",
         "@mui/icons-material": "^6.4.0",
         "@mui/material": "^6.4.0",
-        "@prisma/client": "^6.4.0",
+        "@prisma/client": "^6.4.1",
         "@react-email/components": "^0.0.32",
         "@tailwindcss/postcss": "^4.0.1",
         "@tailwindcss/typography": "^0.5.16",
@@ -39,18 +41,20 @@
         "eslint": "8.49.0",
         "eslint-config-next": "13.4.19",
         "framer-motion": "^10.18.0",
-        "next": "^15.1.4",
+        "next": "^15.2.3",
         "next-auth": "^5.0.0-beta.25",
         "nextra": "^4.2.13",
         "nextra-theme-docs": "^4.2.13",
+        "posthog-js": "^1.230.1",
         "prettier": "3.4.2",
-        "prisma": "^6.4.0",
+        "prisma": "^6.4.1",
         "react": "18.3.1",
         "react-cookie-consent": "^9.0.0",
         "react-dom": "18.3.1",
         "react-hook-form": "^7.53.1",
         "react-hot-toast": "^2.4.1",
         "react-textarea-autosize": "^8.5.4",
+        "rehype-external-links": "^3.0.0",
         "remark-directive": "^3.0.0",
         "remark-gfm": "^4.0.0",
         "resend": "^4.1.1",
@@ -67,6 +71,7 @@
         "@svgr/webpack": "^8.0.1",
         "daisyui": "^5.0.0-beta.1",
         "dotenv-cli": "^8.0.0",
-        "pagefind": "^1.1.1"
+        "pagefind": "^1.1.1",
+        "react-email": "3.0.7"
     }
 }

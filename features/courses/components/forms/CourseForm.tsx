@@ -80,6 +80,7 @@ export const CourseForm = ({ course }: { course?: Course }) => {
             dialogueAvailability: course?.dialogueAvailability
                 ? course.dialogueAvailability.toISOString().slice(0, 16)
                 : new Date().toISOString().slice(0, 16),
+            seminarLink: course?.seminarLink ?? "",
             published: course?.published ?? false,
         },
     });
@@ -121,7 +122,7 @@ export const CourseForm = ({ course }: { course?: Course }) => {
                     options={{ required: true }}
                 />
                 <p className="font-semibold text-xs dark:text-gray-500">
-                    ℹ️ For slug, only lowercase letters, numbers, and hyphens
+                    ❗ For slug, only lowercase letters, numbers, and hyphens
                     are allowed, no whitespace
                 </p>
                 <TextInput
@@ -219,6 +220,11 @@ export const CourseForm = ({ course }: { course?: Course }) => {
                     label="Dialogue Availability Until*"
                     name="dialogueAvailability"
                     options={{ required: true }}
+                />
+                <TextInput
+                    label="Seminar link"
+                    name="seminarLink"
+                    options={{ required: false }}
                 />
                 <Checkbox label="Publish" name="published" />
                 <SubmitInput

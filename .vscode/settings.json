@@ -27,5 +27,6 @@
             "other": "off",
             "strings": "off"
         }
-    }
+    },
+    "biome.enabled": false
 }
