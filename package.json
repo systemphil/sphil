@@ -73,5 +73,10 @@
         "dotenv-cli": "^8.0.0",
         "pagefind": "^1.1.1",
         "react-email": "3.0.7"
+    },
+    "overrides": {
+        "next": "^15.2.3",
+        "prismjs": "^1.30.0",
+        "esbuild": "^0.25.1"
     }
 }
