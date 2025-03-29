@@ -58,32 +58,41 @@ export const dbGetAllPublishedCourses = async () => {
     );
     return await getAllCourses();
 };
+
 /**
  * Calls the database to retrieve specific course by slug identifier
+ * @cached
  */
 export const dbGetCourseBySlug = async (slug: string) => {
     const validSlug = z.string().parse(slug);
-    return await prisma.course.findUnique({
-        where: {
-            slug: validSlug,
+    const getCourseCached = cache(
+        async () => {
+            return await prisma.course.findUnique({
+                where: {
+                    slug: validSlug,
+                },
+                include: {
+                    lessons: {
+                        select: {
+                            slug: true,
+                            name: true,
+                        },
+                        orderBy: {
+                            order: "asc",
+                        },
+                    },
+                    details: {
+                        select: {
+                            mdxCompiled: true,
+                        },
+                    },
+                },
+            });
         },
-        include: {
-            lessons: {
-                select: {
-                    slug: true,
-                    name: true,
-                },
-                orderBy: {
-                    order: "asc",
-                },
-            },
-            details: {
-                select: {
-                    mdxCompiled: true,
-                },
-            },
-        },
-    });
+        ["/courses", validSlug],
+        { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
+    );
+    return await getCourseCached();
 };
 /**
  * Calls the database to retrieve specific course by id identifier
