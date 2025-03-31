@@ -73,10 +73,6 @@ export const dbGetCourseBySlug = async (slug: string) => {
                 },
                 include: {
                     lessons: {
-                        select: {
-                            slug: true,
-                            name: true,
-                        },
                         orderBy: {
                             order: "asc",
                         },
