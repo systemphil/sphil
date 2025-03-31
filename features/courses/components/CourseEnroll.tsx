@@ -30,11 +30,17 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
     if (!course) {
         return <div className="d-badge d-badge-error">n/a</div>;
     }
-    const baseAvailable = course.baseAvailability! > new Date();
-    const seminarAvailable = course.seminarAvailability > new Date();
-    const dialogueAvailable = course.dialogueAvailability > new Date();
-    const anyAvailable = baseAvailable || seminarAvailable || dialogueAvailable;
+    const baseAvailable = course.baseAvailability
+        ? new Date(course.baseAvailability) > new Date()
+        : false;
+    const seminarAvailable = course.seminarAvailability
+        ? new Date(course.seminarAvailability) > new Date()
+        : false;
+    const dialogueAvailable = course.dialogueAvailability
+        ? new Date(course.dialogueAvailability) > new Date()
+        : false;
 
+    const anyAvailable = baseAvailable || seminarAvailable || dialogueAvailable;
     const session = await auth();
 
     if (session) {
