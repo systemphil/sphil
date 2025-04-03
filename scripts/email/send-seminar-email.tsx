@@ -26,7 +26,7 @@ async function sendNewsletter() {
     try {
         const emails = emailsRaw.split(",");
 
-        const subject = "The Quality of Being (Part 1): First Week 🏛️";
+        const subject = "The Quality of Being: Pt. 1 - Week One 🏛️";
 
         for (const email of emails) {
             await resend.emails.send({
