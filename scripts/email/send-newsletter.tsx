@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Resend } from "resend";
-import { NewsletterCourseAnnouncement } from "lib/components/email/NewsletterCourseAnnouncement";
+import { NewsletterEnrollmentClosing } from "lib/components/email/NewsletterEnrollmentClosing";
 
 const prisma = new PrismaClient();
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -28,14 +28,14 @@ async function sendNewsletter() {
         });
 
         const subject =
-            "Enrollment Now Open: Unlock the Power of Hegel's Science of Logic 🏛️";
+            "Enrollment is Closing: The Science of Logic is the Metaphysician's Purgatorio ⛰️";
 
         for (const { email } of subscribers) {
             await resend.emails.send({
                 from: `sPhil Newsletter 🦉 <${senderEmail}>`,
                 to: email,
                 subject,
-                react: <NewsletterCourseAnnouncement />,
+                react: <NewsletterEnrollmentClosing />,
             });
 
             console.log(`Email sent to: ${email}`);

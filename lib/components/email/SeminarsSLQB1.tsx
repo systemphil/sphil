@@ -39,13 +39,16 @@ export function SeminarsSLQB1() {
 
                             <p className="text-gray-600 my-4">
                                 Thank you for enrolling in the seminar for the
-                                Quality of Being course. Our first seminar is
+                                Quality of Being course! Our first seminar is
                                 right around the corner and below is some
                                 practical information.
                             </p>
 
                             <ul className="text-gray-600 my-4">
-                                <li>📅 First seminar: April 6, 21:00 CET</li>
+                                <li>
+                                    📅 First seminar: April 6, 21:00 CEST/12:00
+                                    PM PST
+                                </li>
                                 <li>
                                     📍 Where:{" "}
                                     <Link href="https://us06web.zoom.us/j/85635105989?pwd=8huzVaMJpCY1zbmObucaX36w7SQ7JW.1">
