@@ -25,6 +25,10 @@ async function sendNewsletter() {
     }
     try {
         const emails = emailsRaw.split(",");
+        if (emails.length === 0) {
+            console.error("Emails empty");
+            process.exit(1);
+        }
 
         const subject = "The Quality of Being: Pt. 1 - Week One 🏛️";
 
