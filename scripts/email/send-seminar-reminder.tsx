@@ -1,4 +1,4 @@
-import { SeminarsSLQB1 } from "lib/email/templates/SeminarsSLQB1";
+import { SeminarReminder } from "lib/email/templates/SeminarReminder";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -29,6 +29,10 @@ async function sendEmails() {
         process.exit(1);
     }
 
+    const scheduledAt = new Date(Date.UTC(2025, 3, 6, 19, 0, 0)).toISOString();
+
+    console.info("Scheduling for", scheduledAt);
+
     try {
         const emails = emailsRaw.split(",");
         if (emails.length === 0) {
@@ -36,20 +40,21 @@ async function sendEmails() {
             process.exit(1);
         }
 
-        const subject = "The Quality of Being: Pt. 1 - Week One 🏛️";
+        const subject = "Symposia Seminar Reminder 🔔";
 
         for (const email of emails) {
             const res = await resend.emails.send({
                 from: `sPhil Symposia Seminars 🏺 <${senderEmail}>`,
                 to: email,
                 subject,
-                react: <SeminarsSLQB1 seminarLink={seminarLink} />,
+                react: <SeminarReminder seminarLink={seminarLink} />,
+                scheduledAt,
             });
 
             if (res.error) {
                 console.error(res.error.message);
             } else {
-                console.info(`Email sent to: ${email}`);
+                console.info(`Scheduled email to: ${email}`);
             }
         }
     } catch (error) {

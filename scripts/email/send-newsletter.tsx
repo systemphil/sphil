@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
+import { NewsletterEnrollmentClosing } from "lib/email/templates/NewsletterEnrollmentClosing";
 import { Resend } from "resend";
-import { NewsletterEnrollmentClosing } from "lib/components/email/NewsletterEnrollmentClosing";
 
 const prisma = new PrismaClient();
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -31,14 +31,18 @@ async function sendNewsletter() {
             "Enrollment is Closing: The Science of Logic is the Metaphysician's Purgatorio ⛰️";
 
         for (const { email } of subscribers) {
-            await resend.emails.send({
+            const res = await resend.emails.send({
                 from: `sPhil Newsletter 🦉 <${senderEmail}>`,
                 to: email,
                 subject,
                 react: <NewsletterEnrollmentClosing />,
             });
 
-            console.log(`Email sent to: ${email}`);
+            if (res.error) {
+                console.error(res.error.message);
+            } else {
+                console.info(`Email sent to: ${email}`);
+            }
         }
     } catch (error) {
         console.error("Error sending emails:", error);
