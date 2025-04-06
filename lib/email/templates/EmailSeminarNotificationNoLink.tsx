@@ -1,6 +1,6 @@
-import { EmailSeminarNotification } from "lib/components/email/EmailSeminarNotification";
+import { EmailSeminarNotification } from "./EmailSeminarNotification";
 
-export default function PurchaseReceipt() {
+export default function Example() {
     const product = {
         name: "DummyProductName",
         imagePath:

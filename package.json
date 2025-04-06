@@ -5,7 +5,7 @@
     "scripts": {
         "view": "jq '.scripts' package.json",
         "dev": "next dev --turbo",
-        "email:dev": "email dev",
+        "email:dev": "email dev --dir lib/email/templates",
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
@@ -17,7 +17,11 @@
         "db:studio:prod": "dotenv -e .env.production -- npx prisma studio",
         "db:regen": "npx prisma generate",
         "db:push": "npx prisma db push",
-        "db:push:prod": "dotenv -e .env.production -- npx prisma db push"
+        "db:push:prod": "dotenv -e .env.production -- npx prisma db push",
+        "email:send-news": "dotenv -e .env -- bun run scripts/email/send-newsletter.tsx",
+        "email:send-news:prod": "dotenv -e .env.production -- bun run scripts/email/send-newsletter.tsx",
+        "email:send-seminars": "bun run scripts/email/send-seminar-email.tsx",
+        "email:send-reminders": "bun run scripts/email/send-seminar-reminder.tsx"
     },
     "dependencies": {
         "@auth/prisma-adapter": "^2.8.0",
@@ -30,7 +34,7 @@
         "@mui/icons-material": "^6.4.0",
         "@mui/material": "^6.4.0",
         "@prisma/client": "^6.4.1",
-        "@react-email/components": "^0.0.32",
+        "@react-email/components": "^0.0.36",
         "@tailwindcss/postcss": "^4.0.1",
         "@tailwindcss/typography": "^0.5.16",
         "@types/node": "20.6.0",
@@ -51,6 +55,7 @@
         "react": "18.3.1",
         "react-cookie-consent": "^9.0.0",
         "react-dom": "18.3.1",
+        "react-email": "4.0.4",
         "react-hook-form": "^7.53.1",
         "react-hot-toast": "^2.4.1",
         "react-textarea-autosize": "^8.5.4",
@@ -71,12 +76,6 @@
         "@svgr/webpack": "^8.0.1",
         "daisyui": "^5.0.0-beta.1",
         "dotenv-cli": "^8.0.0",
-        "pagefind": "^1.1.1",
-        "react-email": "3.0.7"
-    },
-    "overrides": {
-        "next": "^15.2.3",
-        "prismjs": "^1.30.0",
-        "esbuild": "^0.25.1"
+        "pagefind": "^1.1.1"
     }
 }
