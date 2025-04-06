@@ -47,7 +47,7 @@ export function Heading({
         case "h4":
             return (
                 <h4
-                    className={`${baseClasses} ${replacementClasses} text-xl md:text-2xl lg:text-3xl`}
+                    className={`${baseClasses} ${replacementClasses} text-md sm:text-xl md:text-2xl lg:text-3xl`}
                 >
                     {children}
                 </h4>
