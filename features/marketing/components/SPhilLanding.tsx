@@ -28,36 +28,32 @@ export function SPhilLanding() {
                         className="mt-16 mb-24 flex justify-center items-center flex-wrap gap-16"
                     >
                         <CardFancy
-                            title={"HEGEL"}
+                            title={"ENCYCLOPEDIA"}
                             tagline={
-                                "Discover the power of dialectical thought and immanent critique!"
+                                "Detailed articles on various topics and systems of philosophy"
                             }
                             href={"/articles/hegel"}
                             buttons={[
                                 {
-                                    title: "Guides",
+                                    title: "Visit",
                                     href: "/articles/hegel/guides",
-                                },
-                                {
-                                    title: "Reference",
-                                    href: "/articles/hegel/reference",
                                 },
                             ]}
                         />
                         <CardFancy
-                            title={"KANT"}
+                            title={"SYMPOSIA"}
                             tagline={
-                                "Learn why Kant is the philosopher of the enlightenment bar none!"
+                                "Focused courses on the arguments and beauty of philosophy"
                             }
-                            href={"/articles/kant"}
+                            href={"/symposia"}
                             buttons={[
                                 {
-                                    title: "Guides",
-                                    href: "/articles/kant/guides",
+                                    title: "About",
+                                    href: "/symposia",
                                 },
                                 {
-                                    title: "Reference",
-                                    href: "/articles/kant/reference",
+                                    title: "Courses",
+                                    href: "/symposia/courses",
                                 },
                             ]}
                         />
