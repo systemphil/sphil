@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Button } from "./Button";
 import { CardShellMagic } from "./CardShellMagic";
+import { Heading } from "./Heading";
 
 type Buttons = {
     title: string;
@@ -24,9 +25,12 @@ export function CardFancy({
         <CardShellMagic>
             <Link href={href}>
                 <div className="flex flex-col justify-center items-center">
-                    <p className="text-5xl font-bold text-center hover:text-slate-600 duration-300">
+                    <Heading
+                        as="h3"
+                        additionalClasses="hover:text-slate-500 duration-300"
+                    >
                         {title}
-                    </p>
+                    </Heading>
                     <p className="max-w-[300px] text-center mt-2 text-lg text-stone-500">
                         {tagline}
                     </p>
