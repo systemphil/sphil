@@ -1,10 +1,9 @@
 export default {
     articles: {
-        title: "‎", // Invisible character, this won't display on navbar
+        title: "Encyclopedia",
         type: "page",
         display: "children",
     },
-
     symposia: {
         title: "Symposia 🏺",
         type: "menu",
@@ -16,11 +15,6 @@ export default {
                 href: "/symposia/courses",
             },
         },
-    },
-    contributing: {
-        title: "Contributing",
-        type: "page",
-        href: "/articles/contributing",
     },
     billing: {
         display: "hidden",

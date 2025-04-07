@@ -32,11 +32,11 @@ export function SPhilLanding() {
                             tagline={
                                 "Detailed articles on various topics and systems of philosophy"
                             }
-                            href={"/articles/hegel"}
+                            href={"/articles/articles"}
                             buttons={[
                                 {
-                                    title: "Visit",
-                                    href: "/articles/hegel/guides",
+                                    title: "Overview",
+                                    href: "/articles/articles",
                                 },
                             ]}
                         />

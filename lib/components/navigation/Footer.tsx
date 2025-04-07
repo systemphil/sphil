@@ -58,7 +58,7 @@ function FooterContent() {
                 name: "Discussion",
                 href: "https://github.com/systemphil/sphil/discussions",
             },
-            { name: "Symposia", href: "https://sphil.xyz/symposia" },
+            { name: "Symposia", href: "/symposia" },
             { name: "Acknowledgements", href: "/articles/acknowledgements" },
         ],
         hegel: [

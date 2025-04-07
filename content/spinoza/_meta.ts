@@ -2,6 +2,7 @@ export default {
     index: {
         display: "children",
         theme: {
+            breadcrumb: false,
             layout: "full",
             sidebar: false,
             toc: false,
