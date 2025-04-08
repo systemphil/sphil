@@ -4,6 +4,7 @@ import {
     Layout as NextraLayout,
     Link as NextraLink,
     Navbar as NextraNavbar,
+    ThemeSwitch,
 } from "nextra-theme-docs";
 import { Banner as NextraBanner, Head } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
@@ -166,8 +167,11 @@ export default async function RootLayout({
                                 logo={<NavbarHeader />}
                                 projectLink={PROJECT_LINK}
                             >
-                                <div className="w-[70px] flex justify-center">
-                                    <UserMenu />
+                                <div className="flex justify-center items-center">
+                                    <ThemeSwitch lite={true} className="ml-0" />
+                                    <div className="w-[70px] flex justify-center">
+                                        <UserMenu />
+                                    </div>
                                 </div>
                             </NextraNavbar>
                         }

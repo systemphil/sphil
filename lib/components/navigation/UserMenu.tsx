@@ -23,7 +23,9 @@ export function UserMenu() {
     }
 
     if (status === "unauthenticated") {
-        return <SignInButtonClient className="d-btn d-btn-primary d-btn-sm" />;
+        return (
+            <SignInButtonClient className="d-btn d-btn-primary d-btn-sm ml-4" />
+        );
     }
 
     return (
