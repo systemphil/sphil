@@ -136,7 +136,12 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const toc: Partial<ThemeConfigProps["toc"]> = {
+    const toc: {
+        float?: boolean;
+        backToTop?: React.ReactNode;
+        extraContent?: React.ReactNode;
+        title?: React.ReactNode;
+    } = {
         extraContent: <TableOfContentsExtra />,
     };
     const feedbackOptions = {
