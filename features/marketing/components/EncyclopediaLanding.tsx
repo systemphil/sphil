@@ -14,7 +14,7 @@ export function EncyclopediaLanding() {
     return (
         <div>
             <div className="my-8 flex justify-center flex-col items-center">
-                <Heading as="h3">Encyclopedia Overview</Heading>
+                <Heading as="h3">Encyclopedia</Heading>
                 <Paragraph className="text-left">
                     The sPhil Encyclopedia is organized into systems of
                     particular philosophers, each further subdivided into
