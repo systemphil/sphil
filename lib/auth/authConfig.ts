@@ -29,7 +29,22 @@ declare module "next-auth" {
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     trustHost: true,
-    adapter: PrismaAdapter(prisma),
+    adapter: {
+        ...PrismaAdapter(prisma),
+        createUser: async (user) => {
+            const createdUser = await PrismaAdapter(prisma).createUser!(user);
+            // TODO setup stripe customer creation
+            user.email;
+            PrismaAdapter(prisma).updateUser!(user);
+            // Using non-null assertion as according to NextAuth this method is requried.
+            // const createdUser = await DBAdapter.createUser!(user)
+
+            // // Run whatever callbacks you want here
+            // prePopulateUserData(createdUser);
+
+            return createdUser;
+        },
+    },
     providers: [
         ...(isProduction
             ? [
