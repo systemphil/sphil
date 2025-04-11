@@ -14,7 +14,7 @@ export function EncyclopaediaLanding() {
     return (
         <div>
             <div className="my-8 flex justify-center flex-col items-center">
-                <Heading as="h3">Encyclopaedia</Heading>
+                <Heading as="h1">Encyclopaedia</Heading>
                 <Paragraph className="text-left">
                     The sPhil Encyclopaedia is organized into systems of
                     particular philosophers, each further subdivided into

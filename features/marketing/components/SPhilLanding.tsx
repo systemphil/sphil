@@ -6,6 +6,7 @@ import { CardFancy } from "lib/components/ui/CardFancy";
 import { MaintenanceStatic } from "lib/components/ui/MaintenanceStatic";
 import { Button } from "lib/components/ui/Button";
 import { HeroBackground } from "./HeroBackground";
+import { EncyclopaediaLanding } from "./EncyclopaediaLanding";
 
 export function SPhilLanding() {
     return (
@@ -60,8 +61,18 @@ export function SPhilLanding() {
                     </FadeIn>
                 </div>
             </section>
-            <section className="relative flex flex-col items-center justify-start w-full h-full">
+
+            <div className="relative">
                 <div className="absolute top-0 h-36 w-full -translate-y-full bg-linear-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10" />
+            </div>
+
+            <section className="relative flex justify-center">
+                <div className="max-w-2xl">
+                    <EncyclopaediaLanding />
+                </div>
+            </section>
+
+            <section className="relative flex flex-col items-center justify-start w-full h-full">
                 <div className="py-20 flex flex-col items-center justify-center">
                     <FadeIn>
                         <Heading>What is sPhil?</Heading>
