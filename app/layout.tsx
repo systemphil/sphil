@@ -6,7 +6,7 @@ import {
     Navbar as NextraNavbar,
     ThemeSwitch,
 } from "nextra-theme-docs";
-import { Banner as NextraBanner, Head } from "nextra/components";
+import { Banner as NextraBanner, Head, Search } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import { type ThemeConfigProps } from "node_modules/nextra-theme-docs/dist/layout.mjs";
 import { UserMenu } from "lib/components/navigation/UserMenu";
@@ -165,6 +165,9 @@ export default async function RootLayout({
                         docsRepositoryBase={DOCS_REPOSITORY_BASE}
                         editLink={EDIT_LINK_DESCRIPTION}
                         sidebar={{ defaultMenuCollapseLevel: 2 }}
+                        search={
+                            <Search placeholder="Search the Encyclopaedia…" />
+                        }
                         // banner={<Banner />}
                         navbar={
                             <NextraNavbar
