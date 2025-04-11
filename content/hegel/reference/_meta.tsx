@@ -23,6 +23,9 @@ export default {
     quality: {
         title: "Quality",
     },
+    something: {
+        title: "Something",
+    },
     "mechanical-object": {
         title: "Mechanical Object",
     },
