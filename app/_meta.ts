@@ -1,6 +1,6 @@
 export default {
     articles: {
-        title: "Encyclopedia",
+        title: "Encyclopaedia",
         type: "page",
         display: "children",
     },

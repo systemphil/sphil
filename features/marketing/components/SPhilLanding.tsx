@@ -28,7 +28,7 @@ export function SPhilLanding() {
                         className="mt-16 mb-24 flex justify-center items-center flex-wrap gap-16"
                     >
                         <CardFancy
-                            title={"ENCYCLOPEDIA"}
+                            title={"ENCYCLOPAEDIA"}
                             tagline={
                                 "Detailed articles on various topics and systems of philosophy"
                             }

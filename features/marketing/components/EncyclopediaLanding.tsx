@@ -9,14 +9,14 @@ import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import BookIcon from "@mui/icons-material/Book";
 import { Link } from "nextra-theme-docs";
 
-export function EncyclopediaLanding() {
+export function EncyclopaediaLanding() {
     const cardClasses = "min-w-[220px] m-2";
     return (
         <div>
             <div className="my-8 flex justify-center flex-col items-center">
-                <Heading as="h3">Encyclopedia</Heading>
+                <Heading as="h3">Encyclopaedia</Heading>
                 <Paragraph className="text-left">
-                    The sPhil Encyclopedia is organized into systems of
+                    The sPhil Encyclopaedia is organized into systems of
                     particular philosophers, each further subdivided into
                     modular{" "}
                     <Link href="/articles/contributing#general-division-of-the-encyclopaedia">

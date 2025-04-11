@@ -13,7 +13,8 @@
         "package.json",
         "next.config.mjs",
         ".env",
-        ".env.*"
+        ".env.*",
+        "cspell.json"
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
@@ -133,6 +134,9 @@
         "msapplication",
         "nextra",
         "splitn"
+    ],
+    "flagWords": [
+        "encyclopedia: encyclopaedia",
     ],
     "import": []
 }
