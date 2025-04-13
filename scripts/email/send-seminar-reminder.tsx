@@ -29,7 +29,7 @@ async function sendEmails() {
         process.exit(1);
     }
 
-    const scheduledAt = new Date(Date.UTC(2025, 3, 6, 18, 0, 0)).toISOString();
+    const scheduledAt = new Date(Date.UTC(2025, 3, 13, 18, 0, 0)).toISOString();
 
     console.info("Scheduling for", scheduledAt);
 
