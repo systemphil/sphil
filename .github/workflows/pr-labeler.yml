@@ -1,5 +1,5 @@
 name: PR Labeler 🏷️
-on: [pull_request]
+on: [pull_request_target]
 
 permissions:
   contents: read
@@ -23,22 +23,27 @@ jobs:
           }
 
           async function addLabels(changedFiles) {
-            const extensions = getFileExtensions(changedFiles);
             let labels = [];
             let hasContentChanges = false;
             let hasCodeChanges = false;
 
+            // First check for specific filenames
+            changedFiles.forEach(file => {
+              const filename = path.basename(file);
+              if (filename === '_meta.ts' || filename === '_meta.tsx' || filename === 'cspell.json') {
+                hasContentChanges = true;
+              }
+            });
+
+            // Then check extensions
+            const extensions = getFileExtensions(changedFiles);
             extensions.forEach(ext => {
               if (ext === '.mdx' || ext === '.md' || ext === '.bib') {
                 hasContentChanges = true;
               } else {
-                if (changedFiles[index].name === '_meta.ts' || changedFiles[index].name === '_meta.tsx' || changedFiles[index].name === 'cspell.json') {
-                  hasContentChanges = true;
-                } else {
-                  hasCodeChanges = true;
-                }
+                hasCodeChanges = true;
               }
-            })
+            });
 
             if (hasContentChanges) {
               labels.push('CONTENT');
@@ -66,7 +71,6 @@ jobs:
                 labels: labels
               });
             }
-      
           }
 
           const { data: files } = await github.rest.pulls.listFiles({
