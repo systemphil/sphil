@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 import { dbGetCourseBySlug } from "lib/database/dbFuncs";
 import { MDXRenderer } from "lib/components/MDXRenderer";
 import { CourseEnroll } from "./CourseEnroll";
@@ -8,6 +7,7 @@ import { errorMessages } from "lib/config/errorMessages";
 import { TableOfLessons } from "./TableOfLessons";
 import { Heading } from "lib/components/ui/Heading";
 import { FadeIn } from "lib/components/animations/FadeIn";
+import { Back } from "lib/components/navigation/Back";
 
 const links = {
     courses: "/symposia/courses",
@@ -25,12 +25,7 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
             <div className="flex flex-col justify-center items-center py-10">
                 <div className="flex justify-center gap-10 flex-wrap">
                     <div className="flex flex-col">
-                        <Link
-                            href={links.courses}
-                            className="text-base self-start text-primary dark:text-gray-300 opacity-70 transition hover:opacity-100 p-2"
-                        >
-                            {`<- Back to courses`}
-                        </Link>
+                        <Back href={links.courses} text="Back to courses" />
                         <div className="flex flex-col grow items-center justify-center">
                             <Heading>{course.name}</Heading>
                             <Heading as="h6">{course.description}</Heading>
@@ -51,8 +46,8 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
                     )}
                 </div>
 
-                <div className="flex justify-center gap-10 flex-wrap mt-5">
-                    <div className="max-w-[800px]">
+                <div className="flex justify-center gap-10 flex-wrap mt-5 md:grid md:grid-cols-5 relative">
+                    <div className="max-w-[800px] md:col-span-3 md:col-start-1 lg:col-start-2 flex justify-center">
                         {course?.details?.mdxCompiled ? (
                             <MDXRenderer data={course.details.mdxCompiled} />
                         ) : (
@@ -60,12 +55,20 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
                         )}
                     </div>
 
-                    <div className="flex flex-col justify-start items-center md:items-end md:pt-8 gap-4">
-                        <TableOfLessons
-                            lessons={course.lessons}
-                            courseSlug={slug}
-                        />
-                        <CourseEnroll slug={slug} />
+                    <div className="flex flex-col justify-start items-center md:pt-8 gap-4 md:col-start-5">
+                        <div className="md:sticky top-3">
+                            <TableOfLessons
+                                lessons={course.lessons}
+                                courseSlug={slug}
+                            />
+                            <CourseEnroll slug={slug} />
+                            <div className="mt-4">
+                                <Back
+                                    href={links.courses}
+                                    text="Back to courses"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
