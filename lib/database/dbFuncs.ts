@@ -27,11 +27,11 @@ export const dbGetAllCourses = () => withAdmin(() => prisma.course.findMany());
  * Calls the database to retrieve all courses by owner userId.
  * @access ADMIN
  */
-export const dbGetAllCoursesByOwner = (userId: string) =>
+export const dbGetAllCoursesByCreators = (userId: string) =>
     withAdmin(() =>
         prisma.course.findMany({
             where: {
-                owners: {
+                creators: {
                     some: {
                         id: userId,
                     },
@@ -524,7 +524,7 @@ export const dbGetVideoFileNameByVideoId = async (id: string) => {
 export type DbUpsertCourseByIdProps = Omit<
     Course,
     "id" | "createdAt" | "updatedAt"
-> & { id?: string };
+> & { id?: string; creatorId: string };
 /**
  * Updates an existing course details by id as identifier or creates a new one if id is not provided.
  * @access ADMIN
@@ -548,6 +548,7 @@ export const dbUpsertCourseById = async ({
     seminarAvailability,
     dialogueAvailability,
     seminarLink,
+    creatorId,
 }: DbUpsertCourseByIdProps) => {
     async function task() {
         const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
@@ -605,6 +606,11 @@ export const dbUpsertCourseById = async ({
                 seminarAvailability: validSeminarAvailability,
                 dialogueAvailability: validDialogueAvailability,
                 seminarLink: validSeminarLink,
+                creators: {
+                    connect: {
+                        id: creatorId,
+                    },
+                },
             },
             create: {
                 name: validName,
@@ -624,6 +630,11 @@ export const dbUpsertCourseById = async ({
                 seminarAvailability: validSeminarAvailability,
                 dialogueAvailability: validDialogueAvailability,
                 seminarLink: validSeminarLink,
+                creators: {
+                    connect: {
+                        id: creatorId,
+                    },
+                },
             },
         });
     }
