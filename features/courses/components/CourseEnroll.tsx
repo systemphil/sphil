@@ -49,7 +49,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
             !!userCourses &&
             userCourses.find((course) => course.slug === slug)
         ) {
-            return <div className="d-badge d-badge-success">Owned</div>;
+            return <div className="invisible" x-data="Owned" />;
         }
     }
 
@@ -67,7 +67,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
     }
 
     return (
-        <div className="border w-[280px] flex flex-col justify-center items-center p-3 gap-2">
+        <div className="border w-[300px] md:w-[200px] xl:w-[280px] flex flex-col justify-center items-center p-3 gap-2">
             <form
                 action={handleEnroll}
                 className="flex flex-col gap-2 justify-center  grow"
@@ -78,8 +78,8 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
 
                 <div className="form-control has-checked:bg-indigo-50 has-checked:dark:bg-green-700/20 rounded-md relative">
                     {!baseAvailable && (
-                        <span className="absolute text-xs text-slate-500  top-0 right-0">
-                            &nbsp;Currently unavailable
+                        <span className="absolute text-xs text-slate-500  -top-2 right-0">
+                            &nbsp;Unavailable
                         </span>
                     )}
                     <label
@@ -112,8 +112,8 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                 </div>
                 <div className="form-control has-checked:bg-indigo-50 has-checked:dark:bg-green-700/20 rounded-md relative">
                     {!seminarAvailable && (
-                        <span className="absolute text-xs text-slate-500 top-0 right-0">
-                            &nbsp;Currently unavailable
+                        <span className="absolute text-xs text-slate-500 -top-2 right-0">
+                            &nbsp;Unavailable
                         </span>
                     )}
                     <label
@@ -145,8 +145,8 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                 </div>
                 <div className="form-control has-checked:bg-indigo-50 has-checked:dark:bg-green-700/20 rounded-md relative">
                     {!dialogueAvailable && (
-                        <span className="absolute text-xs text-slate-500 top-0 right-0">
-                            &nbsp;Currently unavailable
+                        <span className="absolute text-xs text-slate-500 -top-2 right-0">
+                            &nbsp;Unavailable
                         </span>
                     )}
                     <label
@@ -210,7 +210,7 @@ function TierDescription({
                 <sup className="text-3xl font-semibold">00</sup>
             </p>
             <Heading
-                as="h4"
+                as="h5"
                 replacementClasses="text-primary dark:text-acid-green"
             >
                 {title}

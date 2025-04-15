@@ -13,6 +13,7 @@ import { VideoDataLoader } from "lib/components/VideoDataLoader";
 import { Suspense } from "react";
 import { Loading } from "lib/components/animations/Loading";
 import { Paragraph } from "lib/components/ui/Paragraph";
+import { Back } from "lib/components/navigation/Back";
 
 export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
     const getLessonAndRelationsBySlug = cache(
@@ -55,15 +56,13 @@ export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
                     )}
                 </div>
             </div>
-            <div className="md:col-span-1 md:p-2 md:order-1 flex justify-end">
-                <div className="lg:fixed max-w-[175px] 2xl:max-w-[350px] lg:pr-2">
-                    <div className="flex flex-col justify-start">
-                        <Link
+            <div className="md:col-span-1 md:p-2 md:order-1 flex justify-end w-full">
+                <div className="lg:fixed w-full md:max-w-[175px] 2xl:max-w-[300px] lg:pr-2 my-2">
+                    <div className="flex md:flex-col justify-evenly flex-wrap md:flex-nowrap">
+                        <Back
                             href={`/symposia/courses/${lessonData.course.slug}`}
-                            className="text-base self-center md:self-start text-primary dark:text-gray-500 opacity-70 transition hover:opacity-100 p-2"
-                        >
-                            {`<- Back to ${lessonData.course.name}`}
-                        </Link>
+                            text={`Back to ${lessonData.course.name}`}
+                        />
                         <TableOfLessons
                             lessons={lessonData.course.lessons}
                             courseSlug={lessonData.course.slug}
