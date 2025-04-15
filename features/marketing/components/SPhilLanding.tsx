@@ -10,7 +10,7 @@ import { HeroBackground } from "./HeroBackground";
 export function SPhilLanding() {
     return (
         <div>
-            <section className="relative flex flex-col items-center justify-start w-full h-full overflow-hidden">
+            <section className="relative flex flex-col items-center justify-start w-full min-h-[calc(100vh-64px)] overflow-hidden">
                 <HeroBackground />
                 <div className="relative flex flex-col items-center justify-center z-2 py-28">
                     <FadeIn>
