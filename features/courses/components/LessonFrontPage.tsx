@@ -55,8 +55,8 @@ export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
                     )}
                 </div>
             </div>
-            <div className="md:col-span-1 md:p-2 md:order-1">
-                <div className="xl:fixed max-w-[300px]">
+            <div className="md:col-span-1 md:p-2 md:order-1 flex justify-end">
+                <div className="lg:fixed max-w-[175px] 2xl:max-w-[350px] lg:pr-2">
                     <div className="flex flex-col justify-start">
                         <Link
                             href={`/symposia/courses/${lessonData.course.slug}`}
