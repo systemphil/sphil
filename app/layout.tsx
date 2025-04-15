@@ -20,8 +20,8 @@ import { Providers } from "lib/components/context/Providers";
 import "nextra-theme-docs/style.css";
 import "@mdxeditor/editor/style.css";
 import "./globals.css";
+import { ContributionModal } from "../lib/components/ui/ContributionModal";
 
-const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub";
 const PROJECT_LINK = "https://github.com/systemphil/sphil";
 const DOCS_REPOSITORY_BASE = "https://github.com/systemphil/sphil/tree/main";
 const SITE_ROOT = process.env.NEXT_PUBLIC_SITE_ROOT as string;
@@ -163,7 +163,12 @@ export default async function RootLayout({
                         feedback={feedbackOptions}
                         pageMap={await getPageMap()}
                         docsRepositoryBase={DOCS_REPOSITORY_BASE}
-                        editLink={EDIT_LINK_DESCRIPTION}
+                        editLink={
+                            <ContributionModal
+                                docsRepositoryBase={DOCS_REPOSITORY_BASE}
+                                filePath={"/content/contributing"}
+                            />
+                        }
                         sidebar={{ defaultMenuCollapseLevel: 2 }}
                         search={
                             <Search placeholder="Search the Encyclopaedia…" />
