@@ -1,7 +1,12 @@
 import { Section } from "@react-email/components";
 import { EmailBaseLayout } from "./components/EmailBaseLayout";
+import { UnsubscribeNewsletter } from "./components/UnsubscribeNewsletter";
 
-export function NewsletterEnrollmentClosing() {
+export function NewsletterEnrollmentClosing({
+    unsubscribeId,
+}: {
+    unsubscribeId: string;
+}) {
     const preview = "Last chance to enroll to seminars!";
 
     return (
@@ -77,6 +82,7 @@ export function NewsletterEnrollmentClosing() {
                     Filip Niklas and Ahilleas Rokni
                 </p>
             </Section>
+            <UnsubscribeNewsletter unsubscribeId={unsubscribeId} />
         </EmailBaseLayout>
     );
 }
