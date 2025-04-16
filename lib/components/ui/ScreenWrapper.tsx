@@ -6,7 +6,10 @@ export function ScreenWrapper({
     ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
     return (
-        <div className={cn("min-h-[calc(100vh-64px)]", className)} {...props}>
+        <div
+            className={cn("min-h-[calc(100vh-64px)] w-full", className)}
+            {...props}
+        >
             {children}
         </div>
     );
