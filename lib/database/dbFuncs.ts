@@ -1130,6 +1130,22 @@ export async function dbCreateNewsletterEmail({ email }: { email: string }) {
     });
 }
 
+export async function dbDeleteNewsletterEmailIfExists({ id }: { id: string }) {
+    const newsletter = await prisma.newsletterEmail.findFirst({
+        where: {
+            id,
+        },
+    });
+
+    if (newsletter) {
+        await prisma.newsletterEmail.delete({
+            where: {
+                id,
+            },
+        });
+    }
+}
+
 export async function dbGetAllUsersWithPurchase() {
     return await prisma.user.findMany({
         where: {
