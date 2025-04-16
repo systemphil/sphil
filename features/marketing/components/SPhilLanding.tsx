@@ -68,7 +68,9 @@ export function SPhilLanding() {
 
             <section className="relative flex justify-center">
                 <div className="max-w-2xl">
-                    <EncyclopaediaLanding />
+                    <FadeIn>
+                        <EncyclopaediaLanding />
+                    </FadeIn>
                 </div>
             </section>
 
