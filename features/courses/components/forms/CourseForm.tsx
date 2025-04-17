@@ -20,7 +20,10 @@ import { actionUploadImage } from "lib/server/actions";
 
 type AmendedDbUpsertCourseByIdProps = Omit<
     DbUpsertCourseByIdProps,
-    "seminarAvailability" | "dialogueAvailability" | "baseAvailability"
+    | "seminarAvailability"
+    | "dialogueAvailability"
+    | "baseAvailability"
+    | "creatorId"
 > & {
     baseAvailability: string;
     seminarAvailability: string;
@@ -42,7 +45,7 @@ export const CourseForm = ({ course }: { course?: Course }) => {
             baseAvailability: new Date(data.baseAvailability),
             seminarAvailability: new Date(data.seminarAvailability),
             dialogueAvailability: new Date(data.dialogueAvailability),
-        } satisfies DbUpsertCourseByIdProps;
+        } satisfies Omit<DbUpsertCourseByIdProps, "creatorId">;
         const resp = await actionUpsertCourse(dataWithConvertedDates);
         if (resp?.error) {
             toast.error(`Error updating course ${resp.error}`);
