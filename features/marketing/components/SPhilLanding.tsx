@@ -7,11 +7,12 @@ import { MaintenanceStatic } from "lib/components/ui/MaintenanceStatic";
 import { Button } from "lib/components/ui/Button";
 import { HeroBackground } from "./HeroBackground";
 import { EncyclopaediaLanding } from "./EncyclopaediaLanding";
+import { ScreenWrapper } from "lib/components/ui/ScreenWrapper";
 
 export function SPhilLanding() {
     return (
         <div>
-            <section className="relative flex flex-col items-center justify-start w-full min-h-[calc(100vh-64px)] overflow-hidden">
+            <ScreenWrapper className="relative flex flex-col items-center justify-start overflow-hidden">
                 <HeroBackground />
                 <div className="relative flex flex-col items-center justify-center z-2 py-28">
                     <FadeIn>
@@ -60,7 +61,7 @@ export function SPhilLanding() {
                         />
                     </FadeIn>
                 </div>
-            </section>
+            </ScreenWrapper>
 
             <div className="relative">
                 <div className="absolute top-0 h-36 w-full -translate-y-full bg-linear-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10" />
@@ -68,7 +69,9 @@ export function SPhilLanding() {
 
             <section className="relative flex justify-center">
                 <div className="max-w-2xl">
-                    <EncyclopaediaLanding />
+                    <FadeIn>
+                        <EncyclopaediaLanding />
+                    </FadeIn>
                 </div>
             </section>
 

@@ -24,18 +24,18 @@ async function sendNewsletter() {
         // TODO add ID for the unsubscribe link when that is implemented
 
         const subscribers = await prisma.newsletterEmail.findMany({
-            select: { email: true },
+            select: { email: true, id: true },
         });
 
         const subject =
             "Enrollment is Closing: The Science of Logic is the Metaphysician's Purgatorio ⛰️";
 
-        for (const { email } of subscribers) {
+        for (const { email, id } of subscribers) {
             const res = await resend.emails.send({
                 from: `sPhil Newsletter 🦉 <${senderEmail}>`,
                 to: email,
                 subject,
-                react: <NewsletterEnrollmentClosing />,
+                react: <NewsletterEnrollmentClosing unsubscribeId={id} />,
             });
 
             if (res.error) {

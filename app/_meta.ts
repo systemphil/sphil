@@ -31,4 +31,7 @@ export default {
     team: {
         display: "hidden",
     },
+    newsletter: {
+        display: "hidden",
+    },
 };

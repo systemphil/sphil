@@ -21,7 +21,7 @@ export const TextInput = ({ name, label, options }: Props) => {
             <Label htmlFor={name}>{label}</Label>
             <input
                 type="text"
-                className="border border-gray-200 p-2 rounded-sm mb-2 text-slate-700"
+                className="border border-gray-200 p-2 rounded-sm mb-2 text-slate-700 dark:text-slate-200"
                 {...register(name, options)}
             />
             {errors[name] && (

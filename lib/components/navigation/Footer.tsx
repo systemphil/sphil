@@ -53,13 +53,14 @@ function FooterHeader({ children }: { children: React.ReactNode }) {
 
 function FooterContent() {
     const navigation = {
-        general: [
+        resources: [
             {
                 name: "Discussion",
                 href: "https://github.com/systemphil/sphil/discussions",
             },
             { name: "Symposia", href: "/symposia" },
             { name: "Acknowledgements", href: "/articles/acknowledgements" },
+            { name: "Newsletter", href: "/newsletter" },
         ],
         hegel: [
             { name: "Guides", href: "/articles/hegel/guides" },
@@ -134,7 +135,7 @@ function FooterContent() {
                                     role="list"
                                     className="mt-4 space-y-1.5 list-none ml-0"
                                 >
-                                    {navigation.general.map((item) => (
+                                    {navigation.resources.map((item) => (
                                         <li key={item.name}>
                                             <FooterLink href={item.href}>
                                                 {item.name}
