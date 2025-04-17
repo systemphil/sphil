@@ -10,7 +10,7 @@ export default async function AdminPage() {
         <PageWrapper>
             <Heading as="h2">Courses</Heading>
             <CoursesDisplay isAdmin />
-            <Link href="/admin/courses/new">
+            <Link href="/admin/courses/new" className="mt-2">
                 <button type="button" className="d-btn d-btn-primary">
                     Create a course
                 </button>
