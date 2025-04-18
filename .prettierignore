@@ -1,3 +1,4 @@
 *.yml
 *.yaml
 cspell.json
+PULL_REQUEST_TEMPLATE.md
