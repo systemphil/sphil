@@ -8,6 +8,8 @@ import { type DefaultSession } from "next-auth";
 import { type JWT } from "next-auth/jwt";
 import { type Role, User } from "@prisma/client";
 import type { AdapterUser } from "@auth/core/adapters";
+import { stripeCreateCustomer } from "lib/stripe/stripeFuncs";
+import { dbUpdateUserStripeCustomerId } from "lib/database/dbFuncs";
 
 const isProduction = process.env.NODE_ENV === "production";
 declare module "next-auth" {
@@ -29,7 +31,36 @@ declare module "next-auth" {
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     trustHost: true,
-    adapter: PrismaAdapter(prisma),
+    adapter: {
+        ...PrismaAdapter(prisma),
+        createUser: async (user) => {
+            /**
+             * Override createUser with a round-trip to create
+             * stripe customer and return.
+             */
+            const createdUser = await PrismaAdapter(prisma).createUser!(user);
+
+            const customer = await stripeCreateCustomer({
+                email: createdUser.email,
+                userId: createdUser.id,
+            });
+
+            await dbUpdateUserStripeCustomerId({
+                userId: createdUser.id,
+                stripeCustomerId: customer.id,
+            });
+
+            const updatedUser = await PrismaAdapter(prisma).getUser!(
+                createdUser.id
+            );
+
+            if (!updatedUser) {
+                throw new Error("Failed to create new user");
+            }
+
+            return updatedUser;
+        },
+    },
     providers: [
         ...(isProduction
             ? [
@@ -83,7 +114,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     theme: {
         colorScheme: "light",
         brandColor: "#AA336A",
-        // TODO fix logo source
         logo: "/sphil_owl.webp",
     },
 });

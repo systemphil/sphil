@@ -2,10 +2,10 @@ import type Stripe from "stripe";
 import { getStripe } from "./stripeInit";
 import { dbGetCourseById, dbUpdateUserPurchases } from "lib/database/dbFuncs";
 import { resend } from "lib/email/emailInit";
-import { EmailPurchaseReceipt } from "lib/components/email/EmailPurchaseReceipt";
-import { EmailPurchaseNotification } from "lib/components/email/EmailPurchaseNotification";
 import { PriceTier } from "lib/server/ctrl";
-import { EmailSeminarNotification } from "lib/components/email/EmailSeminarNotification";
+import { EmailPurchaseReceipt } from "lib/email/templates/EmailPurchaseReceipt";
+import { EmailPurchaseNotification } from "lib/email/templates/EmailPurchaseNotification";
+import { EmailSeminarNotification } from "lib/email/templates/EmailSeminarNotification";
 
 type StripeCreateProductProps = {
     name: string;

@@ -103,7 +103,8 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
                     width: "100%",
                     overflow: "hidden",
                     paddingTop: "56.25%",
-                    padding: "16px",
+                    padding: "2px",
+                    marginTop: "16px",
                 }}
             >
                 {teacher === "filip" && renderFilip(title)}

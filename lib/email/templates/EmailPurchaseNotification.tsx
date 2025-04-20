@@ -1,7 +1,42 @@
-import { Role } from "@prisma/client";
-import { EmailPurchaseNotification } from "lib/components/email/EmailPurchaseNotification";
+import { Heading } from "@react-email/components";
+import { OrderInformation } from "./components/OrderInformation";
+import { Role, User } from "@prisma/client";
+import { UserInformation } from "./components/UserInformation";
+import { EmailBaseLayout } from "./components/EmailBaseLayout";
 
-export default function EmailTest() {
+type PurchaseReceiptEmailProps = {
+    product: {
+        name: string;
+        imagePath: string;
+        description: string;
+    };
+    order: { id: string; createdAt: Date; pricePaidInCents: number };
+    courseLink: string;
+    user: User;
+};
+
+export function EmailPurchaseNotification({
+    user,
+    product,
+    order,
+    courseLink,
+}: PurchaseReceiptEmailProps) {
+    const preview = `New purchase for ${product.name}`;
+
+    return (
+        <EmailBaseLayout preview={preview}>
+            <Heading>Purchase Notification</Heading>
+            <UserInformation user={user} />
+            <OrderInformation
+                order={order}
+                product={product}
+                courseLink={courseLink}
+            />
+        </EmailBaseLayout>
+    );
+}
+
+export default function Example() {
     const product = {
         name: "DummyProductName",
         imagePath:

@@ -1,5 +1,6 @@
 "use server";
 
+import { auth } from "lib/auth/authConfig";
 import { validateAdminAccess } from "lib/auth/authFuncs";
 import {
     bucketDeleteVideoFile,
@@ -42,7 +43,20 @@ export async function actionUpsertCourse(input: ActionUpsertCourseInput) {
     if (!parsedInput.success) {
         return { error: `Bad request ${parsedInput.error.message}` };
     }
-    const data = await ctrlCreateOrUpdateCourse(input);
+
+    const session = await auth();
+    const creatorId = session?.user.id;
+
+    if (!creatorId) {
+        throw new Error("Failed to retrieve creatorId from session user id");
+    }
+
+    const _input = {
+        ...input,
+        creatorId,
+    };
+
+    const data = await ctrlCreateOrUpdateCourse(_input);
     revalidatePath("/(admin)/admin", "layout");
     revalidateTag("allPublicCurses");
     return { data };

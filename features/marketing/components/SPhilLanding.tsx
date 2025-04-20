@@ -6,11 +6,13 @@ import { CardFancy } from "lib/components/ui/CardFancy";
 import { MaintenanceStatic } from "lib/components/ui/MaintenanceStatic";
 import { Button } from "lib/components/ui/Button";
 import { HeroBackground } from "./HeroBackground";
+import { EncyclopaediaLanding } from "./EncyclopaediaLanding";
+import { ScreenWrapper } from "lib/components/ui/ScreenWrapper";
 
 export function SPhilLanding() {
     return (
         <div>
-            <section className="relative flex flex-col items-center justify-start w-full h-full overflow-hidden">
+            <ScreenWrapper className="relative flex flex-col items-center justify-start overflow-hidden">
                 <HeroBackground />
                 <div className="relative flex flex-col items-center justify-center z-2 py-28">
                     <FadeIn>
@@ -28,44 +30,52 @@ export function SPhilLanding() {
                         className="mt-16 mb-24 flex justify-center items-center flex-wrap gap-16"
                     >
                         <CardFancy
-                            title={"HEGEL"}
+                            title={"ENCYCLOPAEDIA"}
                             tagline={
-                                "Discover the power of dialectical thought and immanent critique!"
+                                "Detailed articles on various topics and systems of philosophy"
                             }
-                            href={"/articles/hegel"}
+                            href={"/articles/articles"}
                             buttons={[
                                 {
-                                    title: "Guides",
-                                    href: "/articles/hegel/guides",
-                                },
-                                {
-                                    title: "Reference",
-                                    href: "/articles/hegel/reference",
+                                    title: "Overview",
+                                    href: "/articles/articles",
                                 },
                             ]}
                         />
                         <CardFancy
-                            title={"KANT"}
+                            title={"SYMPOSIA"}
                             tagline={
-                                "Learn why Kant is the philosopher of the enlightenment bar none!"
+                                "Focused courses on the arguments and beauty of philosophy"
                             }
-                            href={"/articles/kant"}
+                            href={"/symposia"}
                             buttons={[
                                 {
-                                    title: "Guides",
-                                    href: "/articles/kant/guides",
+                                    title: "About",
+                                    href: "/symposia",
                                 },
                                 {
-                                    title: "Reference",
-                                    href: "/articles/kant/reference",
+                                    title: "Courses",
+                                    href: "/symposia/courses",
                                 },
                             ]}
                         />
                     </FadeIn>
                 </div>
-            </section>
-            <section className="relative flex flex-col items-center justify-start w-full h-full">
+            </ScreenWrapper>
+
+            <div className="relative">
                 <div className="absolute top-0 h-36 w-full -translate-y-full bg-linear-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10" />
+            </div>
+
+            <section className="relative flex justify-center">
+                <div className="max-w-2xl">
+                    <FadeIn>
+                        <EncyclopaediaLanding />
+                    </FadeIn>
+                </div>
+            </section>
+
+            <section className="relative flex flex-col items-center justify-start w-full h-full">
                 <div className="py-20 flex flex-col items-center justify-center">
                     <FadeIn>
                         <Heading>What is sPhil?</Heading>
@@ -73,11 +83,12 @@ export function SPhilLanding() {
                     <div className="flex flex-col items-center">
                         <div
                             aria-hidden="true"
-                            className="absolute inset-48 grid grid-cols-4 -space-x-52 opacity-40 dark:opacity-20"
+                            className="absolute inset-48 grid grid-cols-4 -space-x-2 sm:-space-x-24 md:-space-x-52 opacity-40 dark:opacity-20"
                         >
                             <div className="blur-[106px] col-span-1 h-64 bg-linear-to-br from-purple-700 to-purple-400 dark:from-blue-700" />
                             <div className="blur-[106px] col-span-1 col-start-4 h-32 bg-linear-to-r from-cyan-400 to-sky-300 dark:to-indigo-600" />
                         </div>
+
                         <FadeIn className="flex flex-col items-center gap-6 max-w-2xl">
                             <Paragraph>
                                 Introducing the platform where the realms of

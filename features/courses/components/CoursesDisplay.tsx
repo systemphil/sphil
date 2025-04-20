@@ -1,6 +1,6 @@
 import {
     dbGetAllCourses,
-    dbGetAllCoursesByOwner,
+    dbGetAllCoursesByCreators,
     dbGetAllPublishedCourses,
 } from "lib/database/dbFuncs";
 import { CourseCard } from "./CourseCard";
@@ -27,7 +27,7 @@ export async function CoursesDisplay({
         if (session.user.role === "SUPERADMIN") {
             courses = await dbGetAllCourses();
         } else {
-            courses = await dbGetAllCoursesByOwner(session.user.id);
+            courses = await dbGetAllCoursesByCreators(session.user.id);
         }
     } else {
         courses = await dbGetAllPublishedCourses();
@@ -49,7 +49,7 @@ export async function CoursesDisplay({
     }
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:px-6">
             {courses.map((course) => (
                 <CourseCard key={course.id} course={course} isAdmin={isAdmin} />
             ))}

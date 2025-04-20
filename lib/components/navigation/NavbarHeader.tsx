@@ -11,9 +11,11 @@ export function NavbarHeader() {
             </h2>
             <Link href="/" title="Home" className="flex items-center gap-4">
                 <LogoOwl />
-                <LogoAnimated />
+                <div className="hidden min-[350px]:flex">
+                    <LogoAnimated />
+                </div>
             </Link>
-            <div className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2 lg:ml-32 md:relative md:left-0 md:transform-none">
+            <div className="hidden xl:flex absolute left-1/2 transform -translate-x-1/2 lg:ml-32 md:relative md:left-0 md:transform-none">
                 <SiteSwitcher />
             </div>
         </>

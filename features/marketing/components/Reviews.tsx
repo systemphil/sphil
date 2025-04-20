@@ -28,7 +28,7 @@ export function Reviews() {
 
     return (
         <div
-            className={`columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 overflow-hidden relative transition-all py-10 px-4`}
+            className={`columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 overflow-hidden relative transition-all py-10 sm:px-4`}
         >
             {showButton && (
                 <div
@@ -74,7 +74,7 @@ function Review({
     imgUrl?: string;
 }) {
     return (
-        <CardShell className="w-72">
+        <CardShell className="sm:w-72">
             <div className="d-card-body">
                 <a href={url ? url : undefined} target="_blank">
                     <div className="flex gap-3 items-center">

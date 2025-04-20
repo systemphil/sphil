@@ -44,11 +44,11 @@ function Hero() {
             </div>
             <div className="translate-y-[7px] md:-translate-y-[2px] lg:-translate-y-3 flex flex-col items-center justify-center">
                 <div className="font-bold text-center relative z-20 bg-clip-text tracking-widest text-transparent">
-                    <Heading replacementClasses="pb-4 text-transparent bg-linear-to-b from-black/80 to-black dark:from-white dark:to-[#AAAAAA]">
+                    <Heading replacementClasses="pb-4 text-transparent bg-linear-to-b from-black/80 to-black dark:from-white dark:to-[#AAAAAA] max-w-[300px] sm:max-w-none">
                         Discover & Reflect
                     </Heading>
                 </div>
-                <h3 className="text-xl my-1.5 md:text-2xl lg:text-3xl text-stone-600 dark:text-stone-300/90 font-light inter-var text-center">
+                <h3 className="text-xl my-1.5 md:text-2xl lg:text-3xl text-stone-600 dark:text-stone-300/90 font-light inter-var text-center max-w-[250px] sm:max-w-none">
                     In-depth learning courses on philosophy
                 </h3>
                 <div className="w-[40rem] h-40 relative">
@@ -84,7 +84,7 @@ function MainInfoCard() {
             <div className="md:px-10 max-w-[900px] mt-10 md:mt-32">
                 <InfoCard
                     title="Why Symposia"
-                    text="We dream of a way of doing philosophy that is intense, life-long and free. To be able to rigorously engage with concepts and ideas to their utmost depth without sacrificing either scholarly quality or creativity.. To be able to pursue and hone one's philosophical craft and enjoyment in a way that supports and enriches everyday living. And finally to be thinking deeply about contents of philosophy purely for their own sake. Symposia exists as a companion to sPhil, a collaborative encyclopedia inspired by systematic philosophers and modern open source principles. Symposia is intended to be an additional guide into the philosophical resources we otherwise make freely available at sPhil. Whether you are a novice or a professional, our courses welcome anyone who has a burning desire to examine, philosophically, the wonders of being."
+                    text="We dream of a way of doing philosophy that is intense, life-long and free. To be able to rigorously engage with concepts and ideas to their utmost depth without sacrificing either scholarly quality or creativity.. To be able to pursue and hone one's philosophical craft and enjoyment in a way that supports and enriches everyday living. And finally to be thinking deeply about contents of philosophy purely for their own sake. Symposia exists as a companion to sPhil, a collaborative encyclopaedia inspired by systematic philosophers and modern open source principles. Symposia is intended to be an additional guide into the philosophical resources we otherwise make freely available at sPhil. Whether you are a novice or a professional, our courses welcome anyone who has a burning desire to examine, philosophically, the wonders of being."
                     imgUrl="/static/images/fire.webp"
                     maskType="triangle"
                 />
@@ -117,7 +117,7 @@ function InfoCards() {
                 />
                 <InfoCard
                     title="Sharpen Your Critical Thinking: Unleash Your Philosophical Potential"
-                    text="They who do not understand the past cannot comprehend the future. Philsophy is not about the past but the discovery of futures. Learn to think critically, analyze arguments, and form your own well-reasoned opinions - skills valuable in all aspects of life."
+                    text="They who do not understand the past cannot comprehend the future. Philosophy is not about the past but the discovery of futures. Learn to think critically, analyze arguments, and form your own well-reasoned opinions - skills valuable in all aspects of life."
                     maskType="diamond"
                     imgUrl="/static/images/eye.webp"
                 />
@@ -210,7 +210,7 @@ function Instructors() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
                 <InfoCard
                     title="Filip Niklas, PhD"
-                    text="Filip completed his PhD in philosophy in 2022 under the supervision of Professor Stephen Houlgate at the University of Warwick. The title of his thesis was Hegel's <em>Critique of Determinism: Justifying Unfreedom as a Moment of Freedom</em>. Filip has given papers and organized numerous conferences on philosophy. He has taught extensively both at universiy, at the Halkyon Academy and privately. Filip's main research areas are systematic philosophy, metaphysics, ontology, essence, freedom, determinism, and maintains an otherwise broad interest in all the dimensions of intelligence and reason. Filip is also an incurable fan of the art and poetry of William Blake."
+                    text="Filip completed his PhD in philosophy in 2022 under the supervision of Professor Stephen Houlgate at the University of Warwick. The title of his thesis was Hegel's Critique of Determinism: Justifying Unfreedom as a Moment of Freedom. Filip has given papers and organized numerous conferences on philosophy. He has taught extensively both at university, at the Halkyon Academy and privately. Filip's main research areas are systematic philosophy, metaphysics, ontology, essence, freedom, determinism, and maintains an otherwise broad interest in all the dimensions of intelligence and reason. Filip is also an incurable fan of the art and poetry of William Blake."
                     maskType="squircle"
                     imgUrl="/static/images/people/filip.jpg"
                 />
@@ -236,8 +236,8 @@ function Refunds() {
                 your mind?
             </Heading>
             <p className="text-lg text-slate-500 dark:text-slate-300 py-4">
-                If you find that a particular course wasn&apos;t for you, we
-                offer full refunds up until 30-days after purchase.
+                If you find that a particular course was not for you, we offer
+                full refunds up until 30-days after purchase.
             </p>
         </>
     );

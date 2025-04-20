@@ -13,7 +13,8 @@
         "package.json",
         "next.config.mjs",
         ".env",
-        ".env.*"
+        ".env.*",
+        "cspell.json"
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
@@ -38,6 +39,7 @@
         "clsx",
         "cockroachdb",
         "Collingwood",
+        "couldn",
         "cuid",
         "Daseiendes",
         "Dasein",
@@ -75,6 +77,7 @@
         "Nicht",
         "Nichtsein",
         "Niklas",
+        "nodownload",
         "numpages",
         "oppheve",
         "Overengineered",
@@ -87,7 +90,9 @@
         "presuppositionless",
         "presuppositionlessness",
         "problematizes",
+        "Purgatorio",
         "Realphilosophie",
+        "reimagined",
         "Rokni",
         "Routledge",
         "Sache",
@@ -97,8 +102,10 @@
         "Sein",
         "sich",
         "simpliciter",
+        "SLQB",
         "spatio",
         "sphil",
+        "squircle",
         "strikethrough",
         "subcontraries",
         "sublate",
@@ -138,6 +145,9 @@
         "msapplication",
         "nextra",
         "splitn"
+    ],
+    "flagWords": [
+        "encyclopedia: encyclopaedia",
     ],
     "import": []
 }

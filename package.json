@@ -5,7 +5,7 @@
     "scripts": {
         "view": "jq '.scripts' package.json",
         "dev": "next dev --turbo",
-        "email:dev": "email dev",
+        "email:dev": "email dev --dir lib/email/templates",
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
@@ -17,7 +17,11 @@
         "db:studio:prod": "dotenv -e .env.production -- npx prisma studio",
         "db:regen": "npx prisma generate",
         "db:push": "npx prisma db push",
-        "db:push:prod": "dotenv -e .env.production -- npx prisma db push"
+        "db:push:prod": "dotenv -e .env.production -- npx prisma db push",
+        "email:send-news": "dotenv -e .env -- bun run scripts/email/send-newsletter.tsx",
+        "email:send-news:prod": "dotenv -e .env.production -- bun run scripts/email/send-newsletter.tsx",
+        "email:send-seminars": "bun run scripts/email/send-seminar-email.tsx",
+        "email:send-reminders": "bun run scripts/email/send-seminar-reminder.tsx"
     },
     "dependencies": {
         "@auth/prisma-adapter": "^2.8.0",
@@ -29,8 +33,9 @@
         "@mdxeditor/editor": "3.14.0",
         "@mui/icons-material": "^6.4.0",
         "@mui/material": "^6.4.0",
+        "@mui/x-date-pickers": "^7.28.3",
         "@prisma/client": "^6.4.1",
-        "@react-email/components": "^0.0.32",
+        "@react-email/components": "^0.0.36",
         "@tailwindcss/postcss": "^4.0.1",
         "@tailwindcss/typography": "^0.5.16",
         "@types/node": "20.6.0",
@@ -38,19 +43,21 @@
         "@types/react-dom": "18.3.1",
         "classnames": "^2.5.1",
         "clsx": "^2.1.1",
+        "dayjs": "^1.11.13",
         "eslint": "8.49.0",
         "eslint-config-next": "13.4.19",
         "framer-motion": "^10.18.0",
         "next": "^15.2.3",
         "next-auth": "^5.0.0-beta.25",
-        "nextra": "^4.2.13",
-        "nextra-theme-docs": "^4.2.13",
+        "nextra": "^4.2.17",
+        "nextra-theme-docs": "^4.2.17",
         "posthog-js": "^1.230.1",
         "prettier": "3.4.2",
         "prisma": "^6.4.1",
         "react": "18.3.1",
         "react-cookie-consent": "^9.0.0",
         "react-dom": "18.3.1",
+        "react-email": "^4.0.6",
         "react-hook-form": "^7.53.1",
         "react-hot-toast": "^2.4.1",
         "react-textarea-autosize": "^8.5.4",
@@ -71,7 +78,6 @@
         "@svgr/webpack": "^8.0.1",
         "daisyui": "^5.0.0-beta.1",
         "dotenv-cli": "^8.0.0",
-        "pagefind": "^1.1.1",
-        "react-email": "3.0.7"
+        "pagefind": "^1.1.1"
     }
 }
