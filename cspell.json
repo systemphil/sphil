@@ -14,7 +14,6 @@
         "next.config.mjs",
         ".env",
         ".env.*",
-        "cspell.json",
         "cspell.json"
     ],
     "dictionaryDefinitions": [],
@@ -123,8 +122,6 @@
         "Seiendes",
         "Sein",
         "selfsameness",
-        "sich",
-        "sich",
         "sich",
         "simpliciter",
         "SLQB",
