@@ -4,8 +4,9 @@ import {
     Layout as NextraLayout,
     Link as NextraLink,
     Navbar as NextraNavbar,
+    ThemeSwitch,
 } from "nextra-theme-docs";
-import { Banner as NextraBanner, Head } from "nextra/components";
+import { Banner as NextraBanner, Head, Search } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import { type ThemeConfigProps } from "node_modules/nextra-theme-docs/dist/layout.mjs";
 import { UserMenu } from "lib/components/navigation/UserMenu";
@@ -135,7 +136,12 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const toc: Partial<ThemeConfigProps["toc"]> = {
+    const toc: {
+        float?: boolean;
+        backToTop?: React.ReactNode;
+        extraContent?: React.ReactNode;
+        title?: React.ReactNode;
+    } = {
         extraContent: <TableOfContentsExtra />,
     };
     const feedbackOptions = {
@@ -158,7 +164,10 @@ export default async function RootLayout({
                         pageMap={await getPageMap()}
                         docsRepositoryBase={DOCS_REPOSITORY_BASE}
                         editLink={EDIT_LINK_DESCRIPTION}
-                        sidebar={{ defaultMenuCollapseLevel: 2 }}
+                        sidebar={{ defaultMenuCollapseLevel: 1 }}
+                        search={
+                            <Search placeholder="Search the Encyclopaedia…" />
+                        }
                         // banner={<Banner />}
                         navbar={
                             <NextraNavbar
@@ -166,8 +175,11 @@ export default async function RootLayout({
                                 logo={<NavbarHeader />}
                                 projectLink={PROJECT_LINK}
                             >
-                                <div className="w-[70px] flex justify-center">
-                                    <UserMenu />
+                                <div className="flex justify-center items-center">
+                                    <ThemeSwitch lite={true} className="ml-0" />
+                                    <div className="w-[70px] flex justify-center">
+                                        <UserMenu />
+                                    </div>
                                 </div>
                             </NextraNavbar>
                         }

@@ -66,9 +66,16 @@ export const LessonForm = ({
                     options={{ required: true }}
                 />
                 <TextInput
-                    label="Slug*"
+                    label="Slug* (the lesson link)"
                     name="slug"
-                    options={{ required: true }}
+                    options={{
+                        required: true,
+                        pattern: {
+                            value: /^[a-z0-9-]+$/,
+                            message:
+                                "Only lowercase letters, numbers, and hyphens are allowed",
+                        },
+                    }}
                 />
                 <TextAreaInput
                     label="Description*"

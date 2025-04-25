@@ -8,6 +8,7 @@
         "content/terms.mdx",
         "content/article/",
         "content/terms-symposia.mdx",
-        "content/contributing/"
+        "content/contributing/",
+        "content/articles/index.mdx"
     ]
 }

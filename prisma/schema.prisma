@@ -59,6 +59,7 @@ model User {
     accounts          Account[]
     sessions          Session[]
     coursesPurchased  Course[]
+    coursesCreated    Course[]             @relation("CourseCreators")
     productsPurchased String[]
     lessonsCompleted  UserLessonProgress[]
 
@@ -96,6 +97,7 @@ model Course {
     dialoguePrice         Float
     stripeDialoguePriceId String?
     owners                User[]
+    creators              User[]         @relation("CourseCreators")
     imageUrl              String?
     parts                 Part[]
     lessons               Lesson[]

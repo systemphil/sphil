@@ -11,7 +11,7 @@ import { NumberInput } from "./NumberInput";
 import { Checkbox } from "./Checkbox";
 import { SubmitInput } from "./SubmitInput";
 import { ImageFileInput } from "./ImageFileInput";
-import { DateInput } from "./DateInput";
+import { DateTimeInput } from "./DateTimeInput";
 import { sleep } from "lib/utils";
 import { Course } from "@prisma/client";
 import { actionUpsertCourse } from "features/courses/server/actions";
@@ -20,12 +20,8 @@ import { actionUploadImage } from "lib/server/actions";
 
 type AmendedDbUpsertCourseByIdProps = Omit<
     DbUpsertCourseByIdProps,
-    "seminarAvailability" | "dialogueAvailability" | "baseAvailability"
-> & {
-    baseAvailability: string;
-    seminarAvailability: string;
-    dialogueAvailability: string;
-};
+    "creatorId"
+>;
 
 export const CourseForm = ({ course }: { course?: Course }) => {
     const [currentImageUrl, setCurrentImageUrl] = useState<string>("");
@@ -39,10 +35,11 @@ export const CourseForm = ({ course }: { course?: Course }) => {
         setSubmitLoading(true);
         const dataWithConvertedDates = {
             ...data,
+            // New dates from form come as UTC strings, convert these to Date objects here
             baseAvailability: new Date(data.baseAvailability),
             seminarAvailability: new Date(data.seminarAvailability),
             dialogueAvailability: new Date(data.dialogueAvailability),
-        } satisfies DbUpsertCourseByIdProps;
+        } satisfies Omit<DbUpsertCourseByIdProps, "creatorId">;
         const resp = await actionUpsertCourse(dataWithConvertedDates);
         if (resp?.error) {
             toast.error(`Error updating course ${resp.error}`);
@@ -71,15 +68,9 @@ export const CourseForm = ({ course }: { course?: Course }) => {
             dialoguePrice: course?.dialoguePrice ?? 0,
             imageUrl: course?.imageUrl ?? "",
             author: course?.author ?? "",
-            baseAvailability: course?.baseAvailability
-                ? course.baseAvailability.toISOString().slice(0, 16)
-                : new Date().toISOString().slice(0, 16),
-            seminarAvailability: course?.seminarAvailability
-                ? course.seminarAvailability.toISOString().slice(0, 16)
-                : new Date().toISOString().slice(0, 16),
-            dialogueAvailability: course?.dialogueAvailability
-                ? course.dialogueAvailability.toISOString().slice(0, 16)
-                : new Date().toISOString().slice(0, 16),
+            baseAvailability: course?.baseAvailability ?? new Date(),
+            seminarAvailability: course?.seminarAvailability ?? new Date(),
+            dialogueAvailability: course?.dialogueAvailability ?? new Date(),
             seminarLink: course?.seminarLink ?? "",
             published: course?.published ?? false,
         },
@@ -121,7 +112,7 @@ export const CourseForm = ({ course }: { course?: Course }) => {
                     name="name"
                     options={{ required: true }}
                 />
-                <p className="font-semibold text-xs dark:text-gray-500">
+                <p className="font-semibold text-xs dark:text-gray-300 text-gray-600">
                     ❗ For slug, only lowercase letters, numbers, and hyphens
                     are allowed, no whitespace
                 </p>
@@ -142,7 +133,7 @@ export const CourseForm = ({ course }: { course?: Course }) => {
                     name="description"
                     options={{ required: true }}
                 />
-                <p className="font-semibold text-xs dark:text-gray-500">
+                <p className="font-semibold text-xs dark:text-gray-300 text-gray-600">
                     ⚠️ Price is in <b>cents</b>, so be sure to add two extra 00
                     at the end
                 </p>
@@ -206,17 +197,17 @@ export const CourseForm = ({ course }: { course?: Course }) => {
                 {/* 
                     TODO add utility to show when dates are in the past!
                 */}
-                <DateInput
+                <DateTimeInput
                     label="Base Availability Until*"
                     name="baseAvailability"
                     options={{ required: true }}
                 />
-                <DateInput
+                <DateTimeInput
                     label="Seminar Availability Until*"
                     name="seminarAvailability"
                     options={{ required: true }}
                 />
-                <DateInput
+                <DateTimeInput
                     label="Dialogue Availability Until*"
                     name="dialogueAvailability"
                     options={{ required: true }}

@@ -84,7 +84,7 @@ function MainInfoCard() {
             <div className="md:px-10 max-w-[900px] mt-10 md:mt-32">
                 <InfoCard
                     title="Why Symposia"
-                    text="We dream of a way of doing philosophy that is intense, life-long and free. To be able to rigorously engage with concepts and ideas to their utmost depth without sacrificing either scholarly quality or creativity.. To be able to pursue and hone one's philosophical craft and enjoyment in a way that supports and enriches everyday living. And finally to be thinking deeply about contents of philosophy purely for their own sake. Symposia exists as a companion to sPhil, a collaborative encyclopedia inspired by systematic philosophers and modern open source principles. Symposia is intended to be an additional guide into the philosophical resources we otherwise make freely available at sPhil. Whether you are a novice or a professional, our courses welcome anyone who has a burning desire to examine, philosophically, the wonders of being."
+                    text="We dream of a way of doing philosophy that is intense, life-long and free. To be able to rigorously engage with concepts and ideas to their utmost depth without sacrificing either scholarly quality or creativity.. To be able to pursue and hone one's philosophical craft and enjoyment in a way that supports and enriches everyday living. And finally to be thinking deeply about contents of philosophy purely for their own sake. Symposia exists as a companion to sPhil, a collaborative encyclopaedia inspired by systematic philosophers and modern open source principles. Symposia is intended to be an additional guide into the philosophical resources we otherwise make freely available at sPhil. Whether you are a novice or a professional, our courses welcome anyone who has a burning desire to examine, philosophically, the wonders of being."
                     imgUrl="/static/images/fire.webp"
                     maskType="triangle"
                 />
@@ -117,7 +117,7 @@ function InfoCards() {
                 />
                 <InfoCard
                     title="Sharpen Your Critical Thinking: Unleash Your Philosophical Potential"
-                    text="They who do not understand the past cannot comprehend the future. Philsophy is not about the past but the discovery of futures. Learn to think critically, analyze arguments, and form your own well-reasoned opinions - skills valuable in all aspects of life."
+                    text="They who do not understand the past cannot comprehend the future. Philosophy is not about the past but the discovery of futures. Learn to think critically, analyze arguments, and form your own well-reasoned opinions - skills valuable in all aspects of life."
                     maskType="diamond"
                     imgUrl="/static/images/eye.webp"
                 />
@@ -236,8 +236,8 @@ function Refunds() {
                 your mind?
             </Heading>
             <p className="text-lg text-slate-500 dark:text-slate-300 py-4">
-                If you find that a particular course wasn&apos;t for you, we
-                offer full refunds up until 30-days after purchase.
+                If you find that a particular course was not for you, we offer
+                full refunds up until 30-days after purchase.
             </p>
         </>
     );

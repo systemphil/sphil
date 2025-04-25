@@ -229,6 +229,7 @@ export async function ctrlCreateOrUpdateCourse({
     seminarAvailability,
     dialogueAvailability,
     seminarLink,
+    creatorId,
 }: OrderCreateOrUpdateCourseProps) {
     // Locally scoped helper functions
     async function updateStripePriceIfNeeded({
@@ -386,6 +387,7 @@ export async function ctrlCreateOrUpdateCourse({
             stripeSeminarPrice,
             stripeDialoguePrice,
         } = await createStripeResources();
+
         const dbPayload = {
             id,
             name,
@@ -405,6 +407,7 @@ export async function ctrlCreateOrUpdateCourse({
             seminarAvailability,
             dialogueAvailability,
             seminarLink,
+            creatorId,
         };
         const course = await dbUpsertCourseById(dbPayload);
         return course;
@@ -468,6 +471,7 @@ export async function ctrlCreateOrUpdateCourse({
         seminarAvailability,
         dialogueAvailability,
         seminarLink,
+        creatorId,
     };
     const course = await dbUpsertCourseById(dbPayload);
 

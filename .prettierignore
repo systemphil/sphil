@@ -1,3 +1,5 @@
 *.yml
 *.yaml
 cspell.json
+*.bib
+PULL_REQUEST_TEMPLATE.md

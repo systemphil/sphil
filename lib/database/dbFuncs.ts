@@ -27,11 +27,11 @@ export const dbGetAllCourses = () => withAdmin(() => prisma.course.findMany());
  * Calls the database to retrieve all courses by owner userId.
  * @access ADMIN
  */
-export const dbGetAllCoursesByOwner = (userId: string) =>
+export const dbGetAllCoursesByCreators = (userId: string) =>
     withAdmin(() =>
         prisma.course.findMany({
             where: {
-                owners: {
+                creators: {
                     some: {
                         id: userId,
                     },
@@ -58,32 +58,37 @@ export const dbGetAllPublishedCourses = async () => {
     );
     return await getAllCourses();
 };
+
 /**
  * Calls the database to retrieve specific course by slug identifier
+ * @cached
  */
 export const dbGetCourseBySlug = async (slug: string) => {
     const validSlug = z.string().parse(slug);
-    return await prisma.course.findUnique({
-        where: {
-            slug: validSlug,
+    const getCourseCached = cache(
+        async () => {
+            return await prisma.course.findUnique({
+                where: {
+                    slug: validSlug,
+                },
+                include: {
+                    lessons: {
+                        orderBy: {
+                            order: "asc",
+                        },
+                    },
+                    details: {
+                        select: {
+                            mdxCompiled: true,
+                        },
+                    },
+                },
+            });
         },
-        include: {
-            lessons: {
-                select: {
-                    slug: true,
-                    name: true,
-                },
-                orderBy: {
-                    order: "asc",
-                },
-            },
-            details: {
-                select: {
-                    mdxCompiled: true,
-                },
-            },
-        },
-    });
+        ["/courses", validSlug],
+        { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
+    );
+    return await getCourseCached();
 };
 /**
  * Calls the database to retrieve specific course by id identifier
@@ -519,7 +524,7 @@ export const dbGetVideoFileNameByVideoId = async (id: string) => {
 export type DbUpsertCourseByIdProps = Omit<
     Course,
     "id" | "createdAt" | "updatedAt"
-> & { id?: string };
+> & { id?: string; creatorId: string };
 /**
  * Updates an existing course details by id as identifier or creates a new one if id is not provided.
  * @access ADMIN
@@ -543,6 +548,7 @@ export const dbUpsertCourseById = async ({
     seminarAvailability,
     dialogueAvailability,
     seminarLink,
+    creatorId,
 }: DbUpsertCourseByIdProps) => {
     async function task() {
         const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
@@ -600,6 +606,11 @@ export const dbUpsertCourseById = async ({
                 seminarAvailability: validSeminarAvailability,
                 dialogueAvailability: validDialogueAvailability,
                 seminarLink: validSeminarLink,
+                creators: {
+                    connect: {
+                        id: creatorId,
+                    },
+                },
             },
             create: {
                 name: validName,
@@ -619,6 +630,11 @@ export const dbUpsertCourseById = async ({
                 seminarAvailability: validSeminarAvailability,
                 dialogueAvailability: validDialogueAvailability,
                 seminarLink: validSeminarLink,
+                creators: {
+                    connect: {
+                        id: creatorId,
+                    },
+                },
             },
         });
     }
@@ -1112,6 +1128,22 @@ export async function dbCreateNewsletterEmail({ email }: { email: string }) {
             email,
         },
     });
+}
+
+export async function dbDeleteNewsletterEmailIfExists({ id }: { id: string }) {
+    const newsletter = await prisma.newsletterEmail.findFirst({
+        where: {
+            id,
+        },
+    });
+
+    if (newsletter) {
+        await prisma.newsletterEmail.delete({
+            where: {
+                id,
+            },
+        });
+    }
 }
 
 export async function dbGetAllUsersWithPurchase() {

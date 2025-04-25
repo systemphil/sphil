@@ -15,7 +15,7 @@ export function NavbarHeader() {
                     <LogoAnimated />
                 </div>
             </Link>
-            <div className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2 lg:ml-32 md:relative md:left-0 md:transform-none">
+            <div className="hidden xl:flex absolute left-1/2 transform -translate-x-1/2 lg:ml-32 md:relative md:left-0 md:transform-none">
                 <SiteSwitcher />
             </div>
         </>

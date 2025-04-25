@@ -1,8 +1,13 @@
 export default {
-    article: {
-        title: "Article",
+    articles: {
+        title: "General",
         type: "page",
-        display: "hidden",
+        display: "children",
+        theme: {
+            breadcrumb: true,
+            sidebar: false,
+            toc: false,
+        },
     },
     contributing: {
         title: "Contributing",

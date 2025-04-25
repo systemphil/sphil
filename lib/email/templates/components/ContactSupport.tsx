@@ -3,7 +3,7 @@ import { Section } from "@react-email/components";
 export function ContactSupport() {
     return (
         <Section>
-            <p className="text-gray-500 my-4">
+            <p className="text-gray-500 my-4 text-center">
                 If there are any issues, please contact{" "}
                 <a
                     href="mailto:support@systemphil.com"
