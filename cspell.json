@@ -21,7 +21,6 @@
     "words": [
         "Ahilleas",
         "Akzent",
-        "Akzent",
         "analysed",
         "Anderes",
         "Ansichsein",
@@ -33,6 +32,7 @@
         "Autosize",
         "Befreiung",
         "Bestimmtheit",
+        "Bestimmung",
         "Bluesky",
         "Burbidge",
         "Clientside",
@@ -129,7 +129,6 @@
         "vanishedness",
         "Veränderung",
         "Verneinung",
-        "Verneinung",
         "webp",
         "Wissenschaft",
         "Yirmibes",
@@ -147,7 +146,7 @@
         "splitn"
     ],
     "flagWords": [
-        "encyclopedia: encyclopaedia",
+        "encyclopedia: encyclopaedia"
     ],
     "import": []
 }
