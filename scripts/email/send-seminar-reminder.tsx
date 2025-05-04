@@ -30,8 +30,8 @@ async function sendEmails() {
     }
 
     const year = 2025;
-    const month = 3; // indexed from 0
-    const day = 27;
+    const month = 4; // indexed from 0
+    const day = 4;
     const hour = 18;
     const minutes = 0;
 
