@@ -3,6 +3,8 @@ import { dbUpsertVideoById } from "lib/database/dbFuncs";
 import { primaryBucket, secondaryBucket } from "./bucketInit";
 import { withAdmin } from "lib/auth/authFuncs";
 
+const READ_RESOURCE_SIGNED_URL_EXPIRY = 90 * 60 * 1000; // 90 minutes
+
 type GcGenerateSignedPostUploadURLProps = {
     fileName: string;
     id?: string;
@@ -131,7 +133,7 @@ export async function bucketGenerateReadSignedUrl({
     const options = {
         version: "v4",
         action: "read",
-        expires: Date.now() + 15 * 60 * 1000, // 15 minutes
+        expires: Date.now() + READ_RESOURCE_SIGNED_URL_EXPIRY,
     } satisfies GetSignedUrlConfig;
     const [url] = await primaryBucket.file(filePath).getSignedUrl(options);
     return url;

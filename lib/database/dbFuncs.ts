@@ -1155,3 +1155,48 @@ export async function dbGetAllUsersWithPurchase() {
         },
     });
 }
+
+export async function dbVerifyVideoToUserId({
+    videoId,
+    userId,
+}: {
+    videoId: string;
+    userId: string;
+}) {
+    const res = await prisma.video.findFirst({
+        where: {
+            id: videoId,
+        },
+        select: {
+            lesson: {
+                select: {
+                    course: {
+                        select: {
+                            owners: {
+                                select: {
+                                    id: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    const owners = res?.lesson?.course.owners;
+
+    if (!owners) {
+        return false;
+    }
+
+    const ownersFlattened = owners.flatMap(
+        (ownerContainer) => ownerContainer.id
+    );
+
+    if (ownersFlattened.includes(userId)) {
+        return true;
+    }
+
+    return false;
+}

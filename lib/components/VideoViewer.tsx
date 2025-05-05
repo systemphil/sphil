@@ -1,21 +1,91 @@
 "use client";
 
+import { actionRefreshVideoUrl } from "lib/server/actions";
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Presentational client video component. Returns video if URL is truthy.
- * @notice HTML video tag _must_ have a key in order for React to re-render the component when the URL changes.
+ * VideoViewer with auto-refresh capabilities for expired signed URLs
  */
-export const VideoViewer = ({ videoUrl }: { videoUrl: string }) => {
+export const VideoViewer = ({
+    videoUrl: initialVideoUrl,
+    videoId,
+    fileName,
+}: {
+    videoUrl: string;
+    videoId: string;
+    fileName: string;
+}) => {
+    const [videoUrl, setVideoUrl] = useState(initialVideoUrl);
     const [isLoading, setIsLoading] = useState(true);
     const [isFloating, setIsFloating] = useState(false);
     const [isMobileView, setIsMobileView] = useState(false);
+    const [isUrlExpired, setIsUrlExpired] = useState(false);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const videoRef = useRef<HTMLVideoElement>(null);
     const videoContainerRef = useRef<HTMLDivElement>(null);
     const placeholderRef = useRef<HTMLDivElement>(null);
     const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
+    // Track last activity time to avoid unnecessary URL refreshes
+    const lastActivityRef = useRef<number>(Date.now());
+
     const handleLoad = () => {
         setIsLoading(false);
+        // Restore playback position after URL refresh if needed
+        if (videoRef.current && currentTime > 0) {
+            videoRef.current.currentTime = currentTime;
+        }
+        lastActivityRef.current = Date.now();
+    };
+
+    const refreshVideoUrl = async () => {
+        try {
+            console.log("Attempting refresh...");
+            const resp = await actionRefreshVideoUrl({
+                fileName,
+                videoId,
+            });
+
+            if (resp.status !== "Ok") {
+                throw new Error(resp.error);
+            }
+
+            return resp.data;
+        } catch (error) {
+            console.error("Error refreshing video URL:", error);
+            throw error;
+        }
+    };
+
+    const handleVideoPlay = async () => {
+        if (isLoading) {
+            return;
+        }
+
+        const now = Date.now();
+
+        // If more than N minutes since last activity
+        if (now - lastActivityRef.current > 60 * 60 * 1000) {
+            setIsUrlExpired(true);
+            setIsLoading(true);
+
+            try {
+                // Save current playback position before refreshing URL
+                if (videoRef.current) {
+                    setCurrentTime(videoRef.current.currentTime);
+                }
+
+                // Get fresh URL from API
+                const freshUrl = await refreshVideoUrl();
+                console.log("Fresh url", freshUrl);
+                setVideoUrl(freshUrl);
+                setIsUrlExpired(false);
+                lastActivityRef.current = now;
+            } catch (error) {
+                console.error("Failed to refresh video URL:", error);
+            }
+        }
     };
 
     useEffect(() => {
@@ -73,6 +143,24 @@ export const VideoViewer = ({ videoUrl }: { videoUrl: string }) => {
         };
     }, [isFloating, isMobileView]);
 
+    useEffect(() => {
+        if (typeof document === "undefined") {
+            return;
+        }
+        const handleFullscreenChange = () => {
+            const fullscreenElement = document.fullscreenElement;
+            setIsFullscreen(!!fullscreenElement);
+        };
+
+        document.addEventListener("fullscreenchange", handleFullscreenChange);
+        return () => {
+            document.removeEventListener(
+                "fullscreenchange",
+                handleFullscreenChange
+            );
+        };
+    }, []);
+
     if (!videoUrl) {
         return null;
     }
@@ -93,14 +181,23 @@ export const VideoViewer = ({ videoUrl }: { videoUrl: string }) => {
                 <div
                     className={`absolute z-10 ${
                         isLoading ? "" : "hidden"
-                    } skeleton rounded-none w-full h-full`}
-                ></div>
+                    } skeleton rounded-none w-full h-full flex items-center justify-center`}
+                >
+                    {isUrlExpired && (
+                        <div className="bg-black bg-opacity-70 p-4 rounded text-white text-center">
+                            <p>Refreshing video...</p>
+                        </div>
+                    )}
+                </div>
                 <video
+                    ref={videoRef}
                     key={videoUrl}
                     controls
                     controlsList="nodownload"
                     onLoadedData={handleLoad}
-                    className="w-full h-full object-cover"
+                    onPlay={handleVideoPlay}
+                    onSeeked={handleVideoPlay}
+                    className={`w-full h-full ${isFullscreen ? "object-contain" : "object-cover"}`}
                 >
                     <source src={videoUrl} type="video/mp4" />
                     Your browser does not support the video tag.

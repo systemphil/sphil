@@ -8,7 +8,13 @@ export async function VideoDataLoader({ videoEntry }: { videoEntry: Video }) {
             id: videoEntry.id,
             fileName: videoEntry.fileName,
         });
-        return <VideoViewer videoUrl={videoUrl} />;
+        return (
+            <VideoViewer
+                videoUrl={videoUrl}
+                videoId={videoEntry.id}
+                fileName={videoEntry.fileName}
+            />
+        );
     } catch (error) {
         console.error(error);
         return (
