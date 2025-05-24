@@ -21,7 +21,7 @@
     "words": [
         "Ahilleas",
         "Akzent",
-        "Akzent",
+        "Aliqulux",
         "analysed",
         "Anderes",
         "Ansichsein",
@@ -32,7 +32,9 @@
         "ausgeglichen",
         "Autosize",
         "Befreiung",
+        "Beschaffenheit",
         "Bestimmtheit",
+        "Bestimmung",
         "Bluesky",
         "Burbidge",
         "Clientside",
@@ -53,8 +55,10 @@
         "fällt",
         "Filip",
         "Firgrep",
+        "geltend",
         "Georg",
         "Geraets",
+        "Grenze",
         "Guyer",
         "Hackett",
         "Halkyon",
@@ -69,6 +73,7 @@
         "lccn",
         "livemode",
         "lxviii",
+        "macht",
         "mctaggart",
         "mdxeditor",
         "Meinen",
@@ -79,6 +84,7 @@
         "Niklas",
         "nodownload",
         "numpages",
+        "Obscurans",
         "oppheve",
         "Overengineered",
         "ownness",
@@ -103,6 +109,7 @@
         "sich",
         "simpliciter",
         "SLQB",
+        "solche",
         "spatio",
         "sphil",
         "squircle",
@@ -129,7 +136,6 @@
         "vanishedness",
         "Veränderung",
         "Verneinung",
-        "Verneinung",
         "webp",
         "Wissenschaft",
         "Yirmibes",
@@ -147,7 +153,7 @@
         "splitn"
     ],
     "flagWords": [
-        "encyclopedia: encyclopaedia",
+        "encyclopedia: encyclopaedia"
     ],
     "import": []
 }
