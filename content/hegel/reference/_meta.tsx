@@ -26,6 +26,9 @@ export default {
     something: {
         title: "Something",
     },
+    "something-and-other": {
+        title: "Something and Other",
+    },
     "mechanical-object": {
         title: "Mechanical Object",
     },
