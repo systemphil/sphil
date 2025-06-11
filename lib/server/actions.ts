@@ -2,7 +2,13 @@
 
 import { validateAdminAccess } from "lib/auth/authFuncs";
 import sharp from "sharp";
-import { bucketPipeImageUpload } from "lib/bucket/bucketFuncs";
+import {
+    bucketGenerateReadSignedUrl,
+    bucketPipeImageUpload,
+} from "lib/bucket/bucketFuncs";
+import { auth } from "lib/auth/authConfig";
+import { z } from "zod";
+import { dbVerifyVideoToUserId } from "lib/database/dbFuncs";
 
 /**
  * @legacy Using old POST Api: Thanks to these resources for helping me understand how to do this!
@@ -37,5 +43,63 @@ export async function actionUploadImage(formData: FormData) {
         data: {
             imageUrl,
         },
+    };
+}
+
+const refreshVideoSchema = z.object({
+    videoId: z.string(),
+    fileName: z.string(),
+});
+type RefreshVideoUrlInput = z.infer<typeof refreshVideoSchema>;
+
+type ActionResponse<T> =
+    | {
+          status: "Ok";
+          data: T;
+          error: undefined;
+      }
+    | {
+          status: "Error";
+          data: undefined;
+          error: string;
+      };
+
+export async function actionRefreshVideoUrl(
+    input: RefreshVideoUrlInput
+): Promise<ActionResponse<string>> {
+    const session = await auth();
+
+    if (!session?.user) {
+        return { error: "Unauthorized", data: undefined, status: "Error" };
+    }
+
+    const parsedInput = refreshVideoSchema.safeParse(input);
+
+    if (!parsedInput.success) {
+        return {
+            status: "Error",
+            error: `Bad request ${parsedInput.error.message}`,
+            data: undefined,
+        };
+    }
+
+    const isOwner = dbVerifyVideoToUserId({
+        videoId: input.videoId,
+        userId: session.user.id,
+    });
+
+    if (!isOwner) {
+        return { status: "Error", error: "Forbidden", data: undefined };
+    }
+
+    const newUrl = await bucketGenerateReadSignedUrl({
+        id: input.videoId,
+        fileName: input.fileName,
+    });
+
+    return {
+        status: "Ok",
+        data: newUrl,
+        error: undefined,
     };
 }

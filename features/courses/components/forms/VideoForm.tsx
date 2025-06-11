@@ -165,7 +165,13 @@ export const VideoForm = ({ videoEntry }: { videoEntry: Video | null }) => {
                 method="put"
                 encType="multipart/form-data"
             >
-                {previewUrl && <VideoViewer videoUrl={previewUrl} />}
+                {previewUrl && videoEntry && (
+                    <VideoViewer
+                        videoUrl={previewUrl}
+                        fileName={videoEntry.fileName}
+                        videoId={videoEntry.id}
+                    />
+                )}
                 <VideoFileInput
                     label="File*"
                     name="fileInput"

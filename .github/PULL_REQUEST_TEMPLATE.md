@@ -13,7 +13,7 @@ By submitting this PR, you agree to license your content under the
 
 ### Required Steps
 
-1. Please follow the [formatting guidelines](https://github.com/systemphil/sphil/blob/dev/src/pages/contributing/formatting/basic-markdown.md).
+1. Please follow the [formatting guidelines](https://github.com/systemphil/sphil/blob/main/content/contributing/formatting/basic-markdown.md).
 2. For citations, kindly use [Chicago author-date style](https://www.chicagomanualofstyle.org/tools_citationguide/citation-guide-2.html).
 3. If needed, make sure to update the [project's central bibliography](https://github.com/systemphil/sphil/blob/main/README_BIBLIOGRAPHY.md).
 4. Add metadata at the top of your file, with title in `##` heading for the title, like so:
@@ -65,3 +65,7 @@ By submitting this PR, you agree to license your content under the
 [CC BY-NC-SA 4.0 License](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 and your code under the
 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt).
+
+## Notice
+
+🪄 Formatting is automatically applied by scripts. If you find there has been an error, [create an issue](https://github.com/systemphil/sphil/issues) or contact us [by email](mailto:service@systemphil.com).
