@@ -29,6 +29,15 @@ export default {
     "something-and-other": {
         title: "Something and Other",
     },
+    determination: {
+        title: "Determination",
+    },
+    constitution: {
+        title: "Constitution",
+    },
+    limit: {
+        title: "Limit",
+    },
     "mechanical-object": {
         title: "Mechanical Object",
     },
