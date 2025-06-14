@@ -20,8 +20,9 @@ By submitting this PR, you agree to license your content under the
 
 ```md
 ---
-title: Your Title Here
-seoTitle: Full title used for external links
+title: Abbreviated title
+indexTitle: Title for the index (include the philosopher or system in parentheses)
+seoTitle: Full title used for external links (This is the actual title)
 description: Brief description of your content
 isArticle: true
 authors: Your Name (Year)
