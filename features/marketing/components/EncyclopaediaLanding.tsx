@@ -62,6 +62,20 @@ export function EncyclopaediaLanding() {
 
             <div className="my-8 flex justify-center flex-col items-center">
                 <Paragraph className="text-left mb-4">
+                    Visit the index to view all articles in alphabetical order.
+                </Paragraph>
+                <CardGrouping>
+                    <Cards.Card
+                        className={cardClasses}
+                        icon={<ImportContactsIcon />}
+                        title="Index"
+                        href="/articles/index"
+                    />
+                </CardGrouping>
+            </div>
+
+            <div className="my-8 flex justify-center flex-col items-center">
+                <Paragraph className="text-left mb-4">
                     Interested in contributing, learning about our methodology,
                     or running sPhil on your own machine? Visit our Contributing
                     section for more information.

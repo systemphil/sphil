@@ -29,6 +29,11 @@ export default {
         display: "children",
         type: "page",
     },
+    index: {
+        title: "Index",
+        display: "children",
+        type: "page",
+    },
     terms: {
         title: "Terms of Use",
         display: "hidden",
