@@ -101,12 +101,7 @@ jobs:
       run: chmod +x target/release/prepyrus_runner/prepyrus_runner
 
     - name: Run prepyrus in PROCESS mode
-      run: |
-        target/release/prepyrus_runner \
-        --bib-file absolute_bibliography.bib \
-        --target-path content --mode process \
-        --generate-index-to-file content/index/index.mdx \
-        --index-link-prefix-rewrite "content/=articles/"
+      run: target/release/prepyrus_runner --bib-file absolute_bibliography.bib --target-path content --mode process --generate-index-to-file content/index/index.mdx --index-link-prefix-rewrite "content/=articles/"
 
     - name: GCP Auth
       uses: "google-github-actions/auth@v2"
