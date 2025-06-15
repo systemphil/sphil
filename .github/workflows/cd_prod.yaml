@@ -26,7 +26,7 @@ jobs:
       run: cargo build --release --package prepyrus_runner
 
     - name: Run prepyrus script in VERIFY mode
-      run: target/release/prepyrus_runner absolute_bibliography.bib content verify
+      run: target/release/prepyrus_runner --bib-file absolute_bibliography.bib --target-path content --mode verify
 
     - name: Upload prepyrus for next job
       uses: actions/upload-artifact@v4
@@ -49,7 +49,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SERVICE: ${{ secrets.SERVICE }}
-      BUILD_PATH:
       SECRETS: >-
         DATABASE_URL
         AUTH_URL
@@ -105,8 +104,14 @@ jobs:
       run: chmod +x target/release/prepyrus_runner/prepyrus_runner
 
     - name: Run prepyrus in PROCESS mode
-      run: target/release/prepyrus_runner/prepyrus_runner absolute_bibliography.bib content process
-
+      run: |
+        target/release/prepyrus_runner/prepyrus_runner \
+        --bib-file absolute_bibliography.bib \
+        --target-path content \
+        --mode process \
+        --generate-index-to-file content/index/index.mdx \
+        --index-link-prefix-rewrite "content/:/"
+        
     - name: GCP Auth
       uses: "google-github-actions/auth@v2"
       with:

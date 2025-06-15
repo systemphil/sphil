@@ -7,6 +7,7 @@ import { ReactNode } from "react";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import BookIcon from "@mui/icons-material/Book";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import { Link } from "nextra-theme-docs";
 
 export function EncyclopaediaLanding() {
@@ -59,6 +60,20 @@ export function EncyclopaediaLanding() {
                     href="/articles/kant/reference"
                 />
             </CardGrouping>
+
+            <div className="my-8 flex justify-center flex-col items-center">
+                <Paragraph className="text-left mb-4">
+                    Visit the index to view all articles in alphabetical order.
+                </Paragraph>
+                <CardGrouping>
+                    <Cards.Card
+                        className={cardClasses}
+                        icon={<FormatListBulletedIcon />}
+                        title="Index"
+                        href="/articles/index"
+                    />
+                </CardGrouping>
+            </div>
 
             <div className="my-8 flex justify-center flex-col items-center">
                 <Paragraph className="text-left mb-4">
