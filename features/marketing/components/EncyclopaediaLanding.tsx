@@ -7,6 +7,7 @@ import { ReactNode } from "react";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import BookIcon from "@mui/icons-material/Book";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import { Link } from "nextra-theme-docs";
 
 export function EncyclopaediaLanding() {
@@ -67,7 +68,7 @@ export function EncyclopaediaLanding() {
                 <CardGrouping>
                     <Cards.Card
                         className={cardClasses}
-                        icon={<ImportContactsIcon />}
+                        icon={<FormatListBulletedIcon />}
                         title="Index"
                         href="/articles/index"
                     />
