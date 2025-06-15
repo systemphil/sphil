@@ -111,7 +111,7 @@ jobs:
         --target-path content \
         --mode process \
         --generate-index-to-file content/index/index.mdx \
-        --index-link-prefix-rewrite "content/:/"
+        --index-link-prefix-rewrite "content:/articles"
 
     - name: GCP Auth
       uses: "google-github-actions/auth@v2"
