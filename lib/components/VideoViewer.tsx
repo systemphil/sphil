@@ -192,6 +192,7 @@ export const VideoViewer = ({
                 <video
                     ref={videoRef}
                     key={videoUrl}
+                    playsInline
                     controls
                     controlsList="nodownload"
                     onLoadedData={handleLoad}
