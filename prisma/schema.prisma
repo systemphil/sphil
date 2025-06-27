@@ -60,6 +60,7 @@ model User {
     sessions          Session[]
     coursesPurchased  Course[]
     coursesCreated    Course[]             @relation("CourseCreators")
+    coursesAssisted   Course[]             @relation("CourseAssistants")
     productsPurchased String[]
     lessonsCompleted  UserLessonProgress[]
     seminarCohorts    SeminarCohort[]      @relation("SeminarCohortParticipants")
@@ -99,6 +100,7 @@ model Course {
     stripeDialoguePriceId String?
     owners                User[]
     creators              User[]          @relation("CourseCreators")
+    assistants            User[]          @relation("CourseAssistants")
     imageUrl              String?
     parts                 Part[]
     lessons               Lesson[]
