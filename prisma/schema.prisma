@@ -62,6 +62,7 @@ model User {
     coursesCreated    Course[]             @relation("CourseCreators")
     productsPurchased String[]
     lessonsCompleted  UserLessonProgress[]
+    seminarCohorts    SeminarCohort[]      @relation("SeminarCohortParticipants")
 
     createdAt DateTime  @default(now())
     updatedAt DateTime? @updatedAt
@@ -85,10 +86,10 @@ model VerificationToken {
 // * Course, Lessons and Content related data
 // ============================================================
 model Course {
-    id                    String         @id @default(cuid())
+    id                    String          @id @default(cuid())
     name                  String
     description           String
-    slug                  String         @unique
+    slug                  String          @unique
     stripeProductId       String?
     basePrice             Float
     stripeBasePriceId     String?
@@ -97,17 +98,93 @@ model Course {
     dialoguePrice         Float
     stripeDialoguePriceId String?
     owners                User[]
-    creators              User[]         @relation("CourseCreators")
+    creators              User[]          @relation("CourseCreators")
     imageUrl              String?
     parts                 Part[]
     lessons               Lesson[]
+    seminarCohorts        SeminarCohort[]
     details               CourseDetails?
     author                String?
     seminarLink           String?
-    baseAvailability      DateTime       @default(now())
-    seminarAvailability   DateTime       @default(now())
-    dialogueAvailability  DateTime       @default(now())
-    published             Boolean        @default(false)
+    baseAvailability      DateTime        @default(now())
+    seminarAvailability   DateTime        @default(now())
+    dialogueAvailability  DateTime        @default(now())
+    published             Boolean         @default(false)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+enum Enrollment {
+    TIER_PURCHASE
+    SEMINAR_ONLY
+}
+
+model SeminarCohort {
+    id           String     @id @default(cuid())
+    year         Int
+    participants User[]     @relation("SeminarCohortParticipants")
+    course       Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+    courseId     String
+    enrollment   Enrollment
+
+    seminar Seminar[]
+
+    notes     String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([year, courseId])
+}
+
+model Seminar {
+    id        String  @id @default(cuid())
+    order     Int
+    published Boolean @default(false)
+
+    seminarCohort   SeminarCohort      @relation(fields: [seminarCohortId], references: [id], onDelete: Cascade)
+    seminarCohortId String
+    content         SeminarContent?
+    transcript      SeminarTranscript?
+    video           SeminarVideo?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([seminarCohortId, order])
+}
+
+model SeminarVideo {
+    id        String   @id @default(cuid())
+    seminar   Seminar? @relation(fields: [seminarId], references: [id], onDelete: Cascade)
+    seminarId String?  @unique
+    fileName  String
+    duration  Float?
+    posterUrl String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model SeminarContent {
+    id          String      @id @default(cuid())
+    seminar     Seminar?    @relation(fields: [seminarId], references: [id], onDelete: Cascade)
+    seminarId   String?     @unique
+    mdxCategory MdxCategory @default(CONTENT)
+    mdx         Bytes
+    mdxCompiled String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model SeminarTranscript {
+    id          String      @id @default(cuid())
+    seminar     Seminar?    @relation(fields: [seminarId], references: [id], onDelete: Cascade)
+    seminarId   String?     @unique
+    mdxCategory MdxCategory @default(TRANSCRIPT)
+    mdx         Bytes
+    mdxCompiled String?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -138,6 +215,9 @@ model Part {
     course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
     courseId String
     lessons  Lesson[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Lesson {
@@ -198,6 +278,9 @@ model UserLessonProgress {
     lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
     lessonId    String
     completedAt DateTime @default(now())
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     @@id([userId, lessonId])
 }
