@@ -118,19 +118,38 @@ model Course {
     updatedAt DateTime @updatedAt
 }
 
+enum ProductsExtraKinds {
+    SEMINAR_UPGRADE
+    OTHER
+}
+
+model ProductsExtra {
+    id                   String             @id @default(cuid())
+    kind                 ProductsExtraKinds @unique
+    stripeProductId      String
+    priceDefault         Float
+    stripePriceIdDefault String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
 enum Enrollment {
     TIER_PURCHASE
     SEMINAR_ONLY
+    ADMIN_ADDED
 }
 
 model SeminarCohort {
-    id           String     @id @default(cuid())
-    year         Int
-    participants User[]     @relation("SeminarCohortParticipants")
-    course       Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
-    courseId     String
-    enrollment   Enrollment
-    seminarLink  String?
+    id                   String     @id @default(cuid())
+    year                 Int
+    participants         User[]     @relation("SeminarCohortParticipants")
+    course               Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+    courseId             String
+    enrollment           Enrollment
+    seminarLink          String?
+    seminarPrice         Float
+    stripeSeminarPriceId String?
 
     seminars Seminar[]
 
