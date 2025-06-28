@@ -84,13 +84,13 @@ model VerificationToken {
 }
 
 // === SECTION 2 ==============================================
-// * Course, Lessons and Content related data
+// * Course, Seminars, Lessons and Content related data
 // ============================================================
 model Course {
-    id                    String          @id @default(cuid())
+    id                    String   @id @default(cuid())
     name                  String
     description           String
-    slug                  String          @unique
+    slug                  String   @unique
     stripeProductId       String?
     basePrice             Float
     stripeBasePriceId     String?
@@ -98,20 +98,21 @@ model Course {
     stripeSeminarPriceId  String?
     dialoguePrice         Float
     stripeDialoguePriceId String?
-    owners                User[]
-    creators              User[]          @relation("CourseCreators")
-    assistants            User[]          @relation("CourseAssistants")
     imageUrl              String?
-    parts                 Part[]
-    lessons               Lesson[]
-    seminarCohorts        SeminarCohort[]
-    details               CourseDetails?
     author                String?
-    seminarLink           String?
-    baseAvailability      DateTime        @default(now())
-    seminarAvailability   DateTime        @default(now())
-    dialogueAvailability  DateTime        @default(now())
-    published             Boolean         @default(false)
+    seminarLink           String? // consider phasing out
+    baseAvailability      DateTime @default(now())
+    seminarAvailability   DateTime @default(now())
+    dialogueAvailability  DateTime @default(now())
+    published             Boolean  @default(false)
+
+    owners         User[]
+    creators       User[]          @relation("CourseCreators")
+    assistants     User[]          @relation("CourseAssistants")
+    parts          Part[]
+    lessons        Lesson[]
+    seminarCohorts SeminarCohort[]
+    details        CourseDetails?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -129,6 +130,7 @@ model SeminarCohort {
     course       Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
     courseId     String
     enrollment   Enrollment
+    seminarLink  String?
 
     seminar Seminar[]
 
