@@ -11,7 +11,7 @@ datasource db {
 }
 
 // === SECTION 1 ==============================================
-// * User Access and Permissions (necessary for NextAuth)
+// * User Access and Permissions
 // ============================================================
 model Account {
     id                       String  @id @default(cuid())
@@ -132,7 +132,7 @@ model SeminarCohort {
     enrollment   Enrollment
     seminarLink  String?
 
-    seminar Seminar[]
+    seminars Seminar[]
 
     notes     String?
     createdAt DateTime @default(now())
