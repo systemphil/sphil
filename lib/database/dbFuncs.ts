@@ -5,6 +5,7 @@ import type {
     Lesson,
     LessonContent,
     LessonTranscript,
+    SeminarCohort,
     Video,
 } from "@prisma/client";
 import { prisma } from "./dbInit";
@@ -1199,4 +1200,48 @@ export async function dbVerifyVideoToUserId({
     }
 
     return false;
+}
+
+/**
+ * Creates a new seminar cohort if one does not exist for the current year for the provided courseId
+ */
+export async function dbEnrollUserInSeminarCohort({
+    userId,
+    courseId,
+    enrollment,
+}: {
+    userId: string;
+    courseId: string;
+    enrollment: SeminarCohort["enrollment"];
+}) {
+    const currentYear = new Date().getFullYear();
+
+    let cohort = await prisma.seminarCohort.findFirst({
+        where: {
+            year: currentYear,
+            courseId: courseId,
+        },
+    });
+
+    if (!cohort) {
+        cohort = await prisma.seminarCohort.create({
+            data: {
+                enrollment,
+                year: currentYear,
+                course: { connect: { id: courseId } },
+            },
+        });
+    }
+
+    // Avoid adding the user twice
+    await prisma.seminarCohort.update({
+        where: { id: cohort.id },
+        data: {
+            participants: {
+                connect: { id: userId },
+            },
+        },
+    });
+
+    return cohort;
 }

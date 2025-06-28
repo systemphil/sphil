@@ -1,6 +1,10 @@
 import type Stripe from "stripe";
 import { getStripe } from "./stripeInit";
-import { dbGetCourseById, dbUpdateUserPurchases } from "lib/database/dbFuncs";
+import {
+    dbEnrollUserInSeminarCohort,
+    dbGetCourseById,
+    dbUpdateUserPurchases,
+} from "lib/database/dbFuncs";
 import { resend } from "lib/email/emailInit";
 import { PriceTier } from "lib/server/ctrl";
 import { EmailPurchaseReceipt } from "lib/email/templates/EmailPurchaseReceipt";
@@ -312,6 +316,12 @@ export async function handleSessionCompleted(
             customerEmail,
             senderEmail,
             product,
+        });
+
+        await dbEnrollUserInSeminarCohort({
+            courseId: sessionMetadata.courseId,
+            enrollment: "TIER_PURCHASE",
+            userId: sessionMetadata.userId,
         });
     }
 
