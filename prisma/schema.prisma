@@ -56,14 +56,18 @@ model User {
     image            String?
     role             Role      @default(BASIC)
 
-    accounts          Account[]
-    sessions          Session[]
-    coursesPurchased  Course[]
-    coursesCreated    Course[]             @relation("CourseCreators")
-    coursesAssisted   Course[]             @relation("CourseAssistants")
-    productsPurchased String[]
-    lessonsCompleted  UserLessonProgress[]
-    seminarCohorts    SeminarCohort[]      @relation("SeminarCohortParticipants")
+    // Internal relations
+    accounts         Account[]
+    sessions         Session[]
+    coursesCreated   Course[]             @relation("CourseCreators")
+    coursesAssisted  Course[]             @relation("CourseAssistants")
+    lessonsCompleted UserLessonProgress[]
+
+    // Commercial relations
+    coursesPurchased  Course[] // Deprecated (only for legacy)
+    productsPurchased String[] // Deprecated (only for legacy)
+    purchases         CoursePurchase[]
+    seminarCohorts    SeminarCohort[]  @relation("SeminarCohortParticipants")
 
     createdAt DateTime  @default(now())
     updatedAt DateTime? @updatedAt
@@ -100,56 +104,40 @@ model Course {
     stripeDialoguePriceId String?
     imageUrl              String?
     author                String?
-    seminarLink           String? // consider phasing out
+    seminarLink           String? // Consider phasing out
     baseAvailability      DateTime @default(now())
     seminarAvailability   DateTime @default(now())
     dialogueAvailability  DateTime @default(now())
     published             Boolean  @default(false)
 
-    owners         User[]
-    creators       User[]          @relation("CourseCreators")
-    assistants     User[]          @relation("CourseAssistants")
-    parts          Part[]
-    lessons        Lesson[]
+    // Internal relations
+    creators   User[]         @relation("CourseCreators")
+    assistants User[]         @relation("CourseAssistants")
+    parts      Part[]
+    lessons    Lesson[]
+    details    CourseDetails?
+
+    // Commercial relations
+    owners         User[] // Deprecated (only for legacy)
     seminarCohorts SeminarCohort[]
-    details        CourseDetails?
+    purchases      CoursePurchase[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-}
-
-enum ProductsExtraKinds {
-    SEMINAR_UPGRADE
-    OTHER
-}
-
-model ProductsExtra {
-    id                   String             @id @default(cuid())
-    kind                 ProductsExtraKinds @unique
-    stripeProductId      String
-    priceDefault         Float
-    stripePriceIdDefault String
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
-enum Enrollment {
-    TIER_PURCHASE
-    SEMINAR_ONLY
-    ADMIN_ADDED
 }
 
 model SeminarCohort {
-    id                   String     @id @default(cuid())
-    year                 Int
-    participants         User[]     @relation("SeminarCohortParticipants")
-    course               Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
-    courseId             String
-    enrollment           Enrollment
-    seminarLink          String?
-    seminarPrice         Float
-    stripeSeminarPriceId String?
+    id           String  @id @default(cuid())
+    year         Int
+    participants User[]  @relation("SeminarCohortParticipants")
+    course       Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+    courseId     String
+    seminarLink  String?
+
+    seminarOnlyPrice            Float
+    stripeSeminarOnlyPriceId    String
+    seminarUpgradePrice         Float
+    stripeSeminarUpgradePriceId String
 
     seminars Seminar[]
 
@@ -309,7 +297,7 @@ model UserLessonProgress {
 }
 
 // === SECTION 3 ==============================================
-// * Stripe related data
+// * Stripe & Product related data
 // ============================================================
 model StripeEvent {
     id               String   @id @unique
@@ -322,6 +310,36 @@ model StripeEvent {
     created          DateTime
     livemode         Boolean
     pending_webhooks Int
+}
+
+model CoursePurchase {
+    product String
+
+    course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+    courseId String
+    User     User   @relation(fields: [userId], references: [id])
+    userId   String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@id([courseId, userId])
+}
+
+enum ProductsAuxiliaryKinds {
+    SEMINAR_ONLY
+    OTHER
+}
+
+model ProductsAuxiliary {
+    id                   String                 @id @default(cuid())
+    kind                 ProductsAuxiliaryKinds @unique
+    stripeProductId      String
+    priceDefault         Float
+    stripePriceIdDefault String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 // === SECTION 4 ==============================================
