@@ -313,11 +313,9 @@ model StripeEvent {
 }
 
 model CoursePurchase {
-    product String
-
     course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
     courseId String
-    User     User   @relation(fields: [userId], references: [id])
+    user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId   String
 
     createdAt DateTime @default(now())

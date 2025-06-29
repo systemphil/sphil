@@ -168,6 +168,13 @@ export async function dbUpdateUserPurchases({
 }) {
     const validUserId = z.string().parse(userId);
 
+    await prisma.coursePurchase.create({
+        data: {
+            user: { connect: { id: userId } },
+            course: { connect: { id: courseId } },
+        },
+    });
+
     const purchasePriceIdWithTimeStamp = `${purchasePriceId}:${Date.now()}`;
     const updatedUser = await prisma.user.update({
         where: {
