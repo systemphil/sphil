@@ -62,7 +62,8 @@ export type ModelName =
     | "Video"
     | "CourseDetails"
     | "Lesson"
-    | "Course";
+    | "Course"
+    | "UNSUPPORTED";
 type OrderDeleteModelEntryProps = {
     id: string;
     modelName: ModelName;
@@ -114,6 +115,12 @@ export async function ctrlDeleteModelEntry({
             return await ctrlDeleteLesson(validId);
         case "Course":
             return await ctrlDeleteCourse(validId);
+        case "UNSUPPORTED":
+            throw new Error("Unsupported");
+        default: {
+            const _exhaustiveTypeCheck: never = modelName;
+            throw new Error(`${_exhaustiveTypeCheck} not supported`);
+        }
     }
 }
 /**

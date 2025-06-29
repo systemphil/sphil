@@ -196,7 +196,7 @@ export async function dbCreateCoursePurchase({
 export async function dbGetCourseAndDetailsAndLessonsById(id: string) {
     async function task() {
         const validId = z.string().parse(id);
-        return await prisma.course.findFirst({
+        return await prisma.course.findUnique({
             where: {
                 id: validId,
             },
@@ -209,6 +209,11 @@ export async function dbGetCourseAndDetailsAndLessonsById(id: string) {
                 details: {
                     select: {
                         id: true,
+                    },
+                },
+                seminarCohorts: {
+                    orderBy: {
+                        year: "desc",
                     },
                 },
             },
@@ -1342,6 +1347,31 @@ async function dbCreateSeminarCohort({
             seminarOnlyPrice: productSeminar.priceDefault,
             year: currentYear,
             course: { connect: { id: courseId } },
+        },
+    });
+}
+
+export async function dbGetSeminarCohortAndSeminarsById({
+    id,
+}: {
+    id: string;
+}) {
+    return await prisma.seminarCohort.findUnique({
+        where: {
+            id,
+        },
+        include: {
+            seminars: {
+                orderBy: {
+                    order: "asc",
+                },
+            },
+            participants: {
+                select: {
+                    name: true,
+                    email: true,
+                },
+            },
         },
     });
 }

@@ -160,6 +160,7 @@ const deleteModelEntrySchema = z.object({
         "CourseDetails",
         "Lesson",
         "Course",
+        "UNSUPPORTED",
     ]),
 });
 type ActionDeleteModelEntryInput = z.infer<typeof deleteModelEntrySchema>;
