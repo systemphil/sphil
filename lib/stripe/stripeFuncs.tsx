@@ -2,7 +2,7 @@ import type Stripe from "stripe";
 import { getStripe } from "./stripeInit";
 import {
     dbEnrollUserInSeminarCohort,
-    dbUpdateUserPurchases,
+    dbCreateCoursePurchase,
 } from "lib/database/dbFuncs";
 import { PriceTier } from "lib/server/ctrl";
 import { STRIPE_FALLBACKS } from "lib/config/stripeFallbacks";
@@ -260,17 +260,16 @@ export async function handleSessionCompleted(
         return;
     }
 
-    await dbUpdateUserPurchases({
+    await dbCreateCoursePurchase({
         userId: sessionMetadata.userId,
         courseId: sessionMetadata.courseId,
-        purchasePriceId: sessionMetadata.purchase,
     });
 
     const customerEmail = sessionMetadata.customerEmail;
     if (!customerEmail) {
-        console.error(
-            `❌ No customer email found in session metadata. Session id ${event.data.object.id}`
-        );
+        const message = `❌ No customer email found in session metadata. Session id ${event.data.object.id}`;
+        console.error(message);
+        void EmailService.adminAlert({ message });
         return;
     }
 

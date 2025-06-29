@@ -110,7 +110,21 @@ export const dbGetCourseById = async (id: string) => {
  */
 export async function dbGetUserPurchasedCourses(userId: string) {
     const validUserId = z.string().parse(userId);
-    const res = await prisma.user.findUnique({
+
+    const res = await prisma.coursePurchase.findMany({
+        where: {
+            userId: validUserId,
+        },
+        select: {
+            course: true,
+        },
+    });
+    if (res && res.length > 0) {
+        const courses = res.map((i) => i.course);
+        return courses;
+    }
+
+    const legacyFallback = await prisma.user.findUnique({
         where: {
             id: validUserId,
         },
@@ -118,8 +132,10 @@ export async function dbGetUserPurchasedCourses(userId: string) {
             coursesPurchased: true,
         },
     });
-    if (!res) return null;
-    const courses = res.coursesPurchased;
+    if (!legacyFallback) {
+        return null;
+    }
+    const courses = legacyFallback.coursesPurchased;
     return courses;
 }
 /**
@@ -154,43 +170,24 @@ export async function dbUpdateUserStripeCustomerId({
         },
     });
 }
-/**
- * Gets user data by id. Returns an object.
- */
-export async function dbUpdateUserPurchases({
+
+export async function dbCreateCoursePurchase({
     userId,
     courseId,
-    purchasePriceId,
 }: {
     userId: string;
     courseId: string;
-    purchasePriceId: string;
 }) {
     const validUserId = z.string().parse(userId);
 
     await prisma.coursePurchase.create({
         data: {
-            user: { connect: { id: userId } },
+            user: { connect: { id: validUserId } },
             course: { connect: { id: courseId } },
         },
     });
 
-    const purchasePriceIdWithTimeStamp = `${purchasePriceId}:${Date.now()}`;
-    const updatedUser = await prisma.user.update({
-        where: {
-            id: validUserId,
-        },
-        data: {
-            productsPurchased: {
-                push: purchasePriceIdWithTimeStamp,
-            },
-            coursesPurchased: {
-                connect: { id: courseId },
-            },
-        },
-    });
-
-    return updatedUser;
+    return;
 }
 /**
  * Calls the database to retrieve specific course, its course details and lessons by id identifier.
