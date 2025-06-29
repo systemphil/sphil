@@ -78,6 +78,28 @@ export default async function AdminCourseEdit({
                             </button>
                         </Link>
                     </div>
+
+                    <div>
+                        <Heading as="h4">Seminar Cohorts</Heading>
+                        {course.seminarCohorts.length > 0 ? (
+                            course.seminarCohorts.map((cohort, index) => (
+                                <CourseMaterialCard
+                                    key={`${courseId}-seminarCohort-${index}`}
+                                    href={`/admin/courses/${courseId}/seminar-cohort/${cohort.id}`}
+                                    heading={`${cohort.year} Cohort`}
+                                    id={cohort.id}
+                                    modelName="UNSUPPORTED"
+                                />
+                            ))
+                        ) : (
+                            <div>
+                                <p>
+                                    Seminar cohorts are automatically generated
+                                    when a user signs up for seminars
+                                </p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
