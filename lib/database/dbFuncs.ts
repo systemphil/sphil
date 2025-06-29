@@ -5,6 +5,7 @@ import type {
     Lesson,
     LessonContent,
     LessonTranscript,
+    ProductsAuxiliary,
     SeminarCohort,
     Video,
 } from "@prisma/client";
@@ -17,6 +18,8 @@ import {
     CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS,
 } from "lib/server/cache";
 import { Text } from "lib/utils/textEncoding";
+import { stripeCreatePrice, stripeCreateProduct } from "lib/stripe/stripeFuncs";
+import { AUXILIARY_PRODUCTS_DEFAULTS } from "lib/config/auxiliaryProductDefaults";
 
 /**
  * Calls the database to retrieve all courses.
@@ -1202,17 +1205,67 @@ export async function dbVerifyVideoToUserId({
     return false;
 }
 
+async function dbGetOrCreateProductAux({
+    kind,
+}: {
+    kind: ProductsAuxiliary["kind"];
+}) {
+    function getProductName(kind: ProductsAuxiliary["kind"]) {
+        switch (kind) {
+            case "SEMINAR_ONLY":
+                return AUXILIARY_PRODUCTS_DEFAULTS.seminarOnly;
+            case "OTHER":
+                return AUXILIARY_PRODUCTS_DEFAULTS.other;
+            default: {
+                const _exhaustiveTypeCheck: never = kind;
+                throw new Error(`${_exhaustiveTypeCheck} not supported`);
+            }
+        }
+    }
+
+    const existingProduct = await prisma.productsAuxiliary.findFirst({
+        where: {
+            kind,
+        },
+    });
+
+    if (existingProduct) {
+        return existingProduct;
+    }
+
+    const { productName, defaultPriceCents, description, imageUrl } =
+        getProductName(kind);
+
+    const newStripeProduct = await stripeCreateProduct({
+        name: productName,
+        description,
+        imageUrl,
+    });
+
+    const newStripePrice = await stripeCreatePrice({
+        stripeProductId: newStripeProduct.id,
+        unitPrice: defaultPriceCents,
+    });
+
+    return await prisma.productsAuxiliary.create({
+        data: {
+            stripePriceIdDefault: newStripePrice.id,
+            priceDefault: defaultPriceCents,
+            kind,
+            stripeProductId: newStripeProduct.id,
+        },
+    });
+}
+
 /**
  * Creates a new seminar cohort if one does not exist for the current year for the provided courseId
  */
 export async function dbEnrollUserInSeminarCohort({
     userId,
     courseId,
-    enrollment,
 }: {
     userId: string;
     courseId: string;
-    enrollment: SeminarCohort["enrollment"];
 }) {
     const currentYear = new Date().getFullYear();
 
@@ -1224,12 +1277,9 @@ export async function dbEnrollUserInSeminarCohort({
     });
 
     if (!cohort) {
-        cohort = await prisma.seminarCohort.create({
-            data: {
-                enrollment,
-                year: currentYear,
-                course: { connect: { id: courseId } },
-            },
+        cohort = await dbCreateSeminarCohort({
+            courseId,
+            currentYear,
         });
     }
 
@@ -1244,4 +1294,50 @@ export async function dbEnrollUserInSeminarCohort({
     });
 
     return cohort;
+}
+
+async function dbCreateSeminarCohort({
+    courseId,
+    currentYear,
+}: {
+    courseId: string;
+    currentYear: number;
+}) {
+    const productSeminar = await dbGetOrCreateProductAux({
+        kind: "SEMINAR_ONLY",
+    });
+
+    const course = await prisma.course.findUnique({
+        where: {
+            id: courseId,
+        },
+    });
+
+    if (!course) {
+        throw new Error("Expected course");
+    }
+
+    const seminarUpgradeDelta = Math.round(
+        course.seminarPrice - course.basePrice
+    );
+
+    if (seminarUpgradeDelta < 0) {
+        throw new Error("Seminar price must be greater than base price.");
+    }
+
+    const upgradePrice = await stripeCreatePrice({
+        stripeProductId: productSeminar.stripeProductId,
+        unitPrice: seminarUpgradeDelta,
+    });
+
+    return await prisma.seminarCohort.create({
+        data: {
+            stripeSeminarUpgradePriceId: upgradePrice.id,
+            seminarUpgradePrice: seminarUpgradeDelta,
+            stripeSeminarOnlyPriceId: productSeminar.stripePriceIdDefault,
+            seminarOnlyPrice: productSeminar.priceDefault,
+            year: currentYear,
+            course: { connect: { id: courseId } },
+        },
+    });
 }
