@@ -1,12 +1,10 @@
-import { Separator } from "lib/components/ui/Separator";
-
 export default {
     index: {
         title: "",
     },
     "--- SL": {
         type: "separator",
-        title: <Separator>The Science of Logic</Separator>,
+        title: "The Science of Logic",
     },
     being: {
         title: "Being",
@@ -43,6 +41,12 @@ export default {
     },
     "mechanical-process": {
         title: "Mechanical Process",
+    },
+    "--- SL-sub": {
+        type: "separator",
+    },
+    _critiques: {
+        title: "Critical Inquiries",
     },
     _annotations: {
         title: "Annotations",
