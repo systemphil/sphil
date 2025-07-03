@@ -231,9 +231,9 @@ checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
 
 [[package]]
 name = "prepyrus"
-version = "0.3.1"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d4750c288aafa3eb853a573409ac414b51e95784beb45c271af1af2a093db15e"
+checksum = "560515b5d27be12e27bc06c5e8433b7ba5b9889f4fb39e9dc3a8ca6cf4c39844"
 dependencies = [
  "biblatex",
  "clap",
