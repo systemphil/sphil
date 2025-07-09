@@ -56,7 +56,7 @@ export function CourseMaterialCard({
             </Link>
             <button
                 className="d-btn d-btn-square mr-2 hover:bg-red-500"
-                disabled={isPending}
+                disabled={modelName === "UNSUPPORTED" || isPending}
                 onClick={() => setIsDialogOpen(true)}
             >
                 <ButtonDeleteCross />
