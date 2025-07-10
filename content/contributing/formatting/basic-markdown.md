@@ -99,10 +99,11 @@ Combined emphasis with **asterisks _and underscores_**.
 
 Create ~~strikethrough~~ with two tildes.
 
+<!-- prettier-ignore -->
 ```md
-You can emphasize (italicize) text with _asterisks_ or _underscores_.
+You can emphasize (italicize) text with *asterisks* or _underscores_.
 
-Add strong emphasis (bold) with **double asterisks** or **double underscores**.
+Add strong emphasis (bold) with **double asterisks** or __double underscores__.
 
 Combined emphasis with **asterisks _and underscores_**!
 
