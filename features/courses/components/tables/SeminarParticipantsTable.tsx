@@ -8,7 +8,7 @@ import {
     TableRow,
 } from "@mui/material";
 
-export function UserTable({
+export function SeminarParticipantsTable({
     users,
 }: {
     users: {

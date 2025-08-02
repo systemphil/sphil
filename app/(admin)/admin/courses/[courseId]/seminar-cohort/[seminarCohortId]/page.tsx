@@ -1,5 +1,5 @@
 import { SeminarCohortForm } from "features/courses/components/forms/SeminarCohortForm";
-import { UserTable } from "features/courses/components/tables/UserTable";
+import { SeminarParticipantsTable } from "features/courses/components/tables/SeminarParticipantsTable";
 import { Heading } from "lib/components/ui/Heading";
 import { errorMessages } from "lib/config/errorMessages";
 import { dbGetSeminarCohortAndSeminarsById } from "lib/database/dbFuncs";
@@ -34,7 +34,9 @@ export default async function AdminSeminarCohortEdit({
                 </Heading>
                 <SeminarCohortForm seminarCohort={seminarCohortAndSeminars} />
                 <div className="p-2">
-                    <UserTable users={seminarCohortAndSeminars.participants} />
+                    <SeminarParticipantsTable
+                        users={seminarCohortAndSeminars.participants}
+                    />
                 </div>
             </div>
 
