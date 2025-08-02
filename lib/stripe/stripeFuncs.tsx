@@ -95,10 +95,13 @@ export async function stripeRetrievePrice({
 export async function stripeArchivePrice({
     stripePriceId,
 }: {
-    stripePriceId: string;
+    stripePriceId: string | undefined;
     unitPrice?: number;
     currency?: string;
 }) {
+    if (!stripePriceId) {
+        return;
+    }
     const stripe = getStripe();
     const price = await stripe.prices.update(stripePriceId, {
         active: false,

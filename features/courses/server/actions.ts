@@ -7,10 +7,15 @@ import {
     bucketGenerateReadSignedUrl,
     bucketGenerateSignedUploadUrl,
 } from "lib/bucket/bucketFuncs";
-import { dbReorderLessons, dbUpsertLessonById } from "lib/database/dbFuncs";
+import {
+    dbReorderLessons,
+    dbUpdateSeminarCohort,
+    dbUpsertLessonById,
+} from "lib/database/dbFuncs";
 import {
     ctrlCreateOrUpdateCourse,
     ctrlDeleteModelEntry,
+    ctrlUpdateSeminarCohortPrices,
 } from "lib/server/ctrl";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
@@ -59,6 +64,35 @@ export async function actionUpsertCourse(input: ActionUpsertCourseInput) {
     const data = await ctrlCreateOrUpdateCourse(_input);
     revalidatePath("/(admin)/admin", "layout");
     revalidateTag("allPublicCurses");
+    return { data };
+}
+
+const updateSeminarCohortSchema = z.object({
+    id: z.string(),
+    seminarOnlyPrice: z.number().positive(),
+    seminarUpgradePrice: z.number().positive(),
+});
+export type ActionUpdateSeminarCohortInput = z.infer<
+    typeof updateSeminarCohortSchema
+>;
+
+export async function actionUpdateSeminarCohort(
+    input: ActionUpdateSeminarCohortInput
+) {
+    const isAdmin = await validateAdminAccess();
+    if (!isAdmin) {
+        return { error: "Unauthorized" };
+    }
+    const parsedInput = updateSeminarCohortSchema.safeParse(input);
+
+    if (!parsedInput.success) {
+        return { error: `Bad request ${parsedInput.error.message}` };
+    }
+
+    const data = await ctrlUpdateSeminarCohortPrices(input);
+    revalidatePath("/(admin)/admin", "layout");
+    revalidateTag("allPublicCurses");
+
     return { data };
 }
 

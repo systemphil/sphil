@@ -1214,7 +1214,7 @@ export async function dbVerifyVideoToUserId({
     return false;
 }
 
-async function dbGetOrCreateProductAux({
+export async function dbGetOrCreateProductAux({
     kind,
 }: {
     kind: ProductsAuxiliary["kind"];
@@ -1366,12 +1366,34 @@ export async function dbGetSeminarCohortAndSeminarsById({
                     order: "asc",
                 },
             },
+            course: {
+                select: {
+                    name: true,
+                },
+            },
             participants: {
                 select: {
                     name: true,
                     email: true,
                 },
             },
+        },
+    });
+}
+
+export async function dbUpdateSeminarCohort({
+    id,
+    data,
+}: {
+    id: SeminarCohort["id"];
+    data: Partial<Omit<SeminarCohort, "id">>;
+}) {
+    return await prisma.seminarCohort.update({
+        where: {
+            id,
+        },
+        data: {
+            ...data,
         },
     });
 }
