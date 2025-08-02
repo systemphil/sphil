@@ -1,3 +1,4 @@
+import { CourseSeminarsSortable } from "features/courses/components/CourseSeminarsSortable";
 import { SeminarCohortForm } from "features/courses/components/forms/SeminarCohortForm";
 import { SeminarParticipantsTable } from "features/courses/components/tables/SeminarParticipantsTable";
 import { Heading } from "lib/components/ui/Heading";
@@ -8,10 +9,13 @@ import { redirect } from "next/navigation";
 export default async function AdminSeminarCohortEdit({
     params,
 }: {
-    params: Promise<{ seminarCohortId: string | undefined }>;
+    params: Promise<{
+        seminarCohortId: string | undefined;
+        courseId: string | undefined;
+    }>;
 }) {
-    const { seminarCohortId } = await params;
-    if (typeof seminarCohortId !== "string") {
+    const { seminarCohortId, courseId } = await params;
+    if (typeof seminarCohortId !== "string" || typeof courseId !== "string") {
         redirect(`/?error=${errorMessages.missingParams}`);
     }
 
@@ -40,7 +44,34 @@ export default async function AdminSeminarCohortEdit({
                 </div>
             </div>
 
-            <pre>{JSON.stringify(seminarCohortAndSeminars, null, 2)}</pre>
+            <div className="flex flex-col gap-6">
+                <div>
+                    <div>
+                        <Heading as="h4">Seminars</Heading>
+                        {seminarCohortAndSeminars.seminars.length > 0 ? (
+                            <CourseSeminarsSortable
+                                courseId={courseId}
+                                seminarCohortId={seminarCohortId}
+                                seminars={seminarCohortAndSeminars.seminars}
+                            />
+                        ) : (
+                            <div>
+                                <p>None yet.</p>
+                            </div>
+                        )}
+                    </div>
+                    {/* 
+                    
+                    // TODO add seminar creation here without redirect
+                    <div className="flex justify-center">
+                        <Link href={`/admin/courses/${course.id}/lessons/new`}>
+                            <button className="d-btn d-btn-primary">
+                                Add a lesson
+                            </button>
+                        </Link>
+                    </div> */}
+                </div>
+            </div>
         </div>
     );
 }

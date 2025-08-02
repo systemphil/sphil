@@ -9,6 +9,7 @@ import {
 } from "lib/bucket/bucketFuncs";
 import {
     dbReorderLessons,
+    dbReorderSeminars,
     dbUpdateSeminarCohort,
     dbUpsertLessonById,
 } from "lib/database/dbFuncs";
@@ -218,9 +219,9 @@ export async function actionDeleteModelEntry(
 
 const reorderModelsSchema = z.array(z.string());
 
-type ActionUpdateLessonsOrder = z.infer<typeof reorderModelsSchema>;
-
-export async function actionUpdateLessonOrder(input: ActionUpdateLessonsOrder) {
+export async function actionUpdateLessonOrder(
+    input: z.infer<typeof reorderModelsSchema>
+) {
     const isAdmin = await validateAdminAccess();
     if (!isAdmin) {
         return { error: true, message: "Unauthorized" };
@@ -234,6 +235,28 @@ export async function actionUpdateLessonOrder(input: ActionUpdateLessonsOrder) {
     }
 
     await dbReorderLessons({ orderedLessonIds: input });
+
+    revalidatePath("/(admin)/admin", "layout");
+    revalidateTag("allPublicCurses");
+    return { error: false, message: "Successfully reordered your lessons" };
+}
+
+export async function actionUpdateSeminarOrder(
+    input: z.infer<typeof reorderModelsSchema>
+) {
+    const isAdmin = await validateAdminAccess();
+    if (!isAdmin) {
+        return { error: true, message: "Unauthorized" };
+    }
+    const parsedInput = reorderModelsSchema.safeParse(input);
+    if (!parsedInput.success) {
+        return {
+            error: true,
+            message: `Bad request ${parsedInput.error.message}`,
+        };
+    }
+
+    await dbReorderSeminars({ orderedIds: input });
 
     revalidatePath("/(admin)/admin", "layout");
     revalidateTag("allPublicCurses");

@@ -747,6 +747,26 @@ export const dbReorderLessons = async ({
     return;
 };
 /**
+ * Reorders seminars by their position in the input array.
+ */
+export const dbReorderSeminars = async ({
+    orderedIds,
+}: {
+    orderedIds: string[];
+}) => {
+    await prisma.$transaction(async (tx) => {
+        await Promise.all(
+            orderedIds.map((id, index) =>
+                tx.seminar.updateMany({
+                    where: { id },
+                    data: { order: index + 1 },
+                })
+            )
+        );
+    });
+    return;
+};
+/**
  * Updates an existing lessonContent details by id as identifier or creates a new one if id is not provided.
  * @access ADMIN
  */
