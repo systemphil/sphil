@@ -38,7 +38,7 @@ export function SeminarCreateNewButton({
             toast.success("Created! Redirecting...");
             await sleep(1000);
             router.push(
-                `/admin/courses/${courseId}/seminar-cohort/${seminarCohortId}/seminar/${seminarId}`
+                `/admin/courses/${courseId}/seminar-cohort/${seminarCohortId}/seminars/${seminarId}`
             );
         } catch (err) {
             toast.error("Unexpected error occurred while creating seminar.");

@@ -2,6 +2,7 @@ export const errorMessages = {
     courseNotPurchased: "course-not-purchased",
     courseNotFound: "course-not-found",
     seminarCohortNotFound: "seminar-cohort-not-found",
+    seminarNotFound: "seminar-not-found",
     lessonNotFound: "lesson-not-found",
     missingSearchParams: "missing-search-params",
     missingParams: "missing-params",

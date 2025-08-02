@@ -25,7 +25,7 @@ export const CourseSeminarsSortable = ({
                     >
                         <CourseMaterialCard
                             key={seminar.id}
-                            href={`/admin/courses/${courseId}/seminar-cohort/${seminarCohortId}/seminar/${seminar.id}`}
+                            href={`/admin/courses/${courseId}/seminar-cohort/${seminarCohortId}/seminars/${seminar.id}`}
                             heading={`${seminar.order}`}
                             id={seminar.id}
                             modelName="UNSUPPORTED"

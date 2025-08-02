@@ -1401,6 +1401,14 @@ export async function dbGetSeminarCohortAndSeminarsById({
     });
 }
 
+export async function dbGetSeminarById({ id }: { id: string }) {
+    return await prisma.seminar.findUnique({
+        where: {
+            id,
+        },
+    });
+}
+
 export async function dbUpdateSeminarCohort({
     id,
     data,
