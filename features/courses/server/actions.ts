@@ -289,7 +289,7 @@ export async function actionCreateSeminar(
     revalidateTag("allPublicCurses");
     return {
         error: false,
-        message: "Successfully reordered your seminars",
+        message: "Successfully created",
         data: {
             seminarId: newSeminar.id,
         },
