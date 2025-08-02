@@ -29,7 +29,7 @@ export function SeminarParticipantsTable({
     }
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} sx={{ maxWidth: 512 }}>
             <Table aria-label="participants table" size="small">
                 <TableHead>
                     <TableRow>

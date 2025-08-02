@@ -65,7 +65,7 @@ export const SeminarCohortForm = ({
                     isLoading={submitLoading}
                 />
             </form>
-            <div className="my-12">
+            {/* <div className="my-12">
                 <button
                     className="d-btn d-btn-warning d-btn-xs m-2 border-dotted border-2 border-black hover:border-solid hover:border-black hover:border-2 duration-200"
                     onClick={() => {
@@ -74,7 +74,7 @@ export const SeminarCohortForm = ({
                 >
                     DEBUG: Get form values
                 </button>
-            </div>
+            </div> */}
         </FormProvider>
     );
 };
