@@ -5,6 +5,8 @@ import type {
     Lesson,
     LessonContent,
     LessonTranscript,
+    ProductsAuxiliary,
+    SeminarCohort,
     Video,
 } from "@prisma/client";
 import { prisma } from "./dbInit";
@@ -16,6 +18,8 @@ import {
     CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS,
 } from "lib/server/cache";
 import { Text } from "lib/utils/textEncoding";
+import { stripeCreatePrice, stripeCreateProduct } from "lib/stripe/stripeFuncs";
+import { AUXILIARY_PRODUCTS_DEFAULTS } from "lib/config/auxiliaryProductDefaults";
 
 /**
  * Calls the database to retrieve all courses.
@@ -106,7 +110,21 @@ export const dbGetCourseById = async (id: string) => {
  */
 export async function dbGetUserPurchasedCourses(userId: string) {
     const validUserId = z.string().parse(userId);
-    const res = await prisma.user.findUnique({
+
+    const res = await prisma.coursePurchase.findMany({
+        where: {
+            userId: validUserId,
+        },
+        select: {
+            course: true,
+        },
+    });
+    if (res && res.length > 0) {
+        const courses = res.map((i) => i.course);
+        return courses;
+    }
+
+    const legacyFallback = await prisma.user.findUnique({
         where: {
             id: validUserId,
         },
@@ -114,8 +132,10 @@ export async function dbGetUserPurchasedCourses(userId: string) {
             coursesPurchased: true,
         },
     });
-    if (!res) return null;
-    const courses = res.coursesPurchased;
+    if (!legacyFallback) {
+        return null;
+    }
+    const courses = legacyFallback.coursesPurchased;
     return courses;
 }
 /**
@@ -150,36 +170,24 @@ export async function dbUpdateUserStripeCustomerId({
         },
     });
 }
-/**
- * Gets user data by id. Returns an object.
- */
-export async function dbUpdateUserPurchases({
+
+export async function dbCreateCoursePurchase({
     userId,
     courseId,
-    purchasePriceId,
 }: {
     userId: string;
     courseId: string;
-    purchasePriceId: string;
 }) {
     const validUserId = z.string().parse(userId);
 
-    const purchasePriceIdWithTimeStamp = `${purchasePriceId}:${Date.now()}`;
-    const updatedUser = await prisma.user.update({
-        where: {
-            id: validUserId,
-        },
+    await prisma.coursePurchase.create({
         data: {
-            productsPurchased: {
-                push: purchasePriceIdWithTimeStamp,
-            },
-            coursesPurchased: {
-                connect: { id: courseId },
-            },
+            user: { connect: { id: validUserId } },
+            course: { connect: { id: courseId } },
         },
     });
 
-    return updatedUser;
+    return;
 }
 /**
  * Calls the database to retrieve specific course, its course details and lessons by id identifier.
@@ -188,7 +196,7 @@ export async function dbUpdateUserPurchases({
 export async function dbGetCourseAndDetailsAndLessonsById(id: string) {
     async function task() {
         const validId = z.string().parse(id);
-        return await prisma.course.findFirst({
+        return await prisma.course.findUnique({
             where: {
                 id: validId,
             },
@@ -201,6 +209,11 @@ export async function dbGetCourseAndDetailsAndLessonsById(id: string) {
                 details: {
                     select: {
                         id: true,
+                    },
+                },
+                seminarCohorts: {
+                    orderBy: {
+                        year: "desc",
                     },
                 },
             },
@@ -1199,4 +1212,188 @@ export async function dbVerifyVideoToUserId({
     }
 
     return false;
+}
+
+export async function dbGetOrCreateProductAux({
+    kind,
+}: {
+    kind: ProductsAuxiliary["kind"];
+}) {
+    function getProductName(kind: ProductsAuxiliary["kind"]) {
+        switch (kind) {
+            case "SEMINAR_ONLY":
+                return AUXILIARY_PRODUCTS_DEFAULTS.seminarOnly;
+            case "OTHER":
+                return AUXILIARY_PRODUCTS_DEFAULTS.other;
+            default: {
+                const _exhaustiveTypeCheck: never = kind;
+                throw new Error(`${_exhaustiveTypeCheck} not supported`);
+            }
+        }
+    }
+
+    const existingProduct = await prisma.productsAuxiliary.findFirst({
+        where: {
+            kind,
+        },
+    });
+
+    if (existingProduct) {
+        return existingProduct;
+    }
+
+    const { productName, defaultPriceCents, description, imageUrl } =
+        getProductName(kind);
+
+    const newStripeProduct = await stripeCreateProduct({
+        name: productName,
+        description,
+        imageUrl,
+    });
+
+    const newStripePrice = await stripeCreatePrice({
+        stripeProductId: newStripeProduct.id,
+        unitPrice: defaultPriceCents,
+    });
+
+    return await prisma.productsAuxiliary.create({
+        data: {
+            stripePriceIdDefault: newStripePrice.id,
+            priceDefault: defaultPriceCents,
+            kind,
+            stripeProductId: newStripeProduct.id,
+        },
+    });
+}
+
+/**
+ * Creates a new seminar cohort if one does not exist for the current year for the provided courseId
+ */
+export async function dbEnrollUserInSeminarCohort({
+    userId,
+    courseId,
+}: {
+    userId: string;
+    courseId: string;
+}) {
+    const currentYear = new Date().getFullYear();
+
+    let cohort = await prisma.seminarCohort.findFirst({
+        where: {
+            year: currentYear,
+            courseId: courseId,
+        },
+    });
+
+    if (!cohort) {
+        cohort = await dbCreateSeminarCohort({
+            courseId,
+            currentYear,
+        });
+    }
+
+    // Avoid adding the user twice
+    await prisma.seminarCohort.update({
+        where: { id: cohort.id },
+        data: {
+            participants: {
+                connect: { id: userId },
+            },
+        },
+    });
+
+    return cohort;
+}
+
+async function dbCreateSeminarCohort({
+    courseId,
+    currentYear,
+}: {
+    courseId: string;
+    currentYear: number;
+}) {
+    const productSeminar = await dbGetOrCreateProductAux({
+        kind: "SEMINAR_ONLY",
+    });
+
+    const course = await prisma.course.findUnique({
+        where: {
+            id: courseId,
+        },
+    });
+
+    if (!course) {
+        throw new Error("Expected course");
+    }
+
+    const seminarUpgradeDelta = Math.round(
+        course.seminarPrice - course.basePrice
+    );
+
+    if (seminarUpgradeDelta < 0) {
+        throw new Error("Seminar price must be greater than base price.");
+    }
+
+    const upgradePrice = await stripeCreatePrice({
+        stripeProductId: productSeminar.stripeProductId,
+        unitPrice: seminarUpgradeDelta,
+    });
+
+    return await prisma.seminarCohort.create({
+        data: {
+            stripeSeminarUpgradePriceId: upgradePrice.id,
+            seminarUpgradePrice: seminarUpgradeDelta,
+            stripeSeminarOnlyPriceId: productSeminar.stripePriceIdDefault,
+            seminarOnlyPrice: productSeminar.priceDefault,
+            year: currentYear,
+            course: { connect: { id: courseId } },
+        },
+    });
+}
+
+export async function dbGetSeminarCohortAndSeminarsById({
+    id,
+}: {
+    id: string;
+}) {
+    return await prisma.seminarCohort.findUnique({
+        where: {
+            id,
+        },
+        include: {
+            seminars: {
+                orderBy: {
+                    order: "asc",
+                },
+            },
+            course: {
+                select: {
+                    name: true,
+                },
+            },
+            participants: {
+                select: {
+                    name: true,
+                    email: true,
+                },
+            },
+        },
+    });
+}
+
+export async function dbUpdateSeminarCohort({
+    id,
+    data,
+}: {
+    id: SeminarCohort["id"];
+    data: Partial<Omit<SeminarCohort, "id">>;
+}) {
+    return await prisma.seminarCohort.update({
+        where: {
+            id,
+        },
+        data: {
+            ...data,
+        },
+    });
 }

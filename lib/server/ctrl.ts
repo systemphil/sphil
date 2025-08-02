@@ -12,8 +12,11 @@ import {
     dbGetCourseById,
     dbGetCourseBySlug,
     dbGetLessonAndRelationsById,
+    dbGetOrCreateProductAux,
+    dbGetSeminarCohortAndSeminarsById,
     dbGetUserData,
     dbGetVideoFileNameByVideoId,
+    dbUpdateSeminarCohort,
     dbUpdateUserStripeCustomerId,
     dbUpsertCourseById,
     DbUpsertCourseByIdProps,
@@ -62,7 +65,8 @@ export type ModelName =
     | "Video"
     | "CourseDetails"
     | "Lesson"
-    | "Course";
+    | "Course"
+    | "UNSUPPORTED";
 type OrderDeleteModelEntryProps = {
     id: string;
     modelName: ModelName;
@@ -114,6 +118,12 @@ export async function ctrlDeleteModelEntry({
             return await ctrlDeleteLesson(validId);
         case "Course":
             return await ctrlDeleteCourse(validId);
+        case "UNSUPPORTED":
+            throw new Error("Unsupported");
+        default: {
+            const _exhaustiveTypeCheck: never = modelName;
+            throw new Error(`${_exhaustiveTypeCheck} not supported`);
+        }
     }
 }
 /**
@@ -210,6 +220,76 @@ type OrderCreateOrUpdateCourseProps = Omit<
     | "stripeSeminarPriceId"
     | "stripeDialoguePriceId"
 >;
+
+export async function ctrlUpdateSeminarCohortPrices({
+    id,
+    seminarOnlyPrice,
+    seminarUpgradePrice,
+}: {
+    id: string;
+    seminarOnlyPrice: number;
+    seminarUpgradePrice: number;
+}) {
+    const product = await dbGetOrCreateProductAux({ kind: "SEMINAR_ONLY" });
+    const seminarCohort = await dbGetSeminarCohortAndSeminarsById({ id });
+
+    const seminarOnlyPriceNewPrice = await updateStripePriceIfNeeded({
+        existingPrice: seminarCohort?.seminarOnlyPrice ?? 0,
+        incomingPrice: seminarOnlyPrice,
+        productId: product.stripeProductId,
+        stripePriceId: seminarCohort?.stripeSeminarOnlyPriceId,
+    });
+
+    const seminarUpgradePriceNewPrice = await updateStripePriceIfNeeded({
+        existingPrice: seminarCohort?.seminarUpgradePrice ?? 0,
+        incomingPrice: seminarUpgradePrice,
+        productId: product.stripeProductId,
+        stripePriceId: seminarCohort?.stripeSeminarUpgradePriceId,
+    });
+
+    console.log("🟡", seminarOnlyPriceNewPrice);
+    console.log("🟡", seminarUpgradePriceNewPrice);
+    await dbUpdateSeminarCohort({
+        id,
+        data: {
+            seminarOnlyPrice:
+                seminarOnlyPriceNewPrice?.unit_amount ?? undefined,
+            stripeSeminarOnlyPriceId: seminarOnlyPriceNewPrice?.id,
+            seminarUpgradePrice:
+                seminarUpgradePriceNewPrice?.unit_amount ?? undefined,
+            stripeSeminarUpgradePriceId: seminarUpgradePriceNewPrice?.id,
+        },
+    });
+}
+
+async function updateStripePriceIfNeeded({
+    stripePriceId,
+    productId,
+    existingPrice,
+    incomingPrice,
+}: {
+    stripePriceId: string | undefined;
+    productId: string;
+    existingPrice: number;
+    incomingPrice: number;
+}) {
+    /**
+     * This check occurs *only* between incoming price from the App and the registered price in the database.
+     * This saves an API call but is less rigorous.
+     * Consider a fault  where the price in the database check fails, but the prices is updated in db but
+     * not in Stripe. This would result in a price mismatch between the App and Stripe.
+     */
+    if (incomingPrice !== existingPrice) {
+        await stripeArchivePrice({ stripePriceId: stripePriceId });
+        const newPrice = await stripeCreatePrice({
+            stripeProductId: productId,
+            unitPrice: incomingPrice,
+        });
+        return newPrice;
+    }
+    return;
+}
+
 /**
  * Higher order controller function that organizes the creation or update of a Course entry. Integrated with Stripe API,
  * so it wil attempt to update the Stripe resources if they already exist, or create them if they don't.
@@ -231,35 +311,6 @@ export async function ctrlCreateOrUpdateCourse({
     seminarLink,
     creatorId,
 }: OrderCreateOrUpdateCourseProps) {
-    // Locally scoped helper functions
-    async function updateStripePriceIfNeeded({
-        stripePriceId,
-        productId,
-        existingPrice,
-        incomingPrice,
-    }: {
-        stripePriceId: string;
-        productId: string;
-        existingPrice: number;
-        incomingPrice: number;
-    }) {
-        /**
-         * This check occurs *only* between incoming price from the App and the registered price in the database.
-         * This saves an API call but is less rigorous.
-         * Consider a fault  where the price in the database check fails, but the prices is updated in db but
-         * not in Stripe. This would result in a price mismatch between the App and Stripe.
-         */
-        if (incomingPrice !== existingPrice) {
-            await stripeArchivePrice({ stripePriceId: stripePriceId });
-            const newPrice = await stripeCreatePrice({
-                stripeProductId: productId,
-                unitPrice: incomingPrice,
-            });
-            return newPrice;
-        }
-        return;
-    }
-
     async function updateStripeProductIfNeeded({
         stripeProductId,
         existingName,
