@@ -1,3 +1,5 @@
+"use client";
+
 import {
     Paper,
     Table,
@@ -7,6 +9,7 @@ import {
     TableHead,
     TableRow,
 } from "@mui/material";
+import toast from "react-hot-toast";
 
 export function SeminarParticipantsTable({
     users,
@@ -16,13 +19,18 @@ export function SeminarParticipantsTable({
         email: string;
     }[];
 }) {
+    async function copyToClipboard(text: string) {
+        try {
+            await navigator.clipboard.writeText(text);
+            toast.success("Copied!");
+        } catch (err) {
+            toast.error(`Error copying to clipboard ${err}`);
+        }
+    }
+
     return (
         <TableContainer component={Paper}>
-            <Table
-                sx={{ minWidth: 650 }}
-                aria-label="participants table"
-                size="small"
-            >
+            <Table aria-label="participants table" size="small">
                 <TableHead>
                     <TableRow>
                         <TableCell>
@@ -46,7 +54,13 @@ export function SeminarParticipantsTable({
                             <TableCell component="th" scope="row">
                                 {row.name}
                             </TableCell>
-                            <TableCell align="right">{row.email}</TableCell>
+                            <TableCell
+                                align="right"
+                                sx={{ cursor: "pointer" }}
+                                onClick={() => copyToClipboard(row.email)}
+                            >
+                                {row.email}
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

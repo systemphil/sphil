@@ -33,7 +33,7 @@ export default async function AdminSeminarCohortEdit({
                     {seminarCohortAndSeminars.course.name}
                 </Heading>
                 <SeminarCohortForm seminarCohort={seminarCohortAndSeminars} />
-                <div className="p-2">
+                <div className="pr-10">
                     <SeminarParticipantsTable
                         users={seminarCohortAndSeminars.participants}
                     />
