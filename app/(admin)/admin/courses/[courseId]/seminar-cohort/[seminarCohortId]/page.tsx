@@ -1,5 +1,6 @@
 import { CourseSeminarsSortable } from "features/courses/components/CourseSeminarsSortable";
 import { SeminarCohortForm } from "features/courses/components/forms/SeminarCohortForm";
+import { SeminarCreateNewButton } from "features/courses/components/SeminarCreateNewButton";
 import { SeminarParticipantsTable } from "features/courses/components/tables/SeminarParticipantsTable";
 import { Heading } from "lib/components/ui/Heading";
 import { errorMessages } from "lib/config/errorMessages";
@@ -55,21 +56,18 @@ export default async function AdminSeminarCohortEdit({
                                 seminars={seminarCohortAndSeminars.seminars}
                             />
                         ) : (
-                            <div>
+                            <div className="flex justify-center py-2">
                                 <p>None yet.</p>
                             </div>
                         )}
                     </div>
-                    {/* 
-                    
-                    // TODO add seminar creation here without redirect
+
                     <div className="flex justify-center">
-                        <Link href={`/admin/courses/${course.id}/lessons/new`}>
-                            <button className="d-btn d-btn-primary">
-                                Add a lesson
-                            </button>
-                        </Link>
-                    </div> */}
+                        <SeminarCreateNewButton
+                            courseId={courseId}
+                            seminarCohortId={seminarCohortId}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

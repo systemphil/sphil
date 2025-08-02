@@ -1417,3 +1417,26 @@ export async function dbUpdateSeminarCohort({
         },
     });
 }
+
+export async function dbCreateSeminar({
+    seminarCohortId,
+}: {
+    seminarCohortId: string;
+}) {
+    const existingSeminars = await prisma.seminar.findMany({
+        where: {
+            seminarCohortId,
+        },
+    });
+
+    return await prisma.seminar.create({
+        data: {
+            order: existingSeminars.length + 1,
+            seminarCohort: {
+                connect: {
+                    id: seminarCohortId,
+                },
+            },
+        },
+    });
+}

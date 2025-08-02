@@ -8,6 +8,7 @@ import {
     bucketGenerateSignedUploadUrl,
 } from "lib/bucket/bucketFuncs";
 import {
+    dbCreateSeminar,
     dbReorderLessons,
     dbReorderSeminars,
     dbUpdateSeminarCohort,
@@ -260,5 +261,37 @@ export async function actionUpdateSeminarOrder(
 
     revalidatePath("/(admin)/admin", "layout");
     revalidateTag("allPublicCurses");
-    return { error: false, message: "Successfully reordered your lessons" };
+    return { error: false, message: "Successfully reordered your seminars" };
+}
+
+const actionCreateSeminarSchema = z.object({
+    seminarCohortId: z.string(),
+});
+
+export async function actionCreateSeminar(
+    input: z.infer<typeof actionCreateSeminarSchema>
+) {
+    const isAdmin = await validateAdminAccess();
+    if (!isAdmin) {
+        return { error: true, message: "Unauthorized" };
+    }
+    const parsedInput = actionCreateSeminarSchema.safeParse(input);
+    if (!parsedInput.success) {
+        return {
+            error: true,
+            message: `Bad request ${parsedInput.error.message}`,
+        };
+    }
+
+    const newSeminar = await dbCreateSeminar(input);
+
+    revalidatePath("/(admin)/admin", "layout");
+    revalidateTag("allPublicCurses");
+    return {
+        error: false,
+        message: "Successfully reordered your seminars",
+        data: {
+            seminarId: newSeminar.id,
+        },
+    };
 }
