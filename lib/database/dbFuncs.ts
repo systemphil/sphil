@@ -516,6 +516,33 @@ export const dbGetVideoByLessonId = async (id: string) => {
 };
 
 /**
+ * Calls the database to retrieve specific SeminarVideo entry based on the ID of the Seminar it is related to.
+ * Returns null when either Seminar or its related Video is not found.
+ * @access ADMIN
+ */
+export const dbGetSeminarVideoBySeminarId = async (id: string) => {
+    async function task() {
+        const validId = z.string().parse(id);
+        const lessonWithVideo = await prisma.seminar.findUnique({
+            where: {
+                id: validId,
+            },
+            include: {
+                video: true,
+            },
+        });
+        if (lessonWithVideo) {
+            if (lessonWithVideo.video) {
+                return lessonWithVideo.video;
+            }
+            return null;
+        }
+        return null;
+    }
+    return withAdmin(task);
+};
+
+/**
  * Calls the database to retrieve specific video.fileName by id identifier.
  * @access ADMIN
  */
@@ -985,6 +1012,40 @@ export const dbUpsertVideoById = async ({
     return withAdmin(task);
 };
 /**
+ * Updates Video details by id as identifier or creates a new one if id is not provided, in which case
+ * the id of the lesson this video is related to must be provided.
+ * @access ADMIN
+ */
+export const dbUpsertSeminarVideoById = async ({
+    id,
+    seminarId,
+    fileName,
+}: {
+    id?: string;
+    seminarId: string;
+    fileName?: string;
+}) => {
+    async function task() {
+        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value in order to query
+        const validSeminarId = z.string().parse(seminarId);
+        const validFileName = fileName ? z.string().parse(fileName) : "";
+
+        return await prisma.seminarVideo.upsert({
+            where: {
+                id: validId,
+            },
+            update: {
+                fileName: validFileName,
+            },
+            create: {
+                seminarId: validSeminarId,
+                fileName: validFileName,
+            },
+        });
+    }
+    return withAdmin(task);
+};
+/**
  * Deletes entry from the LessonTranscript model. Returns only id of deleted model.
  * @access ADMIN
  */
@@ -1401,10 +1462,25 @@ export async function dbGetSeminarCohortAndSeminarsById({
     });
 }
 
-export async function dbGetSeminarById({ id }: { id: string }) {
+export async function dbGetSeminarAndConnectedById({ id }: { id: string }) {
     return await prisma.seminar.findUnique({
         where: {
             id,
+        },
+        include: {
+            content: true,
+            transcript: true,
+            video: true,
+            seminarCohort: {
+                select: {
+                    year: true,
+                    course: {
+                        select: {
+                            name: true,
+                        },
+                    },
+                },
+            },
         },
     });
 }

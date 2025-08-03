@@ -1,38 +1,98 @@
 import { GetSignedUrlConfig } from "@google-cloud/storage";
-import { dbUpsertVideoById } from "lib/database/dbFuncs";
+import {
+    dbUpsertSeminarVideoById,
+    dbUpsertVideoById,
+} from "lib/database/dbFuncs";
 import { primaryBucket, secondaryBucket } from "./bucketInit";
 import { withAdmin } from "lib/auth/authFuncs";
 
 const READ_RESOURCE_SIGNED_URL_EXPIRY = 90 * 60 * 1000; // 90 minutes
 
-type GcGenerateSignedPostUploadURLProps = {
+type GcGenerateSignedPostUploadURLPropsLesson = {
     fileName: string;
     id?: string;
     lessonId: string;
 };
+
+type GcGenerateSignedPostUploadURLPropsSeminar = {
+    fileName: string;
+    id?: string;
+    seminarId: string;
+};
+
+type GcGenerateSignedPostUploadURLProps =
+    | GcGenerateSignedPostUploadURLPropsLesson
+    | GcGenerateSignedPostUploadURLPropsSeminar;
+
+// Type guards to distinguish between lesson and seminar
+function isLessonProps(
+    props: GcGenerateSignedPostUploadURLProps
+): props is GcGenerateSignedPostUploadURLPropsLesson {
+    return "lessonId" in props;
+}
+
+function isSeminarProps(
+    props: GcGenerateSignedPostUploadURLProps
+): props is GcGenerateSignedPostUploadURLPropsSeminar {
+    return "seminarId" in props;
+}
+
 /**
- * Creates a signed post url for video upload. Requires name of file and the ID of the lesson under which the video
- * will be related. Will create (using lessonId) or update Video entry based on whether existing video ID is provided.
- * Finally, will update the Video record if post url returned provided.
- * @description All lesson videos will be stored the directory named after their ID in the Video entry: /video/[VideoId]/[fileName].ext
+ * Creates a signed post url for video upload. Requires name of file and the ID of the lesson or seminar under which the video
+ * will be related. Will create (using lessonId/seminarId) or update Video/SeminarVideo entry based on whether existing video ID is provided.
+ * Finally, will update the Video/SeminarVideo record if post url returned provided.
+ * @description All videos will be stored the directory named after their ID in the Video entry: /video/[VideoId]/[fileName].ext
  * @access ADMIN
  */
-export async function bucketGenerateSignedUploadUrl({
-    fileName,
-    id,
-    lessonId,
-}: GcGenerateSignedPostUploadURLProps) {
+export async function bucketGenerateSignedUploadUrl(
+    props: GcGenerateSignedPostUploadURLProps
+) {
     async function task() {
-        const videoEntry = {
-            id: id,
-            fileName: fileName,
-            lessonId: lessonId,
+        const { fileName, id } = props;
+
+        let videoEntry: {
+            id: string;
+            fileName: string;
+            lessonId?: string;
+            seminarId?: string;
         };
-        if (!videoEntry.id) {
-            const newVideoEntry = await dbUpsertVideoById({ lessonId });
-            videoEntry.id = newVideoEntry.id;
+
+        if (isLessonProps(props)) {
+            // Handle lesson video
+            videoEntry = {
+                id: id || "",
+                fileName: fileName,
+                lessonId: props.lessonId,
+            };
+
+            if (!videoEntry.id) {
+                const newVideoEntry = await dbUpsertVideoById({
+                    lessonId: props.lessonId,
+                });
+                videoEntry.id = newVideoEntry.id;
+            }
+        } else if (isSeminarProps(props)) {
+            // Handle seminar video
+            videoEntry = {
+                id: id || "",
+                fileName: fileName,
+                seminarId: props.seminarId,
+            };
+
+            if (!videoEntry.id) {
+                const newVideoEntry = await dbUpsertSeminarVideoById({
+                    seminarId: props.seminarId,
+                });
+                videoEntry.id = newVideoEntry.id;
+            }
+        } else {
+            throw new Error(
+                "Invalid props: must contain either lessonId or seminarId"
+            );
         }
+
         const filePath = `video/${videoEntry.id}/${videoEntry.fileName}`;
+
         // * Alternative method using bucket server
         // if (!BUCKET_SERVER_ORIGIN)
         //     throw new Error("Bucket server URL not set.");
@@ -45,19 +105,29 @@ export async function bucketGenerateSignedUploadUrl({
         //     throw new Error("Failed to get signed upload URL");
         // }
         // const data = await res.json();
+
         const options = {
             version: "v4",
             action: "write",
             expires: Date.now() + 15 * 60 * 1000, // 15 minutes
         } satisfies GetSignedUrlConfig;
+
         const [url] = await primaryBucket.file(filePath).getSignedUrl(options);
 
         if (url) {
-            await dbUpsertVideoById({
-                lessonId: videoEntry.lessonId,
-                id: videoEntry.id,
-                fileName: videoEntry.fileName,
-            });
+            if (isLessonProps(props)) {
+                await dbUpsertVideoById({
+                    lessonId: props.lessonId,
+                    id: videoEntry.id,
+                    fileName: videoEntry.fileName,
+                });
+            } else if (isSeminarProps(props)) {
+                await dbUpsertSeminarVideoById({
+                    seminarId: props.seminarId,
+                    id: videoEntry.id,
+                    fileName: videoEntry.fileName,
+                });
+            }
         }
 
         const data = {
@@ -67,6 +137,7 @@ export async function bucketGenerateSignedUploadUrl({
     }
     return withAdmin(task);
 }
+
 type GcVideoFilePathProps = {
     fileName: string;
     id: string;

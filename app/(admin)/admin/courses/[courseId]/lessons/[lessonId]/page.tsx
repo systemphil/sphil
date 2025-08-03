@@ -61,7 +61,7 @@ export default async function AdminLessonEdit({
 
                 <div>
                     <Heading as="h4">Lesson Video</Heading>
-                    <VideoForm videoEntry={video} />
+                    <VideoForm videoEntry={video} videoKind="lesson" />
                 </div>
 
                 <div>

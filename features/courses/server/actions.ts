@@ -149,6 +149,31 @@ export async function actionCreateSignedPostUrl(
     return { data };
 }
 
+const createSignedPostUrlSeminarSchema = z.object({
+    id: z.string().optional(),
+    seminarId: z.string(),
+    fileName: z.string(),
+});
+
+export async function actionCreateSignedPostUrlSeminar(
+    input: z.infer<typeof createSignedPostUrlSeminarSchema>
+) {
+    const isAdmin = await validateAdminAccess();
+    if (!isAdmin) {
+        return { error: "Unauthorized" };
+    }
+    const parsedInput = createSignedPostUrlSeminarSchema.safeParse(input);
+
+    if (!parsedInput.success) {
+        return { error: `Bad request ${parsedInput.error.message}` };
+    }
+
+    const data = await bucketGenerateSignedUploadUrl(input);
+    revalidatePath("/(admin)/admin", "layout");
+    revalidateTag("allPublicCurses");
+    return { data };
+}
+
 const createSignedReadUrlSchema = z.object({
     id: z.string(),
     fileName: z.string(),
