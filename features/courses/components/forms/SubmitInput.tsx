@@ -5,9 +5,10 @@ import clsx from "clsx";
 type Props = {
     value: string;
     isLoading: boolean;
+    isVerbose?: boolean;
 };
 
-export const SubmitInput = ({ value, isLoading }: Props) => {
+export const SubmitInput = ({ value, isLoading, isVerbose = false }: Props) => {
     const classes = clsx({
         "d-btn d-btn-primary": true,
         "": !isLoading,
@@ -25,7 +26,9 @@ export const SubmitInput = ({ value, isLoading }: Props) => {
                 disabled={isLoading}
             >
                 {isLoading && (
-                    <span className="loading loading-bars loading-md"></span>
+                    <span className="loading loading-bars loading-md">
+                        {isVerbose && "May take 1-2mins"}
+                    </span>
                 )}
                 {label}
             </button>
