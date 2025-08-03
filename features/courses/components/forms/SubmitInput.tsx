@@ -26,11 +26,10 @@ export const SubmitInput = ({ value, isLoading, isVerbose = false }: Props) => {
                 disabled={isLoading}
             >
                 {isLoading && (
-                    <span className="loading loading-bars loading-md">
-                        {isVerbose && "May take 1-2mins"}
-                    </span>
+                    <span className="loading loading-bars loading-md" />
                 )}
                 {label}
+                {isVerbose && "...may take 1-2mins"}
             </button>
         </div>
     );
