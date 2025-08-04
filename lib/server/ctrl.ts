@@ -7,6 +7,8 @@ import {
     dbDeleteLesson,
     dbDeleteLessonContentById,
     dbDeleteLessonTranscriptById,
+    dbDeleteSeminarContentById,
+    dbDeleteSeminarTranscriptById,
     dbDeleteVideoById,
     dbGetCourseAndDetailsAndLessonsById,
     dbGetCourseById,
@@ -66,6 +68,8 @@ export type ModelName =
     | "CourseDetails"
     | "Lesson"
     | "Course"
+    | "SeminarContent"
+    | "SeminarTranscript"
     | "UNSUPPORTED";
 type OrderDeleteModelEntryProps = {
     id: string;
@@ -118,6 +122,10 @@ export async function ctrlDeleteModelEntry({
             return await ctrlDeleteLesson(validId);
         case "Course":
             return await ctrlDeleteCourse(validId);
+        case "SeminarContent":
+            return await dbDeleteSeminarContentById({ id: validId });
+        case "SeminarTranscript":
+            return await dbDeleteSeminarTranscriptById({ id: validId });
         case "UNSUPPORTED":
             throw new Error("Unsupported");
         default: {

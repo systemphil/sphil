@@ -18,6 +18,7 @@ import {
     ctrlCreateOrUpdateCourse,
     ctrlDeleteModelEntry,
     ctrlUpdateSeminarCohortPrices,
+    ModelName,
 } from "lib/server/ctrl";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
@@ -221,8 +222,10 @@ const deleteModelEntrySchema = z.object({
         "CourseDetails",
         "Lesson",
         "Course",
+        "SeminarTranscript",
+        "SeminarContent",
         "UNSUPPORTED",
-    ]),
+    ]) satisfies z.ZodType<ModelName>,
 });
 type ActionDeleteModelEntryInput = z.infer<typeof deleteModelEntrySchema>;
 

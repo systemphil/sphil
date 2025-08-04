@@ -1,10 +1,9 @@
+import { CourseMaterialCard } from "features/courses/components/CourseMaterialCard";
 import { VideoForm } from "features/courses/components/forms/VideoForm";
 import { Heading } from "lib/components/ui/Heading";
 import { errorMessages } from "lib/config/errorMessages";
-import {
-    dbGetSeminarAndConnectedById,
-    dbGetSeminarVideoBySeminarId,
-} from "lib/database/dbFuncs";
+import { dbGetSeminarAndConnectedById } from "lib/database/dbFuncs";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function AdminSeminarEdit({
@@ -51,48 +50,48 @@ export default async function AdminSeminarEdit({
             <div className="flex flex-col gap-24">
                 <div>
                     <Heading as="h4">Seminar Content</Heading>
-                    {/* {lesson.content ? (
+                    {seminar.content ? (
                         <CourseMaterialCard
-                            href={`/admin/courses/${courseId}/lessons/${lessonId}/lesson-material/${lesson.content.id}`}
-                            id={lesson.content.id}
-                            modelName="LessonContent"
-                            heading={lesson.name}
+                            href={`/admin/courses/${courseId}/seminar-cohort/${seminarCohortId}/seminars/${seminarId}/seminar-material/${seminar.content.id}`}
+                            id={seminar.content.id}
+                            modelName="SeminarContent"
+                            heading={`Content of Seminar ${seminar.order}`}
                         />
                     ) : (
-                        <div>
-                            <Heading as="h2">No content.</Heading>
+                        <div className="flex flex-col gap-2 justify-center items-center">
+                            <p>No content.</p>
                             <Link
-                                href={`/admin/courses/${courseId}/lessons/${lessonId}/lesson-content/new`}
+                                href={`/admin/courses/${courseId}/seminar-cohort/${seminarCohortId}/seminars/${seminarId}/seminar-content/new`}
                             >
                                 <button className="d-btn d-btn-primary">
                                     Add content
                                 </button>
                             </Link>
                         </div>
-                    )} */}
+                    )}
                 </div>
 
                 <div>
-                    <Heading as="h4">Transcript</Heading>
-                    {/* {lesson.transcript ? (
+                    <Heading as="h4">Seminar Transcript</Heading>
+                    {seminar.transcript ? (
                         <CourseMaterialCard
-                            href={`/admin/courses/${courseId}/lessons/${lessonId}/lesson-material/${lesson.transcript.id}`}
-                            id={lesson.transcript.id}
+                            href={`/admin/courses/${courseId}/seminar-cohort/${seminarCohortId}/seminars/${seminarId}/seminar-material//${seminar.transcript.id}`}
+                            id={seminar.transcript.id}
                             modelName="LessonTranscript"
-                            heading={lesson.name}
+                            heading={`Transcript of Seminar ${seminar.order}`}
                         />
                     ) : (
-                        <div>
-                            <Heading as="h2">No transcript.</Heading>
+                        <div className="flex flex-col gap-2 justify-center items-center">
+                            <p>No transcript.</p>
                             <Link
-                                href={`/admin/courses/${courseId}/lessons/${lessonId}/lesson-transcript/new`}
+                                href={`/admin/courses/${courseId}/seminar-cohort/${seminarCohortId}/seminars/${seminarId}/seminar-transcript/new`}
                             >
                                 <button className="d-btn d-btn-primary">
-                                    Add content
+                                    Add transcript
                                 </button>
                             </Link>
                         </div>
-                    )} */}
+                    )}
                 </div>
             </div>
         </div>

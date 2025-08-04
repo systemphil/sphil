@@ -5,8 +5,11 @@ import type {
     Lesson,
     LessonContent,
     LessonTranscript,
+    MdxCategory,
     ProductsAuxiliary,
     SeminarCohort,
+    SeminarContent,
+    SeminarTranscript,
     Video,
 } from "@prisma/client";
 import { prisma } from "./dbInit";
@@ -296,81 +299,86 @@ export const dbGetLessonAndRelationsBySlug = async (slug: string) => {
         },
     });
 };
+type MdxModel = {
+    id: string;
+    mdx: Uint8Array<ArrayBufferLike>;
+    mdxCategory: MdxCategory;
+    [key: string]: any;
+};
+
+// Configuration for different model types
+const mdxModelConfig = [
+    {
+        name: "lessonContent",
+        query: (id: string) =>
+            prisma.lessonContent.findUnique({ where: { id } }),
+        description: "LessonContent",
+    },
+    {
+        name: "lessonTranscript",
+        query: (id: string) =>
+            prisma.lessonTranscript.findUnique({ where: { id } }),
+        description: "LessonTranscript",
+    },
+    {
+        name: "courseDetails",
+        query: (id: string) =>
+            prisma.courseDetails.findUnique({ where: { id } }),
+        description: "CourseDetails",
+    },
+    {
+        name: "seminarContent",
+        query: (id: string) =>
+            prisma.seminarContent.findUnique({ where: { id } }),
+        description: "SeminarContent",
+    },
+    {
+        name: "seminarTranscript",
+        query: (id: string) =>
+            prisma.seminarTranscript.findUnique({ where: { id } }),
+        description: "SeminarTranscript",
+    },
+] as const;
+
 /**
- * Calls the database to retrieve mdx field by id of the model as identifier.
- * Converts binary content of found record to string
- * and/or be passed down to Client Components from Server Components.
- * @supports LessonContent | LessonTranscript | CourseDetails
- * TODO fixme! Auth guard this
+ * Converts binary MDX content to string for a given model record
+ */
+const convertMdxToString = <T extends MdxModel>(
+    record: T
+): T & { mdx: string } => {
+    const mdxAsString = Text.Decode(record.mdx);
+    return {
+        ...record,
+        mdx: mdxAsString,
+    };
+};
+/**
+ * Calls the database to retrieve mdx field by id across multiple models.
+ * Converts binary content of found record to string for tRPC compatibility
+ * and/or to be passed down to Client Components from Server Components.
+ * @supports LessonContent | LessonTranscript | CourseDetails | SeminarContent | SeminarTranscript
  */
 export const dbGetMdxByModelId = async (id: string) => {
     const validId = z.string().parse(id);
-    /**
-     * tRPC cannot handle binary transmission, so the buffer from each below must be converted to string.
-     * And then new object is made from shallow copy of the result with the updated content field.
-     *
-     * First we look for a match in the LessonContent Model
-     */
-    const lessonContent = await prisma.lessonContent.findUnique({
-        where: {
-            id: validId,
-        },
-    });
-    if (!lessonContent) {
-        /**
-         * If no matching id found, proceed to query LessonTranscript.
-         */
-        const lessonTranscript = await prisma.lessonTranscript.findUnique({
-            where: {
-                id: validId,
-            },
-        });
-        if (!lessonTranscript) {
-            /**
-             * If no matching id found, proceed to query CourseDetails.
-             */
-            const courseDetails = await prisma.courseDetails.findUnique({
-                where: {
-                    id: validId,
-                },
-            });
-            /**
-             * All three query attempts failed, throw error.
-             */
-            if (!courseDetails)
-                throw new Error(
-                    "No lessonTranscript, lessonContent or courseDetails found at db call"
-                );
-            /**
-             * Resolve third attempt if query successful.
-             */
-            const courseDetailsContentAsString = Text.Decode(courseDetails.mdx);
-            const newResult = {
-                ...courseDetails,
-                mdx: courseDetailsContentAsString,
-            };
-            return newResult;
+
+    // Try each model in sequence until we find a match
+    for (const config of mdxModelConfig) {
+        const result = await config.query(validId);
+
+        if (result) {
+            return convertMdxToString(result as MdxModel);
         }
-        /**
-         * Resolve second attempt if query successful.
-         */
-        const transcriptAsString = Text.Decode(lessonTranscript.mdx);
-        const newResult = {
-            ...lessonTranscript,
-            mdx: transcriptAsString,
-        };
-        return newResult;
     }
-    /**
-     * Resolve first attempt if query successful.
-     */
-    const contentAsString = Text.Decode(lessonContent.mdx);
-    const newResult = {
-        ...lessonContent,
-        mdx: contentAsString,
-    };
-    return newResult;
+
+    // If no record found in any model, throw error
+    const modelNames = mdxModelConfig
+        .map((config) => config.description)
+        .join(", ");
+    throw new Error(
+        `No record found with id "${validId}" in any of: ${modelNames}`
+    );
 };
+
 export type DBGetMdxContentByModelIdReturnType = Awaited<
     ReturnType<typeof dbGetMdxByModelId>
 >;
@@ -831,6 +839,80 @@ export const dbUpsertLessonContentById = async ({
     return withAdmin(task);
 };
 /**
+ * Updates an existing SeminarContent details by id as identifier or creates a new one if id is not provided.
+ * @access ADMIN
+ */
+export const dbUpsertSeminarContentById = async ({
+    id,
+    seminarId,
+    content,
+}: {
+    id?: SeminarContent["id"];
+    seminarId: SeminarContent["seminarId"];
+    content: string;
+}) => {
+    async function task() {
+        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
+        const validSeminarId = z.string().parse(seminarId);
+
+        const contentAsBuffer = Text.Encode(content);
+
+        const result = await prisma.seminarContent.upsert({
+            where: {
+                id: validId,
+            },
+            update: {
+                mdx: contentAsBuffer,
+            },
+            create: {
+                seminarId: validSeminarId,
+                mdx: contentAsBuffer,
+            },
+        });
+
+        const resultWithoutContent = exclude(result, ["mdx"]);
+        return resultWithoutContent;
+    }
+    return withAdmin(task);
+};
+/**
+ * Updates an existing SeminarContent details by id as identifier or creates a new one if id is not provided.
+ * @access ADMIN
+ */
+export const dbUpsertSeminarTranscriptById = async ({
+    id,
+    seminarId,
+    content,
+}: {
+    id?: SeminarTranscript["id"];
+    seminarId: SeminarTranscript["seminarId"];
+    content: string;
+}) => {
+    async function task() {
+        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
+        const validSeminarId = z.string().parse(seminarId);
+
+        const contentAsBuffer = Text.Encode(content);
+
+        const result = await prisma.seminarTranscript.upsert({
+            where: {
+                id: validId,
+            },
+            update: {
+                mdx: contentAsBuffer,
+            },
+            create: {
+                seminarId: validSeminarId,
+                mdx: contentAsBuffer,
+            },
+        });
+
+        const resultWithoutContent = exclude(result, ["mdx"]);
+        return resultWithoutContent;
+    }
+    return withAdmin(task);
+};
+/**
  * Updates an existing LessonTranscript model by id as identifier or creates a new one if id is not provided.
  * Must have the id of the Lesson this LessonTranscript relates to.
  * @access ADMIN
@@ -906,6 +988,7 @@ export const dbUpsertCourseDetailsById = async ({
     return withAdmin(task);
 };
 /**
+ * TODO update with new models
  * Updates mdx field for an existing model by id as identifier.
  * @access ADMIN
  */
@@ -913,7 +996,7 @@ export const dbUpdateMdxByModelId = async ({
     id,
     content,
 }: {
-    id: LessonContent["id"] | LessonTranscript["id"] | CourseDetails["id"];
+    id: string;
     content: string;
 }) => {
     async function task() {
@@ -962,6 +1045,34 @@ export const dbUpdateMdxByModelId = async ({
         if (result === 1) {
             const compiledMdx = await mdxCompiler(validContent);
             await prisma.courseDetails.update({
+                where: {
+                    id: validId,
+                },
+                data: {
+                    mdxCompiled: compiledMdx,
+                },
+            });
+            return;
+        }
+        result =
+            await prisma.$executeRaw`UPDATE "SeminarContent" SET mdx = ${contentAsBuffer} WHERE id = ${validId};`;
+        if (result === 1) {
+            const compiledMdx = await mdxCompiler(validContent);
+            await prisma.seminarContent.update({
+                where: {
+                    id: validId,
+                },
+                data: {
+                    mdxCompiled: compiledMdx,
+                },
+            });
+            return;
+        }
+        result =
+            await prisma.$executeRaw`UPDATE "SeminarTranscript" SET mdx = ${contentAsBuffer} WHERE id = ${validId};`;
+        if (result === 1) {
+            const compiledMdx = await mdxCompiler(validContent);
+            await prisma.seminarTranscript.update({
                 where: {
                     id: validId,
                 },
@@ -1075,6 +1186,42 @@ export const dbDeleteLessonContentById = async ({
     async function task() {
         const validId = z.string().parse(id);
         return await prisma.lessonContent.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    }
+    return withAdmin(task);
+};
+/**
+ * Deletes entry from the LessonContent model. Returns only id of deleted model.
+ * @access ADMIN
+ */
+export const dbDeleteSeminarContentById = async ({
+    id,
+}: {
+    id: SeminarContent["id"];
+}) => {
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.seminarContent.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    }
+    return withAdmin(task);
+};
+/**
+ * Deletes entry from the LessonContent model. Returns only id of deleted model.
+ * @access ADMIN
+ */
+export const dbDeleteSeminarTranscriptById = async ({
+    id,
+}: {
+    id: SeminarTranscript["id"];
+}) => {
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.seminarTranscript.delete({
             where: { id: validId },
             select: { id: true },
         });

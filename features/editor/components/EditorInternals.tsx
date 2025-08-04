@@ -101,6 +101,9 @@ export default function EditorInternals({ material, title }: EditorProps) {
         const markdownValue = editorRef.current?.getMarkdown();
         if (!markdownValue) {
             console.error("No markdown value in handleSave", markdownValue);
+            toast.error(
+                "No markdown value in handleSave. See console (F12) for details"
+            );
             return;
         }
         setIsLoading(true);
@@ -136,14 +139,14 @@ export default function EditorInternals({ material, title }: EditorProps) {
     };
 
     return (
-        <div className="px-4 ">
+        <div className="p-4">
             <Heading as="h5">
                 Editing {material.mdxCategory.toLowerCase()} of &quot;
                 <span className="italic">{title}</span>&nbsp;&quot;
             </Heading>
             <EditorContext.Provider value={isLoading}>
                 <MDXEditor
-                    className="border-2 border-gray-200 rounded-lg full-demo-mdxeditor"
+                    className="border-2 border-gray-200 rounded-lg full-demo-mdxeditor min-h-screen"
                     ref={editorRef}
                     markdown={material.mdx}
                     contentEditableClassName="!prose dark:!prose-invert !max-w-none"
