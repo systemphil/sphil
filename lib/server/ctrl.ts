@@ -1,4 +1,4 @@
-import { Video } from "@prisma/client";
+import { SeminarVideo, Video } from "@prisma/client";
 import { auth } from "lib/auth/authConfig";
 import { bucketDeleteVideoFile } from "lib/bucket/bucketFuncs";
 import {
@@ -7,14 +7,17 @@ import {
     dbDeleteLesson,
     dbDeleteLessonContentById,
     dbDeleteLessonTranscriptById,
+    dbDeleteSeminarCohort,
     dbDeleteSeminarContentById,
     dbDeleteSeminarTranscriptById,
+    dbDeleteSeminarVideoById,
     dbDeleteVideoById,
     dbGetCourseAndDetailsAndLessonsById,
     dbGetCourseById,
     dbGetCourseBySlug,
     dbGetLessonAndRelationsById,
     dbGetOrCreateProductAux,
+    dbGetSeminarAndConnectedById,
     dbGetSeminarCohortAndSeminarsById,
     dbGetUserData,
     dbGetVideoFileNameByVideoId,
@@ -61,6 +64,30 @@ export async function ctrlDeleteVideo({
     await bucketDeleteVideoFile(directoryAndVideoToDelete);
     return await dbDeleteVideoById({ id: validId });
 }
+
+export async function ctrlDeleteSeminarVideo({
+    id,
+    fileName = "",
+}: Pick<SeminarVideo, "id"> & Partial<Pick<SeminarVideo, "fileName">>) {
+    const validId = z.string().parse(id);
+    let validFileName = z.string().parse(fileName);
+
+    if (fileName === "") {
+        const video = await dbGetVideoFileNameByVideoId(validId);
+        if (!video)
+            throw new Error("SeminarVideo fileName not found at db call");
+        validFileName = video.fileName;
+    }
+
+    const directoryAndVideoToDelete = {
+        id: validId,
+        fileName: validFileName,
+    };
+
+    await bucketDeleteVideoFile(directoryAndVideoToDelete);
+    return await dbDeleteSeminarVideoById({ id: validId });
+}
+
 export type ModelName =
     | "LessonTranscript"
     | "LessonContent"
@@ -70,6 +97,8 @@ export type ModelName =
     | "Course"
     | "SeminarContent"
     | "SeminarTranscript"
+    | "SeminarVideo"
+    | "Seminar"
     | "UNSUPPORTED";
 type OrderDeleteModelEntryProps = {
     id: string;
@@ -99,6 +128,28 @@ async function ctrlDeleteLesson(id: string) {
         throw new Error("Lesson video not deleted");
     return await dbDeleteLesson({ id: validId });
 }
+
+async function ctrlDeleteSeminar(id: string) {
+    const validId = z.string().parse(id);
+    const seminar = await dbGetSeminarAndConnectedById({ id: validId });
+
+    if (seminar && seminar.video) {
+        const videoArgs = {
+            id: seminar.video.id,
+            directory: true,
+        };
+        await ctrlDeleteSeminarVideo(videoArgs);
+    }
+
+    const isSeminarWithoutVideo = await dbGetSeminarAndConnectedById({
+        id: validId,
+    });
+    if (isSeminarWithoutVideo && isSeminarWithoutVideo.video !== null) {
+        throw new Error("Lesson video not deleted");
+    }
+    return await dbDeleteLesson({ id: validId });
+}
+
 /**
  * Higher order controller function that organizes the deletion of model entries by
  * calling the correct function using the model name as a switch statement filter.
@@ -126,8 +177,13 @@ export async function ctrlDeleteModelEntry({
             return await dbDeleteSeminarContentById({ id: validId });
         case "SeminarTranscript":
             return await dbDeleteSeminarTranscriptById({ id: validId });
+        case "SeminarVideo":
+            return await ctrlDeleteSeminarVideo({ id: validId });
+        case "Seminar":
+            return await ctrlDeleteSeminar(validId);
+        // SeminarCohorts are deleted inside of Course deletion, but not separately
         case "UNSUPPORTED":
-            throw new Error("Unsupported");
+            throw new Error("Not supported");
         default: {
             const _exhaustiveTypeCheck: never = modelName;
             throw new Error(`${_exhaustiveTypeCheck} not supported`);
@@ -215,12 +271,98 @@ async function ctrlDeleteCourse(id: string) {
         await Promise.all(deleteLessonPromises);
     }
     /**
+     * Delete all related seminar cohorts and resources.
+     */
+    if (course.seminarCohorts.length > 0) {
+        const deleteSeminarCohortPromises = course.seminarCohorts.map(
+            async (sC) => {
+                const d = await ctrlDeleteSeminarCohort(sC.id);
+                console.info(`☑️ SEMINAR COHORT DELETED: ${d.id}`);
+            }
+        );
+        await Promise.all(deleteSeminarCohortPromises);
+    }
+    /**
      * Finally, delete course entry.
      */
     const deletedCourse = await dbDeleteCourse({ id: validId });
     console.info(`☑️ COURSE DELETED->ID: ${deletedCourse.id}`);
     return deletedCourse;
 }
+
+async function ctrlDeleteSeminarCohort(id: string) {
+    // Locally scoped helper functions
+    async function archiveStripeResources({
+        stripeSeminarOnlyPriceId,
+        stripeSeminarUpgradePriceId,
+    }: {
+        stripeSeminarOnlyPriceId: string;
+        stripeSeminarUpgradePriceId: string;
+    }) {
+        const archivedStripeSeminarOnlyPriceId = await stripeArchivePrice({
+            stripePriceId: stripeSeminarOnlyPriceId,
+        });
+        const archivedStripeSeminarUpgradePriceId = await stripeArchivePrice({
+            stripePriceId: stripeSeminarUpgradePriceId,
+        });
+        return {
+            archivedStripeSeminarOnlyPriceId,
+            archivedStripeSeminarUpgradePriceId,
+        };
+    }
+
+    // Main function execution
+    const validId = z.string().parse(id);
+    const seminarCohort = await dbGetSeminarCohortAndSeminarsById({
+        id: validId,
+    });
+    if (!seminarCohort) throw new Error("Course not found at db call");
+    /**
+     * Archive related Stripe resources if they exist.
+     */
+    if (
+        seminarCohort.stripeSeminarOnlyPriceId &&
+        seminarCohort.stripeSeminarUpgradePriceId
+    ) {
+        await archiveStripeResources({
+            stripeSeminarOnlyPriceId: seminarCohort.stripeSeminarOnlyPriceId,
+            stripeSeminarUpgradePriceId:
+                seminarCohort.stripeSeminarUpgradePriceId,
+        });
+        console.info(
+            `☑️ STRIPE RESOURCES ARCHIVED->COURSE ID: ${seminarCohort.id}`
+        );
+    } else {
+        console.info(
+            `☑️ NO OR INCOMPLETE STRIPE RESOURCES TO ARCHIVE->COURSE ID: ${seminarCohort.id}`
+        );
+        throw new Error(
+            "orderDeleteCourse Func: Could not archive all stripe resources. Terminating delete process."
+        );
+    }
+    /**
+     * Delete all related lessons and resources.
+     */
+    if (seminarCohort.seminars.length > 0) {
+        /**
+         * Using `forEach()` will not work here, as it will not wait for the async function to finish.
+         * Instead we use `map()` to create an array of promises, and then use `Promise.all()`
+         * to wait for all promises to resolve.
+         */
+        const deleteLessonPromises = seminarCohort.seminars.map(async (s) => {
+            const deletedLesson = await ctrlDeleteSeminar(s.id);
+            console.info(`☑️ SEMINAR DELETED: ${deletedLesson.id}`);
+        });
+        await Promise.all(deleteLessonPromises);
+    }
+    /**
+     * Finally, delete course entry.
+     */
+    const deletedSeminarCohort = await dbDeleteSeminarCohort({ id: validId });
+    console.info(`☑️ SEMINAR COHORT DELETED->ID: ${deletedSeminarCohort.id}`);
+    return deletedSeminarCohort;
+}
+
 type OrderCreateOrUpdateCourseProps = Omit<
     DbUpsertCourseByIdProps,
     | "stripeProductId"

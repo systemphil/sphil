@@ -7,9 +7,11 @@ import type {
     LessonTranscript,
     MdxCategory,
     ProductsAuxiliary,
+    Seminar,
     SeminarCohort,
     SeminarContent,
     SeminarTranscript,
+    SeminarVideo,
     Video,
 } from "@prisma/client";
 import { prisma } from "./dbInit";
@@ -569,6 +571,27 @@ export const dbGetVideoFileNameByVideoId = async (id: string) => {
     }
     return withAdmin(task);
 };
+
+/**
+ * Calls the database to retrieve specific seminarVideo.fileName by id identifier.
+ * @access ADMIN
+ */
+export const dbGetSeminarVideoFileNameByVideoId = async (id: string) => {
+    async function task() {
+        const validId = z.string().parse(id);
+        const video = await prisma.seminarVideo.findUnique({
+            where: {
+                id: validId,
+            },
+            select: {
+                fileName: true,
+            },
+        });
+        return video;
+    }
+    return withAdmin(task);
+};
+
 export type DbUpsertCourseByIdProps = Omit<
     Course,
     "id" | "createdAt" | "updatedAt"
@@ -1230,7 +1253,7 @@ export const dbDeleteSeminarTranscriptById = async ({
 };
 /**
  * Deletes entry from the Video model. Returns only id of deleted model.
- * @note This function DOES NOT delete video from storage. Consider using `orderDeleteVideo()` instead.
+ * @note This function DOES NOT delete video from storage!
  * @access ADMIN
  */
 export const dbDeleteVideoById = async ({ id }: { id: Video["id"] }) => {
@@ -1243,6 +1266,27 @@ export const dbDeleteVideoById = async ({ id }: { id: Video["id"] }) => {
     }
     return withAdmin(task);
 };
+
+/**
+ * Deletes entry from the Video model. Returns only id of deleted model.
+ * @note This function DOES NOT delete video from storage!
+ * @access ADMIN
+ */
+export const dbDeleteSeminarVideoById = async ({
+    id,
+}: {
+    id: SeminarVideo["id"];
+}) => {
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.seminarVideo.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    }
+    return withAdmin(task);
+};
+
 /**
  * Deletes entry from the CourseDetails model. Returns only id of deleted model.
  * @access ADMIN
@@ -1303,6 +1347,47 @@ export const dbDeleteLesson = async ({ id }: { id: Lesson["id"] }) => {
 };
 
 /**
+ * Deletes entry from the Seminar model (and all related models). Returns only id of deleted model.
+ * @warning Does NOT delete video from storage!
+ * @access ADMIN
+ */
+export const dbDeleteSeminar = async ({ id }: { id: Seminar["id"] }) => {
+    async function task() {
+        const validId = z.string().parse(id);
+        const deletedSeminar = await prisma.$transaction(async (tx) => {
+            // First, get the order and seminarCohortId of the seminar to be deleted
+            const seminarToDelete = await tx.seminar.findUnique({
+                where: { id: validId },
+                select: { order: true, seminarCohortId: true, id: true },
+            });
+
+            if (!seminarToDelete) {
+                throw new Error("Lesson not found");
+            }
+
+            // Delete the seminar
+            await tx.lesson.delete({
+                where: { id: validId },
+            });
+
+            // Update the order of remaining seminars
+            await tx.lesson.updateMany({
+                where: {
+                    courseId: seminarToDelete.seminarCohortId,
+                    order: { gt: seminarToDelete.order },
+                },
+                data: {
+                    order: { decrement: 1 },
+                },
+            });
+            return seminarToDelete;
+        });
+        return deletedSeminar;
+    }
+    return withAdmin(task);
+};
+
+/**
  * Deletes entry from the Course model (and all related models, including CourseDetails). Returns only id of deleted model.
  * @warning Does NOT delete video from storage. Consider using `ctrlDeleteVideo()` or `ctrlDeleteLesson()` instead.
  * @access ADMIN
@@ -1311,6 +1396,17 @@ export const dbDeleteCourse = async ({ id }: { id: Course["id"] }) => {
     async function task() {
         const validId = z.string().parse(id);
         return await prisma.course.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    }
+    return withAdmin(task);
+};
+
+export const dbDeleteSeminarCohort = async ({ id }: { id: string }) => {
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.seminarCohort.delete({
             where: { id: validId },
             select: { id: true },
         });

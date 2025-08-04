@@ -63,8 +63,9 @@ export function CourseMaterialCard({
             </button>
             <Dialog open={isDialogOpen} onClose={onClose} disableScrollLock>
                 <DialogContent>
-                    Are you sure you want to delete this {modelName} item? This
-                    action cannot be undone.
+                    Are you sure you want to delete this{" "}
+                    {modelName.toLowerCase()} item? This action cannot be
+                    undone.
                 </DialogContent>
                 <DialogActions>
                     <button

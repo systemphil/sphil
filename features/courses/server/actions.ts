@@ -11,7 +11,6 @@ import {
     dbCreateSeminar,
     dbReorderLessons,
     dbReorderSeminars,
-    dbUpdateSeminarCohort,
     dbUpsertLessonById,
 } from "lib/database/dbFuncs";
 import {
@@ -224,6 +223,8 @@ const deleteModelEntrySchema = z.object({
         "Course",
         "SeminarTranscript",
         "SeminarContent",
+        "SeminarVideo",
+        "Seminar",
         "UNSUPPORTED",
     ]) satisfies z.ZodType<ModelName>,
 });
