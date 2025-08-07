@@ -32,7 +32,6 @@ type StarsProps = {
  * - Added types.
  * - Switched out var with const and let.
  * - Converted functions that behaved like classes to regular classes.
- * - // TODO fix remaining "any" types. This will require we also properly type the delaunay-fast file.
  */
 export function Stars({ theme }: StarsProps) {
     useEffect(() => {
@@ -146,7 +145,7 @@ export function Stars({ theme }: StarsProps) {
 
             // Tell all the particles who their neighbors are
             for (i = 0; i < particles.length; i++) {
-                // Loop through all tirangles
+                // Loop through all triangles
                 for (j = 0; j < triangles.length; j++) {
                     // Check if this particle's index is in this triangle
                     k = triangles[j].indexOf(i);
@@ -173,6 +172,7 @@ export function Stars({ theme }: StarsProps) {
             }
 
             // Motion mode
+            /* cspell:disable-next-line */
             //if (Modernizr && Modernizr.deviceorientation) {
             if (
                 "ontouchstart" in document.documentElement &&
@@ -210,7 +210,9 @@ export function Stars({ theme }: StarsProps) {
             }
 
             // Animation loop
+            /* cspell:disable-next-line */
             (function animloop() {
+                /* cspell:disable-next-line */
                 customWindow.requestAnimFrame(animloop);
                 resize();
                 render();

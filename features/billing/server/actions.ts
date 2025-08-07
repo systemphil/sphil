@@ -16,14 +16,12 @@ export async function actionVerifyUserPurchase(
     const session = await auth();
 
     if (!session?.user) {
-        // TODO handle these errors on the frontend
         return { error: "Unauthorized" };
     }
 
     const parsedInput = inputSchema.safeParse({ userId, purchasePriceId });
 
     if (!parsedInput.success) {
-        // TODO handle these errors on the frontend
         return { error: `Bad request ${parsedInput.error.message}` };
     }
 

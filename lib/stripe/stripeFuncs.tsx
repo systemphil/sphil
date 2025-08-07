@@ -234,7 +234,7 @@ export async function stripeGetCustomerEmail({
 }) {
     const stripe = getStripe();
     const customer = await stripe.customers.retrieve(customerId);
-    // TODO typescript isn't picking up the type here for some reason
+    // FIXME typescript isn't picking up the type here because we must narrow it down first
     // @ts-expect-error
     return customer.email;
 }
