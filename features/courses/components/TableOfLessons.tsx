@@ -35,7 +35,7 @@ export function TableOfLessons({
 function LessonsMap({ lessons, courseSlug }: CourseLessonContentsProps) {
     return (
         <ul className="max-w-xs">
-            {lessons.map((lesson: any, index) => {
+            {lessons.map((lesson, index) => {
                 return (
                     <li key={lesson.slug}>
                         <Link

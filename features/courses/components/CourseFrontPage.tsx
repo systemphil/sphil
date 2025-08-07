@@ -8,6 +8,7 @@ import { TableOfLessons } from "./TableOfLessons";
 import { Heading } from "lib/components/ui/Heading";
 import { FadeIn } from "lib/components/animations/FadeIn";
 import { Back } from "lib/components/navigation/Back";
+import { TableOfSeminarCohorts } from "./TableOfSeminarCohorts";
 
 const links = {
     courses: "/symposia/courses",
@@ -61,6 +62,7 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
                                 lessons={course.lessons}
                                 courseSlug={slug}
                             />
+                            <TableOfSeminarCohorts courseSlug={slug} />
                             <CourseEnroll slug={slug} />
                             <div className="mt-4">
                                 <Back

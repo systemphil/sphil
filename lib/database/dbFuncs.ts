@@ -99,6 +99,28 @@ export const dbGetCourseBySlug = async (slug: string) => {
     );
     return await getCourseCached();
 };
+
+export async function dbGetSeminarCohortByCourseAndUser({
+    courseId,
+    userId,
+}: {
+    courseId: string;
+    userId: string;
+}) {
+    return await prisma.seminarCohort.findMany({
+        where: {
+            courseId,
+            participants: {
+                some: {
+                    id: userId,
+                },
+            },
+        },
+        include: {
+            seminars: true,
+        },
+    });
+}
 /**
  * Calls the database to retrieve specific course by id identifier
  */
