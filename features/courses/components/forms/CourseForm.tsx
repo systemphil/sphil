@@ -17,6 +17,7 @@ import { Course } from "@prisma/client";
 import { actionUpsertCourse } from "features/courses/server/actions";
 import { DbUpsertCourseByIdProps } from "lib/database/dbFuncs";
 import { actionUploadImage } from "lib/server/actions";
+import { Alert } from "@mui/material";
 
 type AmendedDbUpsertCourseByIdProps = Omit<
     DbUpsertCourseByIdProps,
@@ -217,7 +218,15 @@ export const CourseForm = ({ course }: { course?: Course }) => {
                     name="seminarLink"
                     options={{ required: false }}
                 />
-                <Checkbox label="Publish" name="published" />
+                <Alert color="info" sx={{ my: 2 }}>
+                    If you want to make the course publicly visible for
+                    marketing purposes, set it to <i>published</i> but ensure
+                    all the enrollment dates are in the past.
+                </Alert>
+                <Checkbox
+                    label="Publish (this makes the course visible on site)"
+                    name="published"
+                />
                 <SubmitInput
                     value={`${course ? "Update" : "Create"} course`}
                     isLoading={submitLoading}
