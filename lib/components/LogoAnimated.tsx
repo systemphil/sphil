@@ -9,7 +9,6 @@ export function LogoAnimated({ animation = true }: { animation?: boolean }) {
                 viewBox="0 0 102.88 28.56"
                 xmlns="http://www.w3.org/2000/svg"
             >
-                <title>Logo of an owl</title>
                 <g
                     id="svgGroup"
                     strokeLinecap="round"
@@ -57,7 +56,6 @@ export function LogoAnimated({ animation = true }: { animation?: boolean }) {
             viewBox="0 0 102.88 28.56"
             xmlns="http://www.w3.org/2000/svg"
         >
-            <title>Logo of an owl</title>
             <g
                 id="svgGroup"
                 strokeLinecap="round"
