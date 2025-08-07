@@ -121,6 +121,49 @@ export async function dbGetSeminarCohortByCourseAndUser({
         },
     });
 }
+
+export async function dbGetSeminarAndConnectedByYearAndUser({
+    seminarOrder,
+    year,
+    userId,
+}: {
+    seminarOrder: number;
+    year: number;
+    userId: string;
+}) {
+    return await prisma.seminar.findFirst({
+        where: {
+            seminarCohort: {
+                participants: {
+                    some: {
+                        id: userId,
+                    },
+                },
+                year,
+            },
+            order: seminarOrder,
+        },
+        select: {
+            content: true,
+            seminarCohort: {
+                include: {
+                    course: {
+                        select: {
+                            slug: true,
+                            name: true,
+                        },
+                    },
+                },
+            },
+            transcript: true,
+            video: true,
+            order: true,
+            id: true,
+            published: true,
+            seminarCohortId: true,
+        },
+    });
+}
 /**
  * Calls the database to retrieve specific course by id identifier
  */

@@ -8,17 +8,17 @@ import {
 import { romanize } from "lib/utils";
 import Link from "next/link";
 
-type CourseLessonContentsProps = {
-    courseSlug: string;
-};
-
 const links = {
     courses: "/symposia/courses",
 };
 
 export async function TableOfSeminarCohorts({
     courseSlug,
-}: CourseLessonContentsProps) {
+    isCentered = false,
+}: {
+    courseSlug: string;
+    isCentered?: boolean;
+}) {
     const session = await auth();
 
     if (!session) {
@@ -41,7 +41,7 @@ export async function TableOfSeminarCohorts({
         return (
             <div className="mt-4 md:py-8 max-w-[320px]">
                 <div>
-                    <Heading as="h3">Seminars</Heading>
+                    <Heading as="h4">Seminars</Heading>
                     {seminarCohorts.map((seminarCohort, index) => {
                         return (
                             <div key={`${seminarCohort.year}-${index}`}>
@@ -49,6 +49,7 @@ export async function TableOfSeminarCohorts({
                                     Cohort {seminarCohort.year}
                                 </Heading>
                                 <SeminarsMap
+                                    isCentered={isCentered}
                                     seminars={seminarCohort.seminars}
                                     courseSlug={courseSlug}
                                     seminarCohortYear={seminarCohort.year}
@@ -69,11 +70,17 @@ function SeminarsMap({
     seminars,
     courseSlug,
     seminarCohortYear,
+    isCentered = false,
 }: {
     seminars: Seminar[];
     courseSlug: string;
     seminarCohortYear: number;
+    isCentered?: boolean;
 }) {
+    const isCenteredClasses = isCentered
+        ? "justify-center w-full"
+        : "flex-start";
+
     return (
         <ul className="max-w-xs">
             {seminars.map((seminar: Seminar) => {
@@ -81,25 +88,23 @@ function SeminarsMap({
                     <li key={seminar.order}>
                         <Link
                             className="dark:hover:bg-dark-green-hsl hover:bg-slate-200/90 transition-all duration-300 flex p-1 rounded-md"
-                            href={`${links.courses}/${courseSlug}/seminar/${seminarCohortYear}/${seminar.order}`}
+                            href={`${links.courses}/${courseSlug}/seminars/${seminarCohortYear}/${seminar.order}`}
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="w-5 h-5"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
-                                />
-                            </svg>
-                            <span className="ml-1">
-                                {`Seminar ${romanize(seminar.order)}`}
-                            </span>
+                            <div className={`flex ${isCenteredClasses} pl-0.5`}>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    className="w-5 h-5"
+                                >
+                                    <path d="M3.5 8a5.5 5.5 0 1 1 8.596 4.547 9.005 9.005 0 0 1 5.9 8.18.751.751 0 0 1-1.5.045 7.5 7.5 0 0 0-14.993 0 .75.75 0 0 1-1.499-.044 9.005 9.005 0 0 1 5.9-8.181A5.496 5.496 0 0 1 3.5 8ZM9 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm8.29 4c-.148 0-.292.01-.434.03a.75.75 0 1 1-.212-1.484 4.53 4.53 0 0 1 3.38 8.097 6.69 6.69 0 0 1 3.956 6.107.75.75 0 0 1-1.5 0 5.193 5.193 0 0 0-3.696-4.972l-.534-.16v-1.676l.41-.209A3.03 3.03 0 0 0 17.29 8Z" />
+                                </svg>
+                                <span className="ml-1">
+                                    {`Seminar ${romanize(seminar.order)}`}
+                                </span>
+                            </div>
                         </Link>
                     </li>
                 );

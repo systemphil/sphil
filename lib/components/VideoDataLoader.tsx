@@ -1,8 +1,12 @@
-import { Video } from "@prisma/client";
+import { SeminarVideo, Video } from "@prisma/client";
 import { VideoViewer } from "./VideoViewer";
 import { bucketGenerateReadSignedUrl } from "lib/bucket/bucketFuncs";
 
-export async function VideoDataLoader({ videoEntry }: { videoEntry: Video }) {
+export async function VideoDataLoader({
+    videoEntry,
+}: {
+    videoEntry: Video | SeminarVideo;
+}) {
     try {
         const videoUrl = await bucketGenerateReadSignedUrl({
             id: videoEntry.id,

@@ -9,6 +9,7 @@ import { Heading } from "lib/components/ui/Heading";
 import { FadeIn } from "lib/components/animations/FadeIn";
 import { Back } from "lib/components/navigation/Back";
 import { TableOfSeminarCohorts } from "./TableOfSeminarCohorts";
+import { Suspense } from "react";
 
 const links = {
     courses: "/symposia/courses",
@@ -62,8 +63,15 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
                                 lessons={course.lessons}
                                 courseSlug={slug}
                             />
-                            <TableOfSeminarCohorts courseSlug={slug} />
-                            <CourseEnroll slug={slug} />
+                            <Suspense>
+                                <TableOfSeminarCohorts
+                                    courseSlug={slug}
+                                    isCentered={false}
+                                />
+                            </Suspense>
+                            <Suspense>
+                                <CourseEnroll slug={slug} />
+                            </Suspense>
                             <div className="mt-4">
                                 <Back
                                     href={links.courses}
