@@ -1,3 +1,4 @@
+import "server-only";
 import { dbGetUserData } from "lib/database/dbFuncs";
 import { resend } from "./emailInit";
 import { EmailPurchaseAdminNotification } from "./templates/EmailPurchaseNotification";
@@ -11,25 +12,27 @@ import { EmailPurchaseReceipt } from "./templates/EmailPurchaseReceipt";
 
 export class EmailService {
     private static resend = resend;
-    private static adminEmail =
-        process.env.EMAIL_RECEIVE !== undefined
-            ? process.env.EMAIL_RECEIVE
-            : (() => {
-                  throw new Error(
-                      "EMAIL_RECEIVE environment variable is not set"
-                  );
-              })();
-    private static senderEmail =
-        process.env.EMAIL_SEND !== undefined
-            ? process.env.EMAIL_SEND
-            : (() => {
-                  throw new Error("EMAIL_SEND environment variable is not set");
-              })();
+
+    private static getAdminEmail(): string {
+        const email = process.env.EMAIL_RECEIVE;
+        if (!email) {
+            throw new Error("EMAIL_RECEIVE environment variable is not set");
+        }
+        return email;
+    }
+
+    private static getSenderEmail(): string {
+        const email = process.env.EMAIL_SEND;
+        if (!email) {
+            throw new Error("EMAIL_SEND environment variable is not set");
+        }
+        return email;
+    }
 
     public static async adminAlert({ message }: { message: string }) {
         await this.resend.emails.send({
-            from: `No Reply <${this.senderEmail}>`,
-            to: this.adminEmail,
+            from: `No Reply <${this.getSenderEmail()}>`,
+            to: this.getAdminEmail(),
             subject: `sPhil Server Error`,
             text: message,
             html: `<div><pre>${message}</pre><br /><br />Timestamp: ${new Date().toLocaleDateString()}</div>`,
@@ -47,7 +50,7 @@ export class EmailService {
     }) {
         try {
             await this.resend.emails.send({
-                from: `No Reply <${this.senderEmail}>`,
+                from: `No Reply <${this.getSenderEmail()}>`,
                 to: customerEmail,
                 subject: `Seminar Information - ${product.name}`,
                 react: (
@@ -77,7 +80,7 @@ export class EmailService {
     }) {
         try {
             await this.resend.emails.send({
-                from: `No Reply <${this.senderEmail}>`,
+                from: `No Reply <${this.getSenderEmail()}>`,
                 to: customerEmail,
                 subject: `Order Confirmation - ${product.name}`,
                 react: (
@@ -118,8 +121,8 @@ export class EmailService {
         }
 
         await this.resend.emails.send({
-            from: `No Reply <${this.senderEmail}>`,
-            to: this.adminEmail,
+            from: `No Reply <${this.getSenderEmail()}>`,
+            to: this.getAdminEmail(),
             subject: `New Purchase $${order.pricePaidInCents / 100} - ${
                 product.name
             } - ${user.email}`,
