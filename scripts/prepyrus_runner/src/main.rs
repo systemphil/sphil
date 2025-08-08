@@ -1,7 +1,7 @@
 use prepyrus::{cli::Mode, Prepyrus};
 
 fn main() {
-    let _ = run().unwrap_or_else(|e| {
+    run().unwrap_or_else(|e| {
         eprintln!("Error: {}", e);
         std::process::exit(1);
     });
