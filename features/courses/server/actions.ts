@@ -7,10 +7,17 @@ import {
     bucketGenerateReadSignedUrl,
     bucketGenerateSignedUploadUrl,
 } from "lib/bucket/bucketFuncs";
-import { dbReorderLessons, dbUpsertLessonById } from "lib/database/dbFuncs";
+import {
+    dbCreateSeminar,
+    dbReorderLessons,
+    dbReorderSeminars,
+    dbUpsertLessonById,
+} from "lib/database/dbFuncs";
 import {
     ctrlCreateOrUpdateCourse,
     ctrlDeleteModelEntry,
+    ctrlUpdateSeminarCohortPrices,
+    ModelName,
 } from "lib/server/ctrl";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
@@ -59,6 +66,35 @@ export async function actionUpsertCourse(input: ActionUpsertCourseInput) {
     const data = await ctrlCreateOrUpdateCourse(_input);
     revalidatePath("/(admin)/admin", "layout");
     revalidateTag("allPublicCurses");
+    return { data };
+}
+
+const updateSeminarCohortSchema = z.object({
+    id: z.string(),
+    seminarOnlyPrice: z.number().positive(),
+    seminarUpgradePrice: z.number().positive(),
+});
+export type ActionUpdateSeminarCohortInput = z.infer<
+    typeof updateSeminarCohortSchema
+>;
+
+export async function actionUpdateSeminarCohort(
+    input: ActionUpdateSeminarCohortInput
+) {
+    const isAdmin = await validateAdminAccess();
+    if (!isAdmin) {
+        return { error: "Unauthorized" };
+    }
+    const parsedInput = updateSeminarCohortSchema.safeParse(input);
+
+    if (!parsedInput.success) {
+        return { error: `Bad request ${parsedInput.error.message}` };
+    }
+
+    const data = await ctrlUpdateSeminarCohortPrices(input);
+    revalidatePath("/(admin)/admin", "layout");
+    revalidateTag("allPublicCurses");
+
     return { data };
 }
 
@@ -113,6 +149,31 @@ export async function actionCreateSignedPostUrl(
     return { data };
 }
 
+const createSignedPostUrlSeminarSchema = z.object({
+    id: z.string().optional(),
+    seminarId: z.string(),
+    fileName: z.string(),
+});
+
+export async function actionCreateSignedPostUrlSeminar(
+    input: z.infer<typeof createSignedPostUrlSeminarSchema>
+) {
+    const isAdmin = await validateAdminAccess();
+    if (!isAdmin) {
+        return { error: "Unauthorized" };
+    }
+    const parsedInput = createSignedPostUrlSeminarSchema.safeParse(input);
+
+    if (!parsedInput.success) {
+        return { error: `Bad request ${parsedInput.error.message}` };
+    }
+
+    const data = await bucketGenerateSignedUploadUrl(input);
+    revalidatePath("/(admin)/admin", "layout");
+    revalidateTag("allPublicCurses");
+    return { data };
+}
+
 const createSignedReadUrlSchema = z.object({
     id: z.string(),
     fileName: z.string(),
@@ -160,7 +221,12 @@ const deleteModelEntrySchema = z.object({
         "CourseDetails",
         "Lesson",
         "Course",
-    ]),
+        "SeminarTranscript",
+        "SeminarContent",
+        "SeminarVideo",
+        "Seminar",
+        "UNSUPPORTED",
+    ]) satisfies z.ZodType<ModelName>,
 });
 type ActionDeleteModelEntryInput = z.infer<typeof deleteModelEntrySchema>;
 
@@ -183,9 +249,9 @@ export async function actionDeleteModelEntry(
 
 const reorderModelsSchema = z.array(z.string());
 
-type ActionUpdateLessonsOrder = z.infer<typeof reorderModelsSchema>;
-
-export async function actionUpdateLessonOrder(input: ActionUpdateLessonsOrder) {
+export async function actionUpdateLessonOrder(
+    input: z.infer<typeof reorderModelsSchema>
+) {
     const isAdmin = await validateAdminAccess();
     if (!isAdmin) {
         return { error: true, message: "Unauthorized" };
@@ -203,4 +269,58 @@ export async function actionUpdateLessonOrder(input: ActionUpdateLessonsOrder) {
     revalidatePath("/(admin)/admin", "layout");
     revalidateTag("allPublicCurses");
     return { error: false, message: "Successfully reordered your lessons" };
+}
+
+export async function actionUpdateSeminarOrder(
+    input: z.infer<typeof reorderModelsSchema>
+) {
+    const isAdmin = await validateAdminAccess();
+    if (!isAdmin) {
+        return { error: true, message: "Unauthorized" };
+    }
+    const parsedInput = reorderModelsSchema.safeParse(input);
+    if (!parsedInput.success) {
+        return {
+            error: true,
+            message: `Bad request ${parsedInput.error.message}`,
+        };
+    }
+
+    await dbReorderSeminars({ orderedIds: input });
+
+    revalidatePath("/(admin)/admin", "layout");
+    revalidateTag("allPublicCurses");
+    return { error: false, message: "Successfully reordered your seminars" };
+}
+
+const actionCreateSeminarSchema = z.object({
+    seminarCohortId: z.string(),
+});
+
+export async function actionCreateSeminar(
+    input: z.infer<typeof actionCreateSeminarSchema>
+) {
+    const isAdmin = await validateAdminAccess();
+    if (!isAdmin) {
+        return { error: true, message: "Unauthorized" };
+    }
+    const parsedInput = actionCreateSeminarSchema.safeParse(input);
+    if (!parsedInput.success) {
+        return {
+            error: true,
+            message: `Bad request ${parsedInput.error.message}`,
+        };
+    }
+
+    const newSeminar = await dbCreateSeminar(input);
+
+    revalidatePath("/(admin)/admin", "layout");
+    revalidateTag("allPublicCurses");
+    return {
+        error: false,
+        message: "Successfully created",
+        data: {
+            seminarId: newSeminar.id,
+        },
+    };
 }

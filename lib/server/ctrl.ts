@@ -1,4 +1,4 @@
-import { Video } from "@prisma/client";
+import { SeminarVideo, Video } from "@prisma/client";
 import { auth } from "lib/auth/authConfig";
 import { bucketDeleteVideoFile } from "lib/bucket/bucketFuncs";
 import {
@@ -7,13 +7,21 @@ import {
     dbDeleteLesson,
     dbDeleteLessonContentById,
     dbDeleteLessonTranscriptById,
+    dbDeleteSeminarCohort,
+    dbDeleteSeminarContentById,
+    dbDeleteSeminarTranscriptById,
+    dbDeleteSeminarVideoById,
     dbDeleteVideoById,
     dbGetCourseAndDetailsAndLessonsById,
     dbGetCourseById,
     dbGetCourseBySlug,
     dbGetLessonAndRelationsById,
+    dbGetOrCreateProductAux,
+    dbGetSeminarAndConnectedById,
+    dbGetSeminarCohortAndSeminarsById,
     dbGetUserData,
     dbGetVideoFileNameByVideoId,
+    dbUpdateSeminarCohort,
     dbUpdateUserStripeCustomerId,
     dbUpsertCourseById,
     DbUpsertCourseByIdProps,
@@ -56,13 +64,42 @@ export async function ctrlDeleteVideo({
     await bucketDeleteVideoFile(directoryAndVideoToDelete);
     return await dbDeleteVideoById({ id: validId });
 }
+
+export async function ctrlDeleteSeminarVideo({
+    id,
+    fileName = "",
+}: Pick<SeminarVideo, "id"> & Partial<Pick<SeminarVideo, "fileName">>) {
+    const validId = z.string().parse(id);
+    let validFileName = z.string().parse(fileName);
+
+    if (fileName === "") {
+        const video = await dbGetVideoFileNameByVideoId(validId);
+        if (!video)
+            throw new Error("SeminarVideo fileName not found at db call");
+        validFileName = video.fileName;
+    }
+
+    const directoryAndVideoToDelete = {
+        id: validId,
+        fileName: validFileName,
+    };
+
+    await bucketDeleteVideoFile(directoryAndVideoToDelete);
+    return await dbDeleteSeminarVideoById({ id: validId });
+}
+
 export type ModelName =
     | "LessonTranscript"
     | "LessonContent"
     | "Video"
     | "CourseDetails"
     | "Lesson"
-    | "Course";
+    | "Course"
+    | "SeminarContent"
+    | "SeminarTranscript"
+    | "SeminarVideo"
+    | "Seminar"
+    | "UNSUPPORTED";
 type OrderDeleteModelEntryProps = {
     id: string;
     modelName: ModelName;
@@ -91,6 +128,28 @@ async function ctrlDeleteLesson(id: string) {
         throw new Error("Lesson video not deleted");
     return await dbDeleteLesson({ id: validId });
 }
+
+async function ctrlDeleteSeminar(id: string) {
+    const validId = z.string().parse(id);
+    const seminar = await dbGetSeminarAndConnectedById({ id: validId });
+
+    if (seminar && seminar.video) {
+        const videoArgs = {
+            id: seminar.video.id,
+            directory: true,
+        };
+        await ctrlDeleteSeminarVideo(videoArgs);
+    }
+
+    const isSeminarWithoutVideo = await dbGetSeminarAndConnectedById({
+        id: validId,
+    });
+    if (isSeminarWithoutVideo && isSeminarWithoutVideo.video !== null) {
+        throw new Error("Lesson video not deleted");
+    }
+    return await dbDeleteLesson({ id: validId });
+}
+
 /**
  * Higher order controller function that organizes the deletion of model entries by
  * calling the correct function using the model name as a switch statement filter.
@@ -114,6 +173,21 @@ export async function ctrlDeleteModelEntry({
             return await ctrlDeleteLesson(validId);
         case "Course":
             return await ctrlDeleteCourse(validId);
+        case "SeminarContent":
+            return await dbDeleteSeminarContentById({ id: validId });
+        case "SeminarTranscript":
+            return await dbDeleteSeminarTranscriptById({ id: validId });
+        case "SeminarVideo":
+            return await ctrlDeleteSeminarVideo({ id: validId });
+        case "Seminar":
+            return await ctrlDeleteSeminar(validId);
+        // SeminarCohorts are deleted inside of Course deletion, but not separately
+        case "UNSUPPORTED":
+            throw new Error("Not supported");
+        default: {
+            const _exhaustiveTypeCheck: never = modelName;
+            throw new Error(`${_exhaustiveTypeCheck} not supported`);
+        }
     }
 }
 /**
@@ -197,12 +271,98 @@ async function ctrlDeleteCourse(id: string) {
         await Promise.all(deleteLessonPromises);
     }
     /**
+     * Delete all related seminar cohorts and resources.
+     */
+    if (course.seminarCohorts.length > 0) {
+        const deleteSeminarCohortPromises = course.seminarCohorts.map(
+            async (sC) => {
+                const d = await ctrlDeleteSeminarCohort(sC.id);
+                console.info(`☑️ SEMINAR COHORT DELETED: ${d.id}`);
+            }
+        );
+        await Promise.all(deleteSeminarCohortPromises);
+    }
+    /**
      * Finally, delete course entry.
      */
     const deletedCourse = await dbDeleteCourse({ id: validId });
     console.info(`☑️ COURSE DELETED->ID: ${deletedCourse.id}`);
     return deletedCourse;
 }
+
+async function ctrlDeleteSeminarCohort(id: string) {
+    // Locally scoped helper functions
+    async function archiveStripeResources({
+        stripeSeminarOnlyPriceId,
+        stripeSeminarUpgradePriceId,
+    }: {
+        stripeSeminarOnlyPriceId: string;
+        stripeSeminarUpgradePriceId: string;
+    }) {
+        const archivedStripeSeminarOnlyPriceId = await stripeArchivePrice({
+            stripePriceId: stripeSeminarOnlyPriceId,
+        });
+        const archivedStripeSeminarUpgradePriceId = await stripeArchivePrice({
+            stripePriceId: stripeSeminarUpgradePriceId,
+        });
+        return {
+            archivedStripeSeminarOnlyPriceId,
+            archivedStripeSeminarUpgradePriceId,
+        };
+    }
+
+    // Main function execution
+    const validId = z.string().parse(id);
+    const seminarCohort = await dbGetSeminarCohortAndSeminarsById({
+        id: validId,
+    });
+    if (!seminarCohort) throw new Error("Course not found at db call");
+    /**
+     * Archive related Stripe resources if they exist.
+     */
+    if (
+        seminarCohort.stripeSeminarOnlyPriceId &&
+        seminarCohort.stripeSeminarUpgradePriceId
+    ) {
+        await archiveStripeResources({
+            stripeSeminarOnlyPriceId: seminarCohort.stripeSeminarOnlyPriceId,
+            stripeSeminarUpgradePriceId:
+                seminarCohort.stripeSeminarUpgradePriceId,
+        });
+        console.info(
+            `☑️ STRIPE RESOURCES ARCHIVED->COURSE ID: ${seminarCohort.id}`
+        );
+    } else {
+        console.info(
+            `☑️ NO OR INCOMPLETE STRIPE RESOURCES TO ARCHIVE->COURSE ID: ${seminarCohort.id}`
+        );
+        throw new Error(
+            "orderDeleteCourse Func: Could not archive all stripe resources. Terminating delete process."
+        );
+    }
+    /**
+     * Delete all related lessons and resources.
+     */
+    if (seminarCohort.seminars.length > 0) {
+        /**
+         * Using `forEach()` will not work here, as it will not wait for the async function to finish.
+         * Instead we use `map()` to create an array of promises, and then use `Promise.all()`
+         * to wait for all promises to resolve.
+         */
+        const deleteLessonPromises = seminarCohort.seminars.map(async (s) => {
+            const deletedLesson = await ctrlDeleteSeminar(s.id);
+            console.info(`☑️ SEMINAR DELETED: ${deletedLesson.id}`);
+        });
+        await Promise.all(deleteLessonPromises);
+    }
+    /**
+     * Finally, delete course entry.
+     */
+    const deletedSeminarCohort = await dbDeleteSeminarCohort({ id: validId });
+    console.info(`☑️ SEMINAR COHORT DELETED->ID: ${deletedSeminarCohort.id}`);
+    return deletedSeminarCohort;
+}
+
 type OrderCreateOrUpdateCourseProps = Omit<
     DbUpsertCourseByIdProps,
     | "stripeProductId"
@@ -210,6 +370,76 @@ type OrderCreateOrUpdateCourseProps = Omit<
     | "stripeSeminarPriceId"
     | "stripeDialoguePriceId"
 >;
+
+export async function ctrlUpdateSeminarCohortPrices({
+    id,
+    seminarOnlyPrice,
+    seminarUpgradePrice,
+}: {
+    id: string;
+    seminarOnlyPrice: number;
+    seminarUpgradePrice: number;
+}) {
+    const product = await dbGetOrCreateProductAux({ kind: "SEMINAR_ONLY" });
+    const seminarCohort = await dbGetSeminarCohortAndSeminarsById({ id });
+
+    const seminarOnlyPriceNewPrice = await updateStripePriceIfNeeded({
+        existingPrice: seminarCohort?.seminarOnlyPrice ?? 0,
+        incomingPrice: seminarOnlyPrice,
+        productId: product.stripeProductId,
+        stripePriceId: seminarCohort?.stripeSeminarOnlyPriceId,
+    });
+
+    const seminarUpgradePriceNewPrice = await updateStripePriceIfNeeded({
+        existingPrice: seminarCohort?.seminarUpgradePrice ?? 0,
+        incomingPrice: seminarUpgradePrice,
+        productId: product.stripeProductId,
+        stripePriceId: seminarCohort?.stripeSeminarUpgradePriceId,
+    });
+
+    console.log("🟡", seminarOnlyPriceNewPrice);
+    console.log("🟡", seminarUpgradePriceNewPrice);
+    await dbUpdateSeminarCohort({
+        id,
+        data: {
+            seminarOnlyPrice:
+                seminarOnlyPriceNewPrice?.unit_amount ?? undefined,
+            stripeSeminarOnlyPriceId: seminarOnlyPriceNewPrice?.id,
+            seminarUpgradePrice:
+                seminarUpgradePriceNewPrice?.unit_amount ?? undefined,
+            stripeSeminarUpgradePriceId: seminarUpgradePriceNewPrice?.id,
+        },
+    });
+}
+
+async function updateStripePriceIfNeeded({
+    stripePriceId,
+    productId,
+    existingPrice,
+    incomingPrice,
+}: {
+    stripePriceId: string | undefined;
+    productId: string;
+    existingPrice: number;
+    incomingPrice: number;
+}) {
+    /**
+     * This check occurs *only* between incoming price from the App and the registered price in the database.
+     * This saves an API call but is less rigorous.
+     * Consider a fault  where the price in the database check fails, but the prices is updated in db but
+     * not in Stripe. This would result in a price mismatch between the App and Stripe.
+     */
+    if (incomingPrice !== existingPrice) {
+        await stripeArchivePrice({ stripePriceId: stripePriceId });
+        const newPrice = await stripeCreatePrice({
+            stripeProductId: productId,
+            unitPrice: incomingPrice,
+        });
+        return newPrice;
+    }
+    return;
+}
+
 /**
  * Higher order controller function that organizes the creation or update of a Course entry. Integrated with Stripe API,
  * so it wil attempt to update the Stripe resources if they already exist, or create them if they don't.
@@ -231,35 +461,6 @@ export async function ctrlCreateOrUpdateCourse({
     seminarLink,
     creatorId,
 }: OrderCreateOrUpdateCourseProps) {
-    // Locally scoped helper functions
-    async function updateStripePriceIfNeeded({
-        stripePriceId,
-        productId,
-        existingPrice,
-        incomingPrice,
-    }: {
-        stripePriceId: string;
-        productId: string;
-        existingPrice: number;
-        incomingPrice: number;
-    }) {
-        /**
-         * This check occurs *only* between incoming price from the App and the registered price in the database.
-         * This saves an API call but is less rigorous.
-         * Consider a fault  where the price in the database check fails, but the prices is updated in db but
-         * not in Stripe. This would result in a price mismatch between the App and Stripe.
-         */
-        if (incomingPrice !== existingPrice) {
-            await stripeArchivePrice({ stripePriceId: stripePriceId });
-            const newPrice = await stripeCreatePrice({
-                stripeProductId: productId,
-                unitPrice: incomingPrice,
-            });
-            return newPrice;
-        }
-        return;
-    }
-
     async function updateStripeProductIfNeeded({
         stripeProductId,
         existingName,

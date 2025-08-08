@@ -8,7 +8,6 @@ import {
 } from "nextra-theme-docs";
 import { Banner as NextraBanner, Head, Search } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
-import { type ThemeConfigProps } from "node_modules/nextra-theme-docs/dist/layout.mjs";
 import { UserMenu } from "lib/components/navigation/UserMenu";
 import { Footer } from "lib/components/navigation/Footer";
 import { NavbarHeader } from "lib/components/navigation/NavbarHeader";

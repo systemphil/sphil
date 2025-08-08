@@ -9,7 +9,11 @@ export function NavbarHeader() {
             <h2 id="navbar-heading" className="sr-only">
                 Navbar heading
             </h2>
-            <Link href="/" title="Home" className="flex items-center gap-4">
+            <Link
+                href="/"
+                title="Why dost thy hand linger when thou canst but press and enter... Neith's Owl awaits thee"
+                className="flex items-center gap-4"
+            >
                 <LogoOwl />
                 <div className="hidden min-[350px]:flex">
                     <LogoAnimated />

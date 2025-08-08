@@ -56,15 +56,16 @@ export function CourseMaterialCard({
             </Link>
             <button
                 className="d-btn d-btn-square mr-2 hover:bg-red-500"
-                disabled={isPending}
+                disabled={modelName === "UNSUPPORTED" || isPending}
                 onClick={() => setIsDialogOpen(true)}
             >
                 <ButtonDeleteCross />
             </button>
             <Dialog open={isDialogOpen} onClose={onClose} disableScrollLock>
                 <DialogContent>
-                    Are you sure you want to delete this {modelName} item? This
-                    action cannot be undone.
+                    Are you sure you want to delete this{" "}
+                    {modelName.toLowerCase()} item? This action cannot be
+                    undone.
                 </DialogContent>
                 <DialogActions>
                     <button

@@ -15,7 +15,7 @@ type PurchaseReceiptEmailProps = {
     user: User;
 };
 
-export function EmailPurchaseNotification({
+export function EmailPurchaseAdminNotification({
     user,
     product,
     order,
@@ -67,7 +67,7 @@ export default function Example() {
     };
 
     return (
-        <EmailPurchaseNotification
+        <EmailPurchaseAdminNotification
             user={user}
             product={product}
             order={order}
