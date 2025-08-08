@@ -6,13 +6,14 @@ import { dbGetCourseAndDetailsAndLessonsById } from "lib/database/dbFuncs";
 import { CourseMaterialCard } from "features/courses/components/CourseMaterialCard";
 import { errorMessages } from "lib/config/errorMessages";
 import { CourseLessonsSortable } from "features/courses/components/CourseLessonsSortable";
+import { Alert } from "@mui/material";
 
 export const metadata = {};
 
 export default async function AdminCourseEdit({
     params,
 }: {
-    params: { courseId: string };
+    params: Promise<{ courseId: string }>;
 }) {
     const { courseId } = await params;
     if (typeof courseId !== "string") {
@@ -93,12 +94,13 @@ export default async function AdminCourseEdit({
                             ))
                         ) : (
                             <div>
-                                <p>
-                                    Seminar cohorts are automatically generated
-                                    when a user signs up for seminars
-                                </p>
+                                <p>No cohorts at this time</p>
                             </div>
                         )}
+                        <Alert color="info" sx={{ mt: 2 }}>
+                            Seminar cohorts are automatically generated when a
+                            user signs up for seminars for the current year
+                        </Alert>
                     </div>
                 </div>
             </div>
