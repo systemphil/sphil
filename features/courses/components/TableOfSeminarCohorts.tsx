@@ -41,11 +41,13 @@ export async function TableOfSeminarCohorts({
 
     if (seminarCohorts.length > 0) {
         return (
-            <div className="mt-4 md:py-8 max-w-[320px]">
+            <div className="mt-1 md:py-1 max-w-[320px]">
                 <div>
                     <Heading as="h4">Seminars</Heading>
                     <div
-                        className={isDropdown ? "flex justify-center gap2" : ""}
+                        className={
+                            isDropdown ? "flex justify-center gap-2" : ""
+                        }
                     >
                         {seminarCohorts.map((seminarCohort, index) => {
                             return (
