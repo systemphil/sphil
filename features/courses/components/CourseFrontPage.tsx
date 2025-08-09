@@ -67,6 +67,7 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
                                 <TableOfSeminarCohorts
                                     courseSlug={slug}
                                     isCentered={false}
+                                    isDropdown
                                 />
                             </Suspense>
                             <Suspense>

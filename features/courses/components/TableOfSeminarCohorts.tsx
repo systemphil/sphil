@@ -15,9 +15,11 @@ const links = {
 export async function TableOfSeminarCohorts({
     courseSlug,
     isCentered = false,
+    isDropdown = false,
 }: {
     courseSlug: string;
     isCentered?: boolean;
+    isDropdown?: boolean;
 }) {
     const session = await auth();
 
@@ -42,21 +44,50 @@ export async function TableOfSeminarCohorts({
             <div className="mt-4 md:py-8 max-w-[320px]">
                 <div>
                     <Heading as="h4">Seminars</Heading>
-                    {seminarCohorts.map((seminarCohort, index) => {
-                        return (
-                            <div key={`${seminarCohort.year}-${index}`}>
-                                <Heading as="h6">
-                                    Cohort {seminarCohort.year}
-                                </Heading>
-                                <SeminarsMap
-                                    isCentered={isCentered}
-                                    seminars={seminarCohort.seminars}
-                                    courseSlug={courseSlug}
-                                    seminarCohortYear={seminarCohort.year}
-                                />
-                            </div>
-                        );
-                    })}
+                    <div
+                        className={isDropdown ? "flex justify-center gap2" : ""}
+                    >
+                        {seminarCohorts.map((seminarCohort, index) => {
+                            return (
+                                <div
+                                    key={`${seminarCohort.year}-${index}`}
+                                    className={
+                                        isDropdown
+                                            ? "d-dropdown d-dropdown-top d-dropdown-end"
+                                            : ""
+                                    }
+                                >
+                                    {isDropdown ? (
+                                        <div
+                                            tabIndex={index}
+                                            role="button"
+                                            className="d-btn d-btn-primary m-1"
+                                        >
+                                            <Heading
+                                                as="h6"
+                                                replacementClasses="!text-stone-200"
+                                            >
+                                                Cohort {seminarCohort.year}
+                                            </Heading>
+                                        </div>
+                                    ) : (
+                                        <Heading as="h6">
+                                            Cohort {seminarCohort.year}
+                                        </Heading>
+                                    )}
+
+                                    <SeminarsMap
+                                        isCentered={isCentered}
+                                        seminars={seminarCohort.seminars}
+                                        courseSlug={courseSlug}
+                                        seminarCohortYear={seminarCohort.year}
+                                        isDropdown={isDropdown}
+                                        tabIndex={index}
+                                    />
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
         );
@@ -71,23 +102,38 @@ function SeminarsMap({
     courseSlug,
     seminarCohortYear,
     isCentered = false,
+    isDropdown = false,
+    tabIndex = 0,
 }: {
     seminars: Seminar[];
     courseSlug: string;
     seminarCohortYear: number;
     isCentered?: boolean;
+    isDropdown?: boolean;
+    tabIndex?: number;
 }) {
     const isCenteredClasses = isCentered
         ? "justify-center w-full"
         : "flex-start";
 
     return (
-        <ul className="max-w-xs">
+        <ul
+            className={
+                isDropdown
+                    ? "d-dropdown-content d-menu bg-base-100 dark:bg-stone-900 rounded-box z-1 w-52 p-2 shadow-sm"
+                    : "max-w-xs"
+            }
+            tabIndex={tabIndex}
+        >
             {seminars.map((seminar: Seminar) => {
                 return (
                     <li key={seminar.order}>
                         <Link
-                            className="dark:hover:bg-dark-green-hsl hover:bg-slate-200/90 transition-all duration-300 flex p-1 rounded-md"
+                            className={
+                                isDropdown
+                                    ? "dark:hover:bg-dark-green-hsl"
+                                    : "dark:hover:bg-dark-green-hsl hover:bg-slate-200/90 transition-all duration-300 flex p-1 rounded-md"
+                            }
                             href={`${links.courses}/${courseSlug}/seminars/${seminarCohortYear}/${seminar.order}`}
                         >
                             <div className={`flex ${isCenteredClasses} pl-0.5`}>
