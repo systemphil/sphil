@@ -82,7 +82,7 @@ export function Billing({
                             .
                             <div className="text-stone-500 mt-1">
                                 Please note that refunds are only available
-                                within 30 days of purchase.
+                                within 7 days of purchase.
                             </div>
                         </div>
                     </>
