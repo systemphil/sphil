@@ -73,6 +73,7 @@ const updateSeminarCohortSchema = z.object({
     id: z.string(),
     seminarOnlyPrice: z.number().positive(),
     seminarUpgradePrice: z.number().positive(),
+    seminarLink: z.string().nullish(),
 });
 export type ActionUpdateSeminarCohortInput = z.infer<
     typeof updateSeminarCohortSchema

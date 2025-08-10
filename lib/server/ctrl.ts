@@ -375,10 +375,12 @@ export async function ctrlUpdateSeminarCohortPrices({
     id,
     seminarOnlyPrice,
     seminarUpgradePrice,
+    seminarLink,
 }: {
     id: string;
     seminarOnlyPrice: number;
     seminarUpgradePrice: number;
+    seminarLink?: string | null;
 }) {
     const product = await dbGetOrCreateProductAux({ kind: "SEMINAR_ONLY" });
     const seminarCohort = await dbGetSeminarCohortAndSeminarsById({ id });
@@ -397,9 +399,7 @@ export async function ctrlUpdateSeminarCohortPrices({
         stripePriceId: seminarCohort?.stripeSeminarUpgradePriceId,
     });
 
-    console.log("🟡", seminarOnlyPriceNewPrice);
-    console.log("🟡", seminarUpgradePriceNewPrice);
-    await dbUpdateSeminarCohort({
+    return await dbUpdateSeminarCohort({
         id,
         data: {
             seminarOnlyPrice:
@@ -408,6 +408,7 @@ export async function ctrlUpdateSeminarCohortPrices({
             seminarUpgradePrice:
                 seminarUpgradePriceNewPrice?.unit_amount ?? undefined,
             stripeSeminarUpgradePriceId: seminarUpgradePriceNewPrice?.id,
+            seminarLink,
         },
     });
 }

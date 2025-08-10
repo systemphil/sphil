@@ -10,6 +10,7 @@ import {
     actionUpdateSeminarCohort,
     ActionUpdateSeminarCohortInput,
 } from "features/courses/server/actions";
+import { TextInput } from "./TextInput";
 
 export const SeminarCohortForm = ({
     seminarCohort,
@@ -37,6 +38,7 @@ export const SeminarCohortForm = ({
             id: seminarCohort.id,
             seminarOnlyPrice: seminarCohort.seminarOnlyPrice,
             seminarUpgradePrice: seminarCohort.seminarUpgradePrice,
+            seminarLink: seminarCohort.seminarLink,
         },
     });
 
@@ -59,6 +61,11 @@ export const SeminarCohortForm = ({
                     label="Seminar Upgrade Price* (in cents) - The price for upgrading to current seminar tier for base purchases"
                     name="seminarUpgradePrice"
                     options={{ valueAsNumber: true, required: true }}
+                />
+                <TextInput
+                    label="Seminar Link"
+                    name="seminarLink"
+                    options={{ required: false }}
                 />
                 <SubmitInput
                     value={"Update pricing for this cohort"}
