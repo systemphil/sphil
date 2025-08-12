@@ -27,5 +27,6 @@ export async function actionUpdateMdxModelById(
     const data = await dbUpdateMdxByModelId(input);
     revalidatePath("/(admin)/admin", "layout");
     revalidateTag(cacheKeys.allPublicCourses);
+    revalidateTag(cacheKeys.allSeminars);
     return { data };
 }

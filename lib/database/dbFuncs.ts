@@ -1082,6 +1082,40 @@ export const dbUpsertCourseDetailsById = async ({
     }
     return withAdmin(task);
 };
+
+export const dbUpsertSeminarCohortDetailsById = async ({
+    id,
+    seminarCohortId,
+    content,
+}: {
+    id?: string;
+    seminarCohortId: string;
+    content: string;
+}) => {
+    async function task() {
+        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
+        const validSeminarCourseId = z.string().parse(seminarCohortId);
+
+        const contentAsBuffer = Text.Encode(content);
+
+        const result = await prisma.seminarCohortDetails.upsert({
+            where: {
+                id: validId,
+            },
+            update: {
+                mdx: contentAsBuffer,
+            },
+            create: {
+                seminarCohortId: validSeminarCourseId,
+                mdx: contentAsBuffer,
+            },
+        });
+
+        const resultWithoutContent = exclude(result, ["mdx"]);
+        return resultWithoutContent;
+    }
+    return withAdmin(task);
+};
 /**
  * TODO update with new models
  * Updates mdx field for an existing model by id as identifier.
