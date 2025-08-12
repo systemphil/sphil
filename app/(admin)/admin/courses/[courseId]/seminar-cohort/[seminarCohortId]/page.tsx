@@ -59,8 +59,7 @@ export default async function AdminSeminarCohortEdit({
                                 modelName="CourseDetails"
                             />
                         ) : (
-                            <div>
-                                <p>None yet.</p>
+                            <div className="flex items-center justify-center mb-6">
                                 <Link
                                     href={`/admin/courses/${courseId}/seminar-cohort/${seminarCohortAndSeminars.id}/seminar-cohort-details/new`}
                                 >

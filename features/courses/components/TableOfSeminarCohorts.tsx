@@ -85,6 +85,7 @@ export async function TableOfSeminarCohorts({
                                         seminarCohortYear={seminarCohort.year}
                                         isDropdown={isDropdown}
                                         tabIndex={index}
+                                        // TODO replace seminar link with seminarCohortDetails
                                         seminarLink={seminarCohort.seminarLink}
                                     />
                                 </div>

@@ -1117,7 +1117,6 @@ export const dbUpsertSeminarCohortDetailsById = async ({
     return withAdmin(task);
 };
 /**
- * TODO update with new models
  * Updates mdx field for an existing model by id as identifier.
  * @access ADMIN
  */
@@ -1202,6 +1201,20 @@ export const dbUpdateMdxByModelId = async ({
         if (result === 1) {
             const compiledMdx = await mdxCompiler(validContent);
             await prisma.seminarTranscript.update({
+                where: {
+                    id: validId,
+                },
+                data: {
+                    mdxCompiled: compiledMdx,
+                },
+            });
+            return;
+        }
+        result =
+            await prisma.$executeRaw`UPDATE "SeminarCohortDetails" SET mdx = ${contentAsBuffer} WHERE id = ${validId};`;
+        if (result === 1) {
+            const compiledMdx = await mdxCompiler(validContent);
+            await prisma.seminarCohortDetails.update({
                 where: {
                     id: validId,
                 },
