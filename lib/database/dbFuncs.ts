@@ -21,6 +21,7 @@ import { withAdmin, withUser } from "lib/auth/authFuncs";
 import {
     cache,
     CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS,
+    cacheKeys,
 } from "lib/server/cache";
 import { Text } from "lib/utils/textEncoding";
 import { stripeCreatePrice, stripeCreateProduct } from "lib/stripe/stripeFuncs";
@@ -62,7 +63,7 @@ export const dbGetAllPublishedCourses = async () => {
                 },
             });
         },
-        ["allPublicCurses"],
+        [cacheKeys.allPublicCourses],
         { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
     );
     return await getAllCourses();
@@ -94,7 +95,7 @@ export const dbGetCourseBySlug = async (slug: string) => {
                 },
             });
         },
-        ["/courses", validSlug],
+        [cacheKeys.allPublicCourses, validSlug],
         { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
     );
     return await getCourseCached();
@@ -404,6 +405,12 @@ const mdxModelConfig = [
         query: (id: string) =>
             prisma.seminarTranscript.findUnique({ where: { id } }),
         description: "SeminarTranscript",
+    },
+    {
+        name: "seminarCohortDetails",
+        query: (id: string) =>
+            prisma.seminarCohortDetails.findUnique({ where: { id } }),
+        description: "SeminarCohortDetails",
     },
 ] as const;
 
@@ -1745,52 +1752,67 @@ export async function dbGetSeminarCohortAndSeminarsById({
 }: {
     id: string;
 }) {
-    return await prisma.seminarCohort.findUnique({
-        where: {
-            id,
-        },
-        include: {
-            seminars: {
-                orderBy: {
-                    order: "asc",
+    const _task = cache(
+        async () => {
+            return prisma.seminarCohort.findUnique({
+                where: {
+                    id,
                 },
-            },
-            course: {
-                select: {
-                    name: true,
-                },
-            },
-            participants: {
-                select: {
-                    name: true,
-                    email: true,
-                },
-            },
-        },
-    });
-}
-
-export async function dbGetSeminarAndConnectedById({ id }: { id: string }) {
-    return await prisma.seminar.findUnique({
-        where: {
-            id,
-        },
-        include: {
-            content: true,
-            transcript: true,
-            video: true,
-            seminarCohort: {
-                select: {
-                    year: true,
+                include: {
+                    seminars: {
+                        orderBy: {
+                            order: "asc",
+                        },
+                    },
+                    details: true,
                     course: {
                         select: {
                             name: true,
                         },
                     },
+                    participants: {
+                        select: {
+                            name: true,
+                            email: true,
+                        },
+                    },
                 },
-            },
+            });
         },
-    });
+        [cacheKeys.allSeminars],
+        { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
+    );
+    return await _task();
+}
+
+export async function dbGetSeminarAndConnectedById({ id }: { id: string }) {
+    const _task = cache(
+        async () => {
+            return await prisma.seminar.findUnique({
+                where: {
+                    id,
+                },
+                include: {
+                    content: true,
+                    transcript: true,
+                    video: true,
+                    seminarCohort: {
+                        select: {
+                            year: true,
+                            course: {
+                                select: {
+                                    name: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+        },
+        [cacheKeys.allSeminars],
+        { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
+    );
+    return await _task();
 }
 
 export async function dbUpdateSeminarCohort({

@@ -2,6 +2,7 @@
 
 import { validateAdminAccess } from "lib/auth/authFuncs";
 import { dbUpdateMdxByModelId } from "lib/database/dbFuncs";
+import { cacheKeys } from "lib/server/cache";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
 
@@ -25,6 +26,6 @@ export async function actionUpdateMdxModelById(
     }
     const data = await dbUpdateMdxByModelId(input);
     revalidatePath("/(admin)/admin", "layout");
-    revalidateTag("allPublicCurses");
+    revalidateTag(cacheKeys.allPublicCourses);
     return { data };
 }

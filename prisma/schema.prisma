@@ -64,8 +64,8 @@ model User {
     lessonsCompleted UserLessonProgress[]
 
     // Commercial relations
-    coursesPurchased  Course[] // Deprecated (only for legacy)
-    productsPurchased String[] // Deprecated (only for legacy)
+    coursesPurchased  Course[] // TODO Deprecated
+    productsPurchased String[] // TODO Deprecated
     purchases         CoursePurchase[]
     seminarCohorts    SeminarCohort[]  @relation("SeminarCohortParticipants")
 
@@ -118,7 +118,7 @@ model Course {
     details    CourseDetails?
 
     // Commercial relations
-    owners         User[] // Deprecated (only for legacy)
+    owners         User[] // TODO Deprecated
     seminarCohorts SeminarCohort[]
     purchases      CoursePurchase[]
 
@@ -127,25 +127,40 @@ model Course {
 }
 
 model SeminarCohort {
-    id           String  @id @default(cuid())
-    year         Int
-    participants User[]  @relation("SeminarCohortParticipants")
-    course       Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
-    courseId     String
-    seminarLink  String?
-
+    id                          String  @id @default(cuid())
+    year                        Int
+    courseId                    String
+    seminarLink                 String? // TODO Deprecated
     seminarOnlyPrice            Float
     stripeSeminarOnlyPriceId    String
     seminarUpgradePrice         Float
     stripeSeminarUpgradePriceId String
 
+    // Internal relations
+    course   Course                @relation(fields: [courseId], references: [id], onDelete: Cascade)
+    details  SeminarCohortDetails?
     seminars Seminar[]
+
+    // Commercial relations
+    participants User[] @relation("SeminarCohortParticipants")
 
     notes     String?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
     @@unique([year, courseId])
+}
+
+model SeminarCohortDetails {
+    id              String        @id @default(cuid())
+    seminarCohort   SeminarCohort @relation(fields: [seminarCohortId], references: [id], onDelete: Cascade)
+    seminarCohortId String        @unique
+    mdxCategory     MdxCategory   @default(DETAILS)
+    mdx             Bytes
+    mdxCompiled     String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Seminar {
