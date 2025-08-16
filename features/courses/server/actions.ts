@@ -13,6 +13,7 @@ import {
     dbReorderSeminars,
     dbUpsertLessonById,
 } from "lib/database/dbFuncs";
+import { cacheKeys } from "lib/server/cache";
 import {
     ctrlCreateOrUpdateCourse,
     ctrlDeleteModelEntry,
@@ -65,7 +66,7 @@ export async function actionUpsertCourse(input: ActionUpsertCourseInput) {
 
     const data = await ctrlCreateOrUpdateCourse(_input);
     revalidatePath("/(admin)/admin", "layout");
-    revalidateTag("allPublicCurses");
+    revalidateTag(cacheKeys.allPublicCourses);
     return { data };
 }
 
@@ -94,7 +95,7 @@ export async function actionUpdateSeminarCohort(
 
     const data = await ctrlUpdateSeminarCohortPrices(input);
     revalidatePath("/(admin)/admin", "layout");
-    revalidateTag("allPublicCurses");
+    revalidateTag(cacheKeys.allSeminars);
 
     return { data };
 }
@@ -121,7 +122,7 @@ export async function actionUpsertLesson(input: ActionUpsertLessonInput) {
     }
     const data = await dbUpsertLessonById(input);
     revalidatePath("/(admin)/admin", "layout");
-    revalidateTag("allPublicCurses");
+    revalidateTag(cacheKeys.allPublicCourses);
     return { data };
 }
 
@@ -146,7 +147,7 @@ export async function actionCreateSignedPostUrl(
     }
     const data = await bucketGenerateSignedUploadUrl(input);
     revalidatePath("/(admin)/admin", "layout");
-    revalidateTag("allPublicCurses");
+    revalidateTag(cacheKeys.allPublicCourses);
     return { data };
 }
 
@@ -171,7 +172,7 @@ export async function actionCreateSignedPostUrlSeminar(
 
     const data = await bucketGenerateSignedUploadUrl(input);
     revalidatePath("/(admin)/admin", "layout");
-    revalidateTag("allPublicCurses");
+    revalidateTag(cacheKeys.allPublicCourses);
     return { data };
 }
 
@@ -226,6 +227,7 @@ const deleteModelEntrySchema = z.object({
         "SeminarContent",
         "SeminarVideo",
         "Seminar",
+        "SeminarCohortDetails",
         "UNSUPPORTED",
     ]) satisfies z.ZodType<ModelName>,
 });
@@ -244,7 +246,7 @@ export async function actionDeleteModelEntry(
     }
     const data = await ctrlDeleteModelEntry(input);
     revalidatePath("/(admin)/admin", "layout");
-    revalidateTag("allPublicCurses");
+    revalidateTag(cacheKeys.allPublicCourses);
     return { data };
 }
 
@@ -268,7 +270,7 @@ export async function actionUpdateLessonOrder(
     await dbReorderLessons({ orderedLessonIds: input });
 
     revalidatePath("/(admin)/admin", "layout");
-    revalidateTag("allPublicCurses");
+    revalidateTag(cacheKeys.allPublicCourses);
     return { error: false, message: "Successfully reordered your lessons" };
 }
 
@@ -290,7 +292,7 @@ export async function actionUpdateSeminarOrder(
     await dbReorderSeminars({ orderedIds: input });
 
     revalidatePath("/(admin)/admin", "layout");
-    revalidateTag("allPublicCurses");
+    revalidateTag(cacheKeys.allSeminars);
     return { error: false, message: "Successfully reordered your seminars" };
 }
 
@@ -316,7 +318,7 @@ export async function actionCreateSeminar(
     const newSeminar = await dbCreateSeminar(input);
 
     revalidatePath("/(admin)/admin", "layout");
-    revalidateTag("allPublicCurses");
+    revalidateTag(cacheKeys.allSeminars);
     return {
         error: false,
         message: "Successfully created",

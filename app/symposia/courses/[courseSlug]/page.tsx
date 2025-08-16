@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({
     params,
 }: {
-    params: Promise<{ courseSlug: string }> | { courseSlug: string };
+    params: Promise<{ courseSlug: string }>;
 }): Promise<Metadata> {
     const { courseSlug: slug } = await params;
     const course = await dbGetCourseBySlug(slug);
@@ -58,11 +58,11 @@ export async function generateMetadata({
 export default async function CourseFrontPageRoute({
     params,
 }: {
-    params: Promise<{ courseSlug: string }> | { courseSlug: string };
+    params: Promise<{ courseSlug: string }>;
 }) {
     const { courseSlug: slug } = await params;
 
-    if (typeof slug !== "string") {
+    if (!slug) {
         return redirect(`/?error=${errorMessages.missingParams}`);
     }
 

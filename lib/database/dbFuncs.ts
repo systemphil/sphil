@@ -21,6 +21,7 @@ import { withAdmin, withUser } from "lib/auth/authFuncs";
 import {
     cache,
     CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS,
+    cacheKeys,
 } from "lib/server/cache";
 import { Text } from "lib/utils/textEncoding";
 import { stripeCreatePrice, stripeCreateProduct } from "lib/stripe/stripeFuncs";
@@ -62,7 +63,7 @@ export const dbGetAllPublishedCourses = async () => {
                 },
             });
         },
-        ["allPublicCurses"],
+        [cacheKeys.allPublicCourses],
         { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
     );
     return await getAllCourses();
@@ -74,39 +75,41 @@ export const dbGetAllPublishedCourses = async () => {
  */
 export const dbGetCourseBySlug = async (slug: string) => {
     const validSlug = z.string().parse(slug);
-    const getCourseCached = cache(
-        async () => {
-            return await prisma.course.findUnique({
-                where: {
-                    slug: validSlug,
-                },
-                include: {
-                    lessons: {
-                        orderBy: {
-                            order: "asc",
-                        },
-                    },
-                    details: {
-                        select: {
-                            mdxCompiled: true,
-                        },
-                    },
-                },
-            });
+    // const getCourseCached = cache(
+    //     async () => {
+    return await prisma.course.findUnique({
+        where: {
+            slug: validSlug,
         },
-        ["/courses", validSlug],
-        { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
-    );
-    return await getCourseCached();
+        include: {
+            lessons: {
+                orderBy: {
+                    order: "asc",
+                },
+            },
+            details: {
+                select: {
+                    mdxCompiled: true,
+                },
+            },
+        },
+    });
+    // },
+    // [cacheKeys.allPublicCourses, validSlug],
+    // { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
+    // );
+    // return await getCourseCached();
 };
 
-export async function dbGetSeminarCohortByCourseAndUser({
+export async function dbGetSeminarCohortsByCourseAndUser({
     courseId,
     userId,
 }: {
     courseId: string;
     userId: string;
 }) {
+    // const _task = cache(
+    //     async () => {
     return await prisma.seminarCohort.findMany({
         where: {
             courseId,
@@ -118,8 +121,53 @@ export async function dbGetSeminarCohortByCourseAndUser({
         },
         include: {
             seminars: true,
+            details: true,
         },
     });
+    //     },
+    //     [cacheKeys.allSeminars, userId],
+    //     { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
+    // );
+    // return await _task();
+}
+
+export async function dbGetSeminarCohortByCourseYearAndUser({
+    courseId,
+    userId,
+    year,
+}: {
+    courseId: string;
+    userId: string;
+    year: number;
+}) {
+    // const _task = cache(
+    //     async () => {
+    return await prisma.seminarCohort.findFirst({
+        where: {
+            courseId,
+            year,
+            participants: {
+                some: {
+                    id: userId,
+                },
+            },
+        },
+        include: {
+            seminars: true,
+            details: true,
+            course: {
+                select: {
+                    name: true,
+                    slug: true,
+                },
+            },
+        },
+    });
+    //     },
+    //     [cacheKeys.allSeminars, userId],
+    //     { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
+    // );
+    // return await _task();
 }
 
 export async function dbGetSeminarAndConnectedByYearAndUser({
@@ -404,6 +452,12 @@ const mdxModelConfig = [
         query: (id: string) =>
             prisma.seminarTranscript.findUnique({ where: { id } }),
         description: "SeminarTranscript",
+    },
+    {
+        name: "seminarCohortDetails",
+        query: (id: string) =>
+            prisma.seminarCohortDetails.findUnique({ where: { id } }),
+        description: "SeminarCohortDetails",
     },
 ] as const;
 
@@ -1075,8 +1129,41 @@ export const dbUpsertCourseDetailsById = async ({
     }
     return withAdmin(task);
 };
+
+export const dbUpsertSeminarCohortDetailsById = async ({
+    id,
+    seminarCohortId,
+    content,
+}: {
+    id?: string;
+    seminarCohortId: string;
+    content: string;
+}) => {
+    async function task() {
+        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
+        const validSeminarCourseId = z.string().parse(seminarCohortId);
+
+        const contentAsBuffer = Text.Encode(content);
+
+        const result = await prisma.seminarCohortDetails.upsert({
+            where: {
+                id: validId,
+            },
+            update: {
+                mdx: contentAsBuffer,
+            },
+            create: {
+                seminarCohortId: validSeminarCourseId,
+                mdx: contentAsBuffer,
+            },
+        });
+
+        const resultWithoutContent = exclude(result, ["mdx"]);
+        return resultWithoutContent;
+    }
+    return withAdmin(task);
+};
 /**
- * TODO update with new models
  * Updates mdx field for an existing model by id as identifier.
  * @access ADMIN
  */
@@ -1161,6 +1248,20 @@ export const dbUpdateMdxByModelId = async ({
         if (result === 1) {
             const compiledMdx = await mdxCompiler(validContent);
             await prisma.seminarTranscript.update({
+                where: {
+                    id: validId,
+                },
+                data: {
+                    mdxCompiled: compiledMdx,
+                },
+            });
+            return;
+        }
+        result =
+            await prisma.$executeRaw`UPDATE "SeminarCohortDetails" SET mdx = ${contentAsBuffer} WHERE id = ${validId};`;
+        if (result === 1) {
+            const compiledMdx = await mdxCompiler(validContent);
+            await prisma.seminarCohortDetails.update({
                 where: {
                     id: validId,
                 },
@@ -1364,6 +1465,21 @@ export const dbDeleteCourseDetailsById = async ({
     async function task() {
         const validId = z.string().parse(id);
         return await prisma.courseDetails.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    }
+    return withAdmin(task);
+};
+
+export const dbDeleteSeminarCohortDetailsById = async ({
+    id,
+}: {
+    id: string;
+}) => {
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.seminarCohortDetails.delete({
             where: { id: validId },
             select: { id: true },
         });
@@ -1745,7 +1861,9 @@ export async function dbGetSeminarCohortAndSeminarsById({
 }: {
     id: string;
 }) {
-    return await prisma.seminarCohort.findUnique({
+    // const _task = cache(
+    //     async () => {
+    return prisma.seminarCohort.findUnique({
         where: {
             id,
         },
@@ -1755,6 +1873,7 @@ export async function dbGetSeminarCohortAndSeminarsById({
                     order: "asc",
                 },
             },
+            details: true,
             course: {
                 select: {
                     name: true,
@@ -1768,29 +1887,41 @@ export async function dbGetSeminarCohortAndSeminarsById({
             },
         },
     });
+    //     },
+    //     [cacheKeys.allSeminars],
+    //     { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
+    // );
+    // return await _task();
 }
 
 export async function dbGetSeminarAndConnectedById({ id }: { id: string }) {
-    return await prisma.seminar.findUnique({
-        where: {
-            id,
-        },
-        include: {
-            content: true,
-            transcript: true,
-            video: true,
-            seminarCohort: {
-                select: {
-                    year: true,
-                    course: {
+    const _task = cache(
+        async () => {
+            return await prisma.seminar.findUnique({
+                where: {
+                    id,
+                },
+                include: {
+                    content: true,
+                    transcript: true,
+                    video: true,
+                    seminarCohort: {
                         select: {
-                            name: true,
+                            year: true,
+                            course: {
+                                select: {
+                                    name: true,
+                                },
+                            },
                         },
                     },
                 },
-            },
+            });
         },
-    });
+        [cacheKeys.allSeminars],
+        { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
+    );
+    return await _task();
 }
 
 export async function dbUpdateSeminarCohort({

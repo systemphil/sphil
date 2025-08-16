@@ -3,7 +3,7 @@ import { auth } from "lib/auth/authConfig";
 import { Heading } from "lib/components/ui/Heading";
 import {
     dbGetCourseBySlug,
-    dbGetSeminarCohortByCourseAndUser,
+    dbGetSeminarCohortsByCourseAndUser,
 } from "lib/database/dbFuncs";
 import { romanize } from "lib/utils";
 import Link from "next/link";
@@ -34,7 +34,7 @@ export async function TableOfSeminarCohorts({
         return null;
     }
 
-    const seminarCohorts = await dbGetSeminarCohortByCourseAndUser({
+    const seminarCohorts = await dbGetSeminarCohortsByCourseAndUser({
         courseId: course.id,
         userId: session.user.id,
     });
@@ -81,11 +81,13 @@ export async function TableOfSeminarCohorts({
                                     <SeminarsMap
                                         isCentered={isCentered}
                                         seminars={seminarCohort.seminars}
-                                        courseSlug={courseSlug}
+                                        courseSlug={course.slug}
                                         seminarCohortYear={seminarCohort.year}
                                         isDropdown={isDropdown}
                                         tabIndex={index}
-                                        seminarLink={seminarCohort.seminarLink}
+                                        hasSeminarCohortDetails={
+                                            seminarCohort.details ? true : false
+                                        }
                                     />
                                 </div>
                             );
@@ -107,7 +109,7 @@ function SeminarsMap({
     isCentered = false,
     isDropdown = false,
     tabIndex = 0,
-    seminarLink,
+    hasSeminarCohortDetails = false,
 }: {
     seminars: Seminar[];
     courseSlug: string;
@@ -115,7 +117,7 @@ function SeminarsMap({
     isCentered?: boolean;
     isDropdown?: boolean;
     tabIndex?: number;
-    seminarLink?: string | null;
+    hasSeminarCohortDetails?: boolean;
 }) {
     const isCenteredClasses = isCentered
         ? "justify-center w-full"
@@ -130,10 +132,10 @@ function SeminarsMap({
             }
             tabIndex={tabIndex}
         >
-            {seminarLink && (
+            {hasSeminarCohortDetails && courseSlug && seminarCohortYear && (
                 <li>
-                    <SeminarLink
-                        href={seminarLink}
+                    <SeminarCohortInformationLink
+                        href={`${links.courses}/${courseSlug}/seminars/${seminarCohortYear}/information`}
                         isCentered={isCentered}
                         isDropdown={isDropdown}
                     />
@@ -179,7 +181,7 @@ function SeminarsMap({
     );
 }
 
-function SeminarLink({
+function SeminarCohortInformationLink({
     href,
     isCentered = false,
     isDropdown = false,
@@ -196,7 +198,6 @@ function SeminarLink({
                     : `dark:hover:bg-dark-green-hsl hover:bg-slate-200/90 transition-all duration-300 p-1 rounded-md flex ${isCentered ? "justify-center" : "flex-start"}`
             }
             href={href}
-            target="_blank"
         >
             <div className={`flex justify-center pl-0.5`}>
                 <svg
@@ -207,9 +208,10 @@ function SeminarLink({
                     stroke="currentColor"
                     className="w-5 h-5"
                 >
-                    <path d="M24 5.25v13a.75.75 0 0 1-1.136.643L16.5 15.075v2.175A1.75 1.75 0 0 1 14.75 19h-13A1.75 1.75 0 0 1 0 17.25v-11C0 5.284.784 4.5 1.75 4.5h13c.966 0 1.75.784 1.75 1.75v2.175l6.364-3.818A.75.75 0 0 1 24 5.25Zm-9 1a.25.25 0 0 0-.25-.25h-13a.25.25 0 0 0-.25.25v11c0 .138.112.25.25.25h13a.25.25 0 0 0 .25-.25v-11Zm1.5 7.075 6 3.6V6.575l-6 3.6Z" />
+                    <path d="M13 7.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-3 3.75a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 .75.75v4.25h.75a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1 0-1.5h.75V12h-.75a.75.75 0 0 1-.75-.75Z" />
+                    <path d="M12 1c6.075 0 11 4.925 11 11s-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1ZM2.5 12a9.5 9.5 0 0 0 9.5 9.5 9.5 9.5 0 0 0 9.5-9.5A9.5 9.5 0 0 0 12 2.5 9.5 9.5 0 0 0 2.5 12Z" />
                 </svg>
-                <span className="ml-1">Zoom link</span>
+                <span className="ml-1">Information</span>
             </div>
         </Link>
     );

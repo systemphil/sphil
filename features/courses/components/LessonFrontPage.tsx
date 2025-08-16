@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import { TableOfLessons } from "./TableOfLessons";
 import { MDXRenderer } from "lib/components/MDXRenderer";
 import { errorMessages } from "lib/config/errorMessages";
 import {
     cache,
     CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS,
+    cacheKeys,
 } from "lib/server/cache";
 import { dbGetLessonAndRelationsBySlug } from "lib/database/dbFuncs";
 import { Heading } from "lib/components/ui/Heading";
@@ -20,7 +20,7 @@ export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
         async (slug) => {
             return await dbGetLessonAndRelationsBySlug(slug);
         },
-        ["/lessons", lessonSlug],
+        [cacheKeys.allPublicCourses, lessonSlug],
         { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
     );
     const lessonData = await getLessonAndRelationsBySlug(lessonSlug);
