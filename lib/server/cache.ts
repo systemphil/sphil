@@ -5,7 +5,7 @@ const isDevelopment = process.env.NODE_ENV === "development";
 
 export const CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS = isDevelopment
     ? 10
-    : 60 * 60;
+    : 60 * 15;
 export const CACHE_REVALIDATION_INTERVAL_MAINTENANCE = isDevelopment
     ? 10
     : 60 * 60; // 1 hour
@@ -18,3 +18,8 @@ export function cache<T extends Callback>(
 ) {
     return nextCache(reactCache(cb), keyParts, options);
 }
+
+export const cacheKeys = {
+    allPublicCourses: "allPublicCourses",
+    allSeminars: "allSeminars",
+} as const;

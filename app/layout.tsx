@@ -8,7 +8,6 @@ import {
 } from "nextra-theme-docs";
 import { Banner as NextraBanner, Head, Search } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
-import { type ThemeConfigProps } from "node_modules/nextra-theme-docs/dist/layout.mjs";
 import { UserMenu } from "lib/components/navigation/UserMenu";
 import { Footer } from "lib/components/navigation/Footer";
 import { NavbarHeader } from "lib/components/navigation/NavbarHeader";
@@ -184,7 +183,7 @@ export default async function RootLayout({
                             </NextraNavbar>
                         }
                         footer={
-                            <div className="relative">
+                            <div className="relative" key="footer-key-123">
                                 <div
                                     data-name="footer-flair"
                                     className="absolute h-20 w-full -top-[80px] bg-linear-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"

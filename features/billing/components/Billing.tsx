@@ -32,7 +32,7 @@ export function Billing({
                                             <div className="flex">
                                                 {course.imageUrl && (
                                                     <Image
-                                                        className="custom-mask custom-mask-parallelogram"
+                                                        className="rounded-md"
                                                         src={course.imageUrl}
                                                         height={200}
                                                         width={200}
@@ -47,22 +47,6 @@ export function Billing({
                                                         <div>
                                                             {course.description}
                                                         </div>
-                                                    </div>
-                                                    <div className="p-2 bg-purple-100 rounded-md">
-                                                        <span>
-                                                            Course last
-                                                            updated:&nbsp;
-                                                        </span>
-                                                        {new Date(
-                                                            course.updatedAt
-                                                        ).toLocaleDateString(
-                                                            "en-US",
-                                                            {
-                                                                day: "numeric",
-                                                                month: "long",
-                                                                year: "numeric",
-                                                            }
-                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
@@ -82,7 +66,7 @@ export function Billing({
                             .
                             <div className="text-stone-500 mt-1">
                                 Please note that refunds are only available
-                                within 30 days of purchase.
+                                within 7 days of purchase.
                             </div>
                         </div>
                     </>

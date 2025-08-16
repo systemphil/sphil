@@ -19,7 +19,11 @@ export const metadata = {};
 export default async function AdminLessonMaterialEdit({
     params,
 }: {
-    params: { courseId: string; lessonId: string; lessonMaterialId: string };
+    params: Promise<{
+        courseId: string;
+        lessonId: string;
+        lessonMaterialId: string;
+    }>;
 }) {
     const { lessonId, lessonMaterialId } = await params;
     if (typeof lessonMaterialId !== "string") {

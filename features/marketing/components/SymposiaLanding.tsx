@@ -237,7 +237,7 @@ function Refunds() {
             </Heading>
             <p className="text-lg text-slate-500 dark:text-slate-300 py-4">
                 If you find that a particular course was not for you, we offer
-                full refunds up until 30-days after purchase.
+                full refunds up until 7-days after purchase.
             </p>
         </>
     );

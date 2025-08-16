@@ -5,6 +5,13 @@ import type {
     Lesson,
     LessonContent,
     LessonTranscript,
+    MdxCategory,
+    ProductsAuxiliary,
+    Seminar,
+    SeminarCohort,
+    SeminarContent,
+    SeminarTranscript,
+    SeminarVideo,
     Video,
 } from "@prisma/client";
 import { prisma } from "./dbInit";
@@ -14,8 +21,11 @@ import { withAdmin, withUser } from "lib/auth/authFuncs";
 import {
     cache,
     CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS,
+    cacheKeys,
 } from "lib/server/cache";
 import { Text } from "lib/utils/textEncoding";
+import { stripeCreatePrice, stripeCreateProduct } from "lib/stripe/stripeFuncs";
+import { AUXILIARY_PRODUCTS_DEFAULTS } from "lib/config/auxiliaryProductDefaults";
 
 /**
  * Calls the database to retrieve all courses.
@@ -53,7 +63,7 @@ export const dbGetAllPublishedCourses = async () => {
                 },
             });
         },
-        ["allPublicCurses"],
+        [cacheKeys.allPublicCourses],
         { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
     );
     return await getAllCourses();
@@ -65,31 +75,143 @@ export const dbGetAllPublishedCourses = async () => {
  */
 export const dbGetCourseBySlug = async (slug: string) => {
     const validSlug = z.string().parse(slug);
-    const getCourseCached = cache(
-        async () => {
-            return await prisma.course.findUnique({
-                where: {
-                    slug: validSlug,
-                },
-                include: {
-                    lessons: {
-                        orderBy: {
-                            order: "asc",
-                        },
-                    },
-                    details: {
-                        select: {
-                            mdxCompiled: true,
-                        },
-                    },
-                },
-            });
+    // const getCourseCached = cache(
+    //     async () => {
+    return await prisma.course.findUnique({
+        where: {
+            slug: validSlug,
         },
-        ["/courses", validSlug],
-        { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
-    );
-    return await getCourseCached();
+        include: {
+            lessons: {
+                orderBy: {
+                    order: "asc",
+                },
+            },
+            details: {
+                select: {
+                    mdxCompiled: true,
+                },
+            },
+        },
+    });
+    // },
+    // [cacheKeys.allPublicCourses, validSlug],
+    // { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
+    // );
+    // return await getCourseCached();
 };
+
+export async function dbGetSeminarCohortsByCourseAndUser({
+    courseId,
+    userId,
+}: {
+    courseId: string;
+    userId: string;
+}) {
+    // const _task = cache(
+    //     async () => {
+    return await prisma.seminarCohort.findMany({
+        where: {
+            courseId,
+            participants: {
+                some: {
+                    id: userId,
+                },
+            },
+        },
+        include: {
+            seminars: true,
+            details: true,
+        },
+    });
+    //     },
+    //     [cacheKeys.allSeminars, userId],
+    //     { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
+    // );
+    // return await _task();
+}
+
+export async function dbGetSeminarCohortByCourseYearAndUser({
+    courseId,
+    userId,
+    year,
+}: {
+    courseId: string;
+    userId: string;
+    year: number;
+}) {
+    // const _task = cache(
+    //     async () => {
+    return await prisma.seminarCohort.findFirst({
+        where: {
+            courseId,
+            year,
+            participants: {
+                some: {
+                    id: userId,
+                },
+            },
+        },
+        include: {
+            seminars: true,
+            details: true,
+            course: {
+                select: {
+                    name: true,
+                    slug: true,
+                },
+            },
+        },
+    });
+    //     },
+    //     [cacheKeys.allSeminars, userId],
+    //     { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
+    // );
+    // return await _task();
+}
+
+export async function dbGetSeminarAndConnectedByYearAndUser({
+    seminarOrder,
+    year,
+    userId,
+}: {
+    seminarOrder: number;
+    year: number;
+    userId: string;
+}) {
+    return await prisma.seminar.findFirst({
+        where: {
+            seminarCohort: {
+                participants: {
+                    some: {
+                        id: userId,
+                    },
+                },
+                year,
+            },
+            order: seminarOrder,
+        },
+        select: {
+            content: true,
+            seminarCohort: {
+                include: {
+                    course: {
+                        select: {
+                            slug: true,
+                            name: true,
+                        },
+                    },
+                },
+            },
+            transcript: true,
+            video: true,
+            order: true,
+            id: true,
+            published: true,
+            seminarCohortId: true,
+        },
+    });
+}
 /**
  * Calls the database to retrieve specific course by id identifier
  */
@@ -106,7 +228,21 @@ export const dbGetCourseById = async (id: string) => {
  */
 export async function dbGetUserPurchasedCourses(userId: string) {
     const validUserId = z.string().parse(userId);
-    const res = await prisma.user.findUnique({
+
+    const res = await prisma.coursePurchase.findMany({
+        where: {
+            userId: validUserId,
+        },
+        select: {
+            course: true,
+        },
+    });
+    if (res && res.length > 0) {
+        const courses = res.map((i) => i.course);
+        return courses;
+    }
+
+    const legacyFallback = await prisma.user.findUnique({
         where: {
             id: validUserId,
         },
@@ -114,8 +250,10 @@ export async function dbGetUserPurchasedCourses(userId: string) {
             coursesPurchased: true,
         },
     });
-    if (!res) return null;
-    const courses = res.coursesPurchased;
+    if (!legacyFallback) {
+        return null;
+    }
+    const courses = legacyFallback.coursesPurchased;
     return courses;
 }
 /**
@@ -150,36 +288,24 @@ export async function dbUpdateUserStripeCustomerId({
         },
     });
 }
-/**
- * Gets user data by id. Returns an object.
- */
-export async function dbUpdateUserPurchases({
+
+export async function dbCreateCoursePurchase({
     userId,
     courseId,
-    purchasePriceId,
 }: {
     userId: string;
     courseId: string;
-    purchasePriceId: string;
 }) {
     const validUserId = z.string().parse(userId);
 
-    const purchasePriceIdWithTimeStamp = `${purchasePriceId}:${Date.now()}`;
-    const updatedUser = await prisma.user.update({
-        where: {
-            id: validUserId,
-        },
+    await prisma.coursePurchase.create({
         data: {
-            productsPurchased: {
-                push: purchasePriceIdWithTimeStamp,
-            },
-            coursesPurchased: {
-                connect: { id: courseId },
-            },
+            user: { connect: { id: validUserId } },
+            course: { connect: { id: courseId } },
         },
     });
 
-    return updatedUser;
+    return;
 }
 /**
  * Calls the database to retrieve specific course, its course details and lessons by id identifier.
@@ -188,7 +314,7 @@ export async function dbUpdateUserPurchases({
 export async function dbGetCourseAndDetailsAndLessonsById(id: string) {
     async function task() {
         const validId = z.string().parse(id);
-        return await prisma.course.findFirst({
+        return await prisma.course.findUnique({
             where: {
                 id: validId,
             },
@@ -201,6 +327,11 @@ export async function dbGetCourseAndDetailsAndLessonsById(id: string) {
                 details: {
                     select: {
                         id: true,
+                    },
+                },
+                seminarCohorts: {
+                    orderBy: {
+                        year: "desc",
                     },
                 },
             },
@@ -283,81 +414,92 @@ export const dbGetLessonAndRelationsBySlug = async (slug: string) => {
         },
     });
 };
+type MdxModel = {
+    id: string;
+    mdx: Uint8Array<ArrayBufferLike>;
+    mdxCategory: MdxCategory;
+    [key: string]: any;
+};
+
+// Configuration for different model types
+const mdxModelConfig = [
+    {
+        name: "lessonContent",
+        query: (id: string) =>
+            prisma.lessonContent.findUnique({ where: { id } }),
+        description: "LessonContent",
+    },
+    {
+        name: "lessonTranscript",
+        query: (id: string) =>
+            prisma.lessonTranscript.findUnique({ where: { id } }),
+        description: "LessonTranscript",
+    },
+    {
+        name: "courseDetails",
+        query: (id: string) =>
+            prisma.courseDetails.findUnique({ where: { id } }),
+        description: "CourseDetails",
+    },
+    {
+        name: "seminarContent",
+        query: (id: string) =>
+            prisma.seminarContent.findUnique({ where: { id } }),
+        description: "SeminarContent",
+    },
+    {
+        name: "seminarTranscript",
+        query: (id: string) =>
+            prisma.seminarTranscript.findUnique({ where: { id } }),
+        description: "SeminarTranscript",
+    },
+    {
+        name: "seminarCohortDetails",
+        query: (id: string) =>
+            prisma.seminarCohortDetails.findUnique({ where: { id } }),
+        description: "SeminarCohortDetails",
+    },
+] as const;
+
 /**
- * Calls the database to retrieve mdx field by id of the model as identifier.
- * Converts binary content of found record to string
- * and/or be passed down to Client Components from Server Components.
- * @supports LessonContent | LessonTranscript | CourseDetails
- * TODO fixme! Auth guard this
+ * Converts binary MDX content to string for a given model record
+ */
+const convertMdxToString = <T extends MdxModel>(
+    record: T
+): T & { mdx: string } => {
+    const mdxAsString = Text.Decode(record.mdx);
+    return {
+        ...record,
+        mdx: mdxAsString,
+    };
+};
+/**
+ * Calls the database to retrieve mdx field by id across multiple models.
+ * Converts binary content of found record to string for tRPC compatibility
+ * and/or to be passed down to Client Components from Server Components.
+ * @supports LessonContent | LessonTranscript | CourseDetails | SeminarContent | SeminarTranscript
  */
 export const dbGetMdxByModelId = async (id: string) => {
     const validId = z.string().parse(id);
-    /**
-     * tRPC cannot handle binary transmission, so the buffer from each below must be converted to string.
-     * And then new object is made from shallow copy of the result with the updated content field.
-     *
-     * First we look for a match in the LessonContent Model
-     */
-    const lessonContent = await prisma.lessonContent.findUnique({
-        where: {
-            id: validId,
-        },
-    });
-    if (!lessonContent) {
-        /**
-         * If no matching id found, proceed to query LessonTranscript.
-         */
-        const lessonTranscript = await prisma.lessonTranscript.findUnique({
-            where: {
-                id: validId,
-            },
-        });
-        if (!lessonTranscript) {
-            /**
-             * If no matching id found, proceed to query CourseDetails.
-             */
-            const courseDetails = await prisma.courseDetails.findUnique({
-                where: {
-                    id: validId,
-                },
-            });
-            /**
-             * All three query attempts failed, throw error.
-             */
-            if (!courseDetails)
-                throw new Error(
-                    "No lessonTranscript, lessonContent or courseDetails found at db call"
-                );
-            /**
-             * Resolve third attempt if query successful.
-             */
-            const courseDetailsContentAsString = Text.Decode(courseDetails.mdx);
-            const newResult = {
-                ...courseDetails,
-                mdx: courseDetailsContentAsString,
-            };
-            return newResult;
+
+    // Try each model in sequence until we find a match
+    for (const config of mdxModelConfig) {
+        const result = await config.query(validId);
+
+        if (result) {
+            return convertMdxToString(result as MdxModel);
         }
-        /**
-         * Resolve second attempt if query successful.
-         */
-        const transcriptAsString = Text.Decode(lessonTranscript.mdx);
-        const newResult = {
-            ...lessonTranscript,
-            mdx: transcriptAsString,
-        };
-        return newResult;
     }
-    /**
-     * Resolve first attempt if query successful.
-     */
-    const contentAsString = Text.Decode(lessonContent.mdx);
-    const newResult = {
-        ...lessonContent,
-        mdx: contentAsString,
-    };
-    return newResult;
+
+    // If no record found in any model, throw error
+    const modelNames = mdxModelConfig
+        .map((config) => config.description)
+        .join(", ");
+    throw new Error(
+        `No record found with id "${validId}" in any of: ${modelNames}`
+    );
 };
+
 export type DBGetMdxContentByModelIdReturnType = Awaited<
     ReturnType<typeof dbGetMdxByModelId>
 >;
@@ -503,6 +645,33 @@ export const dbGetVideoByLessonId = async (id: string) => {
 };
 
 /**
+ * Calls the database to retrieve specific SeminarVideo entry based on the ID of the Seminar it is related to.
+ * Returns null when either Seminar or its related Video is not found.
+ * @access ADMIN
+ */
+export const dbGetSeminarVideoBySeminarId = async (id: string) => {
+    async function task() {
+        const validId = z.string().parse(id);
+        const lessonWithVideo = await prisma.seminar.findUnique({
+            where: {
+                id: validId,
+            },
+            include: {
+                video: true,
+            },
+        });
+        if (lessonWithVideo) {
+            if (lessonWithVideo.video) {
+                return lessonWithVideo.video;
+            }
+            return null;
+        }
+        return null;
+    }
+    return withAdmin(task);
+};
+
+/**
  * Calls the database to retrieve specific video.fileName by id identifier.
  * @access ADMIN
  */
@@ -521,6 +690,27 @@ export const dbGetVideoFileNameByVideoId = async (id: string) => {
     }
     return withAdmin(task);
 };
+
+/**
+ * Calls the database to retrieve specific seminarVideo.fileName by id identifier.
+ * @access ADMIN
+ */
+export const dbGetSeminarVideoFileNameByVideoId = async (id: string) => {
+    async function task() {
+        const validId = z.string().parse(id);
+        const video = await prisma.seminarVideo.findUnique({
+            where: {
+                id: validId,
+            },
+            select: {
+                fileName: true,
+            },
+        });
+        return video;
+    }
+    return withAdmin(task);
+};
+
 export type DbUpsertCourseByIdProps = Omit<
     Course,
     "id" | "createdAt" | "updatedAt"
@@ -734,6 +924,26 @@ export const dbReorderLessons = async ({
     return;
 };
 /**
+ * Reorders seminars by their position in the input array.
+ */
+export const dbReorderSeminars = async ({
+    orderedIds,
+}: {
+    orderedIds: string[];
+}) => {
+    await prisma.$transaction(async (tx) => {
+        await Promise.all(
+            orderedIds.map((id, index) =>
+                tx.seminar.updateMany({
+                    where: { id },
+                    data: { order: index + 1 },
+                })
+            )
+        );
+    });
+    return;
+};
+/**
  * Updates an existing lessonContent details by id as identifier or creates a new one if id is not provided.
  * @access ADMIN
  */
@@ -761,6 +971,80 @@ export const dbUpsertLessonContentById = async ({
             },
             create: {
                 lessonId: validLessonId,
+                mdx: contentAsBuffer,
+            },
+        });
+
+        const resultWithoutContent = exclude(result, ["mdx"]);
+        return resultWithoutContent;
+    }
+    return withAdmin(task);
+};
+/**
+ * Updates an existing SeminarContent details by id as identifier or creates a new one if id is not provided.
+ * @access ADMIN
+ */
+export const dbUpsertSeminarContentById = async ({
+    id,
+    seminarId,
+    content,
+}: {
+    id?: SeminarContent["id"];
+    seminarId: SeminarContent["seminarId"];
+    content: string;
+}) => {
+    async function task() {
+        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
+        const validSeminarId = z.string().parse(seminarId);
+
+        const contentAsBuffer = Text.Encode(content);
+
+        const result = await prisma.seminarContent.upsert({
+            where: {
+                id: validId,
+            },
+            update: {
+                mdx: contentAsBuffer,
+            },
+            create: {
+                seminarId: validSeminarId,
+                mdx: contentAsBuffer,
+            },
+        });
+
+        const resultWithoutContent = exclude(result, ["mdx"]);
+        return resultWithoutContent;
+    }
+    return withAdmin(task);
+};
+/**
+ * Updates an existing SeminarContent details by id as identifier or creates a new one if id is not provided.
+ * @access ADMIN
+ */
+export const dbUpsertSeminarTranscriptById = async ({
+    id,
+    seminarId,
+    content,
+}: {
+    id?: SeminarTranscript["id"];
+    seminarId: SeminarTranscript["seminarId"];
+    content: string;
+}) => {
+    async function task() {
+        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
+        const validSeminarId = z.string().parse(seminarId);
+
+        const contentAsBuffer = Text.Encode(content);
+
+        const result = await prisma.seminarTranscript.upsert({
+            where: {
+                id: validId,
+            },
+            update: {
+                mdx: contentAsBuffer,
+            },
+            create: {
+                seminarId: validSeminarId,
                 mdx: contentAsBuffer,
             },
         });
@@ -845,6 +1129,40 @@ export const dbUpsertCourseDetailsById = async ({
     }
     return withAdmin(task);
 };
+
+export const dbUpsertSeminarCohortDetailsById = async ({
+    id,
+    seminarCohortId,
+    content,
+}: {
+    id?: string;
+    seminarCohortId: string;
+    content: string;
+}) => {
+    async function task() {
+        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
+        const validSeminarCourseId = z.string().parse(seminarCohortId);
+
+        const contentAsBuffer = Text.Encode(content);
+
+        const result = await prisma.seminarCohortDetails.upsert({
+            where: {
+                id: validId,
+            },
+            update: {
+                mdx: contentAsBuffer,
+            },
+            create: {
+                seminarCohortId: validSeminarCourseId,
+                mdx: contentAsBuffer,
+            },
+        });
+
+        const resultWithoutContent = exclude(result, ["mdx"]);
+        return resultWithoutContent;
+    }
+    return withAdmin(task);
+};
 /**
  * Updates mdx field for an existing model by id as identifier.
  * @access ADMIN
@@ -853,7 +1171,7 @@ export const dbUpdateMdxByModelId = async ({
     id,
     content,
 }: {
-    id: LessonContent["id"] | LessonTranscript["id"] | CourseDetails["id"];
+    id: string;
     content: string;
 }) => {
     async function task() {
@@ -911,6 +1229,48 @@ export const dbUpdateMdxByModelId = async ({
             });
             return;
         }
+        result =
+            await prisma.$executeRaw`UPDATE "SeminarContent" SET mdx = ${contentAsBuffer} WHERE id = ${validId};`;
+        if (result === 1) {
+            const compiledMdx = await mdxCompiler(validContent);
+            await prisma.seminarContent.update({
+                where: {
+                    id: validId,
+                },
+                data: {
+                    mdxCompiled: compiledMdx,
+                },
+            });
+            return;
+        }
+        result =
+            await prisma.$executeRaw`UPDATE "SeminarTranscript" SET mdx = ${contentAsBuffer} WHERE id = ${validId};`;
+        if (result === 1) {
+            const compiledMdx = await mdxCompiler(validContent);
+            await prisma.seminarTranscript.update({
+                where: {
+                    id: validId,
+                },
+                data: {
+                    mdxCompiled: compiledMdx,
+                },
+            });
+            return;
+        }
+        result =
+            await prisma.$executeRaw`UPDATE "SeminarCohortDetails" SET mdx = ${contentAsBuffer} WHERE id = ${validId};`;
+        if (result === 1) {
+            const compiledMdx = await mdxCompiler(validContent);
+            await prisma.seminarCohortDetails.update({
+                where: {
+                    id: validId,
+                },
+                data: {
+                    mdxCompiled: compiledMdx,
+                },
+            });
+            return;
+        }
         throw new Error(
             "Database update should have returned exactly 1 updated record."
         );
@@ -945,6 +1305,40 @@ export const dbUpsertVideoById = async ({
             },
             create: {
                 lessonId: validLessonId,
+                fileName: validFileName,
+            },
+        });
+    }
+    return withAdmin(task);
+};
+/**
+ * Updates Video details by id as identifier or creates a new one if id is not provided, in which case
+ * the id of the lesson this video is related to must be provided.
+ * @access ADMIN
+ */
+export const dbUpsertSeminarVideoById = async ({
+    id,
+    seminarId,
+    fileName,
+}: {
+    id?: string;
+    seminarId: string;
+    fileName?: string;
+}) => {
+    async function task() {
+        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value in order to query
+        const validSeminarId = z.string().parse(seminarId);
+        const validFileName = fileName ? z.string().parse(fileName) : "";
+
+        return await prisma.seminarVideo.upsert({
+            where: {
+                id: validId,
+            },
+            update: {
+                fileName: validFileName,
+            },
+            create: {
+                seminarId: validSeminarId,
                 fileName: validFileName,
             },
         });
@@ -988,8 +1382,44 @@ export const dbDeleteLessonContentById = async ({
     return withAdmin(task);
 };
 /**
+ * Deletes entry from the LessonContent model. Returns only id of deleted model.
+ * @access ADMIN
+ */
+export const dbDeleteSeminarContentById = async ({
+    id,
+}: {
+    id: SeminarContent["id"];
+}) => {
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.seminarContent.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    }
+    return withAdmin(task);
+};
+/**
+ * Deletes entry from the LessonContent model. Returns only id of deleted model.
+ * @access ADMIN
+ */
+export const dbDeleteSeminarTranscriptById = async ({
+    id,
+}: {
+    id: SeminarTranscript["id"];
+}) => {
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.seminarTranscript.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    }
+    return withAdmin(task);
+};
+/**
  * Deletes entry from the Video model. Returns only id of deleted model.
- * @note This function DOES NOT delete video from storage. Consider using `orderDeleteVideo()` instead.
+ * @note This function DOES NOT delete video from storage!
  * @access ADMIN
  */
 export const dbDeleteVideoById = async ({ id }: { id: Video["id"] }) => {
@@ -1002,6 +1432,27 @@ export const dbDeleteVideoById = async ({ id }: { id: Video["id"] }) => {
     }
     return withAdmin(task);
 };
+
+/**
+ * Deletes entry from the Video model. Returns only id of deleted model.
+ * @note This function DOES NOT delete video from storage!
+ * @access ADMIN
+ */
+export const dbDeleteSeminarVideoById = async ({
+    id,
+}: {
+    id: SeminarVideo["id"];
+}) => {
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.seminarVideo.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    }
+    return withAdmin(task);
+};
+
 /**
  * Deletes entry from the CourseDetails model. Returns only id of deleted model.
  * @access ADMIN
@@ -1014,6 +1465,21 @@ export const dbDeleteCourseDetailsById = async ({
     async function task() {
         const validId = z.string().parse(id);
         return await prisma.courseDetails.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    }
+    return withAdmin(task);
+};
+
+export const dbDeleteSeminarCohortDetailsById = async ({
+    id,
+}: {
+    id: string;
+}) => {
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.seminarCohortDetails.delete({
             where: { id: validId },
             select: { id: true },
         });
@@ -1062,6 +1528,47 @@ export const dbDeleteLesson = async ({ id }: { id: Lesson["id"] }) => {
 };
 
 /**
+ * Deletes entry from the Seminar model (and all related models). Returns only id of deleted model.
+ * @warning Does NOT delete video from storage!
+ * @access ADMIN
+ */
+export const dbDeleteSeminar = async ({ id }: { id: Seminar["id"] }) => {
+    async function task() {
+        const validId = z.string().parse(id);
+        const deletedSeminar = await prisma.$transaction(async (tx) => {
+            // First, get the order and seminarCohortId of the seminar to be deleted
+            const seminarToDelete = await tx.seminar.findUnique({
+                where: { id: validId },
+                select: { order: true, seminarCohortId: true, id: true },
+            });
+
+            if (!seminarToDelete) {
+                throw new Error("Lesson not found");
+            }
+
+            // Delete the seminar
+            await tx.lesson.delete({
+                where: { id: validId },
+            });
+
+            // Update the order of remaining seminars
+            await tx.lesson.updateMany({
+                where: {
+                    courseId: seminarToDelete.seminarCohortId,
+                    order: { gt: seminarToDelete.order },
+                },
+                data: {
+                    order: { decrement: 1 },
+                },
+            });
+            return seminarToDelete;
+        });
+        return deletedSeminar;
+    }
+    return withAdmin(task);
+};
+
+/**
  * Deletes entry from the Course model (and all related models, including CourseDetails). Returns only id of deleted model.
  * @warning Does NOT delete video from storage. Consider using `ctrlDeleteVideo()` or `ctrlDeleteLesson()` instead.
  * @access ADMIN
@@ -1070,6 +1577,17 @@ export const dbDeleteCourse = async ({ id }: { id: Course["id"] }) => {
     async function task() {
         const validId = z.string().parse(id);
         return await prisma.course.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    }
+    return withAdmin(task);
+};
+
+export const dbDeleteSeminarCohort = async ({ id }: { id: string }) => {
+    async function task() {
+        const validId = z.string().parse(id);
+        return await prisma.seminarCohort.delete({
             where: { id: validId },
             select: { id: true },
         });
@@ -1199,4 +1717,249 @@ export async function dbVerifyVideoToUserId({
     }
 
     return false;
+}
+
+export async function dbGetOrCreateProductAux({
+    kind,
+}: {
+    kind: ProductsAuxiliary["kind"];
+}) {
+    function getProductName(kind: ProductsAuxiliary["kind"]) {
+        switch (kind) {
+            case "SEMINAR_ONLY":
+                return AUXILIARY_PRODUCTS_DEFAULTS.seminarOnly;
+            case "OTHER":
+                return AUXILIARY_PRODUCTS_DEFAULTS.other;
+            default: {
+                const _exhaustiveTypeCheck: never = kind;
+                throw new Error(`${_exhaustiveTypeCheck} not supported`);
+            }
+        }
+    }
+
+    const existingProduct = await prisma.productsAuxiliary.findFirst({
+        where: {
+            kind,
+        },
+    });
+
+    if (existingProduct) {
+        return existingProduct;
+    }
+
+    const { productName, defaultPriceCents, description, imageUrl } =
+        getProductName(kind);
+
+    const newStripeProduct = await stripeCreateProduct({
+        name: productName,
+        description,
+        imageUrl,
+    });
+
+    const newStripePrice = await stripeCreatePrice({
+        stripeProductId: newStripeProduct.id,
+        unitPrice: defaultPriceCents,
+    });
+
+    return await prisma.productsAuxiliary.create({
+        data: {
+            stripePriceIdDefault: newStripePrice.id,
+            priceDefault: defaultPriceCents,
+            kind,
+            stripeProductId: newStripeProduct.id,
+        },
+    });
+}
+
+/**
+ * Creates a new seminar cohort if one does not exist for the current year for the provided courseId
+ */
+export async function dbEnrollUserInSeminarCohort({
+    userId,
+    courseId,
+}: {
+    userId: string;
+    courseId: string;
+}) {
+    const currentYear = new Date().getFullYear();
+
+    let cohort = await prisma.seminarCohort.findFirst({
+        where: {
+            year: currentYear,
+            courseId: courseId,
+        },
+    });
+
+    if (!cohort) {
+        cohort = await dbCreateSeminarCohort({
+            courseId,
+            currentYear,
+        });
+    }
+
+    // Avoid adding the user twice
+    await prisma.seminarCohort.update({
+        where: { id: cohort.id },
+        data: {
+            participants: {
+                connect: { id: userId },
+            },
+        },
+    });
+
+    return cohort;
+}
+
+async function dbCreateSeminarCohort({
+    courseId,
+    currentYear,
+}: {
+    courseId: string;
+    currentYear: number;
+}) {
+    const productSeminar = await dbGetOrCreateProductAux({
+        kind: "SEMINAR_ONLY",
+    });
+
+    const course = await prisma.course.findUnique({
+        where: {
+            id: courseId,
+        },
+    });
+
+    if (!course) {
+        throw new Error("Expected course");
+    }
+
+    const seminarUpgradeDelta = Math.round(
+        course.seminarPrice - course.basePrice
+    );
+
+    if (seminarUpgradeDelta < 0) {
+        throw new Error("Seminar price must be greater than base price.");
+    }
+
+    const upgradePrice = await stripeCreatePrice({
+        stripeProductId: productSeminar.stripeProductId,
+        unitPrice: seminarUpgradeDelta,
+    });
+
+    return await prisma.seminarCohort.create({
+        data: {
+            stripeSeminarUpgradePriceId: upgradePrice.id,
+            seminarUpgradePrice: seminarUpgradeDelta,
+            stripeSeminarOnlyPriceId: productSeminar.stripePriceIdDefault,
+            seminarOnlyPrice: productSeminar.priceDefault,
+            year: currentYear,
+            course: { connect: { id: courseId } },
+        },
+    });
+}
+
+export async function dbGetSeminarCohortAndSeminarsById({
+    id,
+}: {
+    id: string;
+}) {
+    // const _task = cache(
+    //     async () => {
+    return prisma.seminarCohort.findUnique({
+        where: {
+            id,
+        },
+        include: {
+            seminars: {
+                orderBy: {
+                    order: "asc",
+                },
+            },
+            details: true,
+            course: {
+                select: {
+                    name: true,
+                },
+            },
+            participants: {
+                select: {
+                    name: true,
+                    email: true,
+                },
+            },
+        },
+    });
+    //     },
+    //     [cacheKeys.allSeminars],
+    //     { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
+    // );
+    // return await _task();
+}
+
+export async function dbGetSeminarAndConnectedById({ id }: { id: string }) {
+    const _task = cache(
+        async () => {
+            return await prisma.seminar.findUnique({
+                where: {
+                    id,
+                },
+                include: {
+                    content: true,
+                    transcript: true,
+                    video: true,
+                    seminarCohort: {
+                        select: {
+                            year: true,
+                            course: {
+                                select: {
+                                    name: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+        },
+        [cacheKeys.allSeminars],
+        { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
+    );
+    return await _task();
+}
+
+export async function dbUpdateSeminarCohort({
+    id,
+    data,
+}: {
+    id: SeminarCohort["id"];
+    data: Partial<Omit<SeminarCohort, "id">>;
+}) {
+    return await prisma.seminarCohort.update({
+        where: {
+            id,
+        },
+        data: {
+            ...data,
+        },
+    });
+}
+
+export async function dbCreateSeminar({
+    seminarCohortId,
+}: {
+    seminarCohortId: string;
+}) {
+    const existingSeminars = await prisma.seminar.findMany({
+        where: {
+            seminarCohortId,
+        },
+    });
+
+    return await prisma.seminar.create({
+        data: {
+            order: existingSeminars.length + 1,
+            seminarCohort: {
+                connect: {
+                    id: seminarCohortId,
+                },
+            },
+        },
+    });
 }

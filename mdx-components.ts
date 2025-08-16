@@ -1,12 +1,10 @@
-import { useMDXComponents as getDocsMDXComponents } from "nextra-theme-docs";
-import { Pre, withIcons } from "nextra/components";
-import { GitHubIcon } from "nextra/icons";
+import { useMDXComponents as getThemeComponents } from "nextra-theme-docs";
 
-const docsComponents = getDocsMDXComponents({
-    pre: withIcons(Pre, { js: GitHubIcon }),
-});
+const themeComponents = getThemeComponents();
 
-export const useMDXComponents: typeof getDocsMDXComponents = (components) => ({
-    ...docsComponents,
-    ...components,
-});
+export function useMDXComponents(components) {
+    return {
+        ...themeComponents,
+        ...components,
+    };
+}

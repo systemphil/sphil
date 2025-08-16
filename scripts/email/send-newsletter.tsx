@@ -21,8 +21,6 @@ async function sendNewsletter() {
         process.exit(1);
     }
     try {
-        // TODO add ID for the unsubscribe link when that is implemented
-
         const subscribers = await prisma.newsletterEmail.findMany({
             select: { email: true, id: true },
         });

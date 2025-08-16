@@ -182,7 +182,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
             </form>
             {!session && anyAvailable && <SignInToBuyBtn />}
             <p className="text-center text-sm text-slate-500">
-                30-Day Money-Back Guarantee
+                7-Day Money-Back Guarantee
             </p>
             <Link
                 href="/articles/terms-symposia"

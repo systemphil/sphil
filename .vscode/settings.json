@@ -28,5 +28,11 @@
             "strings": "off"
         }
     },
-    "biome.enabled": false
+    "biome.enabled": false,
+    "todo-tree.filtering.excludeGlobs": [
+        "**/node_modules/**",
+        "**/*.min.js",
+        "**/dist/**",
+        "**/extended-markdown.md"
+    ]
 }

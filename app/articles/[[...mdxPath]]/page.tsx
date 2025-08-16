@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks -- false positive, useMDXComponents/useTOC are not react hooks */
 
+import { $NextraMetadata } from "nextra";
 import { useMDXComponents } from "nextra-theme-docs";
 import { generateStaticParamsFor, importPage } from "nextra/pages";
 
@@ -7,17 +8,21 @@ const SITE_ROOT = process.env.NEXT_PUBLIC_SITE_ROOT as string;
 
 export const generateStaticParams = generateStaticParamsFor("mdxPath");
 
+type CustomMarkdownContentMetadata = $NextraMetadata & {
+    seoTitle?: string | null;
+};
 export async function generateMetadata(props: any) {
     const params = await props.params;
-    const { metadata } = await importPage(params.mdxPath);
+    const metadata = (await importPage(params.mdxPath))
+        .metadata as CustomMarkdownContentMetadata;
 
     const enhancedMetadata = {
         ...metadata,
         twitter: {
             ...(metadata?.twitter || {}),
             site: SITE_ROOT,
-            title: undefined,
-            description: undefined,
+            title: "",
+            description: "",
             images: ogImages,
         },
         openGraph: {
@@ -26,8 +31,8 @@ export async function generateMetadata(props: any) {
             type: "website",
             locale: "en_US",
             siteName: "sPhil",
-            title: undefined,
-            description: undefined,
+            title: "",
+            description: "",
             images: ogImages,
         },
     };

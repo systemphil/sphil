@@ -1,11 +1,12 @@
 import type Stripe from "stripe";
 import { getStripe } from "./stripeInit";
-import { dbGetCourseById, dbUpdateUserPurchases } from "lib/database/dbFuncs";
-import { resend } from "lib/email/emailInit";
+import {
+    dbEnrollUserInSeminarCohort,
+    dbCreateCoursePurchase,
+} from "lib/database/dbFuncs";
 import { PriceTier } from "lib/server/ctrl";
-import { EmailPurchaseReceipt } from "lib/email/templates/EmailPurchaseReceipt";
-import { EmailPurchaseNotification } from "lib/email/templates/EmailPurchaseNotification";
-import { EmailSeminarNotification } from "lib/email/templates/EmailSeminarNotification";
+import { STRIPE_FALLBACKS } from "lib/config/stripeFallbacks";
+import { EmailService } from "lib/email/EmailService";
 
 type StripeCreateProductProps = {
     name: string;
@@ -94,10 +95,13 @@ export async function stripeRetrievePrice({
 export async function stripeArchivePrice({
     stripePriceId,
 }: {
-    stripePriceId: string;
+    stripePriceId: string | undefined;
     unitPrice?: number;
     currency?: string;
 }) {
+    if (!stripePriceId) {
+        return;
+    }
     const stripe = getStripe();
     const price = await stripe.prices.update(stripePriceId, {
         active: false,
@@ -183,12 +187,7 @@ export async function stripeCreateCheckoutSession({
             userId: userId,
             purchase: purchase.price,
             courseId: courseId,
-            /**
-             * TODO fix fallback image
-             */
-            imageUrl:
-                imageUrl ??
-                "https://avatars.githubusercontent.com/u/147748257?s=200&v=4",
+            imageUrl: imageUrl ?? STRIPE_FALLBACKS.imageUrl,
             name: name,
             description: description,
             courseLink: `${baseUrl}/symposia/courses/${slug}`,
@@ -235,7 +234,7 @@ export async function stripeGetCustomerEmail({
 }) {
     const stripe = getStripe();
     const customer = await stripe.customers.retrieve(customerId);
-    // TODO typescript isn't picking up the type here for some reason
+    // FIXME typescript isn't picking up the type here because we must narrow it down first
     // @ts-expect-error
     return customer.email;
 }
@@ -246,35 +245,35 @@ export type Product = {
     description: string;
 };
 
+export type Order = {
+    id: string;
+    createdAt: Date;
+    pricePaidInCents: number;
+};
+
 export async function handleSessionCompleted(
     event: Stripe.CheckoutSessionCompletedEvent
 ) {
     const sessionMetadata = event.data.object
         .metadata as StripeCheckoutSessionMetadata;
     if (event.data.object.payment_status !== "paid") {
-        console.error(
-            `❌ Payment status not paid for session ${event.data.object.id}`
+        console.info(
+            `⏹️ Payment status not paid for session ${event.data.object.id}`
         );
         return;
     }
 
-    const updatedUser = await dbUpdateUserPurchases({
+    await dbCreateCoursePurchase({
         userId: sessionMetadata.userId,
         courseId: sessionMetadata.courseId,
-        purchasePriceId: sessionMetadata.purchase,
     });
 
     const customerEmail = sessionMetadata.customerEmail;
     if (!customerEmail) {
-        console.error(
-            `❌ No customer email found in session metadata. Session id ${event.data.object.id}`
-        );
-        return updatedUser;
-    }
-    const senderEmail = process.env.EMAIL_SEND;
-    if (!senderEmail) {
-        console.error("❌ No sender email found in process.env");
-        return updatedUser;
+        const message = `❌ No customer email found in session metadata. Session id ${event.data.object.id}`;
+        console.error(message);
+        void EmailService.adminAlert({ message });
+        return;
     }
 
     const order = {
@@ -289,86 +288,37 @@ export async function handleSessionCompleted(
         description: sessionMetadata.description,
     };
 
-    await resend.emails.send({
-        from: `No Reply <${senderEmail}>`,
-        to: customerEmail,
-        subject: `Order Confirmation - ${product.name}`,
-        react: (
-            <EmailPurchaseReceipt
-                key={order.id}
-                order={order}
-                product={product}
-                courseLink={sessionMetadata.courseLink}
-            />
-        ),
+    await EmailService.sendPurchaseReceiptEmail({
+        sessionMetadata,
+        order,
+        customerEmail,
+        product,
     });
 
     if (
         sessionMetadata.priceTier === "seminar" ||
         sessionMetadata.priceTier === "dialogue"
     ) {
-        await handleSeminarEmail({
+        await EmailService.sendSeminarEmail({
             sessionMetadata,
             customerEmail,
-            senderEmail,
             product,
         });
-    }
 
-    const receiverEmail = process.env.EMAIL_RECEIVE;
-    if (receiverEmail) {
-        await resend.emails.send({
-            from: `No Reply <${senderEmail}>`,
-            to: receiverEmail,
-            subject: `New Purchase $${order.pricePaidInCents / 100} - ${
-                product.name
-            } - ${updatedUser.email}`,
-            react: (
-                <EmailPurchaseNotification
-                    user={updatedUser}
-                    key={order.id}
-                    order={order}
-                    product={product}
-                    courseLink={sessionMetadata.courseLink}
-                />
-            ),
+        await dbEnrollUserInSeminarCohort({
+            courseId: sessionMetadata.courseId,
+            userId: sessionMetadata.userId,
         });
-    } else {
-        console.error("❌ No receiver email found in process.env");
     }
 
-    return updatedUser;
-}
-
-async function handleSeminarEmail({
-    sessionMetadata,
-    senderEmail,
-    customerEmail,
-    product,
-}: {
-    sessionMetadata: StripeCheckoutSessionMetadata;
-    senderEmail: string;
-    customerEmail: string;
-    product: Product;
-}) {
-    const course = await dbGetCourseById(sessionMetadata.courseId);
-    if (!course) {
-        return;
-    }
-    const seminarLink = course.seminarLink;
-
-    await resend.emails.send({
-        from: `No Reply <${senderEmail}>`,
-        to: customerEmail,
-        subject: `Seminar Information - ${product.name}`,
-        react: (
-            <EmailSeminarNotification
-                courseLink={sessionMetadata.courseLink}
-                product={product}
-                seminarLink={seminarLink}
-            />
-        ),
+    await EmailService.adminSendPurchaseNotification({
+        courseLink: sessionMetadata.courseLink,
+        order,
+        product,
+        userId: sessionMetadata.userId,
     });
+
+    return;
 }
 
 // interface CreateStripeRefundProps {

@@ -15,10 +15,9 @@ export const dynamic = "force-dynamic";
 export default async function LessonFrontPageRoute({
     params,
 }: {
-    params: { lessonSlug: string; courseSlug: string };
+    params: Promise<{ lessonSlug: string; courseSlug: string }>;
 }) {
     const { lessonSlug, courseSlug } = await params;
-    const notPurchasedRedirect = `/symposia/courses/${courseSlug}?error=${errorMessages.courseNotPurchased}`;
 
     if (typeof lessonSlug !== "string") {
         return redirect(`/?error=${errorMessages.missingParams}`);
