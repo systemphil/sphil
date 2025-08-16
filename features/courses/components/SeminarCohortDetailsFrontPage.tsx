@@ -23,7 +23,7 @@ export async function SeminarCohortDetailsFrontPage({
         >
             <div className="min-h-[500px] flex flex-col w-full md:col-span-3 md:order-2">
                 <div className="py-3">
-                    <Heading as="h3">Cohort Information</Heading>
+                    <Heading as="h3">Seminar Information</Heading>
                     <Paragraph className="!text-center">
                         {seminarCohort.course.name} {seminarCohort.year}
                     </Paragraph>

@@ -1,6 +1,7 @@
 import { SeminarCohortDetailsFrontPage } from "features/courses/components/SeminarCohortDetailsFrontPage";
 import { auth } from "lib/auth/authConfig";
 import { Loading } from "lib/components/animations/Loading";
+import { AuthViews } from "lib/components/auth/AuthViews";
 import { errorMessages } from "lib/config/errorMessages";
 import {
     dbGetCourseBySlug,
@@ -8,6 +9,10 @@ import {
 } from "lib/database/dbFuncs";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+
+export const dynamic = "force-dynamic";
+
+export const metadata = {};
 
 export default async function SeminarCohortInformationPage({
     params,
@@ -26,7 +31,7 @@ export default async function SeminarCohortInformationPage({
 
     const session = await auth();
     if (!session) {
-        return null;
+        return <AuthViews.MustBeLoggedIn />;
     }
 
     const course = await dbGetCourseBySlug(courseSlug);

@@ -8,6 +8,7 @@ import {
     dbDeleteLessonContentById,
     dbDeleteLessonTranscriptById,
     dbDeleteSeminarCohort,
+    dbDeleteSeminarCohortDetailsById,
     dbDeleteSeminarContentById,
     dbDeleteSeminarTranscriptById,
     dbDeleteSeminarVideoById,
@@ -99,6 +100,7 @@ export type ModelName =
     | "SeminarTranscript"
     | "SeminarVideo"
     | "Seminar"
+    | "SeminarCohortDetails"
     | "UNSUPPORTED";
 type OrderDeleteModelEntryProps = {
     id: string;
@@ -181,6 +183,8 @@ export async function ctrlDeleteModelEntry({
             return await ctrlDeleteSeminarVideo({ id: validId });
         case "Seminar":
             return await ctrlDeleteSeminar(validId);
+        case "SeminarCohortDetails":
+            return await dbDeleteSeminarCohortDetailsById({ id: validId });
         // SeminarCohorts are deleted inside of Course deletion, but not separately
         case "UNSUPPORTED":
             throw new Error("Not supported");

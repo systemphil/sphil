@@ -134,7 +134,7 @@ function SeminarsMap({
         >
             {hasSeminarCohortDetails && courseSlug && seminarCohortYear && (
                 <li>
-                    <SeminarLink
+                    <SeminarCohortInformationLink
                         href={`${links.courses}/${courseSlug}/seminars/${seminarCohortYear}/information`}
                         isCentered={isCentered}
                         isDropdown={isDropdown}
@@ -181,7 +181,7 @@ function SeminarsMap({
     );
 }
 
-function SeminarLink({
+function SeminarCohortInformationLink({
     href,
     isCentered = false,
     isDropdown = false,

@@ -56,7 +56,7 @@ export default async function AdminSeminarCohortEdit({
                                 href={`/admin/courses/${courseId}/seminar-cohort/${seminarCohortAndSeminars.id}/seminar-cohort-details/${seminarCohortAndSeminars.details.id}`}
                                 heading="General details of the course"
                                 id={seminarCohortAndSeminars.details.id}
-                                modelName="CourseDetails"
+                                modelName="SeminarCohortDetails"
                             />
                         ) : (
                             <div className="flex items-center justify-center mb-6">

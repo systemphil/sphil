@@ -227,6 +227,7 @@ const deleteModelEntrySchema = z.object({
         "SeminarContent",
         "SeminarVideo",
         "Seminar",
+        "SeminarCohortDetails",
         "UNSUPPORTED",
     ]) satisfies z.ZodType<ModelName>,
 });
