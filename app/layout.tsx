@@ -183,7 +183,7 @@ export default async function RootLayout({
                             </NextraNavbar>
                         }
                         footer={
-                            <div className="relative">
+                            <div className="relative" key="footer-key-123">
                                 <div
                                     data-name="footer-flair"
                                     className="absolute h-20 w-full -top-[80px] bg-linear-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
