@@ -34,4 +34,7 @@ export default {
     newsletter: {
         display: "hidden",
     },
+    test: {
+        display: "hidden",
+    },
 };

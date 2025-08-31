@@ -6,14 +6,10 @@ import { useEffect, useRef, useState } from "react";
 /**
  * VideoViewer with auto-refresh capabilities for expired signed URLs
  */
-export const VideoViewer = ({
+export const VideoViewerTest = ({
     videoUrl: initialVideoUrl,
-    videoId,
-    fileName,
 }: {
     videoUrl: string;
-    videoId: string;
-    fileName: string;
 }) => {
     const [videoUrl, setVideoUrl] = useState(initialVideoUrl);
     const [isLoading, setIsLoading] = useState(true);
@@ -40,22 +36,7 @@ export const VideoViewer = ({
     };
 
     const refreshVideoUrl = async () => {
-        try {
-            console.info("Attempting refresh...");
-            const resp = await actionRefreshVideoUrl({
-                fileName,
-                videoId,
-            });
-
-            if (resp.status !== "Ok") {
-                throw new Error(resp.error);
-            }
-
-            return resp.data;
-        } catch (error) {
-            console.error("Error refreshing video URL:", error);
-            throw error;
-        }
+        console.info("no refresh available in test mode");
     };
 
     const handleVideoPlay = async () => {
@@ -77,8 +58,6 @@ export const VideoViewer = ({
                 }
 
                 // Get fresh URL from API
-                const freshUrl = await refreshVideoUrl();
-                setVideoUrl(freshUrl);
                 setIsUrlExpired(false);
                 lastActivityRef.current = now;
             } catch (error) {
