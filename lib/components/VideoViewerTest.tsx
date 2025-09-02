@@ -173,6 +173,7 @@ export const VideoViewerTest = ({
                     playsInline
                     controls
                     controlsList="nodownload"
+                    poster="/static/images/sphil_owl.webp"
                     onLoadedData={handleLoad}
                     onPlay={handleVideoPlay}
                     onSeeked={handleVideoPlay}
