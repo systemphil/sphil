@@ -1,8 +1,9 @@
 "use client";
+
 import { Heading } from "lib/components/ui/Heading";
 import { useEffect, useRef, useState } from "react";
 
-export default function DebugVideo3() {
+export default function DebugVideo2() {
     const [videoUrl, setVideoUrl] = useState("/static/video/vid1.mp4");
     const [isLoading, setIsLoading] = useState(true);
     const [isFloating, setIsFloating] = useState(false);
@@ -149,24 +150,25 @@ export default function DebugVideo3() {
                 }`}
             >
                 {/* <div
-                        className={`absolute z-10 ${
-                            isLoading ? "" : "hidden"
-                        } skeleton rounded-none w-full h-full flex items-center justify-center`}
-                    >
-                        {isUrlExpired && (
-                            <div className="bg-black bg-opacity-70 p-4 rounded text-white text-center">
-                                <p>Refreshing video...</p>
-                            </div>
-                        )}
-                    </div> */}
-                <div className="flex h-full w-full">
+                    className={`absolute z-10 ${
+                        isLoading ? "" : "hidden"
+                    } skeleton rounded-none w-full h-full flex items-center justify-center`}
+                >
+                    {isUrlExpired && (
+                        <div className="bg-black bg-opacity-70 p-4 rounded text-white text-center">
+                            <p>Refreshing video...</p>
+                        </div>
+                    )}
+                </div> */}
+                <div
+                    className={`w-full h-full ${isFullscreen ? "object-contain" : "object-cover"}`}
+                >
                     <video
+                        ref={videoRef}
+                        key={videoUrl}
                         playsInline
                         controls
                         poster="/static/images/sphil_owl.webp"
-                        onLoadedData={handleLoad}
-                        onPlay={handleVideoPlay}
-                        onSeeked={handleVideoPlay}
                     >
                         <source src={videoUrl} type="video/mp4" />
                         Your browser does not support the video tag.
@@ -179,10 +181,10 @@ export default function DebugVideo3() {
     // return (
     //     <div className="flex flex-col flex-wrap ">
     //         <div className="p-4">
-    //             <Heading>Testing video 3</Heading>
+    //             <Heading>Testing video 2</Heading>
     //             <p>Do you see the video below? Does it play?</p>
     //         </div>
-    //         <video controls poster="/static/images/sphil_owl.webp" lang="en">
+    //         <video playsInline controls poster="/static/images/sphil_owl.webp">
     //             <source src="/static/video/vid1.mp4" type="video/mp4" />
     //             Your browser does not support the video tag.
     //         </video>

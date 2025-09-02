@@ -156,7 +156,7 @@ export const VideoViewerTest = ({
                         : "relative w-full h-full aspect-video overflow-hidden"
                 }`}
             >
-                <div
+                {/* <div
                     className={`absolute z-10 ${
                         isLoading ? "" : "hidden"
                     } skeleton rounded-none w-full h-full flex items-center justify-center`}
@@ -166,21 +166,22 @@ export const VideoViewerTest = ({
                             <p>Refreshing video...</p>
                         </div>
                     )}
+                </div> */}
+                <div className="flex h-full w-full">
+                    <video
+                        ref={videoRef}
+                        key={videoUrl}
+                        playsInline
+                        controls
+                        poster="/static/images/sphil_owl.webp"
+                        onLoadedData={handleLoad}
+                        onPlay={handleVideoPlay}
+                        onSeeked={handleVideoPlay}
+                    >
+                        <source src={videoUrl} type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
-                <video
-                    ref={videoRef}
-                    key={videoUrl}
-                    playsInline
-                    controls
-                    poster="/static/images/sphil_owl.webp"
-                    onLoadedData={handleLoad}
-                    onPlay={handleVideoPlay}
-                    onSeeked={handleVideoPlay}
-                    className={`w-full h-full ${isFullscreen ? "object-contain" : "object-cover"}`}
-                >
-                    <source src={videoUrl} type="video/mp4" />
-                    Your browser does not support the video tag.
-                </video>
             </div>
         </div>
     );
