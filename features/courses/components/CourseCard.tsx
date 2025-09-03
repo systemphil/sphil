@@ -1,6 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import type { Course } from "@prisma/client";
 import Link from "next/link";
-import Image from "next/image";
 import { Heading } from "lib/components/ui/Heading";
 import { GlowBoundary } from "lib/components/animations/GlowBoundary";
 import { auth } from "lib/auth/authConfig";
@@ -25,20 +25,18 @@ export async function CourseCard({ course, isAdmin = false }: CourseCardProps) {
             <div className="w-full h-full rounded-lg border bg-linear-to-b from-neutral-50/90 to-neutral-100/90 transition duration-300 dark:from-neutral-950/90 dark:to-neutral-800/90 md:hover:border-transparent md:bg-linear-to-bl">
                 <Link href={href}>
                     {course.imageUrl && (
-                        <Image
-                            className="max-h-[300px] w-full rounded-t-md"
-                            src={course.imageUrl}
-                            alt={`Video thumbnail preview for ${course.name}`}
-                            width={340}
-                            height={240}
-                            layout="responsive"
-                            priority
-                        />
+                        <div className="aspect-video">
+                            <img
+                                className="object-cover w-full h-full rounded-t-md"
+                                src={course.imageUrl}
+                                alt={`Video thumbnail preview for ${course.name}`}
+                            />
+                        </div>
                     )}
 
                     <div className="p-8 flex flex-col grow">
                         {!course.published && (
-                            <div>
+                            <div className="absolute">
                                 <span className="bg-slate-200 text-slate-700 rounded-full text-xs py-1 px-3 mb-2 inline-block">
                                     Draft
                                 </span>
