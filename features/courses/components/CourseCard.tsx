@@ -34,7 +34,7 @@ export async function CourseCard({ course, isAdmin = false }: CourseCardProps) {
                         </div>
                     )}
 
-                    <div className="p-8 flex flex-col grow">
+                    <div className="p-6 flex flex-col grow">
                         {!course.published && (
                             <div className="absolute">
                                 <span className="bg-slate-200 text-slate-700 rounded-full text-xs py-1 px-3 mb-2 inline-block">
@@ -42,7 +42,7 @@ export async function CourseCard({ course, isAdmin = false }: CourseCardProps) {
                                 </span>
                             </div>
                         )}
-                        <Heading as="h3">{course.name}</Heading>
+                        <Heading as="h5">{course.name}</Heading>
                         <p className="text-slate-700 dark:text-gray-300/90 text-center">
                             {course.description}
                         </p>

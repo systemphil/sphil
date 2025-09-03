@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { Suspense } from "react";
 import { PageWrapper } from "lib/components/ui/PageWrapper";
-import { Maintenance } from "lib/components/Maintenance";
 import { PolyRhythmicSpiral } from "lib/components/animations/PolyRhythmicSpiral";
 import { FadeIn } from "lib/components/animations/FadeIn";
 import { Reviews } from "./Reviews";
@@ -15,12 +13,6 @@ export async function SymposiaLanding() {
             <Hero />
             <PageWrapper>
                 <OpeningDescription />
-                <Suspense>
-                    <Maintenance
-                        area="global"
-                        componentToDisplayForBeta={<NewsletterSignUpForBeta />}
-                    />
-                </Suspense>
                 <MainInfoCard />
                 <InfoCards />
                 <Community />
