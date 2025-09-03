@@ -121,6 +121,8 @@ export const CourseForm = ({ course }: { course?: Course }) => {
                 <p className="font-semibold text-xs dark:text-gray-300 text-gray-600">
                     ❗ For slug, only lowercase letters, numbers, and hyphens
                     are allowed, no whitespace
+                    <br />
+                    ⚠️ Do not change this lightly!
                 </p>
                 <TextInput
                     label="Slug* (the course link)"
@@ -188,7 +190,7 @@ export const CourseForm = ({ course }: { course?: Course }) => {
                     )}
                 </div>
                 <ImageFileInput
-                    label="Image"
+                    label="Image (should be 1280x720 pixels)"
                     name="fileInput"
                     options={{
                         required: false,
