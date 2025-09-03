@@ -1,6 +1,6 @@
 import {
     dbGetAllCourses,
-    dbGetAllCoursesByCreators,
+    dbGetAllCoursesByCreatorsOrTutors,
     dbGetAllPublishedCourses,
 } from "lib/database/dbFuncs";
 import { CourseCard } from "./CourseCard";
@@ -27,7 +27,7 @@ export async function CoursesDisplay({
         if (session.user.role === "SUPERADMIN") {
             courses = await dbGetAllCourses();
         } else {
-            courses = await dbGetAllCoursesByCreators(session.user.id);
+            courses = await dbGetAllCoursesByCreatorsOrTutors(session.user.id);
         }
     } else {
         courses = await dbGetAllPublishedCourses();

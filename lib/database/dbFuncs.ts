@@ -37,18 +37,17 @@ export const dbGetAllCourses = () => withAdmin(() => prisma.course.findMany());
  * Calls the database to retrieve all courses by owner userId.
  * @access ADMIN
  */
-export const dbGetAllCoursesByCreators = (userId: string) =>
-    withAdmin(() =>
-        prisma.course.findMany({
+export const dbGetAllCoursesByCreatorsOrTutors = (userId: string) =>
+    withAdmin(() => {
+        return prisma.course.findMany({
             where: {
-                creators: {
-                    some: {
-                        id: userId,
-                    },
-                },
+                OR: [
+                    { creators: { some: { id: userId } } },
+                    { assistants: { some: { id: userId } } },
+                ],
             },
-        })
-    );
+        });
+    });
 
 /**
  * Calls the database to retrieve all published courses.
@@ -325,6 +324,16 @@ export async function dbGetCourseAndDetailsAndLessonsById(id: string) {
                     },
                 },
                 details: {
+                    select: {
+                        id: true,
+                    },
+                },
+                assistants: {
+                    select: {
+                        id: true,
+                    },
+                },
+                creators: {
                     select: {
                         id: true,
                     },

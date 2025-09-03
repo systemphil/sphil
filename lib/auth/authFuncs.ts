@@ -1,4 +1,6 @@
+import { Session } from "next-auth";
 import { auth } from "./authConfig";
+import { dbGetCourseAndDetailsAndLessonsById } from "lib/database/dbFuncs";
 
 /**
  * Checks the user's authentication session for admin access.
@@ -71,3 +73,38 @@ export const withUser = async <T>(
     await requireUserAuthOrThrow();
     return await retrieveFunc();
 };
+
+export function determineCourseAccess(
+    session: Session,
+    course: NonNullable<
+        Awaited<ReturnType<typeof dbGetCourseAndDetailsAndLessonsById>>
+    >
+) {
+    const fullAccess = {
+        courseAccess: true,
+        seminarAccess: true,
+    };
+
+    const limitedAccess = {
+        courseAccess: false,
+        seminarAccess: true,
+    };
+
+    if (session.user.role === "SUPERADMIN") {
+        return fullAccess;
+    }
+
+    if (course.creators.some((c: { id: string }) => c.id === session.user.id)) {
+        return fullAccess;
+    }
+
+    if (
+        course.assistants.some((c: { id: string }) => c.id === session.user.id)
+    ) {
+        return limitedAccess;
+    }
+
+    throw new Error(
+        "Expected either superadmin, a course creator or assistant"
+    );
+}

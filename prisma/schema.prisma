@@ -104,7 +104,7 @@ model Course {
     stripeDialoguePriceId String?
     imageUrl              String?
     author                String?
-    seminarLink           String? // Consider phasing out
+    seminarLink           String? // TODO Deprecated - phase out
     baseAvailability      DateTime @default(now())
     seminarAvailability   DateTime @default(now())
     dialogueAvailability  DateTime @default(now())
@@ -127,10 +127,9 @@ model Course {
 }
 
 model SeminarCohort {
-    id                          String  @id @default(cuid())
+    id                          String @id @default(cuid())
     year                        Int
     courseId                    String
-    seminarLink                 String? // TODO Deprecated
     seminarOnlyPrice            Float
     stripeSeminarOnlyPriceId    String
     seminarUpgradePrice         Float
