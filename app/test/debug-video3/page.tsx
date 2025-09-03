@@ -1,6 +1,7 @@
 "use client";
 import { Heading } from "lib/components/ui/Heading";
 import { useEffect, useRef, useState } from "react";
+// TODO remove after testing
 
 export default function DebugVideo3() {
     const [videoUrl, setVideoUrl] = useState("/static/video/vid1.mp4");

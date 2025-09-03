@@ -177,6 +177,8 @@ export const VideoViewer = ({
                         : "relative w-full h-full aspect-video overflow-hidden"
                 }`}
             >
+                {/* 
+                // TODO This might be causing playback issues on iPhones. Consider removing entirely. 
                 <div
                     className={`absolute z-10 ${
                         isLoading ? "" : "hidden"
@@ -187,21 +189,25 @@ export const VideoViewer = ({
                             <p>Refreshing video...</p>
                         </div>
                     )}
-                </div>
-                <video
-                    ref={videoRef}
-                    key={videoUrl}
-                    playsInline
-                    controls
-                    controlsList="nodownload"
-                    onLoadedData={handleLoad}
-                    onPlay={handleVideoPlay}
-                    onSeeked={handleVideoPlay}
+                </div> */}
+                <div
                     className={`w-full h-full ${isFullscreen ? "object-contain" : "object-cover"}`}
                 >
-                    <source src={videoUrl} type="video/mp4" />
-                    Your browser does not support the video tag.
-                </video>
+                    <video
+                        ref={videoRef}
+                        key={videoUrl}
+                        playsInline
+                        controls
+                        controlsList="nodownload"
+                        onLoadedData={handleLoad}
+                        onPlay={handleVideoPlay}
+                        onSeeked={handleVideoPlay}
+                        poster="/static/images/sphil_owl_large.webp"
+                    >
+                        <source src={videoUrl} type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
             </div>
         </div>
     );

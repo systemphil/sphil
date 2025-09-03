@@ -3,6 +3,8 @@
 import { Heading } from "lib/components/ui/Heading";
 import { useEffect, useRef, useState } from "react";
 
+// TODO remove after testing
+
 export default function DebugVideo2() {
     const [videoUrl, setVideoUrl] = useState("/static/video/vid1.mp4");
     const [isLoading, setIsLoading] = useState(true);

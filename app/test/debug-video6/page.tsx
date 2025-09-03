@@ -3,6 +3,8 @@
 import { Heading } from "lib/components/ui/Heading";
 import { useEffect, useRef, useState } from "react";
 
+// TODO remove after testing
+
 export default function DebugVideo2() {
     return (
         <div className="flex flex-col flex-wrap ">
