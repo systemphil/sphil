@@ -412,7 +412,6 @@ export async function ctrlUpdateSeminarCohortPrices({
             seminarUpgradePrice:
                 seminarUpgradePriceNewPrice?.unit_amount ?? undefined,
             stripeSeminarUpgradePriceId: seminarUpgradePriceNewPrice?.id,
-            seminarLink,
         },
     });
 }
