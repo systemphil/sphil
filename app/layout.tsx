@@ -19,6 +19,8 @@ import { Providers } from "lib/components/context/Providers";
 import "nextra-theme-docs/style.css";
 import "@mdxeditor/editor/style.css";
 import "./globals.css";
+import { Suspense } from "react";
+import { ImagePreloader } from "lib/components/ImagePreloader";
 
 const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub";
 const PROJECT_LINK = "https://github.com/systemphil/sphil";
@@ -198,6 +200,9 @@ export default async function RootLayout({
                         <ArticleWrapper>{children}</ArticleWrapper>
                     </NextraLayout>
                 </Providers>
+                <Suspense>
+                    <ImagePreloader />
+                </Suspense>
             </body>
         </html>
     );

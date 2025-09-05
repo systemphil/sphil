@@ -72,7 +72,7 @@ export const CourseForm = ({ course }: { course?: Course }) => {
             baseAvailability: course?.baseAvailability ?? new Date(),
             seminarAvailability: course?.seminarAvailability ?? new Date(),
             dialogueAvailability: course?.dialogueAvailability ?? new Date(),
-            seminarLink: course?.seminarLink ?? "",
+            seminarLink: course?.seminarLink ?? null,
             published: course?.published ?? false,
         },
     });
@@ -216,11 +216,6 @@ export const CourseForm = ({ course }: { course?: Course }) => {
                     label={`Dialogue Availability Until* ${isPast(methods.watch("dialogueAvailability")) ? " Date is past❗" : ""}`}
                     name="dialogueAvailability"
                     options={{ required: true }}
-                />
-                <TextInput
-                    label="Seminar link"
-                    name="seminarLink"
-                    options={{ required: false }}
                 />
                 <Alert color="info" sx={{ my: 2 }}>
                     If you want to make the course publicly visible for
