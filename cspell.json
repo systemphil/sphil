@@ -14,7 +14,8 @@
         "next.config.mjs",
         ".env",
         ".env.*",
-        "cspell.json"
+        "cspell.json",
+        "Dockerfile"
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
