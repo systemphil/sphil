@@ -16,9 +16,7 @@ ARG NEXT_PUBLIC_SITE_ROOT
 ENV NEXT_PUBLIC_SITE_ROOT=$NEXT_PUBLIC_SITE_ROOT
 
 RUN --mount=type=secret,id=sec_database_url \
- export DATABASE_URL=$(cat /run/secrets/sec_database_url)
-
-RUN npm run build
+ export DATABASE_URL=$(cat /run/secrets/sec_database_url) npm run build
 
 # Force node.js to use ipv4 first, over ipv6, by appending the following to server.js
 RUN echo "const dns = require('node:dns');" >> ./.next/standalone/server.js \
