@@ -9,6 +9,7 @@ import { CourseLessonsSortable } from "features/courses/components/CourseLessons
 import { Alert } from "@mui/material";
 import { auth } from "lib/auth/authConfig";
 import { determineCourseAccess } from "lib/auth/authFuncs";
+import { CreateNewSeminarCohortBtn } from "features/courses/components/CreateNewSeminarCohortBtn";
 
 export const metadata = {};
 
@@ -39,6 +40,8 @@ export default async function AdminCourseEdit({
         course
     );
 
+    const currentYear = new Date().getFullYear();
+
     return (
         <div className="my-4 min-h-screen container">
             <Heading as="h2">{course.name}</Heading>
@@ -58,8 +61,8 @@ export default async function AdminCourseEdit({
                                         modelName="CourseDetails"
                                     />
                                 ) : (
-                                    <div>
-                                        <p>None yet.</p>
+                                    <div className="flex items-center flex-col justify-center">
+                                        <p className="text-center">None yet.</p>
                                         <Link
                                             href={`/admin/courses/${courseId}/course-details/new`}
                                         >
@@ -80,7 +83,7 @@ export default async function AdminCourseEdit({
                                     />
                                 ) : (
                                     <div>
-                                        <p>None yet.</p>
+                                        <p className="text-center">None yet.</p>
                                     </div>
                                 )}
                             </div>
@@ -110,9 +113,21 @@ export default async function AdminCourseEdit({
                                 ))
                             ) : (
                                 <div>
-                                    <p>No cohorts at this time</p>
+                                    <p className="text-center">
+                                        No cohorts at this time
+                                    </p>
                                 </div>
                             )}
+                            {(course.seminarCohorts.length === 0 ||
+                                !course.seminarCohorts.some(
+                                    (c) => c.year === currentYear
+                                )) && (
+                                <CreateNewSeminarCohortBtn
+                                    currentYear={currentYear}
+                                    courseId={course.id}
+                                />
+                            )}
+
                             <Alert color="info" sx={{ mt: 2 }}>
                                 Seminar cohorts are automatically generated when
                                 a user signs up for seminars for the current
