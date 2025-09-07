@@ -1819,7 +1819,7 @@ export async function dbEnrollUserInSeminarCohort({
     return cohort;
 }
 
-async function dbCreateSeminarCohort({
+export async function dbCreateSeminarCohort({
     courseId,
     currentYear,
 }: {

@@ -18,11 +18,21 @@ import { actionUpsertCourse } from "features/courses/server/actions";
 import { DbUpsertCourseByIdProps } from "lib/database/dbFuncs";
 import { actionUploadImage } from "lib/server/actions";
 import { Alert } from "@mui/material";
+import dayjs from "dayjs";
 
 type AmendedDbUpsertCourseByIdProps = Omit<
     DbUpsertCourseByIdProps,
-    "creatorId"
->;
+    | "creatorId"
+    | "baseAvailability"
+    | "seminarAvailability"
+    | "dialogueAvailability"
+> & {
+    baseAvailability: any;
+    seminarAvailability: any;
+    dialogueAvailability: any;
+};
+
+const DEFAULT_DATE = new Date("1970-01-01T00:00:00Z");
 
 export const CourseForm = ({ course }: { course?: Course }) => {
     const [currentImageUrl, setCurrentImageUrl] = useState<string>("");
@@ -36,10 +46,10 @@ export const CourseForm = ({ course }: { course?: Course }) => {
         setSubmitLoading(true);
         const dataWithConvertedDates = {
             ...data,
-            // New dates from form come as UTC strings, convert these to Date objects here
-            baseAvailability: new Date(data.baseAvailability),
-            seminarAvailability: new Date(data.seminarAvailability),
-            dialogueAvailability: new Date(data.dialogueAvailability),
+            // New dates as Dayjs objects or strings, convert these to Date objects here
+            baseAvailability: dayjs(data.baseAvailability).toDate(),
+            seminarAvailability: dayjs(data.seminarAvailability).toDate(),
+            dialogueAvailability: dayjs(data.dialogueAvailability).toDate(),
         } satisfies Omit<DbUpsertCourseByIdProps, "creatorId">;
         const resp = await actionUpsertCourse(dataWithConvertedDates);
         if (resp?.error) {
@@ -69,13 +79,17 @@ export const CourseForm = ({ course }: { course?: Course }) => {
             dialoguePrice: course?.dialoguePrice ?? 0,
             imageUrl: course?.imageUrl ?? "",
             author: course?.author ?? "",
-            baseAvailability: course?.baseAvailability ?? new Date(),
-            seminarAvailability: course?.seminarAvailability ?? new Date(),
-            dialogueAvailability: course?.dialogueAvailability ?? new Date(),
+            baseAvailability: course?.baseAvailability ?? DEFAULT_DATE,
+            seminarAvailability: course?.seminarAvailability ?? DEFAULT_DATE,
+            dialogueAvailability: course?.dialogueAvailability ?? DEFAULT_DATE,
             seminarLink: course?.seminarLink ?? null,
             published: course?.published ?? false,
         },
     });
+
+    const baseAvailability = String(methods.watch("baseAvailability"));
+    const seminarAvailability = String(methods.watch("seminarAvailability"));
+    const dialogueAvailability = String(methods.watch("dialogueAvailability"));
 
     // Event handlers and other hooks
     const handleSelectedFileImageChange = async (
@@ -102,10 +116,7 @@ export const CourseForm = ({ course }: { course?: Course }) => {
         setCurrentImageUrl(imageUrl);
     };
 
-    function isPast(date: Date): boolean {
-        const now = new Date();
-        return date < now;
-    }
+    const isPast = (value: string) => new Date(value) < new Date();
 
     return (
         <FormProvider {...methods}>
@@ -113,6 +124,43 @@ export const CourseForm = ({ course }: { course?: Course }) => {
                 className="flex flex-col max-w-lg"
                 onSubmit={methods.handleSubmit(onSubmit)}
             >
+                <div className="aspect-video max-w-[500px] relative">
+                    {course?.imageUrl && !currentImageUrl && (
+                        <>
+                            <p className="font-bold">Current Course Image:</p>
+                            <Image
+                                className="object-cover w-full rounded-md"
+                                src={course.imageUrl}
+                                alt={`Preview`}
+                                fill
+                            />
+                        </>
+                    )}
+                    {currentImageUrl && (
+                        <>
+                            <p style={{ fontWeight: "bolder" }}>
+                                New Course Image:
+                            </p>
+                            <Image
+                                className="object-cover w-full rounded-t-md"
+                                src={currentImageUrl}
+                                alt={`Preview`}
+                                fill
+                            />
+                        </>
+                    )}
+                    {!course?.imageUrl && !currentImageUrl && (
+                        <p>No image uploaded</p>
+                    )}
+                </div>
+                <ImageFileInput
+                    label="Image (should be 1280x720 pixels)"
+                    name="fileInput"
+                    options={{
+                        required: false,
+                        onChange: (e) => handleSelectedFileImageChange(e),
+                    }}
+                />
                 <TextInput
                     label="Name*"
                     name="name"
@@ -160,60 +208,23 @@ export const CourseForm = ({ course }: { course?: Course }) => {
                     name="dialoguePrice"
                     options={{ valueAsNumber: true, required: true }}
                 />
-                <div className="h-[250px] max-w-[500px]">
-                    {course?.imageUrl && !currentImageUrl && (
-                        <>
-                            <p className="font-bold">Current Course Image:</p>
-                            <Image
-                                src={course.imageUrl}
-                                alt="Current Course Image"
-                                width={250}
-                                height={250}
-                            />
-                        </>
-                    )}
-                    {currentImageUrl && (
-                        <>
-                            <p style={{ fontWeight: "bolder" }}>
-                                New Course Image:
-                            </p>
-                            <Image
-                                src={currentImageUrl}
-                                alt="New Course Image"
-                                width={250}
-                                height={250}
-                            />
-                        </>
-                    )}
-                    {!course?.imageUrl && !currentImageUrl && (
-                        <p>No image uploaded</p>
-                    )}
-                </div>
-                <ImageFileInput
-                    label="Image (should be 1280x720 pixels)"
-                    name="fileInput"
-                    options={{
-                        required: false,
-                        onChange: (e) => handleSelectedFileImageChange(e),
-                    }}
-                />
                 <TextInput
                     label="Author"
                     name="author"
                     options={{ required: false }}
                 />
                 <DateTimeInput
-                    label={`Base Availability Until* ${isPast(methods.watch("baseAvailability")) ? " Date is past❗" : ""}`}
+                    label={`Base Availability Until* ${isPast(baseAvailability) ? "Date is past❗" : ""}`}
                     name="baseAvailability"
                     options={{ required: true }}
                 />
                 <DateTimeInput
-                    label={`Seminar Availability Until* ${isPast(methods.watch("seminarAvailability")) ? " Date is past❗" : ""}`}
+                    label={`Seminar Availability Until* ${isPast(seminarAvailability) ? "Date is past❗" : ""}`}
                     name="seminarAvailability"
                     options={{ required: true }}
                 />
                 <DateTimeInput
-                    label={`Dialogue Availability Until* ${isPast(methods.watch("dialogueAvailability")) ? " Date is past❗" : ""}`}
+                    label={`Dialogue Availability Until* ${isPast(dialogueAvailability) ? "Date is past❗" : ""}`}
                     name="dialogueAvailability"
                     options={{ required: true }}
                 />

@@ -9,6 +9,7 @@ import {
 } from "lib/bucket/bucketFuncs";
 import {
     dbCreateSeminar,
+    dbCreateSeminarCohort,
     dbReorderLessons,
     dbReorderSeminars,
     dbUpsertLessonById,
@@ -316,6 +317,39 @@ export async function actionCreateSeminar(
     }
 
     const newSeminar = await dbCreateSeminar(input);
+
+    revalidatePath("/(admin)/admin", "layout");
+    revalidateTag(cacheKeys.allSeminars);
+    return {
+        error: false,
+        message: "Successfully created",
+        data: {
+            seminarId: newSeminar.id,
+        },
+    };
+}
+
+const actionCreateSeminarCohortSchema = z.object({
+    courseId: z.string(),
+    currentYear: z.number().min(2024).max(2100),
+});
+
+export async function actionCreateSeminarCohort(
+    input: z.infer<typeof actionCreateSeminarCohortSchema>
+) {
+    const isAdmin = await validateAdminAccess();
+    if (!isAdmin) {
+        return { error: true, message: "Unauthorized" };
+    }
+    const parsedInput = actionCreateSeminarCohortSchema.safeParse(input);
+    if (!parsedInput.success) {
+        return {
+            error: true,
+            message: `Bad request ${parsedInput.error.message}`,
+        };
+    }
+
+    const newSeminar = await dbCreateSeminarCohort(input);
 
     revalidatePath("/(admin)/admin", "layout");
     revalidateTag(cacheKeys.allSeminars);

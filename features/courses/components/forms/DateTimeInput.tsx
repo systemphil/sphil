@@ -17,7 +17,6 @@ type Props = {
 
 export const DateTimeInput = ({ name, label, options }: Props) => {
     const {
-        control,
         formState: { errors },
     } = useFormContext();
 
@@ -27,18 +26,11 @@ export const DateTimeInput = ({ name, label, options }: Props) => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Controller
                     name={name}
-                    control={control}
                     rules={options}
                     render={({ field }) => (
                         <DateTimePicker
                             value={field.value ? dayjs(field.value) : null}
-                            onChange={(newValue) => {
-                                // Convert to UTC ISO string when saving to form
-                                const utcValue = newValue
-                                    ? newValue.toISOString()
-                                    : null;
-                                field.onChange(utcValue);
-                            }}
+                            onChange={(date) => field.onChange(date)}
                             slots={{ textField: TextField }}
                             slotProps={{
                                 textField: {
