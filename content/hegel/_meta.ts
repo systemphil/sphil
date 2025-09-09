@@ -9,11 +9,11 @@ export default {
         },
     },
     guides: {
-        title: "Guides",
+        title: "Hegel Guides",
         type: "page",
     },
     reference: {
-        title: "Reference",
+        title: "Hegel Reference",
         type: "page",
         theme: {
             pagination: false,
