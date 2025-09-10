@@ -15,13 +15,13 @@ type CourseEnrollButtonProps = {
     slug: string;
 };
 
-const BASE_TIER_TITLE = "Solo Learner";
+const BASE_TIER_TITLE = "Self-study";
 const BASE_TIER_TEXT =
     "Base tier grants lifetime access to the course and all its digital contents, including any future updates.";
-const SEMINAR_TIER_TITLE = "Peer";
+const SEMINAR_TIER_TITLE = "Seminar";
 const SEMINAR_TIER_TEXT =
     "Seminar tier includes base tier as well as one-time access to live seminars, valid only for the season in which your course is held.";
-const DIALOGUE_TIER_TITLE = "Scholar";
+const DIALOGUE_TIER_TITLE = "Dialogue";
 const DIALOGUE_TIER_TEXT =
     "Dialogue tier includes base and seminar tier as well as weekly 1:1 sessions with the teacher, valid only for the season in which your course is held. Limited slots.";
 
