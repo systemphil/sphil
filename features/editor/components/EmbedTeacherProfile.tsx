@@ -1,5 +1,7 @@
 import { CardTeamMember } from "lib/components/CardTeamProfile";
 
+export const SUPPORTED_TEACHER_PROFILES = ["filip", "ahilleas", "christopher"];
+
 type EmbedTEacherProfileProps = {
     children?: React.ReactNode;
     teacherInput: string;
@@ -92,6 +94,35 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
         );
     };
 
+    const renderChristopher = (title?: string) => {
+        return (
+            <CardTeamMember
+                name="Christopher Satoor"
+                title={title ? title : "Teacher"}
+                image="/images/team/christopher.png"
+            >
+                Christopher Satoor is a doctoral candidate (ABD) in the
+                Department of Humanities at York University. His areas of
+                specialization are Classical German philosophy; German
+                Romanticism, German idealism (Kant and Fichte) with
+                concentration on Friedrich Wilhelm Joseph Schelling. Christopher
+                is also co-founder and the president{" "}
+                <a
+                    href="https://www.youtube.com/@IdealistSocNA/videos"
+                    target="_blank"
+                >
+                    The Idealist Society of North America
+                </a>
+                . Christopher is in the final stages of completing his
+                dissertation, an interdisciplinary project spanning philosophy,
+                religious studies, and science and technology studies. Over the
+                past 12 years, he has taught a wide range of courses in
+                philosophy social sciences, and the humanities. He currently
+                works as an educator, private instructor, and teacher.
+            </CardTeamMember>
+        );
+    };
+
     return (
         <section
             style={{ width: "100%", maxWidth: maxWidth }}
@@ -109,6 +140,7 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
             >
                 {teacher === "filip" && renderFilip(title)}
                 {teacher === "ahilleas" && renderAhilleas(title)}
+                {teacher === "christopher" && renderChristopher(title)}
             </div>
         </section>
     );

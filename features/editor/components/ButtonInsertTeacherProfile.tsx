@@ -1,4 +1,5 @@
 import { DialogButton, insertJsx$, usePublisher } from "@mdxeditor/editor";
+import { SUPPORTED_TEACHER_PROFILES } from "./EmbedTeacherProfile";
 
 export const ButtonInsertTeacherProfile = () => {
     const insertJsx = usePublisher(insertJsx$);
@@ -7,7 +8,7 @@ export const ButtonInsertTeacherProfile = () => {
 
     return (
         <DialogButton
-            autocompleteSuggestions={["filip", "ahilleas"]}
+            autocompleteSuggestions={SUPPORTED_TEACHER_PROFILES}
             tooltipTitle="Insert teacher profile"
             submitButtonTitle="Insert teacher"
             dialogInputPlaceholder="name:optional-title"
@@ -16,8 +17,9 @@ export const ButtonInsertTeacherProfile = () => {
                 const inputLowercase = input.toLocaleLowerCase();
                 if (
                     inputLowercase &&
-                    (inputLowercase.includes("filip") ||
-                        inputLowercase.includes("ahilleas"))
+                    SUPPORTED_TEACHER_PROFILES.includes(
+                        inputLowercase.split(":")[0]
+                    )
                 ) {
                     insertJsx({
                         name: "EmbedTeacherProfile",
