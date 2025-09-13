@@ -70,6 +70,14 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
                                     isDropdown
                                 />
                             </Suspense>
+                            {course.infoboxDescription ? (
+                                <Infobox
+                                    infoboxTitle={course.infoboxTitle}
+                                    infoboxDescription={
+                                        course.infoboxDescription
+                                    }
+                                />
+                            ) : null}
                             <Suspense>
                                 <CourseEnroll slug={slug} />
                             </Suspense>
@@ -84,5 +92,27 @@ export async function CourseFrontPage({ slug }: { slug: string }) {
                 </div>
             </div>
         </FadeIn>
+    );
+}
+
+function Infobox({
+    infoboxTitle,
+    infoboxDescription,
+}: {
+    infoboxTitle?: string | null;
+    infoboxDescription: string;
+}) {
+    return (
+        <div className="border w-[300px] md:w-[200px] xl:w-[280px] flex flex-col justify-center items-center p-3 gap-2 mb-2">
+            <Heading
+                as="h4"
+                replacementClasses="text-primary dark:text-acid-green"
+            >
+                {infoboxTitle || "❗ Info"}
+            </Heading>
+            <p className="text-md text-slate-600 dark:text-gray-300 px-2">
+                {infoboxDescription}
+            </p>
+        </div>
     );
 }

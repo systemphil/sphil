@@ -18,7 +18,6 @@ type PurchaseReceiptEmailProps = {
 
 export function EmailSeminarNotification({
     product,
-    seminarLink,
     courseLink,
 }: PurchaseReceiptEmailProps) {
     const preview = `Seminar enrollment for ${product.name}`;
@@ -65,21 +64,13 @@ export function EmailSeminarNotification({
                                     href={courseLink}
                                     className="bg-[#001172] text-white p-2 rounded-sm text-md my-4"
                                 >
-                                    View Schedule
+                                    Course Page
                                 </Button>
-                                {seminarLink ? (
-                                    <Button
-                                        href={seminarLink}
-                                        className="bg-[#6b0072] text-white p-2 rounded-sm text-md my-4"
-                                    >
-                                        SEMINAR LINK
-                                    </Button>
-                                ) : (
-                                    <Text className="text-sm font-bold">
-                                        ⚠️ Seminar link not set up yet. Lookout
-                                        for <b>second email</b>!
-                                    </Text>
-                                )}
+                                <Text className="text-sm font-bold">
+                                    🏺 Seminar link will follow by e-mail nearer
+                                    the start date or under Seminar Cohort
+                                    details (available from the Course Page).
+                                </Text>
                             </div>
                         </Row>
                     </Column>

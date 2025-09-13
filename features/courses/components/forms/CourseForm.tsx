@@ -82,7 +82,8 @@ export const CourseForm = ({ course }: { course?: Course }) => {
             baseAvailability: course?.baseAvailability ?? DEFAULT_DATE,
             seminarAvailability: course?.seminarAvailability ?? DEFAULT_DATE,
             dialogueAvailability: course?.dialogueAvailability ?? DEFAULT_DATE,
-            seminarLink: course?.seminarLink ?? null,
+            infoboxTitle: course?.infoboxTitle ?? null,
+            infoboxDescription: course?.infoboxDescription ?? null,
             published: course?.published ?? false,
         },
     });
@@ -227,6 +228,21 @@ export const CourseForm = ({ course }: { course?: Course }) => {
                     label={`Dialogue Availability Until* ${isPast(dialogueAvailability) ? "Date is past❗" : ""}`}
                     name="dialogueAvailability"
                     options={{ required: true }}
+                />
+                <Alert color="info" sx={{ my: 2 }}>
+                    Infobox can highlight important information as it is placed
+                    at the top of the right panel. Populate title and
+                    description below to use it.
+                </Alert>
+                <TextInput
+                    label="Infobox Title"
+                    name="infoboxTitle"
+                    options={{ required: false }}
+                />
+                <TextInput
+                    label="Infobox Description"
+                    name="infoboxDescription"
+                    options={{ required: false }}
                 />
                 <Alert color="info" sx={{ my: 2 }}>
                     If you want to make the course publicly visible for

@@ -462,7 +462,8 @@ export async function ctrlCreateOrUpdateCourse({
     baseAvailability,
     seminarAvailability,
     dialogueAvailability,
-    seminarLink,
+    infoboxTitle,
+    infoboxDescription,
     creatorId,
 }: OrderCreateOrUpdateCourseProps) {
     async function updateStripeProductIfNeeded({
@@ -611,7 +612,8 @@ export async function ctrlCreateOrUpdateCourse({
             baseAvailability,
             seminarAvailability,
             dialogueAvailability,
-            seminarLink,
+            infoboxTitle,
+            infoboxDescription,
             creatorId,
         };
         const course = await dbUpsertCourseById(dbPayload);
@@ -675,7 +677,8 @@ export async function ctrlCreateOrUpdateCourse({
         baseAvailability,
         seminarAvailability,
         dialogueAvailability,
-        seminarLink,
+        infoboxTitle,
+        infoboxDescription,
         creatorId,
     };
     const course = await dbUpsertCourseById(dbPayload);

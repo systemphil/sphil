@@ -19,13 +19,11 @@ declare module "next-auth" {
             role: Role;
             provider: string | null;
             stripeCustomerId?: User["stripeCustomerId"];
-            productsPurchased?: User["productsPurchased"];
         } & DefaultSession["user"];
     }
     interface UserWithRole extends AdapterUser {
         role: Role;
         stripeCustomerId?: User["stripeCustomerId"];
-        productsPurchased?: User["productsPurchased"];
     }
 }
 
@@ -82,7 +80,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             user: AdapterUser & {
                 role?: Role;
                 stripeCustomerId?: User["stripeCustomerId"];
-                productsPurchased?: User["productsPurchased"];
             };
             token: JWT;
         }) => ({
