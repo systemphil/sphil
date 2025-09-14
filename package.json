@@ -60,7 +60,7 @@
         "react-cookie-consent": "^9.0.0",
         "react-dom": "19.1.1",
         "react-email": "^4.2.8",
-        "react-hook-form": "7.53.1",
+        "react-hook-form": "7.62.0",
         "react-hot-toast": "^2.4.1",
         "react-textarea-autosize": "^8.5.4",
         "rehype-external-links": "^3.0.0",
