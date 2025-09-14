@@ -7,7 +7,7 @@ import { SchoolOutlined } from "@mui/icons-material";
 import { cn } from "lib/utils";
 
 /**
- * Thanks to Aceternity UI for the following code snippet. It has been modified to match the project's needs.
+ * Thanks to Ace UI for the following code snippet. It has been modified to match the project's needs.
  * @docs https://ui.aceternity.com/components/text-reveal-card
  */
 export const TextRevealCard = ({
@@ -24,7 +24,7 @@ export const TextRevealCard = ({
     className?: string;
 }) => {
     const [widthPercentage, setWidthPercentage] = useState(0);
-    const cardRef = useRef<HTMLDivElement | any>(null);
+    const cardRef = useRef<HTMLDivElement>(null);
     const [left, setLeft] = useState(0);
     const [localWidth, setLocalWidth] = useState(0);
     const [isMouseOver, setIsMouseOver] = useState(false);
@@ -38,7 +38,9 @@ export const TextRevealCard = ({
         }
     }, []);
 
-    function mouseMoveHandler(event: any) {
+    function mouseMoveHandler(
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ) {
         event.preventDefault();
 
         const { clientX } = event;

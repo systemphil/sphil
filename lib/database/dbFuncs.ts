@@ -415,7 +415,7 @@ type MdxModel = {
     id: string;
     mdx: Uint8Array<ArrayBufferLike>;
     mdxCategory: MdxCategory;
-    [key: string]: any;
+    [key: string]: unknown;
 };
 
 // Configuration for different model types

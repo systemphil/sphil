@@ -26,10 +26,10 @@ const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub";
 const PROJECT_LINK = "https://github.com/systemphil/sphil";
 const DOCS_REPOSITORY_BASE = "https://github.com/systemphil/sphil/tree/main";
 const SITE_ROOT = process.env.NEXT_PUBLIC_SITE_ROOT as string;
-const BACKGROUND_COLOR = {
-    light: "#fca5a5",
-    dark: "#1e40af",
-};
+// const BACKGROUND_COLOR = {
+//     light: "#fca5a5",
+//     dark: "#1e40af",
+// };
 const COLOR = {
     hue: {
         dark: 155,
@@ -208,6 +208,7 @@ export default async function RootLayout({
     );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Banner = () => {
     return (
         <NextraBanner storageKey="release_key" dismissible>

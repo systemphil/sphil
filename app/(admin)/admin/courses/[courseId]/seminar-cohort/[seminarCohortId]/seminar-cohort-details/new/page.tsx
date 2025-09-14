@@ -1,6 +1,5 @@
 import {
     dbGetSeminarCohortAndSeminarsById,
-    dbUpsertCourseDetailsById,
     dbUpsertSeminarCohortDetailsById,
 } from "lib/database/dbFuncs";
 import { redirect } from "next/navigation";
