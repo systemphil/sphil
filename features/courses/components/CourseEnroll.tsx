@@ -10,6 +10,7 @@ import { SubmitButton } from "lib/components/forms/SubmitButton";
 import { SignInToBuyBtn } from "./SignInToBuyBtn";
 import { ctrlCreateCheckout } from "lib/server/ctrl";
 import Link from "next/link";
+import { cn } from "lib/utils";
 
 type CourseEnrollButtonProps = {
     slug: string;
@@ -77,11 +78,6 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                 </p>
 
                 <div className="form-control has-checked:bg-indigo-50 has-checked:dark:bg-green-700/20 rounded-md relative">
-                    {!baseAvailable && (
-                        <span className="absolute text-xs text-slate-500  -top-2 right-0">
-                            &nbsp;Unavailable
-                        </span>
-                    )}
                     <label
                         className={`d-label ${
                             baseAvailable && "cursor-pointer"
@@ -97,25 +93,24 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                         />
 
                         <span
-                            className={`d-label-text dark:text-gray-300 ${
-                                !baseAvailable && "line-through"
-                            }`}
+                            className={cn(
+                                "d-label-text",
+                                baseAvailable
+                                    ? "dark:text-gray-300"
+                                    : "text-slate-300/90 dark:text-gray-700 line-through"
+                            )}
                         >
                             Base Tier
                         </span>
                     </label>
                     <TierDescription
+                        isAvailable={baseAvailable}
                         title={BASE_TIER_TITLE}
                         text={BASE_TIER_TEXT}
                         price={course.basePrice}
                     />
                 </div>
                 <div className="form-control has-checked:bg-indigo-50 has-checked:dark:bg-green-700/20 rounded-md relative">
-                    {!seminarAvailable && (
-                        <span className="absolute text-xs text-slate-500 -top-2 right-0">
-                            &nbsp;Unavailable
-                        </span>
-                    )}
                     <label
                         className={`d-label ${
                             seminarAvailable && "cursor-pointer"
@@ -130,25 +125,24 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                         />
 
                         <span
-                            className={`d-label-text dark:text-gray-300 ${
-                                !seminarAvailable && "line-through"
-                            }`}
+                            className={cn(
+                                "d-label-text",
+                                seminarAvailable
+                                    ? "dark:text-gray-300"
+                                    : "text-slate-300/90 dark:text-gray-700 line-through"
+                            )}
                         >
                             Seminar Tier
                         </span>
                     </label>
                     <TierDescription
+                        isAvailable={seminarAvailable}
                         title={SEMINAR_TIER_TITLE}
                         text={SEMINAR_TIER_TEXT}
                         price={course.seminarPrice}
                     />
                 </div>
                 <div className="form-control has-checked:bg-indigo-50 has-checked:dark:bg-green-700/20 rounded-md relative">
-                    {!dialogueAvailable && (
-                        <span className="absolute text-xs text-slate-500 -top-2 right-0">
-                            &nbsp;Unavailable
-                        </span>
-                    )}
                     <label
                         className={`d-label ${
                             dialogueAvailable && "cursor-pointer"
@@ -163,14 +157,18 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                         />
 
                         <span
-                            className={`d-label-text dark:text-gray-300 ${
-                                !dialogueAvailable && "line-through"
-                            }`}
+                            className={cn(
+                                "d-label-text",
+                                dialogueAvailable
+                                    ? "dark:text-gray-300"
+                                    : " text-slate-300/90 dark:text-gray-700 line-through"
+                            )}
                         >
                             Dialogue Tier
                         </span>
                     </label>
                     <TierDescription
+                        isAvailable={dialogueAvailable}
                         title={DIALOGUE_TIER_TITLE}
                         text={DIALOGUE_TIER_TEXT}
                         price={course.dialoguePrice}
@@ -198,24 +196,55 @@ function TierDescription({
     title,
     text,
     price,
+    isAvailable,
 }: {
+    isAvailable: boolean;
     title: string;
     text: string;
     price: number;
 }) {
     return (
-        <div className="flex flex-col max-w-xs items-center">
-            <p className="text-5xl font-bold">
+        <div className="flex flex-col max-w-xs items-center relative">
+            {!isAvailable && (
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    {/* Cross lines */}
+                    <div className="absolute w-[85%] h-0.5 bg-slate-200 dark:bg-slate-800/70 rotate-45"></div>
+
+                    <div className="absolute w-[85%] h-0.5 bg-slate-200 dark:bg-slate-800/70  -rotate-45"></div>
+                    <div className="z-19 absolute px-4 w-[100%] h-[25%] py-1 rounded bg-white dark:bg-neutral-950 blur-md"></div>
+                    <span className="z-20 text-sm font-semibold tracking-wide  text-slate-600/50 dark:text-slate-800 px-2 py-1 rounded">
+                        Currently unavailable
+                    </span>
+                </div>
+            )}
+
+            <p
+                className={cn(
+                    "text-5xl font-bold",
+                    isAvailable ? "" : "text-slate-300/90 dark:text-gray-700"
+                )}
+            >
                 <sup className="text-3xl font-extrabold">US</sup>${price / 100}
                 <sup className="text-3xl font-semibold">00</sup>
             </p>
             <Heading
                 as="h5"
-                replacementClasses="text-primary dark:text-acid-green"
+                replacementClasses={cn(
+                    isAvailable
+                        ? "text-primary dark:text-acid-green"
+                        : "text-slate-300 dark:text-gray-700"
+                )}
             >
                 {title}
             </Heading>
-            <p className="text-xs text-slate-600 dark:text-gray-300 px-2">
+            <p
+                className={cn(
+                    "text-xs px-2",
+                    isAvailable
+                        ? " text-slate-600 dark:text-gray-300"
+                        : "text-slate-300 dark:text-gray-700"
+                )}
+            >
                 {text}
             </p>
         </div>
