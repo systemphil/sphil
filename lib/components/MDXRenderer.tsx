@@ -53,6 +53,7 @@ export const MDXRenderer = ({
                             >
                                 <Content
                                     components={{
+                                        // eslint-disable-next-line @eslint-react/no-nested-component-definitions
                                         EmbedTeacherProfile(props) {
                                             return (
                                                 <EmbedTeacherProfile
@@ -60,6 +61,7 @@ export const MDXRenderer = ({
                                                 />
                                             );
                                         },
+                                        // eslint-disable-next-line @eslint-react/no-nested-component-definitions
                                         EmbedYT(props) {
                                             return <EmbedYT {...props} />;
                                         },

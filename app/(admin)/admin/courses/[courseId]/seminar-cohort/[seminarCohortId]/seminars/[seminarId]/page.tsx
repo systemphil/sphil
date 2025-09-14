@@ -63,7 +63,10 @@ export default async function AdminSeminarEdit({
                             <Link
                                 href={`/admin/courses/${courseId}/seminar-cohort/${seminarCohortId}/seminars/${seminarId}/seminar-content/new`}
                             >
-                                <button className="d-btn d-btn-primary">
+                                <button
+                                    type="button"
+                                    className="d-btn d-btn-primary"
+                                >
                                     Add content
                                 </button>
                             </Link>
@@ -86,7 +89,10 @@ export default async function AdminSeminarEdit({
                             <Link
                                 href={`/admin/courses/${courseId}/seminar-cohort/${seminarCohortId}/seminars/${seminarId}/seminar-transcript/new`}
                             >
-                                <button className="d-btn d-btn-primary">
+                                <button
+                                    type="button"
+                                    className="d-btn d-btn-primary"
+                                >
                                     Add transcript
                                 </button>
                             </Link>

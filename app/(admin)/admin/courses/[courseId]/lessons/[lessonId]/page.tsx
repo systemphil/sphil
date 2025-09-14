@@ -51,7 +51,10 @@ export default async function AdminLessonEdit({
                             <Link
                                 href={`/admin/courses/${courseId}/lessons/${lessonId}/lesson-content/new`}
                             >
-                                <button className="d-btn d-btn-primary">
+                                <button
+                                    type="button"
+                                    className="d-btn d-btn-primary"
+                                >
                                     Add content
                                 </button>
                             </Link>
@@ -79,7 +82,10 @@ export default async function AdminLessonEdit({
                             <Link
                                 href={`/admin/courses/${courseId}/lessons/${lessonId}/lesson-transcript/new`}
                             >
-                                <button className="d-btn d-btn-primary">
+                                <button
+                                    type="button"
+                                    className="d-btn d-btn-primary"
+                                >
                                     Add content
                                 </button>
                             </Link>

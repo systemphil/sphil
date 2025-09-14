@@ -1,4 +1,6 @@
 import { dirname } from "path";
+import eslintJs from "@eslint/js";
+import eslintReact from "@eslint-react/eslint-plugin";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
 
@@ -10,10 +12,13 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+    eslintJs.configs.recommended,
+    eslintReact.configs.recommended,
     ...compat.extends("next/core-web-vitals", "next/typescript"),
+
     {
         rules: {
-            // Put these rules after the recommended rules to override them
+            // These rules will be added or override existing ones
             "import/no-cycle": "warn",
             "@typescript-eslint/no-explicit-any": "error",
             "@typescript-eslint/no-unused-vars": "warn",
@@ -21,7 +26,7 @@ const eslintConfig = [
             "@typescript-eslint/no-require-imports": "warn",
             "import/no-anonymous-default-export": "off",
             "prefer-const": "warn",
-            "no-var": "off", // prisma.init requires var in global namespace setting
+            "no-var": "off", // Explicitly turn off a core ESLint rule
         },
     },
 ];

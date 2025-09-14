@@ -225,7 +225,10 @@ function FooterContent() {
                                         key="cookie-removal"
                                         onClick={() => handleClearCookies()}
                                     >
-                                        <button className={footerLinkClasses}>
+                                        <button
+                                            type="button"
+                                            className={footerLinkClasses}
+                                        >
                                             Delete Cookies
                                         </button>
                                     </li>
