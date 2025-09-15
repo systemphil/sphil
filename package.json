@@ -40,7 +40,7 @@
         "@react-email/components": "^0.5.3",
         "@tailwindcss/postcss": "^4.1.13",
         "@tailwindcss/typography": "^0.5.16",
-        "@types/node": "24.4.0",
+        "@types/bun": "1.2.21",
         "@types/react": "19.1.1",
         "@types/react-dom": "19.1.1",
         "classnames": "^2.5.1",
