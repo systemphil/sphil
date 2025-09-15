@@ -24,12 +24,12 @@ export const GlowBoundary = ({ children }: { children: React.ReactNode }) => {
     const mouseY = useMotionValue(0);
     const isMobile = useIsMobile();
 
-    function handleMouseMove({ currentTarget, clientX, clientY }: MouseEvent) {
+    function handleMouseMove(
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ) {
         if (isMobile) return;
-        if (!currentTarget) return;
-        const { left, top } = (
-            currentTarget as HTMLElement
-        ).getBoundingClientRect();
+        const { currentTarget, clientX, clientY } = event;
+        const { left, top } = currentTarget.getBoundingClientRect();
         mouseX.set(clientX - left);
         mouseY.set(clientY - top);
     }
@@ -41,7 +41,6 @@ export const GlowBoundary = ({ children }: { children: React.ReactNode }) => {
     return (
         <motion.div
             className="animated-glow dark:animated-glow relative w-full drop-shadow-[0_0_15px_rgba(49,49,49,0.2)] dark:drop-shadow-[0_0_15px_rgba(49,49,49,0.2)]"
-            // @ts-ignore
             onMouseMove={handleMouseMove}
             style={
                 {

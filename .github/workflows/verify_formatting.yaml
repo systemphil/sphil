@@ -16,19 +16,19 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
       with:
-        node-version: 20
+          bun-version: 1.2.21
     
-    # This installs all dependencies, but if we use "npm install -g prettier", 
+    # This installs all dependencies, but if we use "bun install -g prettier", 
     # then prettier won't pick up the project's .prettierrc file.
     - name: Install dependencies
-      run: npm ci
+      run: bun install --frozen-lockfile 
 
     - name: Check formatting
       run: |
-        npm run prettier:check
+        bun run prettier:check
 
     - name: Fail if formatting check failed
       if: failure()

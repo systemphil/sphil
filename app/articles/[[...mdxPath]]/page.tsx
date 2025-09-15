@@ -11,7 +11,9 @@ export const generateStaticParams = generateStaticParamsFor("mdxPath");
 type CustomMarkdownContentMetadata = $NextraMetadata & {
     seoTitle?: string | null;
 };
-export async function generateMetadata(props: any) {
+export async function generateMetadata(props: {
+    params: Promise<{ mdxPath: string[] }>;
+}) {
     const params = await props.params;
     const metadata = (await importPage(params.mdxPath))
         .metadata as CustomMarkdownContentMetadata;
@@ -56,7 +58,9 @@ export async function generateMetadata(props: any) {
     return enhancedMetadata;
 }
 
-export default async function Page(props: any) {
+export default async function Page(props: {
+    params: Promise<{ mdxPath: string[] }>;
+}) {
     const params = await props.params;
     const result = await importPage(params.mdxPath);
     const { default: MDXContent, toc, metadata } = result;

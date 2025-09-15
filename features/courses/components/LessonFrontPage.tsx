@@ -17,7 +17,7 @@ import { Back } from "lib/components/navigation/Back";
 
 export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
     const getLessonAndRelationsBySlug = cache(
-        async (slug) => {
+        async (slug: string) => {
             return await dbGetLessonAndRelationsBySlug(slug);
         },
         [cacheKeys.allPublicCourses, lessonSlug],

@@ -1,10 +1,10 @@
-FROM node:22-bullseye AS installer
+FROM oven/bun:1.2.21 AS installer
 WORKDIR /app
 COPY prisma ./
-COPY package.json package-lock.json ./
-RUN npm install
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile 
 
-FROM node:22-bullseye AS builder
+FROM oven/bun:1.2.21 AS builder
 WORKDIR /app
 COPY --from=installer /app/node_modules/ /app/node_modules
 COPY . .
@@ -17,13 +17,13 @@ ENV NEXT_PUBLIC_SITE_ROOT=$NEXT_PUBLIC_SITE_ROOT
 
 RUN --mount=type=secret,id=sec_database_url \
     export DATABASE_URL=$(cat /run/secrets/sec_database_url) && \
-    npm run build
+    bun run build
 
 # Force node.js to use ipv4 first, over ipv6, by appending the following to server.js
 RUN echo "const dns = require('node:dns');" >> ./.next/standalone/server.js \
     && echo "dns.setDefaultResultOrder('ipv4first');" >> ./.next/standalone/server.js
 
-FROM node:22-bullseye AS runner
+FROM oven/bun:1.2.21 AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -39,4 +39,4 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+CMD ["bun", "run", "server.js"]

@@ -61,7 +61,7 @@ export function NewsletterEnrollmentClosing({
                     <a
                         href="https://sphil.xyz/symposia/courses/science-of-logic-the-quality-of-being-part-1"
                         target="_blank"
-                        rel=""
+                        rel="noreferrer noopener"
                         className="text-blue-400 underline"
                     >
                         Enroll now

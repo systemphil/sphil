@@ -379,12 +379,10 @@ export async function ctrlUpdateSeminarCohortPrices({
     id,
     seminarOnlyPrice,
     seminarUpgradePrice,
-    seminarLink,
 }: {
     id: string;
     seminarOnlyPrice: number;
     seminarUpgradePrice: number;
-    seminarLink?: string | null;
 }) {
     const product = await dbGetOrCreateProductAux({ kind: "SEMINAR_ONLY" });
     const seminarCohort = await dbGetSeminarCohortAndSeminarsById({ id });

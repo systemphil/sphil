@@ -66,7 +66,10 @@ export default async function AdminCourseEdit({
                                         <Link
                                             href={`/admin/courses/${courseId}/course-details/new`}
                                         >
-                                            <button className="d-btn d-btn-primary">
+                                            <button
+                                                type="button"
+                                                className="d-btn d-btn-primary"
+                                            >
                                                 Add details
                                             </button>
                                         </Link>
@@ -91,7 +94,10 @@ export default async function AdminCourseEdit({
                                 <Link
                                     href={`/admin/courses/${course.id}/lessons/new`}
                                 >
-                                    <button className="d-btn d-btn-primary">
+                                    <button
+                                        type="button"
+                                        className="d-btn d-btn-primary"
+                                    >
                                         Add a lesson
                                     </button>
                                 </Link>
@@ -102,9 +108,9 @@ export default async function AdminCourseEdit({
                         <div>
                             <Heading as="h4">Seminar Cohorts</Heading>
                             {course.seminarCohorts.length > 0 ? (
-                                course.seminarCohorts.map((cohort, index) => (
+                                course.seminarCohorts.map((cohort) => (
                                     <CourseMaterialCard
-                                        key={`${courseId}-seminarCohort-${index}`}
+                                        key={`${courseId}-seminarCohort`}
                                         href={`/admin/courses/${courseId}/seminar-cohort/${cohort.id}`}
                                         heading={`${cohort.year} Cohort`}
                                         id={cohort.id}

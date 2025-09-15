@@ -1,14 +1,15 @@
 "use client";
 
-export const EmbedYT = (props: any) => {
-    const {
-        children,
-        src,
-        title,
-        minWidth = "400px",
-        maxWidth = "800px",
-        ...otherProps
-    } = props;
+interface EmbedYTProps extends React.HTMLAttributes<HTMLIFrameElement> {
+    src: string;
+    title?: string;
+    minWidth?: string;
+    maxWidth?: string;
+    children?: React.ReactNode;
+}
+
+export const EmbedYT = (props: EmbedYTProps) => {
+    const { children, src, title, maxWidth = "800px", ...otherProps } = props;
 
     return (
         <section

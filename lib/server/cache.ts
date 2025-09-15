@@ -10,13 +10,14 @@ export const CACHE_REVALIDATION_INTERVAL_MAINTENANCE = isDevelopment
     ? 10
     : 60 * 60; // 1 hour
 
-type Callback = (...args: any[]) => Promise<any>;
-export function cache<T extends Callback>(
-    cb: T,
+export function cache<TArgs extends readonly unknown[], TResult>(
+    cb: (...args: TArgs) => Promise<TResult>,
     keyParts: string[],
     options: { revalidate?: number | false; tags?: string[] } = {}
-) {
-    return nextCache(reactCache(cb), keyParts, options);
+): (...args: TArgs) => Promise<TResult> {
+    return nextCache(reactCache(cb), keyParts, options) as (
+        ...args: TArgs
+    ) => Promise<TResult>;
 }
 
 export const cacheKeys = {

@@ -96,7 +96,10 @@ export default async function AdminSeminarCohortEdit({
                                     <Link
                                         href={`/admin/courses/${courseId}/seminar-cohort/${seminarCohortAndSeminars.id}/seminar-cohort-details/new`}
                                     >
-                                        <button className="d-btn d-btn-primary">
+                                        <button
+                                            type="button"
+                                            className="d-btn d-btn-primary"
+                                        >
                                             Add details
                                         </button>
                                     </Link>
