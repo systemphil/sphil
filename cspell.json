@@ -15,7 +15,8 @@
         ".env",
         ".env.*",
         "cspell.json",
-        "Dockerfile"
+        "Dockerfile",
+        "*.bib"
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
