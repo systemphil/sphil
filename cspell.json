@@ -16,7 +16,8 @@
         ".env.*",
         "cspell.json",
         "Dockerfile",
-        "*.bib"
+        "*.bib",
+        "Dockerfile"
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
@@ -131,6 +132,7 @@
         "Sache",
         "Sceptical",
         "Scepticism",
+        "Satoor",
         "Satoor",
         "seiend",
         "seiende",
