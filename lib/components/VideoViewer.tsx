@@ -2,6 +2,7 @@
 
 import { actionRefreshVideoUrl } from "lib/server/actions";
 import { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 
 /**
  * VideoViewer with auto-refresh capabilities for expired signed URLs
@@ -19,7 +20,6 @@ export const VideoViewer = ({
     const [isLoading, setIsLoading] = useState(true);
     const [isFloating, setIsFloating] = useState(false);
     const [isMobileView, setIsMobileView] = useState(false);
-    const [isUrlExpired, setIsUrlExpired] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -41,7 +41,7 @@ export const VideoViewer = ({
 
     const refreshVideoUrl = async () => {
         try {
-            console.log("Attempting refresh...");
+            console.info("Attempting refresh...");
             const resp = await actionRefreshVideoUrl({
                 fileName,
                 videoId,
@@ -67,7 +67,6 @@ export const VideoViewer = ({
 
         // If more than N minutes since last activity
         if (now - lastActivityRef.current > 60 * 60 * 1000) {
-            setIsUrlExpired(true);
             setIsLoading(true);
 
             try {
@@ -77,10 +76,15 @@ export const VideoViewer = ({
                 }
 
                 // Get fresh URL from API
-                const freshUrl = await refreshVideoUrl();
-                console.log("Fresh url", freshUrl);
+                const freshUrlPromise = refreshVideoUrl();
+                toast.promise(freshUrlPromise, {
+                    error: (err) =>
+                        `Failed to refresh video: ${err.message || "An unknown error occurred."}`,
+                    loading: "Attempting to refresh video",
+                    success: "Video refreshed",
+                });
+                const freshUrl = await freshUrlPromise;
                 setVideoUrl(freshUrl);
-                setIsUrlExpired(false);
                 lastActivityRef.current = now;
             } catch (error) {
                 console.error("Failed to refresh video URL:", error);
@@ -179,30 +183,23 @@ export const VideoViewer = ({
                 }`}
             >
                 <div
-                    className={`absolute z-10 ${
-                        isLoading ? "" : "hidden"
-                    } skeleton rounded-none w-full h-full flex items-center justify-center`}
-                >
-                    {isUrlExpired && (
-                        <div className="bg-black bg-opacity-70 p-4 rounded text-white text-center">
-                            <p>Refreshing video...</p>
-                        </div>
-                    )}
-                </div>
-                <video
-                    ref={videoRef}
-                    key={videoUrl}
-                    playsInline
-                    controls
-                    controlsList="nodownload"
-                    onLoadedData={handleLoad}
-                    onPlay={handleVideoPlay}
-                    onSeeked={handleVideoPlay}
                     className={`w-full h-full ${isFullscreen ? "object-contain" : "object-cover"}`}
                 >
-                    <source src={videoUrl} type="video/mp4" />
-                    Your browser does not support the video tag.
-                </video>
+                    <video
+                        ref={videoRef}
+                        key={videoUrl}
+                        playsInline
+                        controls
+                        controlsList="nodownload"
+                        onLoadedData={handleLoad}
+                        onPlay={handleVideoPlay}
+                        onSeeked={handleVideoPlay}
+                        poster="/static/images/sphil_owl_large.webp"
+                    >
+                        <source src={videoUrl} type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
             </div>
         </div>
     );

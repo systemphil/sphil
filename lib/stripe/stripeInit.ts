@@ -7,7 +7,7 @@ export function getStripe() {
         throw new Error("Stripe API key missing");
     }
     return new Stripe(stripeApiKey, {
-        apiVersion: "2024-09-30.acacia",
+        apiVersion: "2025-08-27.basil",
         typescript: true,
     });
 }

@@ -3,7 +3,6 @@ import { FadeIn } from "lib/components/animations/FadeIn";
 import { Heading } from "lib/components/ui/Heading";
 import { Paragraph } from "lib/components/ui/Paragraph";
 import { CardFancy } from "lib/components/ui/CardFancy";
-import { MaintenanceStatic } from "lib/components/ui/MaintenanceStatic";
 import { Button } from "lib/components/ui/Button";
 import { HeroBackground } from "./HeroBackground";
 import { EncyclopaediaLanding } from "./EncyclopaediaLanding";
@@ -154,12 +153,12 @@ export function SPhilLanding() {
                 </div>
             </section>
 
-            <section className="h-full flex flex-col justify-front items-center container py-20">
+            {/* <section className="h-full flex flex-col justify-front items-center container py-20">
                 <MaintenanceStatic
                     severity="beta"
                     message="This is a very early release of sPhil and we are continuously working to improve it. If you encounter any issues or want to get involved, please visit our GitHub repository."
                 />
-            </section>
+            </section> */}
         </div>
     );
 }

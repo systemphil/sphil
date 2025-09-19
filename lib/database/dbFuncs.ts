@@ -37,18 +37,17 @@ export const dbGetAllCourses = () => withAdmin(() => prisma.course.findMany());
  * Calls the database to retrieve all courses by owner userId.
  * @access ADMIN
  */
-export const dbGetAllCoursesByCreators = (userId: string) =>
-    withAdmin(() =>
-        prisma.course.findMany({
+export const dbGetAllCoursesByCreatorsOrTutors = (userId: string) =>
+    withAdmin(() => {
+        return prisma.course.findMany({
             where: {
-                creators: {
-                    some: {
-                        id: userId,
-                    },
-                },
+                OR: [
+                    { creators: { some: { id: userId } } },
+                    { assistants: { some: { id: userId } } },
+                ],
             },
-        })
-    );
+        });
+    });
 
 /**
  * Calls the database to retrieve all published courses.
@@ -242,19 +241,7 @@ export async function dbGetUserPurchasedCourses(userId: string) {
         return courses;
     }
 
-    const legacyFallback = await prisma.user.findUnique({
-        where: {
-            id: validUserId,
-        },
-        select: {
-            coursesPurchased: true,
-        },
-    });
-    if (!legacyFallback) {
-        return null;
-    }
-    const courses = legacyFallback.coursesPurchased;
-    return courses;
+    return [];
 }
 /**
  * Gets user data by id. Returns an object.
@@ -325,6 +312,16 @@ export async function dbGetCourseAndDetailsAndLessonsById(id: string) {
                     },
                 },
                 details: {
+                    select: {
+                        id: true,
+                    },
+                },
+                assistants: {
+                    select: {
+                        id: true,
+                    },
+                },
+                creators: {
                     select: {
                         id: true,
                     },
@@ -418,7 +415,7 @@ type MdxModel = {
     id: string;
     mdx: Uint8Array<ArrayBufferLike>;
     mdxCategory: MdxCategory;
-    [key: string]: any;
+    [key: string]: unknown;
 };
 
 // Configuration for different model types
@@ -737,7 +734,8 @@ export const dbUpsertCourseById = async ({
     baseAvailability,
     seminarAvailability,
     dialogueAvailability,
-    seminarLink,
+    infoboxTitle,
+    infoboxDescription,
     creatorId,
 }: DbUpsertCourseByIdProps) => {
     async function task() {
@@ -770,9 +768,11 @@ export const dbUpsertCourseById = async ({
         const validBaseAvailability = z.date().parse(baseAvailability);
         const validSeminarAvailability = z.date().parse(seminarAvailability);
         const validDialogueAvailability = z.date().parse(dialogueAvailability);
-        const validSeminarLink = seminarLink
-            ? z.string().parse(seminarLink)
-            : null;
+        const validInfoboxTitle = z.string().nullish().parse(infoboxTitle);
+        const validInfoboxDescription = z
+            .string()
+            .nullish()
+            .parse(infoboxDescription);
 
         return await prisma.course.upsert({
             where: {
@@ -795,7 +795,8 @@ export const dbUpsertCourseById = async ({
                 baseAvailability: validBaseAvailability,
                 seminarAvailability: validSeminarAvailability,
                 dialogueAvailability: validDialogueAvailability,
-                seminarLink: validSeminarLink,
+                infoboxTitle: validInfoboxTitle,
+                infoboxDescription: validInfoboxDescription,
                 creators: {
                     connect: {
                         id: creatorId,
@@ -819,7 +820,8 @@ export const dbUpsertCourseById = async ({
                 baseAvailability: validBaseAvailability,
                 seminarAvailability: validSeminarAvailability,
                 dialogueAvailability: validDialogueAvailability,
-                seminarLink: validSeminarLink,
+                infoboxTitle: validInfoboxTitle,
+                infoboxDescription: validInfoboxDescription,
                 creators: {
                     connect: {
                         id: creatorId,
@@ -1608,13 +1610,36 @@ export async function dbVerifyUserPurchase(userId: string, priceId: string) {
                 id: validUserId,
             },
             select: {
-                productsPurchased: true,
+                purchases: {
+                    select: {
+                        course: {
+                            select: {
+                                stripeBasePriceId: true,
+                                stripeDialoguePriceId: true,
+                                stripeSeminarPriceId: true,
+                            },
+                        },
+                    },
+                },
             },
         });
-        if (!user) return false;
-        const userPurchasedPriceIds = user.productsPurchased.map((id) => {
-            return id.split(":")[0];
-        });
+        if (!user) {
+            return false;
+        }
+        if (!user.purchases || user.purchases.length === 0) {
+            return false;
+        }
+
+        const userPurchasedPriceIds = user.purchases
+            .flatMap((p) => {
+                return [
+                    p.course.stripeBasePriceId,
+                    p.course.stripeSeminarPriceId,
+                    p.course.stripeDialoguePriceId,
+                ];
+            })
+            .filter((priceId): priceId is string => priceId !== undefined);
+
         const hasUserPurchased =
             userPurchasedPriceIds.includes(completePriceId);
         return hasUserPurchased;
@@ -1664,16 +1689,6 @@ export async function dbDeleteNewsletterEmailIfExists({ id }: { id: string }) {
     }
 }
 
-export async function dbGetAllUsersWithPurchase() {
-    return await prisma.user.findMany({
-        where: {
-            productsPurchased: {
-                isEmpty: false,
-            },
-        },
-    });
-}
-
 export async function dbVerifyVideoToUserId({
     videoId,
     userId,
@@ -1690,9 +1705,13 @@ export async function dbVerifyVideoToUserId({
                 select: {
                     course: {
                         select: {
-                            owners: {
+                            purchases: {
                                 select: {
-                                    id: true,
+                                    user: {
+                                        select: {
+                                            id: true,
+                                        },
+                                    },
                                 },
                             },
                         },
@@ -1702,15 +1721,13 @@ export async function dbVerifyVideoToUserId({
         },
     });
 
-    const owners = res?.lesson?.course.owners;
+    const purchases = res?.lesson?.course.purchases;
 
-    if (!owners) {
+    if (!purchases || purchases.length === 0) {
         return false;
     }
 
-    const ownersFlattened = owners.flatMap(
-        (ownerContainer) => ownerContainer.id
-    );
+    const ownersFlattened = purchases.flatMap((p) => p.user.id);
 
     if (ownersFlattened.includes(userId)) {
         return true;
@@ -1810,7 +1827,7 @@ export async function dbEnrollUserInSeminarCohort({
     return cohort;
 }
 
-async function dbCreateSeminarCohort({
+export async function dbCreateSeminarCohort({
     courseId,
     currentYear,
 }: {

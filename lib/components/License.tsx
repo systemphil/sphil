@@ -22,6 +22,7 @@ export const License = () => {
                 <a
                     href="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.en"
                     target="_blank"
+                    rel="noopener noreferrer"
                 >
                     <div className="flex flex-col justify-center items-center gap-1">
                         <CreativeCommonsLogo />

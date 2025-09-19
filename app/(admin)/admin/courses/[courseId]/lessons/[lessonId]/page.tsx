@@ -13,7 +13,7 @@ export const metadata = {};
 export default async function AdminLessonEdit({
     params,
 }: {
-    params: { courseId: string; lessonId: string };
+    params: Promise<{ courseId: string; lessonId: string }>;
 }) {
     const { lessonId, courseId } = await params;
     if (typeof lessonId !== "string" || typeof courseId !== "string") {
@@ -51,7 +51,10 @@ export default async function AdminLessonEdit({
                             <Link
                                 href={`/admin/courses/${courseId}/lessons/${lessonId}/lesson-content/new`}
                             >
-                                <button className="d-btn d-btn-primary">
+                                <button
+                                    type="button"
+                                    className="d-btn d-btn-primary"
+                                >
                                     Add content
                                 </button>
                             </Link>
@@ -79,7 +82,10 @@ export default async function AdminLessonEdit({
                             <Link
                                 href={`/admin/courses/${courseId}/lessons/${lessonId}/lesson-transcript/new`}
                             >
-                                <button className="d-btn d-btn-primary">
+                                <button
+                                    type="button"
+                                    className="d-btn d-btn-primary"
+                                >
                                     Add content
                                 </button>
                             </Link>

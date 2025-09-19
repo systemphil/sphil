@@ -48,7 +48,7 @@ export const SubscribeToNewsletter = () => {
                 <div className="p-2 sm:p-10">
                     <form
                         onSubmit={handleSubmit(onSubmit)}
-                        className="flex justify-center flex-wrap"
+                        className="flex justify-center flex-wrap gap-2"
                     >
                         <div className="form-group">
                             <input
@@ -67,14 +67,14 @@ export const SubscribeToNewsletter = () => {
                                         message: "Enter a valid email address",
                                     },
                                 })}
-                                className="p-2 border border-gray-400 rounded-l-md"
+                                className="p-2 border border-gray-400 rounded-md"
                             />
                         </div>
                         <button
                             disabled={isPending || status === "success"}
                             type="submit"
-                            className={`
-                ${status === "error" ? "bg-red-500" : "bg-blue-500 hover:bg-blue-600"}
+                            className={`d-btn
+                ${status === "error" ? "bg-red-500" : "d-btn-primary"}
                 w-18 md:w-32
                 text-white p-2 rounded-r-md cursor-pointer duration-300 text-sm
               `}
@@ -92,7 +92,7 @@ export const SubscribeToNewsletter = () => {
                             </p>
                         )}
                         {status === "success" && (
-                            <p className="success-message text-green-600 text-center">
+                            <p className="success-message text-purple-800 dark:text-acid-green text-center">
                                 Thank you for subscribing! 🦉
                             </p>
                         )}

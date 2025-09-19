@@ -225,7 +225,10 @@ function FooterContent() {
                                         key="cookie-removal"
                                         onClick={() => handleClearCookies()}
                                     >
-                                        <button className={footerLinkClasses}>
+                                        <button
+                                            type="button"
+                                            className={footerLinkClasses}
+                                        >
                                             Delete Cookies
                                         </button>
                                     </li>
@@ -274,7 +277,7 @@ function FooterContent() {
                             <LogoAnimated animation={false} />
                         </Link>
                         <p className="mt-4 text-xs text-gray-500 dark:text-[#888888]">
-                            &copy; 2024 Eru Iluvatar, Ltd. All rights reserved.
+                            &copy; 2025 Eru Iluvatar, Ltd. All rights reserved.
                         </p>
                     </div>
 

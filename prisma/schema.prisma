@@ -64,10 +64,8 @@ model User {
     lessonsCompleted UserLessonProgress[]
 
     // Commercial relations
-    coursesPurchased  Course[] // TODO Deprecated
-    productsPurchased String[] // TODO Deprecated
-    purchases         CoursePurchase[]
-    seminarCohorts    SeminarCohort[]  @relation("SeminarCohortParticipants")
+    purchases      CoursePurchase[]
+    seminarCohorts SeminarCohort[]  @relation("SeminarCohortParticipants")
 
     createdAt DateTime  @default(now())
     updatedAt DateTime? @updatedAt
@@ -104,7 +102,8 @@ model Course {
     stripeDialoguePriceId String?
     imageUrl              String?
     author                String?
-    seminarLink           String? // Consider phasing out
+    infoboxTitle          String?
+    infoboxDescription    String?
     baseAvailability      DateTime @default(now())
     seminarAvailability   DateTime @default(now())
     dialogueAvailability  DateTime @default(now())
@@ -118,7 +117,6 @@ model Course {
     details    CourseDetails?
 
     // Commercial relations
-    owners         User[] // TODO Deprecated
     seminarCohorts SeminarCohort[]
     purchases      CoursePurchase[]
 
@@ -127,10 +125,9 @@ model Course {
 }
 
 model SeminarCohort {
-    id                          String  @id @default(cuid())
+    id                          String @id @default(cuid())
     year                        Int
     courseId                    String
-    seminarLink                 String? // TODO Deprecated
     seminarOnlyPrice            Float
     stripeSeminarOnlyPriceId    String
     seminarUpgradePrice         Float

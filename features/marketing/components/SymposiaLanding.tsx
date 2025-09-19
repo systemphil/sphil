@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { Suspense } from "react";
 import { PageWrapper } from "lib/components/ui/PageWrapper";
-import { Maintenance } from "lib/components/Maintenance";
 import { PolyRhythmicSpiral } from "lib/components/animations/PolyRhythmicSpiral";
 import { FadeIn } from "lib/components/animations/FadeIn";
 import { Reviews } from "./Reviews";
@@ -15,12 +13,6 @@ export async function SymposiaLanding() {
             <Hero />
             <PageWrapper>
                 <OpeningDescription />
-                <Suspense>
-                    <Maintenance
-                        area="global"
-                        componentToDisplayForBeta={<NewsletterSignUpForBeta />}
-                    />
-                </Suspense>
                 <MainInfoCard />
                 <InfoCards />
                 <Community />
@@ -84,7 +76,7 @@ function MainInfoCard() {
             <div className="md:px-10 max-w-[900px] mt-10 md:mt-32">
                 <InfoCard
                     title="Why Symposia"
-                    text="We dream of a way of doing philosophy that is intense, life-long and free. To be able to rigorously engage with concepts and ideas to their utmost depth without sacrificing either scholarly quality or creativity.. To be able to pursue and hone one's philosophical craft and enjoyment in a way that supports and enriches everyday living. And finally to be thinking deeply about contents of philosophy purely for their own sake. Symposia exists as a companion to sPhil, a collaborative encyclopaedia inspired by systematic philosophers and modern open source principles. Symposia is intended to be an additional guide into the philosophical resources we otherwise make freely available at sPhil. Whether you are a novice or a professional, our courses welcome anyone who has a burning desire to examine, philosophically, the wonders of being."
+                    text="We dream of a way of doing philosophy that is intense, life-long and free. To be able to rigorously engage with concepts and ideas to their utmost depth without sacrificing either scholarly quality or creativity. To be able to pursue and hone one's philosophical craft and enjoyment in a way that supports and enriches everyday living. And finally to be thinking deeply about contents of philosophy purely for their own sake. Symposia exists as a companion to sPhil, a collaborative encyclopaedia inspired by systematic philosophers and modern open source principles. Symposia is intended to be an additional guide into the philosophical resources we otherwise make freely available at sPhil. Whether you are a novice or a professional, our courses welcome anyone who has a burning desire to examine, philosophically, the wonders of being."
                     imgUrl="/static/images/fire.webp"
                     maskType="triangle"
                 />

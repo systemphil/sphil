@@ -1,6 +1,3 @@
-// @ts-nocheck
-// FIXME fix types for node remark-directive below
-
 import { compile } from "@mdx-js/mdx";
 import remarkGfm from "remark-gfm";
 import remarkDirective from "remark-directive";
@@ -34,6 +31,7 @@ export const mdxCompiler = async (mdxSource: string) => {
         );
         return mdxCompiled;
     } catch (e) {
+        console.error(e.stack);
         throw new Error("An error occurred in the mdxCompiler");
     }
 };
@@ -97,11 +95,12 @@ function admonitionPlugin() {
                         };
                     }
 
-                    // @ts-ignore
+                    // @ts-expect-error // FIXME mismatched type
                     node.type = "paragraph";
                     node.data = {
                         ...node.data,
                         hName: tagName,
+                        // @ts-expect-error // FIXME mismatched type
                         hProperties: node.attributes,
                     };
 
@@ -115,7 +114,7 @@ function admonitionPlugin() {
                                     className: ["_nestedEditor_uazmk_963"],
                                 },
                             },
-                            // @ts-ignore
+                            // @ts-expect-error // FIXME mismatched type
                             children: node.children,
                         },
                     ];

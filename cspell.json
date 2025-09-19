@@ -14,7 +14,8 @@
         "next.config.mjs",
         ".env",
         ".env.*",
-        "cspell.json"
+        "cspell.json",
+        "Dockerfile"
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
@@ -81,6 +82,7 @@
         "IIFE",
         "Iluvatar",
         "impossibile",
+        "infobox",
         "Insichsein",
         "interiority",
         "itselfness",
@@ -128,6 +130,7 @@
         "Sache",
         "Sceptical",
         "Scepticism",
+        "Satoor",
         "seiend",
         "seiende",
         "Seiendes",

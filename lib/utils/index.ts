@@ -76,7 +76,9 @@ export function romanize(num: number) {
         ],
         roman = "",
         i = 3;
-    // @ts-ignore
-    while (i--) roman = (key[+digits.pop() + i * 10] || "") + roman;
+    while (i--) {
+        const digit = digits.pop() ?? "0";
+        roman = (key[+digit + i * 10] || "") + roman;
+    }
     return Array(+digits.join("") + 1).join("M") + roman;
 }

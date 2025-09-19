@@ -234,9 +234,10 @@ export async function stripeGetCustomerEmail({
 }) {
     const stripe = getStripe();
     const customer = await stripe.customers.retrieve(customerId);
-    // FIXME typescript isn't picking up the type here because we must narrow it down first
-    // @ts-expect-error
-    return customer.email;
+    if ("deleted" in customer && customer.deleted) {
+        return null;
+    }
+    return (customer as Stripe.Customer).email;
 }
 
 export type Product = {

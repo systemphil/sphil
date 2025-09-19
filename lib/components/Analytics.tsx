@@ -6,6 +6,7 @@ import { usePostHog } from "posthog-js/react";
 import posthog from "posthog-js";
 import { PostHogProvider as PHProvider } from "posthog-js/react";
 import CookieConsent, { getCookieConsentValue } from "react-cookie-consent";
+import Link from "next/link";
 
 const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY as string;
 
@@ -100,12 +101,12 @@ function CookieBanner() {
             >
                 This site uses cookies to analyze traffic for marketing purposes
                 and to improve your experience. To learn more, visit our{" "}
-                <a
+                <Link
                     href="/articles/privacy"
                     className="text-blue-400 underline hover:text-blue-300"
                 >
                     Privacy Policy
-                </a>
+                </Link>
                 .{" "}
             </CookieConsent>
         );

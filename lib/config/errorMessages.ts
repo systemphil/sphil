@@ -9,6 +9,7 @@ export const errorMessages = {
     missingParams: "missing-params",
     mustBeLoggedIn: "must-be-logged-in",
     unauthorized: "unauthorized",
+    missingSession: "missing-session",
 } as const;
 
 export type ErrorMessages = (typeof errorMessages)[keyof typeof errorMessages];

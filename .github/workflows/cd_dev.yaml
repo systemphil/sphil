@@ -149,8 +149,10 @@ jobs:
     - name: Build and Push Container
       # NEXT_PUBLIC_ env variables have to be set during the build phase.
       run: |-
+        export DATABASE_URL=${{secrets.DATABASE_URL}}
         docker build \
           --build-arg NEXT_PUBLIC_SITE_ROOT=${{secrets.NEXT_PUBLIC_SITE_ROOT}} \
+          --secret id=sec_database_url,env=DATABASE_URL \
           -f Dockerfile \
           -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}" ./
         docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"

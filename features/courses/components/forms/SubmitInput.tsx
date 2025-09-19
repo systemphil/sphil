@@ -29,7 +29,7 @@ export const SubmitInput = ({ value, isLoading, isVerbose = false }: Props) => {
                     <span className="loading loading-bars loading-md" />
                 )}
                 {label}
-                {isLoading && isVerbose && "...may take 1-2mins"}
+                {isLoading && isVerbose && "...may take 1-2mins ☕"}
             </button>
         </div>
     );
