@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { NewsletterEnrollmentClosing } from "lib/email/templates/NewsletterEnrollmentClosing";
+import { NL_20250926_SchellingAnnouncement } from "lib/email/templates/NL_20250926_SchellingAnnouncement";
 import { Resend } from "resend";
 
 const prisma = new PrismaClient();
@@ -24,16 +24,22 @@ async function sendNewsletter() {
         const subscribers = await prisma.newsletterEmail.findMany({
             select: { email: true, id: true },
         });
+        // const subscribers = [
+        //     {
+        //         email: "service@systemphil.com",
+        //         id: "test123",
+        //     },
+        // ];
 
         const subject =
-            "Enrollment is Closing: The Science of Logic is the Metaphysician's Purgatorio ⛰️";
+            "Course Announcement: Delving into Schelling's Masterpiece: The 1809 Freedom Essay";
 
         for (const { email, id } of subscribers) {
             const res = await resend.emails.send({
                 from: `sPhil Newsletter 🦉 <${senderEmail}>`,
                 to: email,
                 subject,
-                react: <NewsletterEnrollmentClosing unsubscribeId={id} />,
+                react: <NL_20250926_SchellingAnnouncement unsubscribeId={id} />,
             });
 
             if (res.error) {
@@ -42,6 +48,7 @@ async function sendNewsletter() {
                 console.info(`Email sent to: ${email}`);
             }
         }
+        console.info(`Sent ${subscribers.length} emails`);
     } catch (error) {
         console.error("Error sending emails:", error);
     } finally {
