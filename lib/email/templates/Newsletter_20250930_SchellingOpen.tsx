@@ -3,7 +3,7 @@ import { EmailBaseLayout } from "./components/EmailBaseLayout";
 import { VideoLink } from "./components/VideoLink";
 import { UnsubscribeNewsletter } from "./components/UnsubscribeNewsletter";
 
-export function NL_20250926_SchellingAnnouncement({
+export function Newsletter_20250930_SchellingOpen({
     unsubscribeId,
 }: {
     unsubscribeId: string;
@@ -22,6 +22,19 @@ export function NL_20250926_SchellingAnnouncement({
                     Delving into Schelling&apos;s Masterpiece:
                     <br /> The Freedom Essay
                 </h1>
+
+                <p className="text-gray-500 my-4 text-center text-xl">
+                    ⚜️{" "}
+                    <Link
+                        href="https://sphil.xyz/symposia/courses/schelling-freedom-essay"
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="underline"
+                    >
+                        Enrollment Open
+                    </Link>{" "}
+                    ⚜️
+                </p>
 
                 <p className="text-gray-500 my-4">
                     Join us for an in-depth course exploring F.W.J.
@@ -78,7 +91,7 @@ export function NL_20250926_SchellingAnnouncement({
                     ground, where revelation awaits.
                 </p>
                 <ul className="text-gray-500 my-4">
-                    <li>📝 Enrollment opens 30th</li>
+                    <li>📝 Enrollment open now!</li>
                     <li>🏛️ 8 weeks of seminars</li>
                     <li>
                         📅 First seminar: October 5 (10:00 EST / 16:00 CEST )
@@ -108,6 +121,18 @@ export function NL_20250926_SchellingAnnouncement({
                     thought. Click below to learn more!
                 </p>
 
+                <div className="my-6">
+                    <VideoLink
+                        text="Schelling's Systems: An Experimental Approach"
+                        ytUrl="https://youtu.be/DyiiOIWMjlo?si=IGnSZ44UCaCwg7X_"
+                    />
+                </div>
+                <div className="my-6">
+                    <VideoLink
+                        text="Why Did the Ground Dissolve? Schelling and Inspiration"
+                        ytUrl="https://youtu.be/3AQwXwqEaKs?si=GDm10GGd8Fxo6QkL"
+                    />
+                </div>
                 <div className="my-6">
                     <VideoLink
                         text="In Discussion on Schelling's Ages of the World"
@@ -150,9 +175,8 @@ export function NL_20250926_SchellingAnnouncement({
 
                 <p className="text-gray-500 my-4">
                     Thank you for investing your time in rigorous thought! We
-                    hope the upcoming course has piqued your interest.
-                    We&apos;ll be back soon with more videos, essays, and
-                    explorations to fuel your intellectual journey!
+                    hope this course has piqued your interest and that we will
+                    see you at the seminars!
                 </p>
 
                 <p className="text-gray-500 my-4">Yours Sincerely,</p>
@@ -167,5 +191,5 @@ export function NL_20250926_SchellingAnnouncement({
 }
 
 export default function Example() {
-    return <NL_20250926_SchellingAnnouncement unsubscribeId="123" />;
+    return <Newsletter_20250930_SchellingOpen unsubscribeId="123" />;
 }
