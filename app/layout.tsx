@@ -14,13 +14,15 @@ import { NavbarHeader } from "lib/components/navigation/NavbarHeader";
 import { TableOfContentsExtra } from "lib/components/navigation/TableOfContentsExtra";
 import { ArticleWrapper } from "lib/components/ui/ArticleWrapper";
 import { Providers } from "lib/components/context/Providers";
-
-// CSS
 import "nextra-theme-docs/style.css";
 import "@mdxeditor/editor/style.css";
 import "./globals.css";
 import { Suspense } from "react";
 import { ImagePreloader } from "lib/components/ImagePreloader";
+import { MuiThemeProvider } from "lib/style/MuiThemeProvider";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
+import { Roboto } from "next/font/google";
+import { cn } from "lib/utils";
 
 const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub";
 const PROJECT_LINK = "https://github.com/systemphil/sphil";
@@ -132,6 +134,13 @@ export const metadata: Metadata = {
     },
 };
 
+const roboto = Roboto({
+    weight: ["300", "400", "500", "700"],
+    subsets: ["latin"],
+    display: "swap",
+    variable: "--font-roboto",
+});
+
 export default async function RootLayout({
     children,
 }: {
@@ -154,55 +163,62 @@ export default async function RootLayout({
             lang="en"
             dir="ltr"
             suppressHydrationWarning
-            className="nextra-scrollbar"
+            className={cn("nextra-scrollbar", roboto.variable)}
             data-theme="fantasy"
         >
             <Head color={COLOR}></Head>
             <body>
-                <Providers>
-                    <NextraLayout
-                        feedback={feedbackOptions}
-                        pageMap={await getPageMap()}
-                        docsRepositoryBase={DOCS_REPOSITORY_BASE}
-                        editLink={EDIT_LINK_DESCRIPTION}
-                        sidebar={{ defaultMenuCollapseLevel: 1 }}
-                        search={
-                            <Search placeholder="Search the Encyclopaedia…" />
-                        }
-                        // banner={<Banner />}
-                        navbar={
-                            <NextraNavbar
-                                logoLink={false}
-                                logo={<NavbarHeader />}
-                                projectLink={PROJECT_LINK}
-                            >
-                                <div className="flex justify-center items-center">
-                                    <ThemeSwitch lite={true} className="ml-0" />
-                                    <div className="w-[70px] flex justify-center">
-                                        <UserMenu />
+                <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+                    <Providers>
+                        <NextraLayout
+                            feedback={feedbackOptions}
+                            pageMap={await getPageMap()}
+                            docsRepositoryBase={DOCS_REPOSITORY_BASE}
+                            editLink={EDIT_LINK_DESCRIPTION}
+                            sidebar={{ defaultMenuCollapseLevel: 1 }}
+                            search={
+                                <Search placeholder="Search the Encyclopaedia…" />
+                            }
+                            // banner={<Banner />}
+                            navbar={
+                                <NextraNavbar
+                                    logoLink={false}
+                                    logo={<NavbarHeader />}
+                                    projectLink={PROJECT_LINK}
+                                >
+                                    <div className="flex justify-center items-center">
+                                        <ThemeSwitch
+                                            lite={true}
+                                            className="ml-0"
+                                        />
+                                        <div className="w-[70px] flex justify-center">
+                                            <UserMenu />
+                                        </div>
                                     </div>
+                                </NextraNavbar>
+                            }
+                            footer={
+                                <div className="relative" key="footer-key-123">
+                                    <div
+                                        data-name="footer-flair"
+                                        className="absolute h-20 w-full -top-[80px] bg-linear-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
+                                    />
+                                    <NextraFooter className="flex-col items-center md:items-start relative">
+                                        <Footer />
+                                    </NextraFooter>
                                 </div>
-                            </NextraNavbar>
-                        }
-                        footer={
-                            <div className="relative" key="footer-key-123">
-                                <div
-                                    data-name="footer-flair"
-                                    className="absolute h-20 w-full -top-[80px] bg-linear-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
-                                />
-                                <NextraFooter className="flex-col items-center md:items-start relative">
-                                    <Footer />
-                                </NextraFooter>
-                            </div>
-                        }
-                        toc={toc}
-                    >
-                        <ArticleWrapper>{children}</ArticleWrapper>
-                    </NextraLayout>
-                </Providers>
-                <Suspense>
-                    <ImagePreloader />
-                </Suspense>
+                            }
+                            toc={toc}
+                        >
+                            <MuiThemeProvider>
+                                <ArticleWrapper>{children}</ArticleWrapper>
+                            </MuiThemeProvider>
+                        </NextraLayout>
+                    </Providers>
+                    <Suspense>
+                        <ImagePreloader />
+                    </Suspense>
+                </AppRouterCacheProvider>
             </body>
         </html>
     );

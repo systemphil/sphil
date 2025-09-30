@@ -3,10 +3,10 @@ import { FadeIn } from "lib/components/animations/FadeIn";
 import { Heading } from "lib/components/ui/Heading";
 import { Paragraph } from "lib/components/ui/Paragraph";
 import { CardFancy } from "lib/components/ui/CardFancy";
-import { Button } from "lib/components/ui/Button";
 import { HeroBackground } from "./HeroBackground";
 import { EncyclopaediaLanding } from "./EncyclopaediaLanding";
 import { ScreenWrapper } from "lib/components/ui/ScreenWrapper";
+import { Button } from "@mui/material";
 
 export function SPhilLanding() {
     return (
@@ -15,13 +15,14 @@ export function SPhilLanding() {
                 <HeroBackground />
                 <div className="relative flex flex-col items-center justify-center z-2 py-28">
                     <FadeIn>
-                        <Heading>Open Source Philosophy</Heading>
+                        <Heading>Study The Great Texts</Heading>
                     </FadeIn>
                     <FadeIn delay={0.1}>
                         <Paragraph style="grotesk">
-                            sPhil is a collaborative platform for developing
-                            philosophy through open-source principles,
-                            emphasizing the collective nature of thinking.
+                            sPhil is dedicated to the close, detailed study of
+                            the world&apos;s most foundational texts. Our
+                            courses guide you through the great works, fostering
+                            a profound, nuanced, and lasting understanding.
                         </Paragraph>
                     </FadeIn>
                     <FadeIn
@@ -29,32 +30,28 @@ export function SPhilLanding() {
                         className="mt-16 mb-24 flex justify-center items-center flex-wrap gap-16"
                     >
                         <CardFancy
+                            title={"COURSES"}
+                            tagline={
+                                "Focused courses providing a line-by-line analysis of the great texts and their core arguments."
+                            }
+                            href={"/symposia/courses"}
+                            buttons={[
+                                {
+                                    title: "View Courses",
+                                    href: "/symposia/courses",
+                                },
+                            ]}
+                        />
+                        <CardFancy
                             title={"ENCYCLOPAEDIA"}
                             tagline={
-                                "Detailed articles on various topics and systems of philosophy"
+                                "Detailed articles providing foundational knowledge and historical context for the major texts, thinkers, and concepts."
                             }
                             href={"/articles/articles"}
                             buttons={[
                                 {
                                     title: "Overview",
                                     href: "/articles/articles",
-                                },
-                            ]}
-                        />
-                        <CardFancy
-                            title={"SYMPOSIA"}
-                            tagline={
-                                "Focused courses on the arguments and beauty of philosophy"
-                            }
-                            href={"/symposia"}
-                            buttons={[
-                                {
-                                    title: "About",
-                                    href: "/symposia",
-                                },
-                                {
-                                    title: "Courses",
-                                    href: "/symposia/courses",
                                 },
                             ]}
                         />
@@ -144,9 +141,12 @@ export function SPhilLanding() {
                                 open the horizons of intellectual discourse.
                             </Paragraph>
                         </FadeIn>
+
                         <FadeIn className="mt-6">
                             <Link href="/articles/contributing">
-                                <Button>How to contribute</Button>
+                                <Button variant="contained">
+                                    How to contribute
+                                </Button>
                             </Link>
                         </FadeIn>
                     </div>

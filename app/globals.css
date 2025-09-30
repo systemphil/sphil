@@ -1,3 +1,4 @@
+@layer theme, base, mui, components, utilities;
 @import "tailwindcss";
 @plugin '@tailwindcss/typography';
 @plugin "daisyui" {
