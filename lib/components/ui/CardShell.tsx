@@ -9,8 +9,9 @@ export function CardShell({
     return (
         <Card
             className={cn(
-                "md:!bg-linear-to-bl !bg-linear-to-b !transition !duration-300",
-                " dark:!from-neutral-950/90 dark:!to-neutral-800/90  !from-white !to-neutral-100/90",
+                "md:!bg-linear-to-bl !bg-linear-to-b",
+                " dark:!from-neutral-950/90 dark:!to-neutral-800/90 dark:!border-stone-300 dark:!border-1",
+                " !from-white !to-neutral-100/90",
                 className
             )}
             {...props}
