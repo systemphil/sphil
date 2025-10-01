@@ -4,6 +4,7 @@ import Image from "next/image";
 import ReviewsData from "../data/reviews.json";
 import { useEffect, useState } from "react";
 import { CardShell } from "lib/components/ui/CardShell";
+import { Button } from "@mui/material";
 
 export function Reviews() {
     const [reviews, setReviews] = useState(ReviewsData.slice(0, 10));
@@ -35,8 +36,11 @@ export function Reviews() {
                     className={`absolute bottom-0 left-0 z-10 w-full h-[400px] bg-linear-to-t from-white via-white`}
                 />
             )}
-            {reviews.map((review: any, i: number) => (
-                <div className="mb-4 z-0 break-inside-avoid-column" key={i}>
+            {reviews.map((review) => (
+                <div
+                    className="mb-4 z-0 break-inside-avoid-column"
+                    key={review.url ?? review.name}
+                >
                     <Review
                         name={review.name}
                         text={review.text}
@@ -48,12 +52,7 @@ export function Reviews() {
             ))}
             {showButton && (
                 <div className="absolute flex justify-center bottom-0 left-0 right-0 z-20 mb-10">
-                    <button
-                        className="btn btn-primary btn-sm"
-                        onClick={() => handleShowMore()}
-                    >
-                        Show More
-                    </button>
+                    <Button onClick={() => handleShowMore()}>Show More</Button>
                 </div>
             )}
         </div>
@@ -69,37 +68,37 @@ function Review({
 }: {
     name: string;
     text: string;
-    url?: string | undefined;
-    title?: string | undefined;
+    url?: string;
+    title?: string;
     imgUrl?: string;
 }) {
     return (
         <CardShell className="sm:w-72">
-            <div className="d-card-body">
-                <a href={url ? url : undefined} target="_blank">
-                    <div className="flex gap-3 items-center">
-                        <div className="d-avatar">
-                            <div className="w-12 rounded-full">
-                                <Image
-                                    src={imgUrl}
-                                    width={96}
-                                    height={96}
-                                    alt="review avatar"
-                                />
-                            </div>
-                        </div>
-                        <div className="relative">
-                            <h3 className="text-xl font-semibold">{name}</h3>
-                            <h3 className="absolute text-sm w-[200px] text-slate-400 -translate-y-2">
-                                {title}
-                            </h3>
+            <a href={url} target="_blank">
+                <div className="flex gap-3 items-center">
+                    <div className="d-avatar">
+                        <div className="w-12 rounded-full">
+                            <Image
+                                src={imgUrl}
+                                width={96}
+                                height={96}
+                                alt="review avatar"
+                            />
                         </div>
                     </div>
-                    <div className="text-slate-600/90 dark:text-slate-300 text-md mt-2">
-                        &quot;{text}&quot;
+                    <div className="relative">
+                        <h3 className="text-xl font-semibold text-black dark:text-slate-200">
+                            {name}
+                        </h3>
+                        <h3 className="absolute text-sm w-[200px] text-slate-400 -translate-y-2">
+                            {title}
+                        </h3>
                     </div>
-                </a>
-            </div>
+                </div>
+                <div className="text-slate-600/90 dark:text-slate-300 text-md mt-2">
+                    &quot;{text}&quot;
+                </div>
+            </a>
         </CardShell>
     );
 }

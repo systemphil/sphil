@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { CardShell } from "lib/components/ui/CardShell";
 import { useState, useTransition } from "react";
 import { actionSubscribeToNewsletter } from "../server/actions";
+import { Button } from "@mui/material";
 
 type FormData = {
     email: string;
@@ -36,7 +37,7 @@ export const SubscribeToNewsletter = () => {
                     setStatus("error");
                     toast.error(result.message);
                 }
-            } catch (error) {
+            } catch {
                 setStatus("error");
                 toast.error("Failed to subscribe");
             }
@@ -67,23 +68,20 @@ export const SubscribeToNewsletter = () => {
                                         message: "Enter a valid email address",
                                     },
                                 })}
-                                className="p-2 border border-gray-400 rounded-md"
+                                className="p-2 border border-gray-400 rounded-md text-slate-800 dark:text-slate-300"
                             />
                         </div>
-                        <button
+                        <Button
                             disabled={isPending || status === "success"}
                             type="submit"
-                            className={`d-btn
-                ${status === "error" ? "bg-red-500" : "d-btn-primary"}
-                w-18 md:w-32
-                text-white p-2 rounded-r-md cursor-pointer duration-300 text-sm
-              `}
+                            variant="contained"
+                            className={status === "error" ? "!bg-red-500" : ""}
                         >
                             {status === "error" && "Error. Retry"}
                             {status === "idle" && "Subscribe"}
                             {status === "loading" && "Subscribing..."}
                             {status === "success" && "Subscribed!"}
-                        </button>
+                        </Button>
                     </form>
                     <div className="h-3 p-1 flex justify-center">
                         {errors.email && (

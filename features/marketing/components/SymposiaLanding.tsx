@@ -6,6 +6,7 @@ import { Reviews } from "./Reviews";
 import { Heading } from "lib/components/ui/Heading";
 import { InfoCard } from "./InfoCard";
 import { SubscribeToNewsletter } from "./SubscribeToNewsletter";
+import { Button } from "@mui/material";
 
 export async function SymposiaLanding() {
     return (
@@ -178,9 +179,7 @@ function VisitCourses() {
                 beyond empires, generations and time.
             </p>
             <Link href="/symposia/courses">
-                <button className="d-btn d-btn-primary ">
-                    See our courses
-                </button>
+                <Button variant="contained">See our courses</Button>
             </Link>
         </>
     );

@@ -3,7 +3,7 @@ import { Heading } from "lib/components/ui/Heading";
 import { cn } from "lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { Button, CardContent, Box, Typography } from "@mui/material";
+import { Button, Box, Typography } from "@mui/material";
 
 type InfoCardProps = {
     title: string;
@@ -12,6 +12,7 @@ type InfoCardProps = {
     imgUrl?: string;
     urlDescription?: string;
     url?: string;
+    headingSize?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 };
 
 export async function InfoCard({
@@ -21,6 +22,7 @@ export async function InfoCard({
     imgUrl,
     urlDescription,
     url,
+    headingSize = "h5",
 }: InfoCardProps) {
     return (
         <CardShell>
@@ -46,7 +48,7 @@ export async function InfoCard({
             </Box>
             <Box p={2}>
                 <div className="justify-center">
-                    <Heading as="h3">{title}</Heading>
+                    <Heading as={headingSize}>{title}</Heading>
                 </div>
                 <Typography className="text-slate-700 dark:text-slate-300 pt-4 text-justify sm:text-lg">
                     {text}
