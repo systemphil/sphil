@@ -5,7 +5,11 @@ import { red } from "@mui/material/colors";
 
 const baseTheme: Theme = createTheme({
     typography: {
-        fontFamily: "var(--font-roboto)",
+        fontFamily: "ui-sans-serif, system-ui, sans-serif, ",
+        body1: {
+            fontSize: "1.125rem",
+            lineHeight: 1.6,
+        },
     },
 });
 
@@ -25,10 +29,6 @@ export const lightTheme = createTheme(
                 light: "#42a5f5",
                 dark: "#1565c0",
                 contrastText: "#ffffff",
-            },
-            background: {
-                default: "#121212",
-                paper: "#1d1d1d",
             },
             text: {
                 primary: "#ffffff",

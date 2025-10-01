@@ -1,3 +1,4 @@
+import { Card, CardContent } from "@mui/material";
 import { cn } from "lib/utils";
 
 export function CardShell({
@@ -6,14 +7,15 @@ export function CardShell({
     ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
     return (
-        <div
+        <Card
             className={cn(
-                "d-card rounded-sm shadow-xl border bg-linear-to-b from-white to-neutral-100/90 transition duration-300 dark:from-neutral-950/90 dark:to-neutral-800/90  md:bg-linear-to-bl",
+                "md:!bg-linear-to-bl !bg-linear-to-b !transition !duration-300",
+                " dark:!from-neutral-950/90 dark:!to-neutral-800/90  !from-white !to-neutral-100/90",
                 className
             )}
             {...props}
         >
-            {children}
-        </div>
+            <CardContent>{children}</CardContent>
+        </Card>
     );
 }
