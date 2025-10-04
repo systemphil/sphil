@@ -29,13 +29,13 @@ export async function SymposiaLanding() {
 
 function Hero() {
     return (
-        <div className="h-[45rem] -my-36 md:my-6 w-full  flex flex-col items-center justify-center overflow-hidden rounded-md ">
+        <div className="h-[45rem] -my-36 md:my-6 w-full  flex flex-col items-center justify-center overflow-hidden rounded-md relative">
             <div className="absolute overflow-hidden -translate-y-5">
                 <FadeIn>
                     <PolyRhythmicSpiral />
                 </FadeIn>
             </div>
-            <div className="translate-y-[7px] md:-translate-y-[2px] lg:-translate-y-3 flex flex-col items-center justify-center">
+            <div className="translate-y-[10px] md:-translate-y-[2px] lg:-translate-y-3 flex flex-col items-center justify-center">
                 <div className="font-bold text-center relative z-20 bg-clip-text tracking-widest text-transparent">
                     <Heading replacementClasses="pb-4 text-transparent bg-linear-to-b from-black/80 to-black dark:from-white dark:to-[#AAAAAA] max-w-[300px] sm:max-w-none">
                         Discover & Reflect

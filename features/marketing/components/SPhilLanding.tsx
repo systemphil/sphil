@@ -12,13 +12,14 @@ import { PageWrapper } from "lib/components/ui/PageWrapper";
 import { Reviews } from "./Reviews";
 import { SubscribeToNewsletter } from "./SubscribeToNewsletter";
 import { PolyRhythmicSpiral } from "lib/components/animations/PolyRhythmicSpiral";
+import { BackgroundBoxes } from "lib/components/animations/BackgroundBoxes";
 
 export function SPhilLanding() {
     return (
         <>
             <MainHero />
 
-            <PageWrapper className="mt-16 md:mt-32 gap-16 md:gap-32">
+            <PageWrapper className="my-16 md:my-32 gap-16 md:gap-32">
                 <OpeningDescription />
                 <MainInfoCard />
                 <InfoCards />
@@ -28,97 +29,8 @@ export function SPhilLanding() {
                 <VisitCourses />
                 <Instructors />
                 <Refunds />
+                <EncLanding />
             </PageWrapper>
-
-            <section className="relative flex justify-center">
-                <div className="max-w-2xl">
-                    <FadeIn>
-                        <EncyclopaediaLanding />
-                    </FadeIn>
-                </div>
-            </section>
-
-            <section className="relative flex flex-col items-center justify-start w-full h-full">
-                <div className="py-20 flex flex-col items-center justify-center">
-                    <FadeIn>
-                        <Heading>What is sPhil?</Heading>
-                    </FadeIn>
-                    <div className="flex flex-col items-center">
-                        <div
-                            aria-hidden="true"
-                            className="absolute inset-48 grid grid-cols-4 -space-x-2 sm:-space-x-24 md:-space-x-52 opacity-40 dark:opacity-20"
-                        >
-                            <div className="blur-[106px] col-span-1 h-64 bg-linear-to-br from-purple-700 to-purple-400 dark:from-blue-700" />
-                            <div className="blur-[106px] col-span-1 col-start-4 h-32 bg-linear-to-r from-cyan-400 to-sky-300 dark:to-indigo-600" />
-                        </div>
-
-                        <FadeIn className="flex flex-col items-center gap-6 max-w-2xl">
-                            <Paragraph>
-                                Introducing the platform where the realms of
-                                philosophy and software converge seamlessly.
-                            </Paragraph>
-                            <Paragraph>
-                                At our platform, we&apos;ve reimagined the way
-                                philosophy is explored and shared in the digital
-                                age. We&apos;ve harnessed the power of the
-                                world&apos;s leading collaborative development
-                                platform to create a dynamic and ever-evolving
-                                space where code and content continuously
-                                overlap.
-                            </Paragraph>
-                            <Paragraph>
-                                Here, philosophy isn&apos;t confined to static
-                                texts or stagnant discussions. Instead,
-                                it&apos;s a living, breathing entity that
-                                evolves alongside the rapid advancements in the
-                                digital world. Our GitHub repository serves as
-                                the epicenter of this synergy, where
-                                philosophers, thinkers, and developers unite to
-                                explore, dissect, and refine philosophical ideas
-                                in real-time.
-                            </Paragraph>
-                            <Paragraph>
-                                Our commitment to software principles ensures
-                                that the philosophy presented on our website is
-                                not only rigorous and thought-provoking but also
-                                highly accessible and user-friendly. We embrace
-                                open-source principles, inviting contributions
-                                from anyone who wishes to join the conversation,
-                                whether they&apos;re an established philosopher
-                                or a coding enthusiast with a passion for
-                                philosophy.
-                            </Paragraph>
-                            <Paragraph>
-                                Through version control, continuous integration,
-                                and collaborative coding practices, we&apos;ve
-                                created a digital philosophy ecosystem that
-                                adapts and grows organically. This approach
-                                ensures that our content remains relevant,
-                                accurate, and engaging, reflecting the
-                                ever-evolving landscape of philosophical
-                                thought.
-                            </Paragraph>
-                            <Paragraph>
-                                Join us on this exhilarating journey where
-                                philosophy and code converge, fostering an
-                                environment where the pursuit of knowledge is as
-                                dynamic and interconnected as the world itself.
-                                Welcome to the future of philosophical
-                                exploration, where ideas and software unite to
-                                open the horizons of intellectual discourse.
-                            </Paragraph>
-                        </FadeIn>
-
-                        <FadeIn className="mt-6">
-                            <Link href="/articles/contributing">
-                                <Button variant="contained">
-                                    How to contribute
-                                </Button>
-                            </Link>
-                        </FadeIn>
-                    </div>
-                </div>
-            </section>
 
             {/* <section className="h-full flex flex-col justify-front items-center container py-20">
                 <MaintenanceStatic
@@ -253,7 +165,26 @@ function InfoCards() {
 
 function Community() {
     return (
-        <section className="flex flex-col items-center">
+        <section className="flex flex-col items-center relative">
+            <div
+                aria-hidden="true"
+                className="absolute inset-0 pointer-events-none overflow-hidden"
+            >
+                <div
+                    className="absolute -left-32 top-0 w-96 h-96 bg-cyan-500/30 rounded-full blur-3xl animate-pulse"
+                    style={{ animationDuration: "4s" }}
+                />
+
+                <div
+                    className="absolute -right-32 bottom-0 w-96 h-96 bg-indigo-500/30 rounded-full blur-3xl animate-pulse"
+                    style={{ animationDuration: "5s" }}
+                />
+
+                <div
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-64 bg-blue-400/10 rounded-full blur-3xl animate-pulse"
+                    style={{ animationDuration: "6s" }}
+                />
+            </div>
             <Heading as="h3" additionalClasses="max-w-lg">
                 Join the{" "}
                 <span className="dark:text-acid-green text-[#6b0072]">
@@ -287,8 +218,6 @@ function NewsletterSignUp() {
 }
 
 function SymposiaHero() {
-    // TODO keep here or move elsewhere?
-    // FIXME small sized UI error with the centered line
     return (
         <div className="h-[45rem] -my-36 md:my-6 w-full  flex flex-col items-center justify-center overflow-hidden rounded-md ">
             <div className="absolute overflow-hidden -translate-y-5">
@@ -296,14 +225,14 @@ function SymposiaHero() {
                     <PolyRhythmicSpiral />
                 </FadeIn>
             </div>
-            <div className="translate-y-[7px] md:-translate-y-[2px] lg:-translate-y-3 flex flex-col items-center justify-center">
+            <div className="-translate-y-[29px] sm:translate-y-[8px] md:-translate-y-[1px] lg:-translate-y-3 flex flex-col items-center justify-center">
                 <div className="font-bold text-center relative z-20 bg-clip-text tracking-widest text-transparent">
                     <Heading replacementClasses="pb-4 text-transparent bg-linear-to-b from-black/80 to-black dark:from-white dark:to-[#AAAAAA] max-w-[300px] sm:max-w-none">
                         Discover & Reflect
                     </Heading>
                 </div>
                 <h3 className="text-xl my-1.5 md:text-2xl lg:text-3xl text-stone-600 dark:text-stone-300/90 font-light inter-var text-center max-w-[250px] sm:max-w-none">
-                    In-depth learning courses on philosophy
+                    Truth hides in the text. We teach you how to see it.
                 </h3>
                 <div className="w-[40rem] h-40 relative">
                     {/* Gradients */}
@@ -319,7 +248,14 @@ function SymposiaHero() {
 
 function VisitCourses() {
     return (
-        <section className="flex flex-col items-center">
+        <section className="flex flex-col items-center relative">
+            <div
+                aria-hidden="true"
+                className="absolute inset-48 grid grid-cols-4 -space-x-2 sm:-space-x-24 md:-space-x-52 opacity-40 dark:opacity-20"
+            >
+                <div className="blur-[106px] col-span-1 h-64 bg-linear-to-br from-purple-700 to-purple-400 dark:from-blue-700" />
+                <div className="blur-[106px] col-span-1 col-start-4 h-32 bg-linear-to-r from-cyan-400 to-sky-300 dark:to-indigo-600" />
+            </div>
             <Heading as="h3" additionalClasses="max-w-xl">
                 Look through the eyes of{" "}
                 <span className="dark:text-acid-green text-[#6b0072]">
@@ -363,6 +299,20 @@ function Instructors() {
                     maskType="squircle"
                     imgUrl="/static/images/people/ahilleas.jpg"
                 />
+            </div>
+        </section>
+    );
+}
+
+function EncLanding() {
+    return (
+        <section className="relative flex justify-center h-[100vh] w-[90vw] overflow-hidden">
+            <BackgroundBoxes />
+
+            <div className="max-w-2xl relative">
+                <FadeIn>
+                    <EncyclopaediaLanding />
+                </FadeIn>
             </div>
         </section>
     );

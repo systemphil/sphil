@@ -16,9 +16,16 @@ export function EncyclopaediaLanding() {
         <div>
             <div className="my-8 flex justify-center flex-col items-center">
                 <Heading as="h1">Encyclopaedia</Heading>
-                <Paragraph className="text-left">
-                    The sPhil Encyclopaedia is organized into systems of
-                    particular philosophers, each further subdivided into
+                <Paragraph className="text-justify">
+                    The sPhil Encyclopaedia is a free and open resource built on
+                    open-source principles. Anyone may contribute by editing or
+                    expanding articles through open pull requests. It is
+                    organized into systems of particular philosophers,
+                    presenting their thought in a structured and evolving form.
+                    The project is also a place to exercise philosophical
+                    writing, test interpretations, and engage in rigorous and
+                    spirited debate with others who care about the life of
+                    ideas. Each particular system is further subdivided into
                     modular{" "}
                     <Link href="/articles/contributing#general-division-of-the-encyclopaedia">
                         Guides
