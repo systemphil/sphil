@@ -4,10 +4,11 @@ import { cn } from "lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { Button, Box, Typography } from "@mui/material";
+import { JSX } from "react";
 
 type InfoCardProps = {
     title: string;
-    text: string;
+    text: string | JSX.Element;
     maskType?: "diamond" | "triangle" | "squircle";
     imgUrl?: string;
     urlDescription?: string;

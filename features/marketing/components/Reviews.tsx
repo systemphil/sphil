@@ -4,7 +4,7 @@ import Image from "next/image";
 import ReviewsData from "../data/reviews.json";
 import { useEffect, useState } from "react";
 import { CardShell } from "lib/components/ui/CardShell";
-import { Button } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 
 export function Reviews() {
     const [reviews, setReviews] = useState(ReviewsData.slice(0, 10));
@@ -76,16 +76,7 @@ function Review({
         <CardShell className="sm:w-72">
             <a href={url} target="_blank">
                 <div className="flex gap-3 items-center">
-                    <div className="d-avatar">
-                        <div className="w-12 rounded-full">
-                            <Image
-                                src={imgUrl}
-                                width={96}
-                                height={96}
-                                alt="review avatar"
-                            />
-                        </div>
-                    </div>
+                    <Avatar src={imgUrl}></Avatar>
                     <div className="relative">
                         <h3 className="text-xl font-semibold text-black dark:text-slate-200">
                             {name}

@@ -13,6 +13,7 @@ import { Reviews } from "./Reviews";
 import { SubscribeToNewsletter } from "./SubscribeToNewsletter";
 import { PolyRhythmicSpiral } from "lib/components/animations/PolyRhythmicSpiral";
 import { BackgroundBoxes } from "lib/components/animations/BackgroundBoxes";
+import { EmbedTeacherProfile } from "features/editor/components/EmbedTeacherProfile";
 
 export function SPhilLanding() {
     return (
@@ -51,45 +52,58 @@ function MainHero() {
                     <FadeIn>
                         <Heading>Study The Great Texts</Heading>
                     </FadeIn>
-                    <FadeIn delay={0.1}>
-                        <Paragraph
-                            style="grotesk"
-                            className="md:!text-4xl !text-2xl"
-                        >
-                            Examine closer. Comprehend truer.
-                        </Paragraph>
-                    </FadeIn>
-                    <FadeIn
-                        delay={0.25}
-                        className="mt-16 mb-24 flex justify-center items-center flex-wrap gap-16"
-                    >
-                        <CardFancy
-                            title={"COURSES"}
-                            tagline={
-                                "Focused courses providing guidance and analysis of the great texts and their core arguments."
-                            }
-                            href={"/symposia/courses"}
-                            buttons={[
-                                {
-                                    title: "View Courses",
-                                    href: "/symposia/courses",
-                                },
-                            ]}
-                        />
-                        <CardFancy
-                            title={"ENCYCLOPAEDIA"}
-                            tagline={
-                                "Detailed articles examining the development, ideas and systems of the major texts."
-                            }
-                            href={"/articles/articles"}
-                            buttons={[
-                                {
-                                    title: "Overview",
-                                    href: "/articles/articles",
-                                },
-                            ]}
-                        />
-                    </FadeIn>
+                    <div className="flex justify-center gap-3">
+                        <FadeIn delay={1.5}>
+                            <Paragraph
+                                style="grotesk"
+                                className="md:!text-4xl !text-2xl m-0"
+                                span
+                            >
+                                Examine closer.
+                            </Paragraph>
+                        </FadeIn>
+                        <FadeIn delay={3.25}>
+                            <Paragraph
+                                style="grotesk"
+                                className="md:!text-4xl !text-2xl m-0"
+                                span
+                            >
+                                Comprehend truer.
+                            </Paragraph>
+                        </FadeIn>
+                    </div>
+                    <div className="mt-16 mb-24 flex justify-center items-center flex-wrap gap-16">
+                        <FadeIn delay={0.25}>
+                            <CardFancy
+                                title={"COURSES"}
+                                tagline={
+                                    "Focused courses providing guidance and analysis of the great texts and their core arguments."
+                                }
+                                href={"/symposia/courses"}
+                                buttons={[
+                                    {
+                                        title: "View Courses",
+                                        href: "/symposia/courses",
+                                    },
+                                ]}
+                            />
+                        </FadeIn>
+                        <FadeIn delay={0.5}>
+                            <CardFancy
+                                title={"ENCYCLOPAEDIA"}
+                                tagline={
+                                    "Detailed articles examining the development, ideas and systems of the major texts."
+                                }
+                                href={"/articles/articles"}
+                                buttons={[
+                                    {
+                                        title: "Overview",
+                                        href: "/articles/articles",
+                                    },
+                                ]}
+                            />
+                        </FadeIn>
+                    </div>
                 </div>
             </ScreenWrapper>
             <div className="relative">
@@ -287,17 +301,20 @@ function Instructors() {
                 interests and qualifications.
             </p>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
-                <InfoCard
-                    title="Filip Niklas, PhD"
-                    text="Filip completed his PhD in philosophy in 2022 under the supervision of Professor Stephen Houlgate at the University of Warwick. The title of his thesis was Hegel's Critique of Determinism: Justifying Unfreedom as a Moment of Freedom. Filip has given papers and organized numerous conferences on philosophy. He has taught extensively both at university, at the Halkyon Academy and privately. Filip's main research areas are systematic philosophy, metaphysics, ontology, essence, freedom, determinism, and maintains an otherwise broad interest in all the dimensions of intelligence and reason. Filip is also an incurable fan of the art and poetry of William Blake."
-                    maskType="squircle"
-                    imgUrl="/static/images/people/filip.jpg"
+                <EmbedTeacherProfile
+                    infoCard
+                    teacherInput="filip:Filip Niklas, PhD"
+                    altText
                 />
-                <InfoCard
-                    title="Ahilleas Rokni, PhD"
-                    text="Ahilleas Rokni completed his PhD thesis in philosophy in 2022 under the supervision of Professor Stephen Houlgate at the University of Warwick. His thesis aimed to give an account of the much-debated move from the Science of Logic to the Philosophy of Nature in Hegel's system. Ahilleas's main research concerns are Hegel's logic, philosophy of nature, philosophy of science, and aesthetics."
-                    maskType="squircle"
-                    imgUrl="/static/images/people/ahilleas.jpg"
+                <EmbedTeacherProfile
+                    infoCard
+                    teacherInput="ahilleas:Ahilleas Rokni, PhD"
+                    altText
+                />
+                <EmbedTeacherProfile
+                    infoCard
+                    teacherInput="christopher:Christopher Satoor, PhD Candidate"
+                    altText
                 />
             </div>
         </section>
