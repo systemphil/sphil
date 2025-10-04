@@ -1,9 +1,36 @@
 "use client";
 
 import { Theme, createTheme, darkScrollbar } from "@mui/material";
-import { red } from "@mui/material/colors";
+import { MuiLinkOverride } from "lib/components/navigation/MuiLinkOverride";
 
 const baseTheme: Theme = createTheme({
+    components: {
+        MuiLink: {
+            defaultProps: {
+                component: MuiLinkOverride,
+                color: "text.primary",
+            },
+            styleOverrides: {
+                root: {
+                    // color: "#000",
+                    textDecoration: "underline",
+                },
+            },
+        },
+        MuiButtonBase: {
+            defaultProps: {
+                LinkComponent: MuiLinkOverride,
+                color: "text.primary",
+            },
+        },
+        MuiListItemIcon: {
+            styleOverrides: {
+                root: ({ theme }) => ({
+                    color: theme.palette.text.primary,
+                }),
+            },
+        },
+    },
     typography: {
         fontFamily: "ui-sans-serif, system-ui, sans-serif, ",
         body1: {
@@ -31,8 +58,8 @@ export const lightTheme = createTheme(
                 contrastText: "#ffffff",
             },
             text: {
-                primary: "#ffffff",
-                secondary: "rgba(255, 255, 255, 0.7)",
+                primary: "rgba(0, 0, 0, 0.87)",
+                secondary: "rgba(0, 0, 0, 0.6)",
             },
         },
     })

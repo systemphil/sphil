@@ -192,7 +192,9 @@ export default async function RootLayout({
                                             className="ml-0"
                                         />
                                         <div className="w-[70px] flex justify-center">
-                                            <UserMenu />
+                                            <MuiThemeProvider>
+                                                <UserMenu />
+                                            </MuiThemeProvider>
                                         </div>
                                     </div>
                                 </NextraNavbar>

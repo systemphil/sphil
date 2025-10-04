@@ -85,7 +85,6 @@
         "@eslint/js": "^9.31.0",
         "@react-email/preview-server": "^4.2.8",
         "@svgr/webpack": "^8.0.1",
-        "daisyui": "^5.1.10",
         "dotenv-cli": "^10.0.0",
         "pagefind": "1.4.0"
     },
