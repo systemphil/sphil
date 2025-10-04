@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import ReviewsData from "../data/reviews.json";
 import { useEffect, useState } from "react";
 import { CardShell } from "lib/components/ui/CardShell";
