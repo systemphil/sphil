@@ -11,7 +11,7 @@ export default async function CoursesPage() {
     return (
         <PageWrapper>
             <div className="my-16">
-                <Heading>Available Courses</Heading>
+                <Heading>Join the Symposia</Heading>
             </div>
 
             <FadeIn>
