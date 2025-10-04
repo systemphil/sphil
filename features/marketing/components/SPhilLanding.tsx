@@ -129,13 +129,29 @@ function OpeningDescription() {
 }
 
 function MainInfoCard() {
+    const text = (
+        <>
+            We dream of a way of studying the great texts that is intense,
+            life-long and free. To be able to rigorously engage with concepts
+            and ideas to their utmost depth without sacrificing either scholarly
+            quality or creativity. To be able to pursue and hone one&apos;s
+            philosophical or literary craft and enjoyment in a way that supports
+            and enriches everyday living. And finally to be thinking deeply
+            about contents of art, religion and philosophy purely for their own
+            sake. Our courses are intended to be guides along this path of
+            study, inspiration and reflection. Whether you are a novice or a
+            professional, we welcome anyone who has a burning desire to examine,
+            philosophically, the wonders of being.
+        </>
+    );
+
     return (
         <FadeIn>
             <section className="md:px-10 max-w-[900px]">
                 <InfoCard
                     headingSize="h3"
                     title="Why"
-                    text="We dream of a way of studying the great texts that is intense, life-long and free. To be able to rigorously engage with concepts and ideas to their utmost depth without sacrificing either scholarly quality or creativity. To be able to pursue and hone one's philosophical or literary craft and enjoyment in a way that supports and enriches everyday living. And finally to be thinking deeply about contents of art, religion and philosophy purely for their own sake. Our courses are intended to be guides along this path of study and reflection. Whether you are a novice or a professional, we welcome anyone who has a burning desire to examine, philosophically, the wonders of being."
+                    text={text}
                     imgUrl="/static/images/fire.webp"
                     maskType="triangle"
                 />
