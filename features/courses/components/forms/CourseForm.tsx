@@ -17,7 +17,7 @@ import { Course } from "@prisma/client";
 import { actionUpsertCourse } from "features/courses/server/actions";
 import { DbUpsertCourseByIdProps } from "lib/database/dbFuncs";
 import { actionUploadImage } from "lib/server/actions";
-import { Alert } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import dayjs from "dayjs";
 
 type AmendedDbUpsertCourseByIdProps = Omit<
@@ -27,9 +27,9 @@ type AmendedDbUpsertCourseByIdProps = Omit<
     | "seminarAvailability"
     | "dialogueAvailability"
 > & {
-    baseAvailability: any;
-    seminarAvailability: any;
-    dialogueAvailability: any;
+    baseAvailability: Date | string;
+    seminarAvailability: Date | string;
+    dialogueAvailability: Date | string;
 };
 
 const DEFAULT_DATE = new Date("1970-01-01T00:00:00Z");
@@ -259,14 +259,15 @@ export const CourseForm = ({ course }: { course?: Course }) => {
                 />
             </form>
             <div className="my-12">
-                <button
-                    className="d-btn d-btn-warning d-btn-xs m-2 border-dotted border-2 border-black hover:border-solid hover:border-black hover:border-2 duration-200"
+                <Button
+                    color="inherit"
+                    size="small"
                     onClick={() => {
                         console.info(methods.getValues());
                     }}
                 >
                     DEBUG: Get form values
-                </button>
+                </Button>
             </div>
         </FormProvider>
     );

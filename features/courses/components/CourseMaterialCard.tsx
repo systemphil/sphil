@@ -5,7 +5,13 @@ import { Heading } from "lib/components/ui/Heading";
 import { ModelName } from "lib/server/ctrl";
 import { actionDeleteModelEntry } from "../server/actions";
 import toast from "react-hot-toast";
-import { Dialog, DialogActions, DialogContent } from "@mui/material";
+import {
+    Box,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+} from "@mui/material";
 import { useState } from "react";
 
 type CourseMaterialCardProps = {
@@ -51,16 +57,25 @@ export function CourseMaterialCard({
             <div className="flex grow p-2">
                 <Heading as="h6">{heading}</Heading>
             </div>
-            <Link className="flex" href={href}>
-                <button className="d-btn d-btn-accent mr-2 ">Edit</button>
-            </Link>
-            <button
-                className="d-btn d-btn-square mr-2 hover:bg-red-500"
-                disabled={modelName === "UNSUPPORTED" || isPending}
-                onClick={() => setIsDialogOpen(true)}
-            >
-                <ButtonDeleteCross />
-            </button>
+            <Box display="flex" gap={2} px={1}>
+                <Button
+                    variant="contained"
+                    href={href}
+                    size="small"
+                    LinkComponent={Link}
+                >
+                    Edit
+                </Button>
+                <Button
+                    variant="contained"
+                    color="error"
+                    size="small"
+                    disabled={modelName === "UNSUPPORTED" || isPending}
+                    onClick={() => setIsDialogOpen(true)}
+                >
+                    <ButtonDeleteCross />
+                </Button>
+            </Box>
             <Dialog open={isDialogOpen} onClose={onClose} disableScrollLock>
                 <DialogContent>
                     Are you sure you want to delete this{" "}
@@ -68,13 +83,14 @@ export function CourseMaterialCard({
                     undone.
                 </DialogContent>
                 <DialogActions>
-                    <button
-                        className="d-btn d-btn-error"
+                    <Button
+                        variant="contained"
+                        color="error"
                         disabled={isPending}
                         onClick={handleDeleteEntry}
                     >
                         {isPending ? "Deleting..." : "Delete"}
-                    </button>
+                    </Button>
                 </DialogActions>
             </Dialog>
         </div>
