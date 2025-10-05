@@ -61,7 +61,7 @@ export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
                     <div className="flex md:flex-col justify-evenly flex-wrap md:flex-nowrap">
                         <Back
                             href={`/symposia/courses/${lessonData.course.slug}`}
-                            text={`Back to ${lessonData.course.name}`}
+                            text={`Back to course page`}
                         />
                         <TableOfLessons
                             lessons={lessonData.course.lessons}
