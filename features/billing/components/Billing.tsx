@@ -1,3 +1,4 @@
+import { Alert, Typography } from "@mui/material";
 import { Course } from "@prisma/client";
 import { Maintenance } from "lib/components/Maintenance";
 import { CardShell } from "lib/components/ui/CardShell";
@@ -28,7 +29,7 @@ export function Billing({
                                     <Link
                                         href={`/symposia/courses/${course.slug}`}
                                     >
-                                        <CardShell className="p-4 hover:bg-slate-500">
+                                        <CardShell className="p-4 hover:!bg-pink-500 dark:hover:!bg-acid-green !transition-colors !duration-150">
                                             <div className="flex">
                                                 {course.imageUrl && (
                                                     <Image
@@ -55,20 +56,22 @@ export function Billing({
                                 </li>
                             ))}
                         </ul>
-                        <div className="mt-96 bg-slate-100 p-4 rounded-md text-stone-500">
-                            If you wish to refund a course, please contact us at{" "}
-                            <a
-                                href="mailto:support@systemphil.com"
-                                className="text-blue-400 underline hover:text-blue-700"
-                            >
-                                this email
-                            </a>
-                            .
-                            <div className="text-stone-500 mt-1">
+                        <Alert className="mt-96 rounded-lg" severity="info">
+                            <Typography>
+                                If you wish to refund a course, please contact
+                                us at{" "}
+                                <a
+                                    href="mailto:support@systemphil.com"
+                                    className="text-blue-400 underline hover:text-blue-700"
+                                >
+                                    this email
+                                </a>
+                                .
+                                <br />
                                 Please note that refunds are only available
                                 within 7 days of purchase.
-                            </div>
-                        </div>
+                            </Typography>
+                        </Alert>
                     </>
                 ) : (
                     <div>

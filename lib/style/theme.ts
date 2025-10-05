@@ -3,6 +3,8 @@
 import { Theme, createTheme, darkScrollbar } from "@mui/material";
 import { MuiLinkOverride } from "lib/components/navigation/MuiLinkOverride";
 
+const acidGreen = "#0bda84";
+
 const baseTheme: Theme = createTheme({
     components: {
         MuiLink: {
@@ -79,6 +81,41 @@ export const darkTheme = createTheme(
                     root: {
                         backgroundColor: "#1d1d1d",
                     },
+                },
+            },
+            MuiMenuItem: {
+                styleOverrides: {
+                    root: ({ theme }) => ({
+                        transition: "background-color 125ms ease-in-out",
+
+                        [theme.breakpoints.up("xs")]: {
+                            "&:hover": {
+                                backgroundColor: `${acidGreen}80`,
+                            },
+                        },
+                    }),
+                },
+            },
+            MuiListItemButton: {
+                styleOverrides: {
+                    root: ({ theme }) => ({
+                        transition: "background-color 125ms ease-in-out",
+
+                        "&:hover": {
+                            backgroundColor: `${acidGreen}80`,
+                        },
+
+                        "&.Mui-focusVisible": {
+                            backgroundColor: `${acidGreen}40`, // A slightly lighter focus background
+                        },
+
+                        "&.Mui-selected": {
+                            backgroundColor: `${acidGreen}20`, // A subtle selected color
+                            "&:hover": {
+                                backgroundColor: `${acidGreen}80`, // Keep hover color on selected
+                            },
+                        },
+                    }),
                 },
             },
         },
