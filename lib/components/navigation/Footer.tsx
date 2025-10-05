@@ -266,6 +266,10 @@ function FooterContent() {
                                         icon="github"
                                         href="https://github.com/systemphil"
                                     />
+                                    <SocialIcon
+                                        icon="linkedin"
+                                        href="https://www.linkedin.com/company/sphil"
+                                    />
                                 </div>
                             </div>
                         </div>

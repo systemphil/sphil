@@ -31,7 +31,7 @@ export function CardFancy({
                     >
                         {title}
                     </Heading>
-                    <p className="max-w-[300px] text-center mt-2 text-lg text-stone-500">
+                    <p className="max-w-[330px] text-center mt-2 text-lg text-stone-500">
                         {tagline}
                     </p>
                 </div>
