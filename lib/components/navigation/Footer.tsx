@@ -5,8 +5,9 @@ import { LogoOwl } from "../LogoOwl";
 import { LogoAnimated } from "../LogoAnimated";
 import { SymposiaCard } from "../SymposiaCard";
 import { SocialIcon } from "../icons/SocialIcon";
-import { Button } from "../ui/Button";
 import { resetCookieConsentValue } from "react-cookie-consent";
+import { cn } from "lib/utils";
+import { Button } from "@mui/material";
 
 const footerLinkClasses =
     "text-sm text-gray-600 dark:text-gray-400 no-underline hover:text-gray-800 dark:hover:text-gray-200 transition";
@@ -205,6 +206,7 @@ function FooterContent() {
                                                     accept or decline cookies.
                                                 </span>
                                                 <Button
+                                                    variant="contained"
                                                     onClick={() =>
                                                         handleCloseDialog()
                                                     }
@@ -227,7 +229,10 @@ function FooterContent() {
                                     >
                                         <button
                                             type="button"
-                                            className={footerLinkClasses}
+                                            className={cn(
+                                                footerLinkClasses,
+                                                "hover:cursor-pointer"
+                                            )}
                                         >
                                             Delete Cookies
                                         </button>

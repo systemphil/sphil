@@ -5,6 +5,7 @@ import { actionCreateSeminar } from "../server/actions";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { sleep } from "lib/utils";
+import { Button } from "@mui/material";
 
 export function SeminarCreateNewButton({
     courseId,
@@ -49,12 +50,12 @@ export function SeminarCreateNewButton({
     };
 
     return (
-        <button
-            className="d-btn d-btn-primary"
+        <Button
+            variant="contained"
             onClick={handleNewSeminar}
             disabled={isPending}
         >
             Add a seminar
-        </button>
+        </Button>
     );
 }

@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import { CoursesDisplay } from "features/courses/components/CoursesDisplay";
 import { Heading } from "lib/components/ui/Heading";
 import { PageWrapper } from "lib/components/ui/PageWrapper";
@@ -10,11 +11,13 @@ export default async function AdminPage() {
         <PageWrapper>
             <Heading as="h2">Courses</Heading>
             <CoursesDisplay isAdmin />
-            <Link href="/admin/courses/new" className="mt-2">
-                <button type="button" className="d-btn d-btn-primary">
-                    Create a course
-                </button>
-            </Link>
+            <Button
+                variant="contained"
+                LinkComponent={Link}
+                href="/admin/courses/new"
+            >
+                Create a course
+            </Button>
         </PageWrapper>
     );
 }

@@ -1,10 +1,11 @@
+import { Button } from "@mui/material";
 import { signIn } from "lib/auth/authConfig";
 import { cn } from "lib/utils";
 
 export function SignInButton({
     className,
     ...props
-}: React.HTMLAttributes<HTMLButtonElement>) {
+}: React.ComponentProps<typeof Button>) {
     return (
         <form
             action={async () => {
@@ -13,9 +14,14 @@ export function SignInButton({
             }}
             className="flex grow"
         >
-            <button type="submit" className={cn("", className)} {...props}>
+            <Button
+                type="submit"
+                className={cn("", className)}
+                variant="contained"
+                {...props}
+            >
                 Sign in
-            </button>
+            </Button>
         </form>
     );
 }

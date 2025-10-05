@@ -2,6 +2,7 @@
 
 import toast from "react-hot-toast";
 import { actionCreateSeminarCohort } from "../server/actions";
+import { Button } from "@mui/material";
 
 export const CreateNewSeminarCohortBtn = ({
     courseId,
@@ -21,9 +22,9 @@ export const CreateNewSeminarCohortBtn = ({
 
     return (
         <div className="flex justify-center">
-            <button onClick={handleClick} className="d-btn d-btn-primary">
+            <Button onClick={handleClick} variant="contained">
                 Make New Cohort Now
-            </button>
+            </Button>
         </div>
     );
 };

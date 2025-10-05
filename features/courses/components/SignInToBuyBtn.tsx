@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@mui/material";
 import { signIn, useSession } from "next-auth/react";
 
 export const SignInToBuyBtn = () => {
@@ -13,8 +14,8 @@ export const SignInToBuyBtn = () => {
     }
 
     return (
-        <button onClick={() => signIn()} className="d-btn d-btn-primary">
+        <Button onClick={() => signIn()} variant="contained">
             Sign In To Buy
-        </button>
+        </Button>
     );
 };

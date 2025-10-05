@@ -6,7 +6,7 @@ import { dbGetCourseAndDetailsAndLessonsById } from "lib/database/dbFuncs";
 import { CourseMaterialCard } from "features/courses/components/CourseMaterialCard";
 import { errorMessages } from "lib/config/errorMessages";
 import { CourseLessonsSortable } from "features/courses/components/CourseLessonsSortable";
-import { Alert } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import { auth } from "lib/auth/authConfig";
 import { determineCourseAccess } from "lib/auth/authFuncs";
 import { CreateNewSeminarCohortBtn } from "features/courses/components/CreateNewSeminarCohortBtn";
@@ -63,16 +63,13 @@ export default async function AdminCourseEdit({
                                 ) : (
                                     <div className="flex items-center flex-col justify-center">
                                         <p className="text-center">None yet.</p>
-                                        <Link
+                                        <Button
+                                            variant="contained"
+                                            LinkComponent={Link}
                                             href={`/admin/courses/${courseId}/course-details/new`}
                                         >
-                                            <button
-                                                type="button"
-                                                className="d-btn d-btn-primary"
-                                            >
-                                                Add details
-                                            </button>
-                                        </Link>
+                                            Add details
+                                        </Button>
                                     </div>
                                 )}
                             </div>
@@ -91,16 +88,13 @@ export default async function AdminCourseEdit({
                                 )}
                             </div>
                             <div className="flex justify-center">
-                                <Link
+                                <Button
+                                    variant="contained"
+                                    LinkComponent={Link}
                                     href={`/admin/courses/${course.id}/lessons/new`}
                                 >
-                                    <button
-                                        type="button"
-                                        className="d-btn d-btn-primary"
-                                    >
-                                        Add a lesson
-                                    </button>
-                                </Link>
+                                    Add a lesson
+                                </Button>
                             </div>
                         </>
                     )}
