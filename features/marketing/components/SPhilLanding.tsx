@@ -77,7 +77,7 @@ function MainHero() {
                             <CardFancy
                                 title={"COURSES"}
                                 tagline={
-                                    "Focused courses providing guidance and analysis of the great texts and their core arguments."
+                                    "Focused courses offering guidance and analysis of the great texts—their ideas, arguments, and enduring power."
                                 }
                                 href={"/symposia/courses"}
                                 buttons={[
