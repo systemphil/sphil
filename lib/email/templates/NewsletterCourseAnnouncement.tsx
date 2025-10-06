@@ -71,7 +71,7 @@ export function NewsletterCourseAnnouncement() {
 
                 <p className="text-gray-500 my-4">
                     <a
-                        href="https://sphil.xyz/symposia/courses/science-of-logic-the-quality-of-being-part-1"
+                        href="https://sphil.xyz/courses/science-of-logic-the-quality-of-being-part-1"
                         target="_blank"
                         rel="noreferrer noopener"
                         className="text-blue-400 underline"

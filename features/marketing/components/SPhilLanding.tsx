@@ -79,11 +79,11 @@ function MainHero() {
                                 tagline={
                                     "Focused courses offering guidance and analysis of the great texts—their ideas, arguments, and enduring power."
                                 }
-                                href={"/symposia/courses"}
+                                href={"/courses"}
                                 buttons={[
                                     {
                                         title: "View Courses",
-                                        href: "/symposia/courses",
+                                        href: "/courses",
                                     },
                                 ]}
                             />
@@ -296,7 +296,7 @@ function VisitCourses() {
                 Discover and partake in philosophical discourses that stretches
                 beyond empires, generations and time.
             </p>
-            <Link href="/symposia/courses">
+            <Link href="/courses">
                 <Button variant="contained">See our courses</Button>
             </Link>
         </section>

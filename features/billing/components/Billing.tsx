@@ -26,9 +26,7 @@ export function Billing({
                         <ul className="py-4">
                             {purchasedCourses.map((course) => (
                                 <li key={course.id}>
-                                    <Link
-                                        href={`/symposia/courses/${course.slug}`}
-                                    >
+                                    <Link href={`/courses/${course.slug}`}>
                                         <CardShell className="p-4 hover:!bg-pink-500 dark:hover:!bg-acid-green !transition-colors !duration-150">
                                             <div className="flex">
                                                 {course.imageUrl && (

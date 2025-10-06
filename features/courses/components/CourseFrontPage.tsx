@@ -12,7 +12,7 @@ import { TableOfSeminarCohorts } from "./TableOfSeminarCohorts";
 import { Suspense } from "react";
 
 const links = {
-    courses: "/symposia/courses",
+    courses: "/courses",
 };
 
 export async function CourseFrontPage({ slug }: { slug: string }) {

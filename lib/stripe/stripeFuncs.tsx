@@ -180,7 +180,7 @@ export async function stripeCreateCheckoutSession({
         success_url: `${baseUrl}/purchase-success?p=${
             purchase.price.split("_")[1]
         }&s=${slug}`,
-        cancel_url: `${baseUrl}/symposia/courses/${slug}?canceled=true`,
+        cancel_url: `${baseUrl}/courses/${slug}?canceled=true`,
         allow_promotion_codes: true,
         metadata: {
             stripeCustomerId: customerId,
@@ -190,7 +190,7 @@ export async function stripeCreateCheckoutSession({
             imageUrl: imageUrl ?? STRIPE_FALLBACKS.imageUrl,
             name: name,
             description: description,
-            courseLink: `${baseUrl}/symposia/courses/${slug}`,
+            courseLink: `${baseUrl}/courses/${slug}`,
             priceTier,
             customerEmail,
         },

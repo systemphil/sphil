@@ -103,7 +103,7 @@ export const VerifyPurchase = ({
                             <Button
                                 variant="contained"
                                 LinkComponent={Link}
-                                href={`/symposia/courses/${data}`}
+                                href={`/courses/${data}`}
                             >
                                 Click to go to the course
                             </Button>

@@ -12,7 +12,7 @@ import { People as PeopleIcon, Info as InfoIcon } from "@mui/icons-material";
 import { SeminarCohortsDropdown } from "./SeminarCohortsDropdown";
 
 const links = {
-    courses: "/symposia/courses",
+    courses: "/courses",
 };
 
 export async function TableOfSeminarCohorts({

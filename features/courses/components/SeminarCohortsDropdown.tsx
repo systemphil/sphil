@@ -10,7 +10,7 @@ import { People as PeopleIcon, Info as InfoIcon } from "@mui/icons-material";
 import { dbGetSeminarCohortsByCourseAndUser } from "lib/database/dbFuncs";
 
 const links = {
-    courses: "/symposia/courses",
+    courses: "/courses",
 };
 
 interface SeminarCohortsDropdownProps {

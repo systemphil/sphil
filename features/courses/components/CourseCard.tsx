@@ -14,7 +14,7 @@ type CourseCardProps = {
 export async function CourseCard({ course, isAdmin = false }: CourseCardProps) {
     const href = isAdmin
         ? `/admin/courses/${course.id}`
-        : `/symposia/courses/${course.slug}`;
+        : `/courses/${course.slug}`;
 
     const session = await auth();
 

@@ -21,7 +21,7 @@ type CourseLessonContentsProps = {
 };
 
 const links = {
-    courses: "/symposia/courses",
+    courses: "/courses",
 };
 
 export function TableOfLessons({
