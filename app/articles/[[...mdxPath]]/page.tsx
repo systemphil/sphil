@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks -- false positive, useMDXComponents/useTOC are not react hooks */
 
+import { DESCRIPTION, OG_IMAGES, SITE_ROOT, TITLE } from "lib/config/consts";
 import { $NextraMetadata } from "nextra";
 import { useMDXComponents } from "nextra-theme-docs";
 import { generateStaticParamsFor, importPage } from "nextra/pages";
-
-const SITE_ROOT = process.env.NEXT_PUBLIC_SITE_ROOT as string;
 
 export const generateStaticParams = generateStaticParamsFor("mdxPath");
 
@@ -25,23 +24,22 @@ export async function generateMetadata(props: {
             site: SITE_ROOT,
             title: "",
             description: "",
-            images: ogImages,
+            images: OG_IMAGES,
         },
         openGraph: {
             ...(metadata?.openGraph || {}),
             site: SITE_ROOT,
             type: "website",
             locale: "en_US",
-            siteName: "sPhil",
+            siteName: TITLE,
             title: "",
             description: "",
-            images: ogImages,
+            images: OG_IMAGES,
         },
     };
 
-    const title = metadata?.seoTitle || metadata?.title || "sPhil";
-    const description =
-        metadata?.description || "Where Philosophy Meets Open Collaboration";
+    const title = metadata?.seoTitle || metadata?.title || TITLE;
+    const description = metadata?.description || DESCRIPTION;
 
     if (title) {
         enhancedMetadata.title = title;
@@ -62,38 +60,18 @@ export default async function Page(props: {
     params: Promise<{ mdxPath: string[] }>;
 }) {
     const params = await props.params;
-    const result = await importPage(params.mdxPath);
-    const { default: MDXContent, toc, metadata } = result;
+    const {
+        default: MDXContent,
+        toc,
+        metadata,
+        sourceCode,
+    } = await importPage(params.mdxPath);
 
     const Wrapper = useMDXComponents().wrapper;
 
     return (
-        <Wrapper toc={toc} metadata={metadata}>
+        <Wrapper toc={toc} metadata={metadata} sourceCode={sourceCode}>
             <MDXContent {...props} params={params} />
         </Wrapper>
     );
 }
-
-const ogImages = [
-    {
-        url: "/images/og-image-sphil.avif",
-        width: 1200,
-        height: 630,
-        alt: "sPhil",
-        type: "image/avif",
-    },
-    {
-        url: "/images/og-image-sphil.webp",
-        width: 1200,
-        height: 630,
-        alt: "sPhil",
-        type: "image/webp",
-    },
-    {
-        url: "/images/og-image-sphil.png",
-        width: 1200,
-        height: 630,
-        alt: "sPhil",
-        type: "image/png",
-    },
-];
