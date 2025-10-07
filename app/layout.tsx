@@ -23,47 +23,31 @@ import { MuiThemeProvider } from "lib/style/MuiThemeProvider";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { Roboto } from "next/font/google";
 import { cn } from "lib/utils";
-
-const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub";
-const PROJECT_LINK = "https://github.com/systemphil/sphil";
-const DOCS_REPOSITORY_BASE = "https://github.com/systemphil/sphil/tree/main";
-const SITE_ROOT = process.env.NEXT_PUBLIC_SITE_ROOT as string;
-// const BACKGROUND_COLOR = {
-//     light: "#fca5a5",
-//     dark: "#1e40af",
-// };
-const COLOR = {
-    hue: {
-        dark: 155,
-        light: 215,
-    },
-    saturation: {
-        dark: 90,
-        light: 90,
-    },
-};
+import {
+    COLOR,
+    DESCRIPTION,
+    DOCS_REPOSITORY_BASE,
+    EDIT_LINK_DESCRIPTION,
+    OG_IMAGES,
+    PROJECT_LINK,
+    SITE_ROOT,
+    TITLE,
+} from "lib/config/consts";
+import { KEYWORDS } from "lib/config/keywords";
 
 export const metadata: Metadata = {
     title: {
-        absolute: "sPhil",
+        absolute: TITLE,
         template: "%s | sPhil",
     },
     robots: "index, follow",
-    description: "Where Philosophy Meets Open Collaboration",
+    description: DESCRIPTION,
     metadataBase: new URL(SITE_ROOT),
-    keywords: [
-        "sphil",
-        "philosophy",
-        "systemphil",
-        "metaphysics",
-        "ontology",
-        "hegel",
-        "kant",
-    ],
+    keywords: KEYWORDS,
     generator: "Next.js",
-    applicationName: "sPhil",
+    applicationName: TITLE,
     appleWebApp: {
-        title: "sPhil",
+        title: TITLE,
     },
     alternates: {
         canonical: SITE_ROOT,
@@ -72,65 +56,32 @@ export const metadata: Metadata = {
         "msapplication-TileColor": "#fff",
     },
     twitter: {
-        site: SITE_ROOT,
-        description: "Where Philosophy Meets Open Collaboration",
-        title: "sPhil",
-        images: [
-            {
-                url: "/images/og-image-sphil.avif",
-                width: 1200,
-                height: 630,
-                alt: "sPhil",
-                type: "image/avif",
-            },
-            {
-                url: "/images/og-image-sphil.webp",
-                width: 1200,
-                height: 630,
-                alt: "sPhil",
-                type: "image/webp",
-            },
-            {
-                url: "/images/og-image-sphil.png",
-                width: 1200,
-                height: 630,
-                alt: "sPhil",
-                type: "image/png",
-            },
-        ],
+        card: "summary_large_image",
+        site: "@sphildotxyz",
+        creator: "@sphildotxyz",
+        description: DESCRIPTION,
+        title: TITLE,
+        images: OG_IMAGES,
     },
     authors: {
-        name: "sPhil",
+        name: TITLE,
     },
+    creator: TITLE,
+    publisher: TITLE,
+    formatDetection: {
+        email: false,
+        address: false,
+        telephone: false,
+    },
+    category: "education",
     openGraph: {
-        title: "sPhil",
+        title: TITLE,
         type: "website",
         locale: "en_US",
-        siteName: "sPhil",
-        description: "Where Philosophy Meets Open Collaboration",
-        images: [
-            {
-                url: "/images/og-image-sphil.avif",
-                width: 1200,
-                height: 630,
-                alt: "sPhil",
-                type: "image/avif",
-            },
-            {
-                url: "/images/og-image-sphil.webp",
-                width: 1200,
-                height: 630,
-                alt: "sPhil",
-                type: "image/webp",
-            },
-            {
-                url: "/images/og-image-sphil.png",
-                width: 1200,
-                height: 630,
-                alt: "sPhil",
-                type: "image/png",
-            },
-        ],
+        siteName: TITLE,
+        description: DESCRIPTION,
+        url: SITE_ROOT,
+        images: OG_IMAGES,
     },
 };
 
@@ -140,6 +91,35 @@ const roboto = Roboto({
     display: "swap",
     variable: "--font-roboto",
 });
+
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    name: "sPhil",
+    description: DESCRIPTION,
+    url: SITE_ROOT,
+    email: "service@systemphil.com",
+    sameAs: [
+        "https://www.facebook.com/profile.php?id=61564840656103",
+        "https://www.youtube.com/@sphildotxyz",
+        "https://bsky.app/profile/sphil.xyz",
+        "https://twitter.com/sphildotxyz",
+        "https://github.com/systemphil",
+        "https://www.linkedin.com/company/sphil",
+    ],
+    educationalLevel: "Higher Education",
+    teaches: [
+        "Philosophy",
+        "Literature",
+        "History",
+        "Classical Studies",
+        "Humanities",
+    ],
+    audience: {
+        "@type": "EducationalAudience",
+        educationalRole: "student",
+    },
+};
 
 export default async function RootLayout({
     children,
@@ -222,6 +202,13 @@ export default async function RootLayout({
                     </Suspense>
                 </AppRouterCacheProvider>
             </body>
+            <script
+                type="application/ld+json"
+                // eslint-disable-next-line @eslint-react/dom/no-dangerously-set-innerhtml
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+                }}
+            />
         </html>
     );
 }
