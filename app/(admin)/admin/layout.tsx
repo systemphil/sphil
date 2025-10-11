@@ -24,7 +24,7 @@ export default async function AdminLayout({
     }
 
     return (
-        <section>
+        <section data-pagefind-ignore>
             <div className="w-full bg-purple-200 z-1 fixed shadow-sm flex justify-center items-center py-1 gap-3">
                 <span className="text-purple-300">ADMIN AREA</span>
                 <AdminBtn href="/admin">Main</AdminBtn>

@@ -12,5 +12,5 @@ export default async function UserLayout({
         return redirect("/?missing=login");
     }
 
-    return <>{children}</>;
+    return <div data-pagefind-ignore>{children}</div>;
 }

@@ -12,7 +12,7 @@
         "ct": "tsc --pretty --noEmit",
         "cd:dev": "gh workflow run cd_dev.yaml --ref $(git rev-parse --abbrev-ref HEAD)",
         "prettier:check": "npx prettier --check .",
-        "postbuild": "pagefind --site .next/standalone/.next/server/app/articles --output-path public/_pagefind",
+        "postbuild": "pagefind --site .next/standalone/.next/server/app --output-path public/_pagefind",
         "stripe:listen": "stripe listen --forward-to 127.0.0.1:3000/api/stripe-webhook",
         "db:studio": "dotenv -e .env -- npx prisma studio",
         "db:studio:prod": "dotenv -e .env.production -- npx prisma studio",
