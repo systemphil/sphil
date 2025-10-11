@@ -146,7 +146,15 @@ export default async function RootLayout({
             className={cn("nextra-scrollbar", roboto.variable)}
             data-theme="fantasy"
         >
-            <Head color={COLOR}></Head>
+            <Head color={COLOR}>
+                <script
+                    type="application/ld+json"
+                    // eslint-disable-next-line @eslint-react/dom/no-dangerously-set-innerhtml
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+                    }}
+                />
+            </Head>
             <body>
                 <AppRouterCacheProvider options={{ enableCssLayer: true }}>
                     <Providers>
@@ -202,13 +210,6 @@ export default async function RootLayout({
                     </Suspense>
                 </AppRouterCacheProvider>
             </body>
-            <script
-                type="application/ld+json"
-                // eslint-disable-next-line @eslint-react/dom/no-dangerously-set-innerhtml
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-                }}
-            />
         </html>
     );
 }
