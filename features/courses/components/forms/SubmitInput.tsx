@@ -1,6 +1,6 @@
 "use client";
 
-import clsx from "clsx";
+import { Button } from "@mui/material";
 
 type Props = {
     value: string;
@@ -9,18 +9,12 @@ type Props = {
 };
 
 export const SubmitInput = ({ value, isLoading, isVerbose = false }: Props) => {
-    const classes = clsx({
-        "d-btn d-btn-primary": true,
-        "": !isLoading,
-        "d-btn-disabled": isLoading,
-    });
-
     const label = isLoading ? "Loading..." : value;
 
     return (
         <div>
-            <button
-                className={classes}
+            <Button
+                variant="contained"
                 type="submit"
                 value={label}
                 disabled={isLoading}
@@ -30,7 +24,7 @@ export const SubmitInput = ({ value, isLoading, isVerbose = false }: Props) => {
                 )}
                 {label}
                 {isLoading && isVerbose && "...may take 1-2mins ☕"}
-            </button>
+            </Button>
         </div>
     );
 };

@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "./Button";
 import { CardShellMagic } from "./CardShellMagic";
 import { Heading } from "./Heading";
+import { Button } from "@mui/material";
 
 type Buttons = {
     title: string;
@@ -31,16 +31,16 @@ export function CardFancy({
                     >
                         {title}
                     </Heading>
-                    <p className="max-w-[300px] text-center mt-2 text-lg text-stone-500">
+                    <p className="max-w-[330px] text-center mt-2 text-lg text-stone-500">
                         {tagline}
                     </p>
                 </div>
             </Link>
             <div className="flex gap-4 mt-2">
-                {buttons.map((button, index) => {
+                {buttons.map((button) => {
                     return (
-                        <Link key={index} href={button.href}>
-                            <Button>{button.title}</Button>
+                        <Link key={button.href} href={button.href}>
+                            <Button variant="contained">{button.title}</Button>
                         </Link>
                     );
                 })}

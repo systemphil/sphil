@@ -34,5 +34,8 @@
         "**/*.min.js",
         "**/dist/**",
         "**/extended-markdown.md"
+    ],
+    "tailwindCSS.experimental.classRegex": [
+        ["className\\s*:\\s*['\"]([^'\"]*)['\"]"]
     ]
 }

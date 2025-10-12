@@ -55,6 +55,8 @@ export async function generateMetadata({
     };
 }
 
+// TODO consider static generate and add data-pagefind-body for search indexing
+
 export default async function CourseFrontPageRoute({
     params,
 }: {

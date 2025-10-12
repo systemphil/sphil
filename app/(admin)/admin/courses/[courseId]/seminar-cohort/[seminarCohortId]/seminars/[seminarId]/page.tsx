@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import { CourseMaterialCard } from "features/courses/components/CourseMaterialCard";
 import { VideoForm } from "features/courses/components/forms/VideoForm";
 import { Heading } from "lib/components/ui/Heading";
@@ -60,16 +61,13 @@ export default async function AdminSeminarEdit({
                     ) : (
                         <div className="flex flex-col gap-2 justify-center items-center">
                             <p>No content.</p>
-                            <Link
+                            <Button
+                                variant="contained"
+                                LinkComponent={Link}
                                 href={`/admin/courses/${courseId}/seminar-cohort/${seminarCohortId}/seminars/${seminarId}/seminar-content/new`}
                             >
-                                <button
-                                    type="button"
-                                    className="d-btn d-btn-primary"
-                                >
-                                    Add content
-                                </button>
-                            </Link>
+                                Add content
+                            </Button>
                         </div>
                     )}
                 </div>
@@ -86,16 +84,13 @@ export default async function AdminSeminarEdit({
                     ) : (
                         <div className="flex flex-col gap-2 justify-center items-center">
                             <p>No transcript.</p>
-                            <Link
+                            <Button
+                                variant="contained"
+                                LinkComponent={Link}
                                 href={`/admin/courses/${courseId}/seminar-cohort/${seminarCohortId}/seminars/${seminarId}/seminar-transcript/new`}
                             >
-                                <button
-                                    type="button"
-                                    className="d-btn d-btn-primary"
-                                >
-                                    Add transcript
-                                </button>
-                            </Link>
+                                Add transcript
+                            </Button>
                         </div>
                     )}
                 </div>

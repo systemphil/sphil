@@ -1,58 +1,79 @@
 /* eslint-disable react-hooks/rules-of-hooks -- false positive, useMDXComponents/useTOC are not react hooks */
 
+import { DESCRIPTION, OG_IMAGES, TITLE } from "lib/config/consts";
+import { KEYWORDS } from "lib/config/keywords";
 import { $NextraMetadata } from "nextra";
 import { useMDXComponents } from "nextra-theme-docs";
 import { generateStaticParamsFor, importPage } from "nextra/pages";
 
-const SITE_ROOT = process.env.NEXT_PUBLIC_SITE_ROOT as string;
-
 export const generateStaticParams = generateStaticParamsFor("mdxPath");
 
 type CustomMarkdownContentMetadata = $NextraMetadata & {
-    seoTitle?: string | null;
+    seoTitle?: string | null | undefined;
+    keywords?: string[] | null | undefined;
+    description?: string | null | undefined;
 };
+
+function mergeKeywords(article?: string[] | null): string[] {
+    const incoming = (article ?? []).concat(KEYWORDS ?? []);
+    const result: string[] = [];
+    const seen = new Set<string>();
+    for (const k of incoming) {
+        const s = (k ?? "").trim();
+        if (!s) continue;
+        const key = s.toLowerCase();
+        if (!seen.has(key)) {
+            seen.add(key);
+            result.push(s);
+        }
+    }
+    return result;
+}
+
 export async function generateMetadata(props: {
     params: Promise<{ mdxPath: string[] }>;
 }) {
     const params = await props.params;
-    const metadata = (await importPage(params.mdxPath))
+    const articleMetadata = (await importPage(params.mdxPath))
         .metadata as CustomMarkdownContentMetadata;
 
-    const enhancedMetadata = {
-        ...metadata,
+    const enhancedMetadata: $NextraMetadata = {
+        ...articleMetadata,
         twitter: {
-            ...(metadata?.twitter || {}),
-            site: SITE_ROOT,
+            ...(articleMetadata?.twitter || {}),
             title: "",
             description: "",
-            images: ogImages,
+            images: OG_IMAGES,
         },
         openGraph: {
-            ...(metadata?.openGraph || {}),
-            site: SITE_ROOT,
-            type: "website",
-            locale: "en_US",
-            siteName: "sPhil",
+            ...(articleMetadata?.openGraph || {}),
             title: "",
             description: "",
-            images: ogImages,
+            images: OG_IMAGES,
         },
     };
 
-    const title = metadata?.seoTitle || metadata?.title || "sPhil";
-    const description =
-        metadata?.description || "Where Philosophy Meets Open Collaboration";
+    const title = articleMetadata?.seoTitle || articleMetadata?.title || TITLE;
+    const description = articleMetadata?.description || DESCRIPTION;
 
     if (title) {
         enhancedMetadata.title = title;
-        enhancedMetadata.twitter.title = title;
-        enhancedMetadata.openGraph.title = title;
+        enhancedMetadata.twitter!.title = title;
+        enhancedMetadata.openGraph!.title = title;
     }
 
     if (description) {
-        enhancedMetadata.description = description;
-        enhancedMetadata.twitter.description = description;
-        enhancedMetadata.openGraph.description = description;
+        enhancedMetadata.description = description as string;
+        enhancedMetadata.twitter!.description = description as string;
+        enhancedMetadata.openGraph!.description = description as string;
+    }
+
+    if (
+        articleMetadata.keywords &&
+        Array.isArray(articleMetadata.keywords) &&
+        articleMetadata.keywords.length > 0
+    ) {
+        enhancedMetadata.keywords = mergeKeywords(articleMetadata.keywords);
     }
 
     return enhancedMetadata;
@@ -62,38 +83,17 @@ export default async function Page(props: {
     params: Promise<{ mdxPath: string[] }>;
 }) {
     const params = await props.params;
-    const result = await importPage(params.mdxPath);
-    const { default: MDXContent, toc, metadata } = result;
-
+    const {
+        default: MDXContent,
+        toc,
+        metadata,
+        sourceCode,
+    } = await importPage(params.mdxPath);
     const Wrapper = useMDXComponents().wrapper;
 
     return (
-        <Wrapper toc={toc} metadata={metadata}>
+        <Wrapper toc={toc} metadata={metadata} sourceCode={sourceCode}>
             <MDXContent {...props} params={params} />
         </Wrapper>
     );
 }
-
-const ogImages = [
-    {
-        url: "/images/og-image-sphil.avif",
-        width: 1200,
-        height: 630,
-        alt: "sPhil",
-        type: "image/avif",
-    },
-    {
-        url: "/images/og-image-sphil.webp",
-        width: 1200,
-        height: 630,
-        alt: "sPhil",
-        type: "image/webp",
-    },
-    {
-        url: "/images/og-image-sphil.png",
-        width: 1200,
-        height: 630,
-        alt: "sPhil",
-        type: "image/png",
-    },
-];

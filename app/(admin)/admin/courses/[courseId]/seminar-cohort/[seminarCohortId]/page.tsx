@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import { CourseMaterialCard } from "features/courses/components/CourseMaterialCard";
 import { CourseSeminarsSortable } from "features/courses/components/CourseSeminarsSortable";
 import { SeminarCohortForm } from "features/courses/components/forms/SeminarCohortForm";
@@ -93,16 +94,13 @@ export default async function AdminSeminarCohortEdit({
                                 />
                             ) : (
                                 <div className="flex items-center justify-center mb-6">
-                                    <Link
+                                    <Button
+                                        variant="contained"
+                                        LinkComponent={Link}
                                         href={`/admin/courses/${courseId}/seminar-cohort/${seminarCohortAndSeminars.id}/seminar-cohort-details/new`}
                                     >
-                                        <button
-                                            type="button"
-                                            className="d-btn d-btn-primary"
-                                        >
-                                            Add details
-                                        </button>
-                                    </Link>
+                                        Add details
+                                    </Button>
                                 </div>
                             )}
                         </div>

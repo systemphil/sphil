@@ -7,6 +7,7 @@ import { Heading } from "lib/components/ui/Heading";
 import { LessonForm } from "features/courses/components/forms/LessonForm";
 import { CourseMaterialCard } from "features/courses/components/CourseMaterialCard";
 import { VideoForm } from "features/courses/components/forms/VideoForm";
+import { Button } from "@mui/material";
 
 export const metadata = {};
 
@@ -48,16 +49,13 @@ export default async function AdminLessonEdit({
                     ) : (
                         <div>
                             <Heading as="h2">No content.</Heading>
-                            <Link
+                            <Button
+                                variant="contained"
+                                LinkComponent={Link}
                                 href={`/admin/courses/${courseId}/lessons/${lessonId}/lesson-content/new`}
                             >
-                                <button
-                                    type="button"
-                                    className="d-btn d-btn-primary"
-                                >
-                                    Add content
-                                </button>
-                            </Link>
+                                Add content
+                            </Button>
                         </div>
                     )}
                 </div>
@@ -79,16 +77,13 @@ export default async function AdminLessonEdit({
                     ) : (
                         <div>
                             <Heading as="h2">No transcript.</Heading>
-                            <Link
+                            <Button
+                                variant="contained"
+                                LinkComponent={Link}
                                 href={`/admin/courses/${courseId}/lessons/${lessonId}/lesson-transcript/new`}
                             >
-                                <button
-                                    type="button"
-                                    className="d-btn d-btn-primary"
-                                >
-                                    Add content
-                                </button>
-                            </Link>
+                                Add transcript
+                            </Button>
                         </div>
                     )}
                 </div>

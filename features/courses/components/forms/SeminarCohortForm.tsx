@@ -65,16 +65,6 @@ export const SeminarCohortForm = ({
                     isLoading={submitLoading}
                 />
             </form>
-            {/* <div className="my-12">
-                <button
-                    className="d-btn d-btn-warning d-btn-xs m-2 border-dotted border-2 border-black hover:border-solid hover:border-black hover:border-2 duration-200"
-                    onClick={() => {
-                        console.info(methods.getValues());
-                    }}
-                >
-                    DEBUG: Get form values
-                </button>
-            </div> */}
         </FormProvider>
     );
 };

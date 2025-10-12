@@ -25,6 +25,8 @@ const eslintConfig = [
             "@typescript-eslint/no-namespace": "off",
             "@typescript-eslint/no-require-imports": "warn",
             "import/no-anonymous-default-export": "off",
+            "@eslint-react/hooks-extra/no-direct-set-state-in-use-effect":
+                "off",
             "prefer-const": "warn",
             "no-var": "off", // Explicitly turn off a core ESLint rule
         },

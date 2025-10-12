@@ -14,54 +14,40 @@ import { NavbarHeader } from "lib/components/navigation/NavbarHeader";
 import { TableOfContentsExtra } from "lib/components/navigation/TableOfContentsExtra";
 import { ArticleWrapper } from "lib/components/ui/ArticleWrapper";
 import { Providers } from "lib/components/context/Providers";
-
-// CSS
 import "nextra-theme-docs/style.css";
 import "@mdxeditor/editor/style.css";
 import "./globals.css";
 import { Suspense } from "react";
 import { ImagePreloader } from "lib/components/ImagePreloader";
-
-const EDIT_LINK_DESCRIPTION = "Edit this page on GitHub";
-const PROJECT_LINK = "https://github.com/systemphil/sphil";
-const DOCS_REPOSITORY_BASE = "https://github.com/systemphil/sphil/tree/main";
-const SITE_ROOT = process.env.NEXT_PUBLIC_SITE_ROOT as string;
-// const BACKGROUND_COLOR = {
-//     light: "#fca5a5",
-//     dark: "#1e40af",
-// };
-const COLOR = {
-    hue: {
-        dark: 155,
-        light: 215,
-    },
-    saturation: {
-        dark: 90,
-        light: 90,
-    },
-};
+import { MuiThemeProvider } from "lib/style/MuiThemeProvider";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
+import { Roboto } from "next/font/google";
+import { cn } from "lib/utils";
+import {
+    COLOR,
+    DESCRIPTION,
+    DOCS_REPOSITORY_BASE,
+    EDIT_LINK_DESCRIPTION,
+    OG_IMAGES,
+    PROJECT_LINK,
+    SITE_ROOT,
+    TITLE,
+} from "lib/config/consts";
+import { KEYWORDS } from "lib/config/keywords";
 
 export const metadata: Metadata = {
     title: {
-        absolute: "sPhil",
+        absolute: TITLE,
         template: "%s | sPhil",
     },
     robots: "index, follow",
-    description: "Where Philosophy Meets Open Collaboration",
+    description: DESCRIPTION,
     metadataBase: new URL(SITE_ROOT),
-    keywords: [
-        "sphil",
-        "philosophy",
-        "systemphil",
-        "metaphysics",
-        "ontology",
-        "hegel",
-        "kant",
-    ],
+    keywords: KEYWORDS,
     generator: "Next.js",
-    applicationName: "sPhil",
+    applicationName: TITLE,
     appleWebApp: {
-        title: "sPhil",
+        title: TITLE,
     },
     alternates: {
         canonical: SITE_ROOT,
@@ -70,65 +56,68 @@ export const metadata: Metadata = {
         "msapplication-TileColor": "#fff",
     },
     twitter: {
-        site: SITE_ROOT,
-        description: "Where Philosophy Meets Open Collaboration",
-        title: "sPhil",
-        images: [
-            {
-                url: "/images/og-image-sphil.avif",
-                width: 1200,
-                height: 630,
-                alt: "sPhil",
-                type: "image/avif",
-            },
-            {
-                url: "/images/og-image-sphil.webp",
-                width: 1200,
-                height: 630,
-                alt: "sPhil",
-                type: "image/webp",
-            },
-            {
-                url: "/images/og-image-sphil.png",
-                width: 1200,
-                height: 630,
-                alt: "sPhil",
-                type: "image/png",
-            },
-        ],
+        card: "summary_large_image",
+        site: "@sphildotxyz",
+        creator: "@sphildotxyz",
+        description: DESCRIPTION,
+        title: TITLE,
+        images: OG_IMAGES,
     },
     authors: {
-        name: "sPhil",
+        name: TITLE,
     },
+    creator: TITLE,
+    publisher: TITLE,
+    formatDetection: {
+        email: false,
+        address: false,
+        telephone: false,
+    },
+    category: "education",
     openGraph: {
-        title: "sPhil",
+        title: TITLE,
         type: "website",
         locale: "en_US",
-        siteName: "sPhil",
-        description: "Where Philosophy Meets Open Collaboration",
-        images: [
-            {
-                url: "/images/og-image-sphil.avif",
-                width: 1200,
-                height: 630,
-                alt: "sPhil",
-                type: "image/avif",
-            },
-            {
-                url: "/images/og-image-sphil.webp",
-                width: 1200,
-                height: 630,
-                alt: "sPhil",
-                type: "image/webp",
-            },
-            {
-                url: "/images/og-image-sphil.png",
-                width: 1200,
-                height: 630,
-                alt: "sPhil",
-                type: "image/png",
-            },
-        ],
+        siteName: TITLE,
+        description: DESCRIPTION,
+        url: SITE_ROOT,
+        images: OG_IMAGES,
+    },
+};
+
+const roboto = Roboto({
+    weight: ["300", "400", "500", "700"],
+    subsets: ["latin"],
+    display: "swap",
+    variable: "--font-roboto",
+});
+
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    name: "sPhil",
+    description: DESCRIPTION,
+    url: SITE_ROOT,
+    email: "service@systemphil.com",
+    sameAs: [
+        "https://www.facebook.com/profile.php?id=61564840656103",
+        "https://www.youtube.com/@sphildotxyz",
+        "https://bsky.app/profile/sphil.xyz",
+        "https://twitter.com/sphildotxyz",
+        "https://github.com/systemphil",
+        "https://www.linkedin.com/company/sphil",
+    ],
+    educationalLevel: "Higher Education",
+    teaches: [
+        "Philosophy",
+        "Literature",
+        "History",
+        "Classical Studies",
+        "Humanities",
+    ],
+    audience: {
+        "@type": "EducationalAudience",
+        educationalRole: "student",
     },
 };
 
@@ -154,55 +143,72 @@ export default async function RootLayout({
             lang="en"
             dir="ltr"
             suppressHydrationWarning
-            className="nextra-scrollbar"
+            className={cn("nextra-scrollbar", roboto.variable)}
             data-theme="fantasy"
         >
-            <Head color={COLOR}></Head>
+            <Head color={COLOR}>
+                <script
+                    type="application/ld+json"
+                    // eslint-disable-next-line @eslint-react/dom/no-dangerously-set-innerhtml
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+                    }}
+                />
+            </Head>
             <body>
-                <Providers>
-                    <NextraLayout
-                        feedback={feedbackOptions}
-                        pageMap={await getPageMap()}
-                        docsRepositoryBase={DOCS_REPOSITORY_BASE}
-                        editLink={EDIT_LINK_DESCRIPTION}
-                        sidebar={{ defaultMenuCollapseLevel: 1 }}
-                        search={
-                            <Search placeholder="Search the Encyclopaedia…" />
-                        }
-                        // banner={<Banner />}
-                        navbar={
-                            <NextraNavbar
-                                logoLink={false}
-                                logo={<NavbarHeader />}
-                                projectLink={PROJECT_LINK}
-                            >
-                                <div className="flex justify-center items-center">
-                                    <ThemeSwitch lite={true} className="ml-0" />
-                                    <div className="w-[70px] flex justify-center">
-                                        <UserMenu />
+                <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+                    <Providers>
+                        <NextraLayout
+                            feedback={feedbackOptions}
+                            pageMap={await getPageMap()}
+                            docsRepositoryBase={DOCS_REPOSITORY_BASE}
+                            editLink={EDIT_LINK_DESCRIPTION}
+                            sidebar={{ defaultMenuCollapseLevel: 1 }}
+                            search={
+                                <Search placeholder="Search the Encyclopaedia…" />
+                            }
+                            // banner={<Banner />}
+                            navbar={
+                                <NextraNavbar
+                                    logoLink={false}
+                                    logo={<NavbarHeader />}
+                                    projectLink={PROJECT_LINK}
+                                >
+                                    <div className="flex justify-center items-center">
+                                        <ThemeSwitch
+                                            lite={true}
+                                            className="ml-0"
+                                        />
+                                        <div className="w-[70px] flex justify-center">
+                                            <MuiThemeProvider>
+                                                <UserMenu />
+                                            </MuiThemeProvider>
+                                        </div>
                                     </div>
+                                </NextraNavbar>
+                            }
+                            footer={
+                                <div className="relative" key="footer-key-123">
+                                    <div
+                                        data-name="footer-flair"
+                                        className="absolute h-20 w-full -top-[80px] bg-linear-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
+                                    />
+                                    <NextraFooter className="flex-col items-center md:items-start relative">
+                                        <Footer />
+                                    </NextraFooter>
                                 </div>
-                            </NextraNavbar>
-                        }
-                        footer={
-                            <div className="relative" key="footer-key-123">
-                                <div
-                                    data-name="footer-flair"
-                                    className="absolute h-20 w-full -top-[80px] bg-linear-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
-                                />
-                                <NextraFooter className="flex-col items-center md:items-start relative">
-                                    <Footer />
-                                </NextraFooter>
-                            </div>
-                        }
-                        toc={toc}
-                    >
-                        <ArticleWrapper>{children}</ArticleWrapper>
-                    </NextraLayout>
-                </Providers>
-                <Suspense>
-                    <ImagePreloader />
-                </Suspense>
+                            }
+                            toc={toc}
+                        >
+                            <MuiThemeProvider>
+                                <ArticleWrapper>{children}</ArticleWrapper>
+                            </MuiThemeProvider>
+                        </NextraLayout>
+                    </Providers>
+                    <Suspense>
+                        <ImagePreloader />
+                    </Suspense>
+                </AppRouterCacheProvider>
             </body>
         </html>
     );

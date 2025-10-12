@@ -1,6 +1,12 @@
 "use client";
 
-import { Alert, Dialog, DialogActions, DialogContent } from "@mui/material";
+import {
+    Alert,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+} from "@mui/material";
 import toast from "react-hot-toast";
 import { actionDeleteModelEntry } from "../server/actions";
 import { useState } from "react";
@@ -38,13 +44,15 @@ export function CourseCardDeleteButton({
 
     return (
         <>
-            <button
-                className="d-btn d-btn-error d-btn-sm hover:bg-red-600"
+            <Button
+                variant="contained"
+                color="inherit"
+                size="small"
                 disabled={isPending}
                 onClick={() => setIsDialogOpen(true)}
             >
                 Delete Course
-            </button>
+            </Button>
             <Dialog open={isDialogOpen} onClose={onClose} disableScrollLock>
                 <DialogContent>
                     Are you sure you want to delete this {modelName} item? This
@@ -55,13 +63,14 @@ export function CourseCardDeleteButton({
                     stripe integration and all related content.
                 </Alert>
                 <DialogActions>
-                    <button
-                        className="d-btn d-btn-error"
+                    <Button
+                        variant="contained"
+                        color="error"
                         disabled={isPending}
                         onClick={handleDeleteEntry}
                     >
                         {isPending ? "Deleting..." : "Delete"}
-                    </button>
+                    </Button>
                 </DialogActions>
             </Dialog>
         </>

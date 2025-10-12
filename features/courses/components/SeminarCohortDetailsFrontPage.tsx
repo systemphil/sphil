@@ -42,7 +42,7 @@ export async function SeminarCohortDetailsFrontPage({
                 <div className="lg:fixed w-full md:max-w-[175px] 2xl:max-w-[300px] lg:pr-2 my-2">
                     <div className="flex md:flex-col justify-evenly flex-wrap md:flex-nowrap">
                         <Back
-                            href={`/symposia/courses/${seminarCohort.course.slug}`}
+                            href={`/courses/${seminarCohort.course.slug}`}
                             text={`Back to ${seminarCohort.course.name}`}
                         />
                         <TableOfSeminarCohorts

@@ -3,6 +3,7 @@
 import { Heading } from "lib/components/ui/Heading";
 import { useVerifyPurchase } from "../hooks/useVerifyPurchase";
 import Link from "next/link";
+import { Button } from "@mui/material";
 
 export const VerifyPurchase = ({
     purchasePriceId,
@@ -99,11 +100,13 @@ export const VerifyPurchase = ({
                             <span>Thank you for your purchase! 🙏</span>
                         </div>
                         <div className="flex justify-center m-10">
-                            <button className="d-btn d-btn-primary">
-                                <Link href={`/symposia/courses/${data}`}>
-                                    Click to go to the course
-                                </Link>
-                            </button>
+                            <Button
+                                variant="contained"
+                                LinkComponent={Link}
+                                href={`/courses/${data}`}
+                            >
+                                Click to go to the course
+                            </Button>
                         </div>
                         <div className="flex justify-center">
                             <p className="mt-12 text-gray-500 dark:text-gray-300 max-w-md">
