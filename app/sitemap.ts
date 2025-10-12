@@ -13,6 +13,13 @@ const siteConfig = {
 };
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+    const isProduction =
+        process.env.NEXT_PUBLIC_SITE_ROOT === "https://sphil.xyz";
+
+    if (!isProduction) {
+        return [];
+    }
+
     const staticRoutes = getStaticRoutes();
 
     console.log("All static routes found:", staticRoutes);
