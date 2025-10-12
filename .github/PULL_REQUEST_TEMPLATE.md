@@ -28,6 +28,7 @@ isArticle: true
 authors: Your Name (Year)
 editors: Editor Name (Year)
 contributors: Contributor Name (Year)
+keywords: [word1, word2, word3]
 ---
 
 ## Your Article Title
