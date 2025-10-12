@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { NL_20250926_SchellingAnnouncement } from "lib/email/templates/NL_20250926_SchellingAnnouncement";
+import { Newsletter_20250930_SchellingOpen } from "lib/email/templates/Newsletter_20250930_SchellingOpen";
 import { Resend } from "resend";
 
 const prisma = new PrismaClient();
@@ -31,15 +31,14 @@ async function sendNewsletter() {
         //     },
         // ];
 
-        const subject =
-            "Course Announcement: Delving into Schelling's Masterpiece: The 1809 Freedom Essay";
+        const subject = "Enrollment Open!";
 
         for (const { email, id } of subscribers) {
             const res = await resend.emails.send({
                 from: `sPhil Newsletter 🦉 <${senderEmail}>`,
                 to: email,
                 subject,
-                react: <NL_20250926_SchellingAnnouncement unsubscribeId={id} />,
+                react: <Newsletter_20250930_SchellingOpen unsubscribeId={id} />,
             });
 
             if (res.error) {

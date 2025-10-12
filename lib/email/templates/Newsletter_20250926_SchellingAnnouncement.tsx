@@ -3,7 +3,7 @@ import { EmailBaseLayout } from "./components/EmailBaseLayout";
 import { VideoLink } from "./components/VideoLink";
 import { UnsubscribeNewsletter } from "./components/UnsubscribeNewsletter";
 
-export function NL_20250926_SchellingAnnouncement({
+export function Newsletter_20250926_SchellingAnnouncement({
     unsubscribeId,
 }: {
     unsubscribeId: string;
@@ -167,5 +167,5 @@ export function NL_20250926_SchellingAnnouncement({
 }
 
 export default function Example() {
-    return <NL_20250926_SchellingAnnouncement unsubscribeId="123" />;
+    return <Newsletter_20250926_SchellingAnnouncement unsubscribeId="123" />;
 }
