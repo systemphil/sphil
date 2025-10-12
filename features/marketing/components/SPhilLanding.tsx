@@ -165,8 +165,8 @@ function InfoCards() {
         <FadeIn>
             <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
                 <InfoCard
-                    title="Deepen Your Thinking: Explore Philosophy In-Depth"
-                    text="Dive into the world's greatest ideas with our comprehensive online philosophy courses. Go beyond introductory lectures and engage with challenging concepts in a supportive learning environment."
+                    title="Deepen Your Thinking: Explore The Great Texts In-Depth"
+                    text="Dive into the world's greatest ideas with our comprehensive online courses. Go beyond introductory lectures and engage with challenging concepts in a supportive learning environment."
                     maskType="diamond"
                     imgUrl="/static/images/sun.webp"
                 />
@@ -178,13 +178,13 @@ function InfoCards() {
                 />
                 <InfoCard
                     title="Focus on Text: Meet the Greatest Minds of History"
-                    text="Gain insights from renowned philosophers by meeting them on their own ground, namely, their text! Our courses center around primary texts supplemented by secondary literature. We think it is important that you spend time with the philosopher's own text and become equipped to make up your own mind regarding their ideas."
+                    text="Gain insights from renowned philosophers, poets and authors by meeting them on their own ground, namely, their text! Our courses center around primary texts supplemented by secondary literature. We think it is important that you spend time with the authors's own text and become equipped to make up your own mind regarding their art or ideas."
                     maskType="diamond"
                     imgUrl="/static/images/books.webp"
                 />
                 <InfoCard
-                    title="Sharpen Your Critical Thinking: Unleash Your Philosophical Potential"
-                    text="They who do not understand the past cannot comprehend the future. Philosophy is not about the past but the discovery of futures. Learn to think critically, analyze arguments, and form your own well-reasoned opinions - skills valuable in all aspects of life."
+                    title="The Great Conversation: Critical Thinking Through Classic Texts"
+                    text="They who do not understand the past cannot comprehend the future. Philosophy, poetry, plays, and historical texts form a great conversation, which is the ultimate discovery of futures. Learn to think critically, analyze enduring arguments from Plato to Milton, and form your own well-reasoned opinions—skills invaluable in all aspects of life."
                     maskType="diamond"
                     imgUrl="/static/images/eye.webp"
                 />
@@ -293,8 +293,8 @@ function VisitCourses() {
                 </span>
             </Heading>
             <p className="text-lg text-slate-500 dark:text-slate-300 py-4">
-                Discover and partake in philosophical discourses that stretches
-                beyond empires, generations and time.
+                Engage in discourses that stretch across empires, generations,
+                and time.
             </p>
             <Link href="/courses">
                 <Button variant="contained">See our courses</Button>
