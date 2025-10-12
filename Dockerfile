@@ -1,10 +1,10 @@
-FROM oven/bun:1.2.21 AS installer
+FROM oven/bun:1.2.23 AS installer
 WORKDIR /app
 COPY prisma ./
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile 
 
-FROM oven/bun:1.2.21 AS builder
+FROM oven/bun:1.2.23 AS builder
 WORKDIR /app
 COPY --from=installer /app/node_modules/ /app/node_modules
 COPY . .
@@ -23,7 +23,7 @@ RUN --mount=type=secret,id=sec_database_url \
 RUN echo "const dns = require('node:dns');" >> ./.next/standalone/server.js \
     && echo "dns.setDefaultResultOrder('ipv4first');" >> ./.next/standalone/server.js
 
-FROM oven/bun:1.2.21 AS runner
+FROM oven/bun:1.2.23 AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
