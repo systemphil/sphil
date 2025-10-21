@@ -339,7 +339,7 @@ function Instructors() {
 
 function EncLanding() {
     return (
-        <section className="relative flex justify-center h-[100vh] w-[90vw] overflow-hidden">
+        <section className="relative flex justify-center h-[150vh] sm:h-[120vh] md:h-[100vh] w-[90vw] overflow-hidden">
             <BackgroundBoxes />
 
             <div className="max-w-2xl relative">
