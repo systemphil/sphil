@@ -34,6 +34,7 @@ export default async function SeminarFrontPageRoute({
         seminarOrder: parseInt(seminarOrder),
         userId: session.user.id,
         year: parseInt(seminarCohortYear),
+        courseSlug,
     });
 
     if (!seminar) {

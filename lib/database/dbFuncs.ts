@@ -173,10 +173,12 @@ export async function dbGetSeminarAndConnectedByYearAndUser({
     seminarOrder,
     year,
     userId,
+    courseSlug,
 }: {
     seminarOrder: number;
     year: number;
     userId: string;
+    courseSlug: string;
 }) {
     return await prisma.seminar.findFirst({
         where: {
@@ -187,6 +189,9 @@ export async function dbGetSeminarAndConnectedByYearAndUser({
                     },
                 },
                 year,
+                course: {
+                    slug: courseSlug,
+                },
             },
             order: seminarOrder,
         },
