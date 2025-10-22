@@ -200,6 +200,7 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
         } finally {
             setSelectedFile(undefined);
             setPreviewUrl(null);
+            setUploadProgress(0);
             methods.reset();
             setHandlerLoading(false);
             setTimeout(() => {
