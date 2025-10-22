@@ -83,6 +83,7 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
     const [queryIsRefreshing, setQueryIsRefreshing] = useState<boolean>(false);
     const isCalledRef = useRef(false);
     const params = useParams();
+    const [uploadProgress, setUploadProgress] = useState<number>(0);
 
     const config = videoConfig[videoKind];
     const paramId = params[config.paramKey];
@@ -144,32 +145,52 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
 
             // 2. Preparing post for upload, sending request and checking response for OK.
             const { url } = resp.data;
-            const upload = await fetch(url, {
-                method: "PUT",
-                body: file,
+            await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+
+                xhr.upload.addEventListener("progress", (e) => {
+                    if (e.lengthComputable) {
+                        const percentComplete = (e.loaded / e.total) * 100;
+                        setUploadProgress(Math.round(percentComplete));
+                    }
+                });
+
+                xhr.addEventListener("load", () => {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        resolve(xhr.response);
+                    } else {
+                        reject(new Error("Upload failed"));
+                    }
+                });
+
+                xhr.addEventListener("error", () =>
+                    reject(new Error("Upload failed"))
+                );
+                xhr.addEventListener("abort", () =>
+                    reject(new Error("Upload aborted"))
+                );
+
+                xhr.open("PUT", url);
+                xhr.send(file);
             });
 
-            if (upload.ok) {
-                if (videoEntry && filename !== videoEntry.fileName) {
-                    /**
-                     * If there is an existing entry and the incoming upload filename is different,
-                     * the bucket will not overwrite the old file, in which case we must manually
-                     * send a signal to the bucket to delete the old file. At this stage, videoEntry data is
-                     * not yet updated (this invalidation takes place at the end of this function), so we can use its data.
-                     */
-                    const resp = await actionDeleteVideoFile({
-                        id: videoEntry.id,
-                        fileName: videoEntry.fileName,
-                    });
-                    if (resp?.error) {
-                        toast.error(`Error deleting old file ${resp.error}`);
-                    }
-                    setQueryIsRefreshing(true);
+            if (videoEntry && filename !== videoEntry.fileName) {
+                /**
+                 * If there is an existing entry and the incoming upload filename is different,
+                 * the bucket will not overwrite the old file, in which case we must manually
+                 * send a signal to the bucket to delete the old file. At this stage, videoEntry data is
+                 * not yet updated (this invalidation takes place at the end of this function), so we can use its data.
+                 */
+                const resp = await actionDeleteVideoFile({
+                    id: videoEntry.id,
+                    fileName: videoEntry.fileName,
+                });
+                if (resp?.error) {
+                    toast.error(`Error deleting old file ${resp.error}`);
                 }
-                toast.success("Success! Video uploaded / updated.");
-            } else {
-                throw new Error("Post to GC did not return OK");
+                setQueryIsRefreshing(true);
             }
+            toast.success("Success! Video uploaded / updated.");
 
             // 3. Upload complete. Cleanup of form and resetting queries and states.
             await sleep(1000);
@@ -244,6 +265,26 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
                         <p>Selected File: {selectedFile.name}</p>
                     </div>
                 )}
+                <div className="w-full mb-4 h-12">
+                    {handlerLoading && uploadProgress > 0 ? (
+                        <>
+                            <div className="flex justify-between mb-1">
+                                <span className="text-sm font-medium">
+                                    Uploading...
+                                </span>
+                                <span className="text-sm font-medium">
+                                    {uploadProgress}%
+                                </span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                <div
+                                    className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                                    style={{ width: `${uploadProgress}%` }}
+                                ></div>
+                            </div>
+                        </>
+                    ) : null}
+                </div>
                 <SubmitInput
                     value={`${
                         videoEntry && videoEntry.id ? "Update" : "Upload"
