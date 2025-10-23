@@ -241,18 +241,20 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
     return (
         <FormProvider {...methods}>
             <form
-                className="flex flex-col max-w-lg border-dotted border-2 border-slate-500 p-4 rounded-md"
+                className="flex flex-col max-w-lg border-dotted border-2 border-slate-500 p-4 rounded-md min-h-[400px] justify-between"
                 onSubmit={methods.handleSubmit(onSubmit)}
                 method="put"
                 encType="multipart/form-data"
             >
-                {previewUrl && videoEntry && (
-                    <VideoViewer
-                        videoUrl={previewUrl}
-                        fileName={videoEntry.fileName}
-                        videoId={videoEntry.id}
-                    />
-                )}
+                <div className="min-h-[270px]">
+                    {previewUrl && videoEntry && (
+                        <VideoViewer
+                            videoUrl={previewUrl}
+                            fileName={videoEntry.fileName}
+                            videoId={videoEntry.id}
+                        />
+                    )}
+                </div>
                 <VideoFileInput
                     label="File*"
                     name="fileInput"
