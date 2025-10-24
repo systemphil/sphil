@@ -20,11 +20,11 @@ export const DESCRIPTION =
 
 export const OG_IMAGES = [
     {
-        url: `${SITE_ROOT}/images/og-image-sphil.avif`,
+        url: `${SITE_ROOT}/images/og-image-sphil.png`,
         width: 1200,
         height: 630,
         alt: TITLE,
-        type: "image/avif",
+        type: "image/png",
     },
     {
         url: `${SITE_ROOT}/images/og-image-sphil.webp`,
@@ -34,10 +34,10 @@ export const OG_IMAGES = [
         type: "image/webp",
     },
     {
-        url: `${SITE_ROOT}/images/og-image-sphil.png`,
+        url: `${SITE_ROOT}/images/og-image-sphil.avif`,
         width: 1200,
         height: 630,
         alt: TITLE,
-        type: "image/png",
+        type: "image/avif",
     },
 ];
