@@ -23,7 +23,6 @@ import {
     ModelName,
 } from "lib/server/ctrl";
 import { revalidatePath, revalidateTag } from "next/cache";
-import { cookies } from "next/headers";
 import { z } from "zod";
 
 const upsertCourseSchema = z.object({
