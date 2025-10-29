@@ -13,8 +13,10 @@ import {
     actionCreateSignedPostUrl,
     actionCreateSignedPostUrlSeminar,
     actionCreateSignedReadUrl,
+    actionCreateTranscription,
     actionDeleteVideoFile,
 } from "features/courses/server/actions";
+import { Alert } from "@mui/material";
 
 type FileInput = {
     fileInput: FileList | undefined;
@@ -102,9 +104,11 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
     };
 
     const methods = useForm({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         defaultValues: config.getDefaultValues(videoEntry as any, paramId),
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onSubmit: SubmitHandler<any> = async (data) => {
         try {
             // 0. Preliminary setup and check that there is a file.
@@ -131,6 +135,7 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
                           fileName: filename,
                       };
 
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const resp = await config.createSignedPostUrl(requestParams as any);
 
             if (resp?.error) {
@@ -144,7 +149,7 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
             }
 
             // 2. Preparing post for upload, sending request and checking response for OK.
-            const { url } = resp.data;
+            const { url, videoEntryId } = resp.data;
             await new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
 
@@ -181,19 +186,51 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
                  * send a signal to the bucket to delete the old file. At this stage, videoEntry data is
                  * not yet updated (this invalidation takes place at the end of this function), so we can use its data.
                  */
-                const resp = await actionDeleteVideoFile({
-                    id: videoEntry.id,
-                    fileName: videoEntry.fileName,
-                });
-                if (resp?.error) {
-                    toast.error(`Error deleting old file ${resp.error}`);
+                try {
+                    const resp = await actionDeleteVideoFile({
+                        id: videoEntry.id,
+                        fileName: videoEntry.fileName,
+                    });
+                    if (resp?.error) {
+                        toast.error(`Error deleting old file ${resp.error}`);
+                    }
+                    setQueryIsRefreshing(true);
+                } catch (e) {
+                    console.error(e);
                 }
-                setQueryIsRefreshing(true);
             }
+
             toast.success("Success! Video uploaded / updated.");
 
-            // 3. Upload complete. Cleanup of form and resetting queries and states.
             await sleep(1000);
+
+            if (videoKind === "lesson" && paramId) {
+                const resp = await actionCreateSignedReadUrl({
+                    id: videoEntryId,
+                    fileName: filename,
+                });
+                if (resp?.error || !resp.data) {
+                    toast.error(
+                        "Oops! Unable to get video url for transcription processing"
+                    );
+                    console.error("Error retrieving URL: ", resp.error);
+                } else {
+                    const actionRes = await actionCreateTranscription({
+                        fileUrl: resp.data,
+                        parentId: paramId,
+                    });
+
+                    if (actionRes.error) {
+                        toast.error(
+                            "Oops! Error during transcription trigger request"
+                        );
+                        console.error(
+                            "Error during transcription trigger request ",
+                            actionRes.message
+                        );
+                    }
+                }
+            }
         } catch (error) {
             toast.error("Oops! Something went wrong");
             throw error;
@@ -288,6 +325,15 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
                         </>
                     ) : null}
                 </div>
+                {videoKind === "lesson" && (
+                    <Alert severity="warning" sx={{ m: 1 }}>
+                        Lessons will automatically be transcribed by the server
+                        within a few minutes and{" "}
+                        <b>will overwrite any existing transcript</b>. Be sure
+                        to double-check the transcript after it has been
+                        processed.
+                    </Alert>
+                )}
                 <SubmitInput
                     value={`${
                         videoEntry && videoEntry.id ? "Update" : "Upload"

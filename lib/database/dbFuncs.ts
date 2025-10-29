@@ -1070,34 +1070,40 @@ export const dbUpsertLessonTranscriptById = async ({
     id,
     lessonId,
     transcript,
+    shouldCompile = false,
 }: {
     id?: LessonTranscript["id"];
     lessonId: LessonContent["lessonId"];
     transcript: string;
+    shouldCompile?: boolean;
 }) => {
-    async function task() {
-        const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
-        const validLessonId = z.string().parse(lessonId);
+    const validId = id ? z.string().parse(id) : "x"; // Prisma needs id of some value
+    const validLessonId = z.string().parse(lessonId);
+    const validTranscript = z.string().parse(transcript);
 
-        const contentAsBuffer = Text.Encode(transcript);
+    const contentAsBuffer = Text.Encode(validTranscript);
 
-        const result = await prisma.lessonTranscript.upsert({
-            where: {
-                id: validId,
-            },
-            update: {
-                mdx: contentAsBuffer,
-            },
-            create: {
-                lessonId: validLessonId,
-                mdx: contentAsBuffer,
-            },
-        });
+    const compiledMdx = shouldCompile
+        ? await mdxCompiler(validTranscript)
+        : undefined;
 
-        const resultWithoutTranscript = exclude(result, ["mdx"]);
-        return resultWithoutTranscript;
-    }
-    return withAdmin(task);
+    const result = await prisma.lessonTranscript.upsert({
+        where: {
+            id: validId,
+        },
+        update: {
+            mdx: contentAsBuffer,
+            mdxCompiled: compiledMdx,
+        },
+        create: {
+            lessonId: validLessonId,
+            mdx: contentAsBuffer,
+            mdxCompiled: compiledMdx,
+        },
+    });
+
+    const resultWithoutTranscript = exclude(result, ["mdx"]);
+    return resultWithoutTranscript;
 };
 /**
  * Updates an existing CourseDetails  model by id as identifier or creates a new one if id is not provided.
@@ -1982,6 +1988,21 @@ export async function dbCreateSeminar({
                     id: seminarCohortId,
                 },
             },
+        },
+    });
+}
+
+export async function dbGetTranscriptIdByLessonId({
+    lessonId,
+}: {
+    lessonId: string;
+}) {
+    return await prisma.lessonTranscript.findFirst({
+        where: {
+            lessonId,
+        },
+        select: {
+            id: true,
         },
     });
 }

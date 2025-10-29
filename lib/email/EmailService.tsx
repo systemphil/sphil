@@ -33,7 +33,7 @@ export class EmailService {
         await this.resend.emails.send({
             from: `No Reply <${this.getSenderEmail()}>`,
             to: this.getAdminEmail(),
-            subject: `sPhil Server Error`,
+            subject: `🚨 sPhil Server Error`,
             text: message,
             html: `<div><pre>${message}</pre><br /><br />Timestamp: ${new Date().toLocaleDateString()}</div>`,
         });

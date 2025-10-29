@@ -132,6 +132,8 @@ export async function bucketGenerateSignedUploadUrl(
 
         const data = {
             url: url,
+            videoEntryId: videoEntry.id,
+            isParentLesson: videoEntry.lessonId ? true : false,
         };
         return data;
     }

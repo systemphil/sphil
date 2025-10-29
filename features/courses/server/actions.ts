@@ -10,6 +10,7 @@ import {
 import {
     dbCreateSeminar,
     dbCreateSeminarCohort,
+    dbGetTranscriptIdByLessonId,
     dbReorderLessons,
     dbReorderSeminars,
     dbUpsertLessonById,
@@ -360,5 +361,48 @@ export async function actionCreateSeminarCohort(
         data: {
             seminarId: newSeminar.id,
         },
+    };
+}
+
+const actionCreateTranscriptionSchema = z.object({
+    parentId: z.string(),
+    fileUrl: z.string(),
+});
+
+export async function actionCreateTranscription(
+    input: z.infer<typeof actionCreateTranscriptionSchema>
+) {
+    const isAdmin = await validateAdminAccess();
+    if (!isAdmin) {
+        return { error: true, message: "Unauthorized" };
+    }
+
+    const parsed = actionCreateTranscriptionSchema.safeParse(input);
+    if (!parsed.success) {
+        return { error: true, message: parsed.error.message };
+    }
+
+    const existingTranscriptEntry = await dbGetTranscriptIdByLessonId({
+        lessonId: input.parentId,
+    });
+
+    const payload = {
+        transcriptId: existingTranscriptEntry?.id ?? null,
+        ...input,
+    };
+
+    // Trigger background processing completely outside render
+    fetch(`${process.env.NEXT_PUBLIC_SITE_ROOT}/api/transcribe`, {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+            "Content-Type": "application/json",
+            "x-internal-key": `${process.env.TRANSCRIBE_API_KEY}`,
+        },
+    });
+
+    return {
+        error: false,
+        message: "Transcription process triggered",
     };
 }

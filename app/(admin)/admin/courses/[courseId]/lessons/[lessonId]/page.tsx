@@ -62,7 +62,9 @@ export default async function AdminLessonEdit({
 
                 <div>
                     <Heading as="h4">Lesson Video</Heading>
-                    <VideoForm videoEntry={video} videoKind="lesson" />
+                    <div className="flex flex-col justify-center items-center">
+                        <VideoForm videoEntry={video} videoKind="lesson" />
+                    </div>
                 </div>
 
                 <div>
