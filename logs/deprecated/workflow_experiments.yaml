@@ -70,13 +70,13 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            console.log('PR number: ' + ${{ github.event.pull_request.number }})
+            console.info('PR number: ' + ${{ github.event.pull_request.number }})
             const pr = await github.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: ${{ github.event.pull_request.number }}
             })
-            console.log('PR Head sha: ' + pr.data.head.sha)
+            console.info('PR Head sha: ' + pr.data.head.sha)
             core.setOutput('sha', pr.data.head.sha)
 
       #invoke another workflow using custom inputs

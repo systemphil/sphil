@@ -22,14 +22,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const staticRoutes = getStaticRoutes();
 
-    console.log("All static routes found:", staticRoutes);
+    console.info("All static routes found:", staticRoutes);
 
     // Filter out excluded routes and extract just the route strings
     const filteredRoutes = staticRoutes
         .filter((routeInfo) => !shouldExcludeRoute(routeInfo.route))
         .map((routeInfo) => routeInfo.route);
 
-    console.log("Filtered routes:", filteredRoutes);
+    console.info("Filtered routes:", filteredRoutes);
 
     // Get dynamic routes
     const dynamicRoutes = await getDynamicRoutes();
@@ -47,7 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Remove duplicates and sort
     const uniqueRoutes = Array.from(new Set(allRoutes)).sort();
 
-    console.log("Final routes for sitemap:", uniqueRoutes);
+    console.info("Final routes for sitemap:", uniqueRoutes);
 
     return uniqueRoutes.map(convertRouteToSitemapEntry);
 }
@@ -69,7 +69,7 @@ async function getArticleRoutes(): Promise<string[]> {
             return `/articles/${pathSegments.join("/")}`;
         });
 
-        console.log("Article routes from Nextra:", routes);
+        console.info("Article routes from Nextra:", routes);
         return routes;
     } catch (error) {
         console.error("Error generating article routes:", error);
@@ -195,7 +195,7 @@ async function getDynamicRoutes(): Promise<string[]> {
             routes.push(`/courses/${course.slug}`);
         }
 
-        console.log("Dynamic course routes generated:", routes);
+        console.info("Dynamic course routes generated:", routes);
     } catch (error) {
         console.error("Error fetching dynamic routes:", error);
     }

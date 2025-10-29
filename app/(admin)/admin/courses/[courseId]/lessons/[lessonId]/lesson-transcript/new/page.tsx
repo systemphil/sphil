@@ -14,7 +14,7 @@ export const metadata = {};
 export default async function AdminLessonTranscriptNew({
     params,
 }: {
-    params: { courseId: string; lessonId: string };
+    params: Promise<{ courseId: string; lessonId: string }>;
 }) {
     const { lessonId, courseId } = await params;
     if (typeof lessonId !== "string" || typeof courseId !== "string") {
