@@ -11,37 +11,37 @@ jobs:
     if: github.repository_owner == 'systemphil'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/cache/restore@v4
-      id: prepyrus-cache-restore
-      with:
-        path: target/release/prepyrus_runner
-        key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus_runner/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus_runner/src/**') }}
+      - uses: actions/checkout@v4
+      - uses: actions/cache/restore@v4
+        id: prepyrus-cache-restore
+        with:
+          path: target/release/prepyrus_runner
+          key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus_runner/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus_runner/src/**') }}
 
-    - name: Install Rust
-      if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
-      uses: actions-rust-lang/setup-rust-toolchain@v1
+      - name: Install Rust
+        if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
+        uses: actions-rust-lang/setup-rust-toolchain@v1
 
-    - name: Install dependencies
-      if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
-      run: cargo build --release --package prepyrus_runner
+      - name: Install dependencies
+        if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
+        run: cargo build --release --package prepyrus_runner
 
-    - name: Run prepyrus script in VERIFY mode
-      run: target/release/prepyrus_runner --bib-file absolute_bibliography.bib --target-path content --mode verify
+      - name: Run prepyrus script in VERIFY mode
+        run: target/release/prepyrus_runner --bib-file absolute_bibliography.bib --target-path content --mode verify
 
-    - name: Upload prepyrus for next job
-      uses: actions/upload-artifact@v4
-      with:
-        name: prepyrus_artifact
-        path: target/release/prepyrus_runner
+      - name: Upload prepyrus for next job
+        uses: actions/upload-artifact@v4
+        with:
+          name: prepyrus_artifact
+          path: target/release/prepyrus_runner
 
-    - name: Save Prepyrus to cache
-      id: prepyrus-cache-save
-      if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v4
-      with:
-        path: target/release/prepyrus_runner
-        key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus_runner/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus_runner/src/**') }}
+      - name: Save Prepyrus to cache
+        id: prepyrus-cache-save
+        if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: target/release/prepyrus_runner
+          key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus_runner/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus_runner/src/**') }}
 
   build_and_deploy:
     needs: prepyrus_verify
@@ -68,6 +68,7 @@ jobs:
         RESEND_API_KEY
         EMAIL_SEND
         EMAIL_RECEIVE
+        TRANSCRIBE_API_KEY
       PROJECT_ID: ${{ secrets.PROJECT_ID }}
       PROJECT_NUMBER: ${{ secrets.PROJECT_NUMBER }}
       REGION: ${{ secrets.REGION }}
@@ -81,94 +82,94 @@ jobs:
         max-instances:1
 
     steps:
-    - name: Check if running in the parent repository
-      run: |
-        if [ "${GITHUB_REPOSITORY}" != "systemphil/sphil" ]; then
-          echo "This workflow is only intended for the parent repository. Skipping deployment."
-          exit 1
-        fi
+      - name: Check if running in the parent repository
+        run: |
+          if [ "${GITHUB_REPOSITORY}" != "systemphil/sphil" ]; then
+            echo "This workflow is only intended for the parent repository. Skipping deployment."
+            exit 1
+          fi
 
-    - name: Checkout Code
-      uses: actions/checkout@v4
-      with:
-        repository: ${{ github.repository }}
-        ref: ${{ github.ref }}
-        fetch-depth: 0
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.ref }}
+          fetch-depth: 0
 
-    - name: Download prepyrus artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: prepyrus_artifact
-        path: target/release/prepyrus_runner
+      - name: Download prepyrus artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: prepyrus_artifact
+          path: target/release/prepyrus_runner
 
-    - name: Give execution permissions to prepyrus
-      run: chmod +x target/release/prepyrus_runner/prepyrus_runner
+      - name: Give execution permissions to prepyrus
+        run: chmod +x target/release/prepyrus_runner/prepyrus_runner
 
-    - name: Run prepyrus in PROCESS mode
-      run: |
-        target/release/prepyrus_runner/prepyrus_runner \
-        --bib-file absolute_bibliography.bib \
-        --target-path content \
-        --mode process \
-        --generate-index-to-file content/index/index.mdx \
-        --index-link-prefix-rewrite "content:/articles"
+      - name: Run prepyrus in PROCESS mode
+        run: |
+          target/release/prepyrus_runner/prepyrus_runner \
+          --bib-file absolute_bibliography.bib \
+          --target-path content \
+          --mode process \
+          --generate-index-to-file content/index/index.mdx \
+          --index-link-prefix-rewrite "content:/articles"
 
-    - name: GCP Auth
-      uses: "google-github-actions/auth@v2"
-      with:
-        credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
+      - name: GCP Auth
+        uses: "google-github-actions/auth@v2"
+        with:
+          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
 
-    - name: Set up Cloud SDK
-      uses: "google-github-actions/setup-gcloud@v2"
-      with:
-        install_components: beta
+      - name: Set up Cloud SDK
+        uses: "google-github-actions/setup-gcloud@v2"
+        with:
+          install_components: beta
 
-    - name: Docker Auth
-      id: docker-auth
-      uses: "docker/login-action@v1"
-      with:
-        username: _json_key
-        password: "${{ secrets.GOOGLE_CREDENTIALS }}"
-        registry: "${{ env.REGION }}-docker.pkg.dev"
+      - name: Docker Auth
+        id: docker-auth
+        uses: "docker/login-action@v1"
+        with:
+          username: _json_key
+          password: "${{ secrets.GOOGLE_CREDENTIALS }}"
+          registry: "${{ env.REGION }}-docker.pkg.dev"
 
-    - name: Verify Artifact Registry
-      # Verify artifact registry exists, otherwise create one
-      run: |
-        set +e  # Temporarily allow errors
-        gcloud artifacts repositories describe ${{ env.SERVICE }} --location=${{ env.REGION }} --format='value(name)' > /dev/null 2>&1
-        STATUS=$?  # Capture the exit status
-        set -e  # Re-enable exit on error
-        if [ $STATUS -ne 0 ]; then
-          echo "🏗️ Artifact Registry not found. Attempting to create one..."
-          gcloud artifacts repositories create ${{ env.SERVICE }} \
-            --repository-format=docker \
-            --location=${{ env.REGION }}
-          gcloud artifacts repositories set-cleanup-policies ${{ env.SERVICE }} \
-            --location=${{ env.REGION }} \
-            --policy=.github/artifact_repository_cleanup_policy.json
-        else
-          echo "✅ Artifact Registry already exists."
-        fi
+      - name: Verify Artifact Registry
+        # Verify artifact registry exists, otherwise create one
+        run: |
+          set +e  # Temporarily allow errors
+          gcloud artifacts repositories describe ${{ env.SERVICE }} --location=${{ env.REGION }} --format='value(name)' > /dev/null 2>&1
+          STATUS=$?  # Capture the exit status
+          set -e  # Re-enable exit on error
+          if [ $STATUS -ne 0 ]; then
+            echo "🏗️ Artifact Registry not found. Attempting to create one..."
+            gcloud artifacts repositories create ${{ env.SERVICE }} \
+              --repository-format=docker \
+              --location=${{ env.REGION }}
+            gcloud artifacts repositories set-cleanup-policies ${{ env.SERVICE }} \
+              --location=${{ env.REGION }} \
+              --policy=.github/artifact_repository_cleanup_policy.json
+          else
+            echo "✅ Artifact Registry already exists."
+          fi
 
-    - name: Build and Push Container
-      # NEXT_PUBLIC_ env variables have to be set during the build phase.
-      run: |-
-        export DATABASE_URL=${{secrets.DATABASE_URL}}
-        docker build \
-          --build-arg NEXT_PUBLIC_SITE_ROOT=${{secrets.NEXT_PUBLIC_SITE_ROOT}} \
-          --secret id=sec_database_url,env=DATABASE_URL \
-          -f Dockerfile \
-          -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}" ./
-        docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"
+      - name: Build and Push Container
+        # NEXT_PUBLIC_ env variables have to be set during the build phase.
+        run: |-
+          export DATABASE_URL=${{secrets.DATABASE_URL}}
+          docker build \
+            --build-arg NEXT_PUBLIC_SITE_ROOT=${{secrets.NEXT_PUBLIC_SITE_ROOT}} \
+            --secret id=sec_database_url,env=DATABASE_URL \
+            -f Dockerfile \
+            -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}" ./
+          docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"
 
-    - name: Deploy to Cloud Run
-      run: |
-        chmod +x .github/deploy_script.sh
-        .github/deploy_script.sh \
-          ${{ env.PROJECT_ID }} \
-          ${{ env.PROJECT_NUMBER }} \
-          ${{ env.REGION }} \
-          ${{ env.SERVICE }} \
-          ${{ env.TAG }} \
-          "${{ env.SECRETS }}" \
-          "${{ env.DEPLOY_CONFIG }}"
+      - name: Deploy to Cloud Run
+        run: |
+          chmod +x .github/deploy_script.sh
+          .github/deploy_script.sh \
+            ${{ env.PROJECT_ID }} \
+            ${{ env.PROJECT_NUMBER }} \
+            ${{ env.REGION }} \
+            ${{ env.SERVICE }} \
+            ${{ env.TAG }} \
+            "${{ env.SECRETS }}" \
+            "${{ env.DEPLOY_CONFIG }}"
