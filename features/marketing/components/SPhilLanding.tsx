@@ -6,7 +6,7 @@ import { CardFancy } from "lib/components/ui/CardFancy";
 import { HeroBackground } from "./HeroBackground";
 import { EncyclopaediaLanding } from "./EncyclopaediaLanding";
 import { ScreenWrapper } from "lib/components/ui/ScreenWrapper";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { InfoCard } from "./InfoCard";
 import { PageWrapper } from "lib/components/ui/PageWrapper";
 import { Reviews } from "./Reviews";
@@ -14,6 +14,7 @@ import { SubscribeToNewsletter } from "./SubscribeToNewsletter";
 import { PolyRhythmicSpiral } from "lib/components/animations/PolyRhythmicSpiral";
 import { BackgroundBoxes } from "lib/components/animations/BackgroundBoxes";
 import { EmbedTeacherProfile } from "features/editor/components/EmbedTeacherProfile";
+import { PointerHighlight } from "lib/components/ui/PointerHighlight";
 
 export function SPhilLanding() {
     return (
@@ -24,6 +25,7 @@ export function SPhilLanding() {
                 <OpeningDescription />
                 <MainInfoCard />
                 <InfoCards />
+                <FollowerStudentHighlight />
                 <Community />
                 <NewsletterSignUp />
                 <SymposiaHero />
@@ -155,6 +157,29 @@ function MainInfoCard() {
                     imgUrl="/static/images/fire.webp"
                     maskType="triangle"
                 />
+            </section>
+        </FadeIn>
+    );
+}
+
+function FollowerStudentHighlight() {
+    return (
+        <FadeIn>
+            <section className="mx-auto max-w-lg py-20 text-2xl font-bold tracking-tight md:text-4xl">
+                Don&apos;t be a follower
+                <PointerHighlight
+                    rectangleClassName="bg-[#FAF] dark:bg-acid-green/20 border-neutral-300 dark:border-neutral-600"
+                    pointerClassName="text-yellow-500"
+                >
+                    <span className="relative z-10">be a student.</span>
+                </PointerHighlight>
+                <Typography className="!mt-12 text-slate-700 dark:text-slate-300 pt-4 text-justify sm:text-lg">
+                    We foster a culture of disciplined inquiry and love for the
+                    truth: students interrogate arguments and sources, analyze
+                    evidence, and make up their own minds—never accepting claims
+                    or conventions at face value. The authors of great works
+                    were first great students.
+                </Typography>
             </section>
         </FadeIn>
     );
