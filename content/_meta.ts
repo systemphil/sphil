@@ -29,7 +29,7 @@ export default {
         display: "children",
         type: "page",
     },
-    index: {
+    "encyclopaedia-index": {
         title: "Index",
         display: "children",
         type: "page",

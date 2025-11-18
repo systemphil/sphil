@@ -77,7 +77,7 @@ export function EncyclopaediaLanding() {
                         className={cardClasses}
                         icon={<FormatListBulletedIcon />}
                         title="Index"
-                        href="/articles/index"
+                        href="/articles/encyclopaedia-index"
                     />
                 </CardGrouping>
             </div>

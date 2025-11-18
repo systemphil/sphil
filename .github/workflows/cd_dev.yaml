@@ -107,7 +107,7 @@ jobs:
           --bib-file absolute_bibliography.bib \
           --target-path content \
           --mode process \
-          --generate-index-to-file content/index/index.mdx \
+          --generate-index-to-file content/encyclopaedia-index/index.mdx \
           --index-link-prefix-rewrite "content:/articles"
 
       - name: GCP Auth
