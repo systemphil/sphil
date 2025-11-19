@@ -31,16 +31,6 @@
     }
 }
 
-@layer components {
-    .newsletter-body p {
-        @apply text-gray-500 my-4;
-    }
-
-    .newsletter-body a {
-        @apply text-blue-400 underline;
-    }
-}
-
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still

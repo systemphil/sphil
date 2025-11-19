@@ -11,8 +11,15 @@ import { Newsletter_20250926_SchellingAnnouncement_Web } from "lib/email/templat
 import { SubscribeToNewsletterForm } from "features/marketing/components/SubscribeToNewsletter";
 import { Typography } from "@mui/material";
 import { Newsletter_20250406_HegelSLQB1_Announcement_Web } from "../Newsletter_20250406_HegelSLQB1_Announcement";
+import { Newsletter_20251201_sPhil2026_Web } from "../Newsletter_20251201_sPhil2026";
 
 const EMAILS = [
+    {
+        id: "sphil-2026-12-01",
+        title: "sPhil 2026 Calendar",
+        subtitle: "December 1, 2025",
+        component: Newsletter_20251201_sPhil2026_Web,
+    },
     {
         id: "schelling-2025-09-26",
         title: "Schelling Announcement",

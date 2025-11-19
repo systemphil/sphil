@@ -4,10 +4,12 @@ import { NewsletterWebLayout } from "./components/NewsLetterWebLayout";
 import { UnsubscribeNewsletter } from "./components/UnsubscribeNewsletter";
 import { EmailA, EmailH1, EmailP, EmailUl } from "./components/EmailHtml";
 
+const preview = `2026 Calendar`;
+
 function Content() {
     return (
         <Section>
-            <EmailH1>A Philosophical Pilgrimage Awaits</EmailH1>
+            <EmailH1>sPhil {preview}</EmailH1>
 
             <EmailP>
                 We&apos;ve been hard at work crafting this course, and
@@ -90,13 +92,11 @@ function Content() {
     );
 }
 
-export function Newsletter_20250406_HegelSLQB1_Announcement_Email({
+export function Newsletter_20251201_sPhil2026_Email({
     unsubscribeId,
 }: {
     unsubscribeId: string;
 }) {
-    const preview = `The Ground Quakes & Freedom Wakes`;
-
     return (
         <EmailBaseLayout preview={preview} isSupport={false}>
             <Content />
@@ -105,7 +105,7 @@ export function Newsletter_20250406_HegelSLQB1_Announcement_Email({
     );
 }
 
-export function Newsletter_20250406_HegelSLQB1_Announcement_Web() {
+export function Newsletter_20251201_sPhil2026_Web() {
     return (
         <NewsletterWebLayout>
             <Content />
@@ -114,7 +114,5 @@ export function Newsletter_20250406_HegelSLQB1_Announcement_Web() {
 }
 
 export default function Example() {
-    return (
-        <Newsletter_20250406_HegelSLQB1_Announcement_Email unsubscribeId="123" />
-    );
+    return <Newsletter_20251201_sPhil2026_Email unsubscribeId="123" />;
 }
