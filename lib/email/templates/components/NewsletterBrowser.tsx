@@ -11,23 +11,21 @@ import { Paragraph } from "lib/components/ui/Paragraph";
 import { Newsletter_20250926_SchellingAnnouncement_Web } from "lib/email/templates/Newsletter_20250926_SchellingAnnouncement";
 import { SubscribeToNewsletterForm } from "features/marketing/components/SubscribeToNewsletter";
 import { Typography } from "@mui/material";
+import { Newsletter_20250406_HegelSLQB1_Announcement_Web } from "../Newsletter_20250406_HegelSLQB1_Announcement";
 
 const EMAILS = [
     {
         id: "schelling-2025-09-26",
         title: "Schelling Announcement",
         subtitle: "September 26, 2025",
-        icon: <EmailOutlinedIcon fontSize="small" />,
         component: Newsletter_20250926_SchellingAnnouncement_Web,
     },
-    // Example for future templates:
-    // {
-    //     id: "kant-2025-10-10",
-    //     title: "Kant: Critique of Pure Reason",
-    //     subtitle: "October 10, 2025",
-    //     icon: <MarkEmailUnreadOutlinedIcon fontSize="small" />,
-    //     component: Newsletter_20251010_Kant_Web,
-    // },
+    {
+        id: "hegel-2025-04-06",
+        title: "Hegel Quality of Being Announcement",
+        subtitle: "April 6, 2025",
+        component: Newsletter_20250406_HegelSLQB1_Announcement_Web,
+    },
 ];
 
 type EmailId = (typeof EMAILS)[number]["id"];
@@ -41,7 +39,19 @@ export function NewsletterBrowser() {
     return (
         <div className="mt-8 flex w-full max-w-5xl gap-6">
             {/* Left menu */}
-            <aside className="w-64 shrink-0 rounded-2xl border backdrop-blur-sm">
+            <aside
+                className="
+                    sticky
+                    top-24
+                    h-[calc(100vh-8rem)]
+                    w-64
+                    shrink-0
+                    overflow-y-auto
+                    rounded-2xl
+                    border
+                    backdrop-blur-sm
+                "
+            >
                 <List
                     dense
                     subheader={
@@ -53,10 +63,15 @@ export function NewsletterBrowser() {
                                 Subscribe to our newsletter to stay up to date
                                 on new events.
                             </Typography>
-                            <div className="max-w-[500px] mt-2">
+                            <div className="mt-2">
                                 <SubscribeToNewsletterForm />
                             </div>
-                            Previous newsletters
+                            <Typography
+                                variant="overline"
+                                className="mt-3 block text-xs"
+                            >
+                                Previous newsletters
+                            </Typography>
                         </ListSubheader>
                     }
                 >
@@ -67,7 +82,7 @@ export function NewsletterBrowser() {
                             onClick={() => setSelectedId(email.id)}
                         >
                             <div className="mr-2 flex items-center">
-                                {email.icon}
+                                <EmailOutlinedIcon fontSize="small" />
                             </div>
                             <ListItemText
                                 primary={email.title}
@@ -87,7 +102,7 @@ export function NewsletterBrowser() {
             </aside>
 
             {/* Right preview */}
-            <main className="flex-1 overflow-auto rounded-2xl border  p-4 md:p-6">
+            <article className="flex-1 overflow-auto rounded-2xl border p-4 md:p-6">
                 {SelectedComponent ? (
                     <SelectedComponent />
                 ) : (
@@ -95,7 +110,7 @@ export function NewsletterBrowser() {
                         Select a newsletter from the list to preview it.
                     </Paragraph>
                 )}
-            </main>
+            </article>
         </div>
     );
 }
