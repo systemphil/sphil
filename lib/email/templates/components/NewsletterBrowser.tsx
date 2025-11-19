@@ -36,6 +36,17 @@ export function NewsletterBrowser() {
     const selectedEmail = EMAILS.find((email) => email.id === selectedId);
     const SelectedComponent = selectedEmail?.component ?? null;
 
+    const handleSelect = (id: EmailId) => {
+        setSelectedId(id);
+
+        if (typeof window !== "undefined") {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+            });
+        }
+    };
+
     return (
         <div className="mt-8 flex w-full max-w-5xl gap-6">
             {/* Left menu */}
@@ -79,7 +90,7 @@ export function NewsletterBrowser() {
                         <ListItemButton
                             key={email.id}
                             selected={email.id === selectedId}
-                            onClick={() => setSelectedId(email.id)}
+                            onClick={() => handleSelect(email.id)}
                         >
                             <div className="mr-2 flex items-center">
                                 <EmailOutlinedIcon fontSize="small" />
@@ -102,7 +113,7 @@ export function NewsletterBrowser() {
             </aside>
 
             {/* Right preview */}
-            <article className="flex-1 overflow-auto rounded-2xl border p-4 md:p-6">
+            <article className="flex-1 rounded-2xl border p-4 md:p-6">
                 {SelectedComponent ? (
                     <SelectedComponent />
                 ) : (
