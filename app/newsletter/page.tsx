@@ -14,7 +14,7 @@ export const metadata: Metadata = {
         title,
         description,
         type: "website",
-        url: "https://sphil.xyz/courses",
+        url: "https://sphil.xyz/newsletter",
     },
     twitter: {
         card: "summary_large_image",

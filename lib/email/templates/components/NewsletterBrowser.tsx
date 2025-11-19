@@ -6,7 +6,6 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-
 import { Paragraph } from "lib/components/ui/Paragraph";
 import { Newsletter_20250926_SchellingAnnouncement_Web } from "lib/email/templates/Newsletter_20250926_SchellingAnnouncement";
 import { SubscribeToNewsletterForm } from "features/marketing/components/SubscribeToNewsletter";
@@ -48,11 +47,11 @@ export function NewsletterBrowser() {
     };
 
     return (
-        <div className="mt-8 flex w-full max-w-5xl gap-6">
+        <div className="mt-8 flex justify-center w-full max-w-5xl gap-6 flex-wrap">
             {/* Left menu */}
             <aside
                 className="
-                    sticky
+                    sm:sticky
                     top-24
                     h-[calc(100vh-8rem)]
                     w-64
@@ -70,14 +69,15 @@ export function NewsletterBrowser() {
                             component="div"
                             className="!bg-transparent p-2 pt-3"
                         >
-                            <Typography variant="body2">
-                                Subscribe to our newsletter to stay up to date
-                                on new events.
+                            <Typography variant="body2" component="div">
+                                Subscribe to our newsletter to be the first to
+                                know about our activities.
                             </Typography>
                             <div className="mt-2">
                                 <SubscribeToNewsletterForm />
                             </div>
                             <Typography
+                                component="div"
                                 variant="overline"
                                 className="mt-3 block text-xs"
                             >
@@ -113,7 +113,7 @@ export function NewsletterBrowser() {
             </aside>
 
             {/* Right preview */}
-            <article className="flex-1 rounded-2xl border p-4 md:p-6">
+            <article className="flex-1 rounded-2xl border p-4 md:p-6 min-w-[290px]">
                 {SelectedComponent ? (
                     <SelectedComponent />
                 ) : (

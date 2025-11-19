@@ -17,6 +17,11 @@ export default {
         type: "page",
         display: "children",
     },
+    _newsletter: {
+        title: "Newsletter",
+        type: "page",
+        href: "/newsletter",
+    },
     courses: {
         display: "hidden",
     },
