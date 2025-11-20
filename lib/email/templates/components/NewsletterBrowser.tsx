@@ -71,7 +71,7 @@ export function NewsletterBrowser() {
                         >
                             <Typography variant="body2" component="div">
                                 Subscribe to our newsletter to be the first to
-                                know about our activities.
+                                know about what happens at sPhil.
                             </Typography>
                             <div className="mt-2">
                                 <SubscribeToNewsletterForm />
