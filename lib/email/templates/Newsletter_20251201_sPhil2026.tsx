@@ -1,8 +1,8 @@
-import { Section } from "@react-email/components";
+import { Img, Section } from "@react-email/components";
 import { EmailBaseLayout } from "./components/EmailBaseLayout";
 import { NewsletterWebLayout } from "./components/NewsLetterWebLayout";
 import { UnsubscribeNewsletter } from "./components/UnsubscribeNewsletter";
-import { EmailA, EmailH1, EmailP, EmailUl } from "./components/EmailHtml";
+import { EmailA, EmailH1, EmailP } from "./components/EmailHtml";
 
 const preview = `2026 Calendar`;
 
@@ -12,78 +12,104 @@ function Content() {
             <EmailH1>sPhil {preview}</EmailH1>
 
             <EmailP>
-                We&apos;ve been hard at work crafting this course, and
-                we&apos;re truly excited to share it with you. This is a deep
-                dive into one of the most profound works in philosophy, and we
-                couldn&apos;t be happier with what we have put together. So
-                without further ado:
+                Dear friends of the Logos, we are pleased to announce our course
+                plans for 2026.
             </EmailP>
 
             <EmailP>
-                <strong>Enrollment is now open for The Quality of Being</strong>{" "}
-                (part 1)—an in-depth course designed to guide you through one of
-                the most profound works in philosophy—Hegel&apos;s{" "}
-                <i>Science of Logic </i>. Over twelve weeks, you will explore
-                Hegel&apos;s dialectical method, uncover the foundations of
-                logic, metaphysics, epistemology and ontology, and engage in
-                rigorous discussions that will challenge and expand your
-                understanding of thought and reality itself.
+                As we continue our mission to Study the Great Texts, we are
+                thrilled to unveil four immersive, challenging, and rewarding
+                courses for the coming year. Our 2026 curriculum covers seminal
+                works from Ancient Greece through the Enlightenment and the
+                German Idealists, providing a rich, comprehensive intellectual
+                journey spanning the depths of reality, through the creative
+                potential of all living beings to the exuberant imaginative
+                genius of humanity.
             </EmailP>
 
-            <EmailP>
-                We will be examining closely Hegel&apos;s method of
-                presuppositionless thinking and interrogate the development of
-                the categories (or foundational ontological concepts) like
-                being, nothing, becoming, existence, quality, something, other,
-                being-for-other, being-in-itself, determination, constitution
-                and limit and every little nuance between. Truly, we will
-                mentally wrestle with the philosopher!
-            </EmailP>
+            <Img
+                src="https://storage.googleapis.com/sphil-static-assets/sPhil_2026.webp"
+                alt="sphil_2026_calendar"
+                width="400"
+                height="400"
+                className="mx-auto mb-4 rounded-md"
+            />
 
-            <EmailUl>
-                <li>📅 First seminar: April 6</li>
-                <li>📍 Where: Online via Zoom</li>
-                <li>
-                    🧑‍🏫 Instructor: Filip Niklas (assisted by Ahilleas Rokni)
-                </li>
-            </EmailUl>
-
-            <EmailP>
-                Choose the level of engagement that suits you: from self-study
-                with pre-recorded lectures to interactive live seminars and
-                private one-on-one sessions.
-            </EmailP>
-
-            <EmailP>
-                <strong>Guest Lecture by Professor Stephen Houlgate</strong> – a
-                world-renowned Hegel scholar. We&apos;re honored to welcome
-                Prof. Houlgate to our final seminar, where he will share his
-                profound insights into Hegel&apos;s philosophy. With decades of
-                scholarship and a deep understanding of the{" "}
-                <em>Science of Logic</em>, he will guide us through some of its
-                most challenging yet rewarding concepts. This is a rare
-                opportunity to engage with one of the leading thinkers in Hegel
-                studies—don&apos;t miss it!
-            </EmailP>
-
-            <EmailP>
-                <EmailA
-                    href="https://sphil.xyz/courses/science-of-logic-the-quality-of-being-part-1"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="text-blue-400 underline"
-                >
-                    Enroll now
+            <Section className="text-center">
+                <EmailA href="https://storage.googleapis.com/sphil-static-assets/sPhil_2026.webp">
+                    Click here to view the calendar in full
                 </EmailA>
-                &nbsp;to secure your place and join a community of deep
-                thinkers.
+            </Section>
+
+            <h4>📚 The 2026 Course Lineup</h4>
+
+            <EmailP>
+                We are honored to have a passionate and talented faculty lead
+                these explorations into some of the most enduring works of human
+                thought.
+            </EmailP>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Course Topic</th>
+                        <th>Duration (est)</th>
+                        <th>Instructor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong>Hegel’s Mechanism</strong>
+                        </td>
+                        <td>8-weeks</td>
+                        <td>Ahilleas Rokni</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>
+                                Plato’s <i>Gorgias</i>
+                            </strong>
+                        </td>
+                        <td>6-weeks</td>
+                        <td>Max Macken</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>
+                                Aristotle’s <i>On the Soul</i>
+                            </strong>
+                        </td>
+                        <td>8-weeks</td>
+                        <td>Filip Niklas</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>
+                                Milton’s <i>Paradise Lost</i>
+                            </strong>
+                        </td>
+                        <td>12-weeks</td>
+                        <td>Kenneth Solberg</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <EmailP>
+                Whether your interest lies in metaphysics, political philosophy,
+                poetry, or ethics, these courses promise deep engagement with
+                texts that continue to shape our understanding of the world.
             </EmailP>
 
             <EmailP>
-                Spots are limited—don&apos;t miss this opportunity to engage
-                with Hegel&apos;s Science of Logic in a structured and
-                transformative way!
+                Registration details, schedules, and specific course
+                descriptions will be released in due course (keep an eye out on
+                our media channels or this newsletter!). In the meantime, you
+                can review the full visual course map attached to this email!
+                Please note: Plans may be subject to change.
             </EmailP>
+
+            <EmailP>We look forward to studying alongside you in 2026.</EmailP>
 
             <EmailP>Yours Sincerely,</EmailP>
 

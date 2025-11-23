@@ -7,7 +7,10 @@ export function EmailP({
 }: React.HTMLAttributes<HTMLParagraphElement>) {
     return (
         <p
-            className={cn("text-gray-500 dark:text-gray-400 my-4", className)}
+            className={cn(
+                "text-gray-500 dark:text-gray-400 my-4 text-justify",
+                className
+            )}
             {...props}
         />
     );
