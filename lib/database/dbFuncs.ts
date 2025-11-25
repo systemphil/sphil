@@ -31,7 +31,14 @@ import { AUXILIARY_PRODUCTS_DEFAULTS } from "lib/config/auxiliaryProductDefaults
  * Calls the database to retrieve all courses.
  * @access ADMIN
  */
-export const dbGetAllCourses = () => withAdmin(() => prisma.course.findMany());
+export const dbGetAllCourses = () =>
+    withAdmin(() =>
+        prisma.course.findMany({
+            orderBy: {
+                createdAt: "desc",
+            },
+        })
+    );
 
 /**
  * Calls the database to retrieve all courses by owner userId.
@@ -45,6 +52,9 @@ export const dbGetAllCoursesByCreatorsOrTutors = (userId: string) =>
                     { creators: { some: { id: userId } } },
                     { assistants: { some: { id: userId } } },
                 ],
+            },
+            orderBy: {
+                createdAt: "desc",
             },
         });
     });
