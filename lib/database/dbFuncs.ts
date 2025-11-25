@@ -60,6 +60,9 @@ export const dbGetAllPublishedCourses = async () => {
                 where: {
                     published: true,
                 },
+                orderBy: {
+                    createdAt: "desc",
+                },
             });
         },
         [cacheKeys.allPublicCourses],
