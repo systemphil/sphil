@@ -1,7 +1,7 @@
-import { ScreenWrapper } from "lib/components/ui/ScreenWrapper";
 import { TITLE } from "lib/config/consts";
 import { Metadata } from "next";
-import { NewsletterBrowser } from "lib/email/templates/components/NewsletterBrowser";
+import { NEWSLETTERS } from "lib/email/data/newsletters";
+import { redirect } from "next/navigation";
 
 const title = `${TITLE} - Newsletter`;
 const description =
@@ -23,10 +23,14 @@ export const metadata: Metadata = {
     },
 };
 
-export default function NewsletterPage() {
+export default function NewsletterIndexPage() {
+    if (NEWSLETTERS.length > 0) {
+        redirect(`/newsletter/${NEWSLETTERS[0].id}`);
+    }
+
     return (
-        <ScreenWrapper className="flex flex-col justify-start md:justify-center items-center py-6">
-            <NewsletterBrowser />
-        </ScreenWrapper>
+        <div className="h-full flex items-center justify-center text-gray-500">
+            <p>No newsletters available.</p>
+        </div>
     );
 }

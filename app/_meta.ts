@@ -18,7 +18,7 @@ export default {
         display: "children",
     },
     _newsletter: {
-        title: "Newsletter",
+        title: "News",
         type: "page",
         href: "/newsletter",
     },
