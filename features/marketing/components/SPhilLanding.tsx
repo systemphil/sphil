@@ -10,11 +10,12 @@ import { Button, Typography } from "@mui/material";
 import { InfoCard } from "./InfoCard";
 import { PageWrapper } from "lib/components/ui/PageWrapper";
 import { Reviews } from "./Reviews";
-import { SubscribeToNewsletter } from "./SubscribeToNewsletter";
 import { PolyRhythmicSpiral } from "lib/components/animations/PolyRhythmicSpiral";
 import { BackgroundBoxes } from "lib/components/animations/BackgroundBoxes";
 import { EmbedTeacherProfile } from "features/editor/components/EmbedTeacherProfile";
 import { PointerHighlight } from "lib/components/ui/PointerHighlight";
+import { LatestNewsCard } from "lib/email/templates/components/LatestNewsCard";
+import { SubscribeToNewsletterForm } from "./SubscribeToNewsletter";
 
 export function SPhilLanding() {
     return (
@@ -267,7 +268,10 @@ function NewsletterSignUp() {
                 Sign up to receive updates on new courses, seminars, and other
                 events.
             </p>
-            <SubscribeToNewsletter />
+            <SubscribeToNewsletterForm />
+            <div className="mt-6">
+                <LatestNewsCard />
+            </div>
         </section>
     );
 }

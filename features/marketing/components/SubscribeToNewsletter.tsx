@@ -71,13 +71,14 @@ export const SubscribeToNewsletterForm = ({
                                 message: "Enter a valid email address",
                             },
                         })}
-                        className="pl-2 border border-gray-400 rounded-md text-slate-800 dark:text-slate-300"
+                        className="pl-2 py-1 border border-gray-400 rounded-md text-slate-800 dark:text-slate-300"
                     />
                 </div>
                 <Button
                     disabled={isPending || status === "success"}
                     type="submit"
                     variant="contained"
+                    size="small"
                     className={status === "error" ? "!bg-red-500" : ""}
                 >
                     {status === "error" && "Error. Retry"}
