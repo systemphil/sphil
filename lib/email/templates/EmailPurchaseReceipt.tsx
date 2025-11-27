@@ -1,4 +1,4 @@
-import { Section } from "@react-email/components";
+import { Link, Section } from "@react-email/components";
 import { OrderInformation } from "./components/OrderInformation";
 import { TermsApply } from "./components/TermsApply";
 import { EmailBaseLayout } from "./components/EmailBaseLayout";
@@ -12,9 +12,6 @@ type PurchaseReceiptEmailProps = {
     order: { id: string; createdAt: Date; pricePaidInCents: number };
     courseLink: string;
 };
-
-// ! BUG where is this coming from??
-// Warning: Each child in a list should have a unique "key" prop. See https://reactjs.org/link/warning-keys for more information.
 
 export function EmailPurchaseReceipt({
     product,
@@ -32,8 +29,12 @@ export function EmailPurchaseReceipt({
                     Thank you for your purchase!
                 </h1>
                 <p className="text-gray-500 my-4">
-                    You can access your course by clicking the button below,
-                    from the course page or your account page.
+                    You can access your course by clicking the button below, or
+                    your{" "}
+                    <Link href={"https://sphil.xyz/my-courses"}>
+                        My Courses
+                    </Link>{" "}
+                    page.
                 </p>
                 <p className="text-gray-500 my-4">
                     We hope you will enjoy the course and develop your mind to
