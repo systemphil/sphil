@@ -1,11 +1,12 @@
-FROM oven/bun:1.2.23 AS installer
+FROM oven/bun:1.3.3 AS base
 WORKDIR /app
+
+FROM base AS installer
 COPY prisma ./
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile 
 
-FROM oven/bun:1.2.23 AS builder
-WORKDIR /app
+FROM base AS builder
 COPY --from=installer /app/node_modules/ /app/node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -23,8 +24,7 @@ RUN --mount=type=secret,id=sec_database_url \
 RUN echo "const dns = require('node:dns');" >> ./.next/standalone/server.js \
     && echo "dns.setDefaultResultOrder('ipv4first');" >> ./.next/standalone/server.js
 
-FROM oven/bun:1.2.23 AS runner
-WORKDIR /app
+FROM base AS runner
 
 ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs
