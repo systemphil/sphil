@@ -24,11 +24,7 @@ export default async function AdminSeminarCohortDetailsNew({
         id: seminarCohortId,
     });
 
-    if (
-        seminarCohortAndSeminars &&
-        seminarCohortAndSeminars.details &&
-        seminarCohortAndSeminars.details.id
-    ) {
+    if (seminarCohortAndSeminars?.details?.id) {
         // If CourseDetails already exists, go to that.
         redirect(
             `/admin/courses/${courseId}/seminar-cohort/${seminarCohortAndSeminars.id}/seminar-cohort-details/${seminarCohortAndSeminars.details.id}`
@@ -48,7 +44,7 @@ export default async function AdminSeminarCohortDetailsNew({
 
     const result = await dbUpsertSeminarCohortDetailsById(newCourseDetails);
 
-    if (result && result.id) {
+    if (result?.id) {
         // If new LessonContent entry was created successfully, push user to route.
         redirect(
             `/admin/courses/${courseId}/seminar-cohort/${seminarCohortAndSeminars.id}/seminar-cohort-details/${result.id}`

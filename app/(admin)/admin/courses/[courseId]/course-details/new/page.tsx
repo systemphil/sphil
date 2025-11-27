@@ -12,16 +12,16 @@ export const metadata = {};
 export default async function AdminCourseDetailsNew({
     params,
 }: {
-    params: { courseId: string };
+    params: Promise<{ courseId: string }>;
 }) {
-    const courseId = params.courseId;
+    const courseId = (await params).courseId;
     if (typeof courseId !== "string") {
         throw new Error("missing course or lesson id");
     }
 
     const course = await dbGetCourseAndDetailsAndLessonsById(courseId);
 
-    if (course && course.details && course.details.id) {
+    if (course?.details?.id) {
         // If CourseDetails already exists, go to that.
         redirect(
             `/admin/courses/${courseId}/course-details/${course.details.id}`
@@ -34,7 +34,7 @@ export default async function AdminCourseDetailsNew({
 
     const result = await dbUpsertCourseDetailsById(newCourseDetails);
 
-    if (result && result.id) {
+    if (result?.id) {
         // If new LessonContent entry was created successfully, push user to route.
         redirect(`/admin/courses/${courseId}/course-details/${result.id}`);
     }

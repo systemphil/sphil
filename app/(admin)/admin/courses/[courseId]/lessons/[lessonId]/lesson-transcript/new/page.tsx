@@ -23,7 +23,7 @@ export default async function AdminLessonTranscriptNew({
 
     const lesson = await dbGetLessonAndRelationsById(lessonId);
 
-    if (lesson && lesson.transcript && lesson.transcript.id) {
+    if (lesson?.transcript?.id) {
         // If lessonContent already exists, push to that.
         redirect(
             `/admin/courses/${courseId}/lessons/${lessonId}/lesson-material/${lesson.transcript.id}`
@@ -37,7 +37,7 @@ export default async function AdminLessonTranscriptNew({
     const newLessonTranscript =
         await dbUpsertLessonTranscriptById(newLessonDetails);
 
-    if (newLessonTranscript && newLessonTranscript.id) {
+    if (newLessonTranscript?.id) {
         // If new LessonContent entry was created successfully, push user to route.
         redirect(
             `/admin/courses/${courseId}/lessons/${lessonId}/lesson-material/${newLessonTranscript.id}`
