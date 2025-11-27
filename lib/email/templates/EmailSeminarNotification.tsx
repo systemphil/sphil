@@ -5,6 +5,7 @@ import {
     Section,
     Text,
     Button,
+    Link,
 } from "@react-email/components";
 import { Product } from "lib/stripe/stripeFuncs";
 import { TermsApply } from "./components/TermsApply";
@@ -68,8 +69,13 @@ export function EmailSeminarNotification({
                                 </Button>
                                 <Text className="text-sm font-bold">
                                     🏺 Seminar link will follow by e-mail nearer
-                                    the start date or under Seminar Cohort
-                                    details (available from the Course Page).
+                                    the start date. It will also be made
+                                    available under Seminar Cohort details
+                                    accessible from the{" "}
+                                    <Link href={"https://sphil.xyz/my-courses"}>
+                                        My Courses
+                                    </Link>{" "}
+                                    page.
                                 </Text>
                             </div>
                         </Row>
