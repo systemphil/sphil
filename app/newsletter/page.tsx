@@ -1,5 +1,5 @@
 import { TITLE } from "lib/config/consts";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { NEWSLETTERS } from "lib/email/data/newsletters";
 import { redirect } from "next/navigation";
 

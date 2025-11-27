@@ -10,7 +10,7 @@ import {
 import toast from "react-hot-toast";
 import { actionDeleteModelEntry } from "../server/actions";
 import { useState } from "react";
-import { ModelName } from "lib/server/ctrl";
+import type { ModelName } from "lib/server/ctrl";
 
 export function CourseCardDeleteButton({
     id,

@@ -1,6 +1,6 @@
 "use client";
 
-import { Theme, createTheme, darkScrollbar } from "@mui/material";
+import { type Theme, createTheme, darkScrollbar } from "@mui/material";
 import { MuiLinkOverride } from "lib/components/navigation/MuiLinkOverride";
 
 const acidGreen = "#0bda84";

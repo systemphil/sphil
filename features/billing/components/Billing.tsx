@@ -4,7 +4,7 @@ import { TableOfSeminarCohorts } from "features/courses/components/TableOfSemina
 import { Loading } from "lib/components/animations/Loading";
 import { Maintenance } from "lib/components/Maintenance";
 import { CardShell } from "lib/components/ui/CardShell";
-import { dbGetUserPurchasedCourses } from "lib/database/dbFuncs";
+import type { dbGetUserPurchasedCourses } from "lib/database/dbFuncs";
 import Image from "next/image";
 import { Suspense } from "react";
 

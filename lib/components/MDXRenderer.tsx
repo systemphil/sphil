@@ -3,8 +3,8 @@
 import { run } from "@mdx-js/mdx";
 import { Fragment, useEffect, useState } from "react";
 import * as runtime from "react/jsx-runtime";
-import { type MDXModule } from "mdx/types";
-import { MDXCompilerReturnType } from "lib/server/mdxCompiler";
+import type { MDXModule } from "mdx/types";
+import type { MDXCompilerReturnType } from "lib/server/mdxCompiler";
 import { Loading } from "./animations/Loading";
 import { EmbedTeacherProfile } from "features/editor/components/EmbedTeacherProfile";
 import { EmbedYT } from "./ui/EmbedYT";

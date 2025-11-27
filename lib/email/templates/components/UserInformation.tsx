@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import type { User } from "@prisma/client";
 import { Column, Row, Section, Text } from "@react-email/components";
 
 type OrderInformationProps = {

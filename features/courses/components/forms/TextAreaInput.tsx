@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormContext, RegisterOptions } from "react-hook-form";
+import { useFormContext, type RegisterOptions } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
 import { Field } from "./Field";
 import { Label } from "./Label";

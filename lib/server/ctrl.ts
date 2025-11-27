@@ -1,4 +1,4 @@
-import { SeminarVideo, Video } from "@prisma/client";
+import type { SeminarVideo, Video } from "@prisma/client";
 import { auth } from "lib/auth/authConfig";
 import { bucketDeleteVideoFile } from "lib/bucket/bucketFuncs";
 import {
@@ -25,7 +25,7 @@ import {
     dbUpdateSeminarCohort,
     dbUpdateUserStripeCustomerId,
     dbUpsertCourseById,
-    DbUpsertCourseByIdProps,
+    type DbUpsertCourseByIdProps,
 } from "lib/database/dbFuncs";
 import {
     stripeArchivePrice,

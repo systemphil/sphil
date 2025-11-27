@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Heading } from "lib/components/ui/Heading";
-import { ModelName } from "lib/server/ctrl";
+import type { ModelName } from "lib/server/ctrl";
 import { actionDeleteModelEntry } from "../server/actions";
 import toast from "react-hot-toast";
 import {

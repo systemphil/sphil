@@ -4,7 +4,7 @@ import { cn } from "lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { Button, Box, Typography } from "@mui/material";
-import { JSX } from "react";
+import type { JSX } from "react";
 
 type InfoCardProps = {
     title: string;

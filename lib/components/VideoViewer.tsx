@@ -185,6 +185,7 @@ export const VideoViewer = ({
                 <div
                     className={`w-full h-full ${isFullscreen ? "object-contain" : "object-cover"}`}
                 >
+                    {/** biome-ignore lint/a11y/useMediaCaption: <Not applicable> */}
                     <video
                         ref={videoRef}
                         key={videoUrl}

@@ -40,7 +40,6 @@ export function Stars({ theme }: StarsProps) {
         const particleCount = 40;
         const flareCount = 10;
         const motion = 0.05;
-        const tilt = 0.05;
         const particleSizeBase = 1;
         const particleSizeMultiplier = 0.5;
         const flareSizeBase = 100;
@@ -62,32 +61,29 @@ export function Stars({ theme }: StarsProps) {
         const flicker = true;
         const flickerSmoothing = 15; // higher = smoother flicker
         const blurSize = 0;
-        const orbitTilt = true;
         const randomMotion = true;
         const noiseLength = 1500;
         const noiseStrength = 1;
 
         const canvas = document.getElementById("stars") as HTMLCanvasElement; // Further specify generic HTMLElement to Canvas
         //orbits = document.getElementById('orbits')
-        const context = canvas!.getContext("2d");
+        const context = canvas?.getContext("2d");
         const mouse = { x: 0, y: 0 };
-        let m = {};
-        let r = 0;
-        let c = 1000; // multiplier for delaunay points, since floats too small can mess up the algorithm
+        const c = 1000; // multiplier for delaunay points, since floats too small can mess up the algorithm
         let n = 0;
-        let nAngle = (Math.PI * 2) / noiseLength;
-        let nRad = 100;
-        let nScale = 0.5;
+        const nAngle = (Math.PI * 2) / noiseLength;
+        const nRad = 100;
         let nPos = { x: 0, y: 0 };
-        let points: number[][] = [];
-        let vertices: string | any[] = [];
-        let triangles: any[][] = [];
-        let links: any[] = [];
-        let particles: any[] = [];
-        let flares: any[] = [];
+        const points: number[][] = [];
+        // biome-ignore lint/suspicious/noExplicitAny: <Unsure>
+        let vertices: any[] = [];
+        const triangles: number[][] = [];
+        const links: Link[] = [];
+        const particles: Particle[] = [];
+        const flares: Flare[] = [];
 
         function init() {
-            let i: any, j: any, k: any;
+            let i: number, j: number, k: number;
 
             interface WindowExtended extends Window {
                 requestAnimFrame?: (callback: FrameRequestCallback) => number;
@@ -101,16 +97,13 @@ export function Stars({ theme }: StarsProps) {
 
             // requestAnimFrame polyfill
             const customWindow: WindowExtended = window;
-            customWindow.requestAnimFrame = (function () {
-                return (
-                    customWindow.requestAnimationFrame ||
-                    customWindow.webkitRequestAnimationFrame ||
-                    customWindow.mozRequestAnimationFrame ||
-                    function (callback) {
-                        window.setTimeout(callback, 1000 / 60);
-                    }
-                );
-            })();
+            customWindow.requestAnimFrame = (() =>
+                customWindow.requestAnimationFrame ||
+                customWindow.webkitRequestAnimationFrame ||
+                customWindow.mozRequestAnimationFrame ||
+                ((callback) => {
+                    window.setTimeout(callback, 1000 / 60);
+                }))();
 
             resize();
 
@@ -119,7 +112,7 @@ export function Stars({ theme }: StarsProps) {
 
             // Create particle positions
             for (i = 0; i < particleCount; i++) {
-                var p = new Particle();
+                const p = new Particle();
                 particles.push(p);
                 points.push([p.x * c, p.y * c]);
             }
@@ -134,11 +127,11 @@ export function Stars({ theme }: StarsProps) {
             // Create an array of "triangles" (groups of 3 indices)
             var tri = [];
             for (i = 0; i < vertices.length; i++) {
-                if (tri.length == 3) {
+                if (tri.length === 3) {
                     triangles.push(tri);
                     tri = [];
                 }
-                // @ts-ignore
+                // @ts-expect-error
                 tri.push(vertices[i]);
             }
             //console.log(JSON.stringify(triangles));
@@ -151,10 +144,10 @@ export function Stars({ theme }: StarsProps) {
                     k = triangles[j].indexOf(i);
                     // If it is, add its neighbors to the particles contacts list
                     if (k !== -1) {
-                        triangles[j].forEach(function (value, index, array) {
+                        triangles[j].forEach((value) => {
                             if (
                                 value !== i &&
-                                particles[i].neighbors.indexOf(value) == -1
+                                particles[i].neighbors.indexOf(value) === -1
                             ) {
                                 particles[i].neighbors.push(value);
                             }
@@ -180,8 +173,8 @@ export function Stars({ theme }: StarsProps) {
             ) {
                 window.addEventListener(
                     "deviceorientation",
-                    function (e) {
-                        if (e && e.gamma && e.beta) {
+                    (e) => {
+                        if (e?.gamma && e.beta) {
                             mouse.x =
                                 canvas.clientWidth / 2 -
                                 (e.gamma / 90) * (canvas.clientWidth / 2) * 2;
@@ -196,7 +189,7 @@ export function Stars({ theme }: StarsProps) {
                 );
             } else {
                 // Mouse move listener
-                document.body.addEventListener("mousemove", function (e) {
+                document.body.addEventListener("mousemove", (e) => {
                     //console.log('moved');
                     mouse.x = e.clientX;
                     mouse.y = e.clientY;
@@ -241,7 +234,7 @@ export function Stars({ theme }: StarsProps) {
 
             if (renderParticles) {
                 // Render particles
-                for (var i = 0; i < particleCount; i++) {
+                for (let i = 0; i < particleCount; i++) {
                     particles[i].render();
                 }
             }
@@ -249,19 +242,19 @@ export function Stars({ theme }: StarsProps) {
             if (renderMesh) {
                 // Render all lines
                 context.beginPath();
-                for (var v = 0; v < vertices.length - 1; v++) {
+                for (let v = 0; v < vertices.length - 1; v++) {
                     // Splits the array into triplets
                     if ((v + 1) % 3 === 0) {
                         continue;
                     }
 
-                    var p1 = particles[vertices[v]],
-                        p2 = particles[vertices[v + 1]];
+                    const p1 = particles[vertices[v]];
+                    const p2 = particles[vertices[v + 1]];
 
                     //console.log('Line: '+p1.x+','+p1.y+'->'+p2.x+','+p2.y);
 
-                    var pos1 = position(p1.x, p1.y, p1.z),
-                        pos2 = position(p2.x, p2.y, p2.z);
+                    const pos1 = position(p1.x, p1.y, p1.z);
+                    const pos2 = position(p2.x, p2.y, p2.z);
 
                     context.moveTo(pos1.x, pos1.y);
                     context.lineTo(pos2.x, pos2.y);
@@ -274,15 +267,15 @@ export function Stars({ theme }: StarsProps) {
 
             if (renderLinks) {
                 // Possibly start a new link
-                if (random(0, linkChance) == linkChance) {
-                    var length = random(linkLengthMin, linkLengthMax);
-                    var start = random(0, particles.length - 1);
+                if (random(0, linkChance) === linkChance) {
+                    const length = random(linkLengthMin, linkLengthMax);
+                    const start = random(0, particles.length - 1);
                     startLink(start, length);
                 }
 
                 // Render existing links
                 // Iterate in reverse so that removing items doesn't affect the loop
-                for (var l = links.length - 1; l >= 0; l--) {
+                for (let l = links.length - 1; l >= 0; l--) {
                     if (links[l] && !links[l].finished) {
                         links[l].render();
                     } else {
@@ -293,7 +286,7 @@ export function Stars({ theme }: StarsProps) {
 
             if (renderFlares) {
                 // Render flares
-                for (var j = 0; j < flareCount; j++) {
+                for (let j = 0; j < flareCount; j++) {
                     flares[j].render();
                 }
             }
@@ -326,7 +319,7 @@ export function Stars({ theme }: StarsProps) {
             color: string;
             opacity: number;
             flicker: number;
-            neighbors: any[];
+            neighbors: number[];
 
             constructor() {
                 this.x = random(-0.1, 1.1, true);
@@ -346,7 +339,7 @@ export function Stars({ theme }: StarsProps) {
                     o = this.opacity;
 
                 if (flicker) {
-                    var newVal = random(-0.5, 0.5, true);
+                    const newVal = random(-0.5, 0.5, true);
                     this.flicker += (newVal - this.flicker) / flickerSmoothing;
                     if (this.flicker > 0.5) this.flicker = 0.5;
                     if (this.flicker < -0.5) this.flicker = -0.5;
@@ -457,26 +450,26 @@ export function Stars({ theme }: StarsProps) {
                 // 2. Fade out
                 // 3. Finished (delete me)
 
-                var i, p, pos, points;
+                let i: number,
+                    p: Particle,
+                    pos: { x: number; y: number },
+                    points: number[][];
 
                 switch (this.stage) {
                     // VERTEX COLLECTION STAGE
-                    case 0:
+                    case 0: {
                         // Grab the last member of the link
-                        var last = particles[this.verts[this.verts.length - 1]];
+                        const last =
+                            particles[this.verts[this.verts.length - 1]];
                         //console.log(JSON.stringify(last));
-                        if (
-                            last &&
-                            last.neighbors &&
-                            last.neighbors.length > 0
-                        ) {
+                        if (last?.neighbors && last.neighbors.length > 0) {
                             // Grab a random neighbor
-                            var neighbor =
+                            const neighbor =
                                 last.neighbors[
                                     random(0, last.neighbors.length - 1)
                                 ];
                             // If we haven't seen that particle before, add it to the link
-                            if (this.verts.indexOf(neighbor) == -1) {
+                            if (this.verts.indexOf(neighbor) === -1) {
                                 this.verts.push(neighbor);
                             }
                             // If we have seen that particle before, we'll just wait for the next frame
@@ -489,7 +482,7 @@ export function Stars({ theme }: StarsProps) {
                         if (this.verts.length >= this.length) {
                             // Calculate all distances at once
                             for (i = 0; i < this.verts.length - 1; i++) {
-                                var p1 = particles[this.verts[i]],
+                                const p1 = particles[this.verts[i]],
                                     p2 = particles[this.verts[i + 1]],
                                     dx = p1.x - p2.x,
                                     dy = p1.y - p2.y,
@@ -504,6 +497,7 @@ export function Stars({ theme }: StarsProps) {
                             this.stage = 1;
                         }
                         break;
+                    }
 
                     // RENDER LINE ANIMATION STAGE
                     case 1:
@@ -518,11 +512,11 @@ export function Stars({ theme }: StarsProps) {
                                 points.push([pos.x, pos.y]);
                             }
 
-                            var linkSpeedRel =
+                            const linkSpeedRel =
                                 linkSpeed * 0.00001 * canvas.width;
                             this.traveled += linkSpeedRel;
-                            var d = this.distances[this.linked.length - 1];
-                            // Calculate last point based on linkSpeed and distance travelled to next point
+                            const d = this.distances[this.linked.length - 1];
+                            // Calculate last point based on linkSpeed and distance traveled to next point
                             if (this.traveled >= d) {
                                 this.traveled = 0;
                                 // We've reached the next point, add coordinates to array
@@ -543,9 +537,9 @@ export function Stars({ theme }: StarsProps) {
                                     this.stage = 2;
                                 }
                             } else {
-                                // We're still travelling to the next point, get coordinates at travel distance
+                                // We're still traveling to the next point, get coordinates at travel distance
                                 // http://math.stackexchange.com/a/85582
-                                var a =
+                                const a =
                                         particles[
                                             this.linked[this.linked.length - 1]
                                         ],
@@ -581,7 +575,7 @@ export function Stars({ theme }: StarsProps) {
 
                                 // Render full link between all vertices and fade over time
                                 points = [];
-                                var alpha =
+                                const alpha =
                                     (1 - this.fade / linkFade) * linkOpacity;
                                 for (i = 0; i < this.verts.length; i++) {
                                     p = particles[this.verts[i]];
@@ -602,7 +596,6 @@ export function Stars({ theme }: StarsProps) {
                         break;
 
                     // FINISHED STAGE
-                    case 3:
                     default:
                         this.finished = true;
                         break;
@@ -616,7 +609,7 @@ export function Stars({ theme }: StarsProps) {
                     if (!context) return;
                     context.globalAlpha = alpha;
                     context.beginPath();
-                    for (var i = 0; i < points.length - 1; i++) {
+                    for (let i = 0; i < points.length - 1; i++) {
                         context.moveTo(points[i][0], points[i][1]);
                         context.lineTo(points[i + 1][0], points[i + 1][1]);
                     }

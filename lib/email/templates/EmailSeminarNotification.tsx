@@ -7,7 +7,7 @@ import {
     Button,
     Link,
 } from "@react-email/components";
-import { Product } from "lib/stripe/stripeFuncs";
+import type { Product } from "lib/stripe/stripeFuncs";
 import { TermsApply } from "./components/TermsApply";
 import { EmailBaseLayout } from "./components/EmailBaseLayout";
 

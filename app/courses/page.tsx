@@ -4,7 +4,7 @@ import { Loading } from "lib/components/animations/Loading";
 import { Heading } from "lib/components/ui/Heading";
 import { PageWrapper } from "lib/components/ui/PageWrapper";
 import { dbGetAllPublishedCourses } from "lib/database/dbFuncs";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { Suspense } from "react";
 
 const title = "sPhil Courses";

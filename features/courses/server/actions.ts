@@ -20,7 +20,7 @@ import {
     ctrlCreateOrUpdateCourse,
     ctrlDeleteModelEntry,
     ctrlUpdateSeminarCohortPrices,
-    ModelName,
+    type ModelName,
 } from "lib/server/ctrl";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";

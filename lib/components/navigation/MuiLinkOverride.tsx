@@ -1,5 +1,5 @@
 import NextLink from "next/link";
-import React from "react";
+import type React from "react";
 
 /**
  * We use this component as a default `component` prop for links and button links in our theme.

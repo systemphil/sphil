@@ -1,4 +1,4 @@
-import { Seminar } from "@prisma/client";
+import type { Seminar } from "@prisma/client";
 import { auth } from "lib/auth/authConfig";
 import { Heading } from "lib/components/ui/Heading";
 import {

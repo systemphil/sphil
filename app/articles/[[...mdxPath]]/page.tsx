@@ -2,7 +2,7 @@
 
 import { DESCRIPTION, OG_IMAGES, TITLE } from "lib/config/consts";
 import { KEYWORDS } from "lib/config/keywords";
-import { $NextraMetadata } from "nextra";
+import type { $NextraMetadata } from "nextra";
 import { useMDXComponents } from "nextra-theme-docs";
 import { generateStaticParamsFor, importPage } from "nextra/pages";
 

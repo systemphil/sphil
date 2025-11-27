@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { SeminarVideo, Video } from "@prisma/client";
+import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import type { SeminarVideo, Video } from "@prisma/client";
 import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { sleep } from "lib/utils";

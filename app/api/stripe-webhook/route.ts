@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { getStripe } from "lib/stripe/stripeInit";
 import { handleSessionCompleted } from "lib/stripe/stripeFuncs";
 

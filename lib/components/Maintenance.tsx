@@ -1,4 +1,4 @@
-import { $Enums } from "@prisma/client";
+import type { $Enums } from "@prisma/client";
 import {
     AutoFixHighOutlined,
     ConstructionOutlined,

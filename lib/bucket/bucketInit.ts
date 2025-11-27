@@ -1,5 +1,5 @@
 import { Storage } from "@google-cloud/storage";
-import { env } from "process";
+import { env } from "node:process";
 
 /* cSpell:disable */
 

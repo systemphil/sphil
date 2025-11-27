@@ -1,7 +1,7 @@
 "use client";
 
-import { ReactNode, useId, useOptimistic, useTransition } from "react";
-import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { type ReactNode, useId, useOptimistic, useTransition } from "react";
+import { DndContext, type DragEndEvent } from "@dnd-kit/core";
 import {
     arrayMove,
     SortableContext,

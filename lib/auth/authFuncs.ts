@@ -1,6 +1,6 @@
-import { Session } from "next-auth";
+import type { Session } from "next-auth";
 import { auth } from "./authConfig";
-import { dbGetCourseAndDetailsAndLessonsById } from "lib/database/dbFuncs";
+import type { dbGetCourseAndDetailsAndLessonsById } from "lib/database/dbFuncs";
 
 /**
  * Checks the user's authentication session for admin access.

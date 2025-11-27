@@ -122,7 +122,7 @@ function FooterContent() {
     };
 
     return (
-        <div className="w-full" aria-labelledby="footer-heading">
+        <div className="w-full">
             <h2 id="footer-heading" className="sr-only">
                 Footer
             </h2>
@@ -132,10 +132,7 @@ function FooterContent() {
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 md:gap-8">
                             <div className="mt-12 md:mt-0!">
                                 <FooterHeader>Resources</FooterHeader>
-                                <ul
-                                    role="list"
-                                    className="mt-4 space-y-1.5 list-none ml-0"
-                                >
+                                <ul className="mt-4 space-y-1.5 list-none ml-0">
                                     {navigation.resources.map((item) => (
                                         <li key={item.name}>
                                             <FooterLink href={item.href}>
@@ -147,10 +144,7 @@ function FooterContent() {
                             </div>
                             <div className="mt-12 md:mt-0!">
                                 <FooterHeader>Hegel</FooterHeader>
-                                <ul
-                                    role="list"
-                                    className="mt-4 space-y-1.5 list-none ml-0"
-                                >
+                                <ul className="mt-4 space-y-1.5 list-none ml-0">
                                     {navigation.hegel.map((item) => (
                                         <li key={item.name}>
                                             <FooterLink href={item.href}>
@@ -162,10 +156,7 @@ function FooterContent() {
                             </div>
                             <div className="mt-12 md:mt-0!">
                                 <FooterHeader>Kant</FooterHeader>
-                                <ul
-                                    role="list"
-                                    className="mt-4 space-y-1.5 list-none ml-0"
-                                >
+                                <ul className="mt-4 space-y-1.5 list-none ml-0">
                                     {navigation.kant.map((item) => (
                                         <li key={item.name}>
                                             <FooterLink href={item.href}>
@@ -177,10 +168,7 @@ function FooterContent() {
                             </div>
                             <div className="mt-12 md:mt-0!">
                                 <FooterHeader>About</FooterHeader>
-                                <ul
-                                    role="list"
-                                    className="mt-4 space-y-1.5 list-none ml-0"
-                                >
+                                <ul className="mt-4 space-y-1.5 list-none ml-0">
                                     {navigation.company.map((item) => (
                                         <li key={item.name}>
                                             <FooterLink href={item.href}>
@@ -192,10 +180,7 @@ function FooterContent() {
                             </div>
                             <div className="mt-12 md:mt-0!">
                                 <FooterHeader>Legal</FooterHeader>
-                                <ul
-                                    role="list"
-                                    className="mt-4 space-y-1.5 list-none ml-0"
-                                >
+                                <ul className="mt-4 space-y-1.5 list-none ml-0">
                                     <div className="absolute w-[250px]">
                                         <dialog id="cookie-dialog">
                                             <div className="flex flex-col items-center justify-center max-w-md shadow p-4 rounded-md">
@@ -223,6 +208,7 @@ function FooterContent() {
                                             </FooterLink>
                                         </li>
                                     ))}
+                                    {/** biome-ignore lint/a11y/useKeyWithClickEvents: <Not applicable> */}
                                     <li
                                         key="cookie-removal"
                                         onClick={() => handleClearCookies()}

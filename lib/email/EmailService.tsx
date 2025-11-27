@@ -2,7 +2,7 @@ import "server-only";
 import { dbGetUserData } from "lib/database/dbFuncs";
 import { resend } from "./emailInit";
 import { EmailPurchaseAdminNotification } from "./templates/EmailPurchaseNotification";
-import {
+import type {
     Order,
     Product,
     StripeCheckoutSessionMetadata,
@@ -30,9 +30,9 @@ export class EmailService {
     }
 
     public static async adminAlert({ message }: { message: string }) {
-        await this.resend.emails.send({
-            from: `No Reply <${this.getSenderEmail()}>`,
-            to: this.getAdminEmail(),
+        await EmailService.resend.emails.send({
+            from: `No Reply <${EmailService.getSenderEmail()}>`,
+            to: EmailService.getAdminEmail(),
             subject: `🚨 sPhil Server Error`,
             text: message,
             html: `<div><pre>${message}</pre><br /><br />Timestamp: ${new Date().toLocaleDateString()}</div>`,
@@ -49,8 +49,8 @@ export class EmailService {
         product: Product;
     }) {
         try {
-            await this.resend.emails.send({
-                from: `No Reply <${this.getSenderEmail()}>`,
+            await EmailService.resend.emails.send({
+                from: `No Reply <${EmailService.getSenderEmail()}>`,
                 to: customerEmail,
                 subject: `Seminar Information - ${product.name}`,
                 react: (
@@ -61,7 +61,7 @@ export class EmailService {
                 ),
             });
         } catch (e) {
-            await this.adminAlert({
+            await EmailService.adminAlert({
                 message: JSON.stringify(e, null, 2),
             });
         }
@@ -79,8 +79,8 @@ export class EmailService {
         product: Product;
     }) {
         try {
-            await this.resend.emails.send({
-                from: `No Reply <${this.getSenderEmail()}>`,
+            await EmailService.resend.emails.send({
+                from: `No Reply <${EmailService.getSenderEmail()}>`,
                 to: customerEmail,
                 subject: `Order Confirmation - ${product.name}`,
                 react: (
@@ -93,7 +93,7 @@ export class EmailService {
                 ),
             });
         } catch (e) {
-            await this.adminAlert({
+            await EmailService.adminAlert({
                 message: JSON.stringify(e, null, 2),
             });
         }
@@ -113,16 +113,16 @@ export class EmailService {
         const user = await dbGetUserData(userId);
 
         if (!user) {
-            await this.adminAlert({
+            await EmailService.adminAlert({
                 message:
                     "Failed to get user during adminSendPurchaseNotification",
             });
             return;
         }
 
-        await this.resend.emails.send({
-            from: `No Reply <${this.getSenderEmail()}>`,
-            to: this.getAdminEmail(),
+        await EmailService.resend.emails.send({
+            from: `No Reply <${EmailService.getSenderEmail()}>`,
+            to: EmailService.getAdminEmail(),
             subject: `New Purchase $${order.pricePaidInCents / 100} - ${
                 product.name
             } - ${user.email}`,

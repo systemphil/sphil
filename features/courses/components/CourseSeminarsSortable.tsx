@@ -1,6 +1,6 @@
 "use client";
 
-import { Seminar } from "@prisma/client";
+import type { Seminar } from "@prisma/client";
 import { SortableItem, SortableList } from "lib/components/SortableList";
 import { CourseMaterialCard } from "./CourseMaterialCard";
 import { actionUpdateSeminarOrder } from "../server/actions";

@@ -31,7 +31,7 @@ export async function actionSubscribeToNewsletter(
             success: true,
             message: "Successfully subscribed!",
         };
-    } catch (error) {
+    } catch {
         return {
             success: false,
             message: "Email may already be subscribed",

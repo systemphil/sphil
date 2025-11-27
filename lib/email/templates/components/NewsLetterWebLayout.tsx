@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { imgCenterStyle } from "lib/email/templates/emailUtils";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 export function NewsletterWebLayout({ children }: { children: ReactNode }) {
     return (

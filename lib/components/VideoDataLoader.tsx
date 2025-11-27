@@ -1,4 +1,4 @@
-import { SeminarVideo, Video } from "@prisma/client";
+import type { SeminarVideo, Video } from "@prisma/client";
 import { VideoViewer } from "./VideoViewer";
 import { bucketGenerateReadSignedUrl } from "lib/bucket/bucketFuncs";
 

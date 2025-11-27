@@ -1,6 +1,6 @@
 "use client";
 
-import { FormProvider, useForm, SubmitHandler } from "react-hook-form";
+import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useState } from "react";
@@ -13,9 +13,9 @@ import { SubmitInput } from "./SubmitInput";
 import { ImageFileInput } from "./ImageFileInput";
 import { DateTimeInput } from "./DateTimeInput";
 import { sleep } from "lib/utils";
-import { Course } from "@prisma/client";
+import type { Course } from "@prisma/client";
 import { actionUpsertCourse } from "features/courses/server/actions";
-import { DbUpsertCourseByIdProps } from "lib/database/dbFuncs";
+import type { DbUpsertCourseByIdProps } from "lib/database/dbFuncs";
 import { actionUploadImage } from "lib/server/actions";
 import { Alert, Button } from "@mui/material";
 import dayjs from "dayjs";

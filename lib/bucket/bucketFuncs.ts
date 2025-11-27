@@ -1,4 +1,4 @@
-import { GetSignedUrlConfig } from "@google-cloud/storage";
+import type { GetSignedUrlConfig } from "@google-cloud/storage";
 import {
     dbUpsertSeminarVideoById,
     dbUpsertVideoById,
@@ -133,7 +133,7 @@ export async function bucketGenerateSignedUploadUrl(
         const data = {
             url: url,
             videoEntryId: videoEntry.id,
-            isParentLesson: videoEntry.lessonId ? true : false,
+            isParentLesson: !!videoEntry.lessonId,
         };
         return data;
     }

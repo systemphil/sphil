@@ -1,14 +1,14 @@
 "use client";
 
-import { FormProvider, useForm, SubmitHandler } from "react-hook-form";
+import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { NumberInput } from "./NumberInput";
 import { SubmitInput } from "./SubmitInput";
-import { SeminarCohort } from "@prisma/client";
+import type { SeminarCohort } from "@prisma/client";
 import {
     actionUpdateSeminarCohort,
-    ActionUpdateSeminarCohortInput,
+    type ActionUpdateSeminarCohortInput,
 } from "features/courses/server/actions";
 
 export const SeminarCohortForm = ({

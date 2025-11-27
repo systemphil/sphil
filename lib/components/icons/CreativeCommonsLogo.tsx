@@ -13,6 +13,7 @@ export function CreativeCommonsLogo() {
             enableBackground="new 5.5 -3.5 64 64"
             xmlSpace="preserve"
         >
+            <title>CreativeCommonsLogo</title>
             <g>
                 <circle fill="#FFFFFF" cx="37.785" cy="28.501" r="28.836" />
                 <path
