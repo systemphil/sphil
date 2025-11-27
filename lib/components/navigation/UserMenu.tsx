@@ -98,13 +98,13 @@ export function UserMenu() {
                     )}
                     <MenuItem
                         onClick={handleClose}
-                        href="/billing"
+                        href="/my-courses"
                         component={MuiLinkOverride}
                     >
                         <ListItemIcon>
                             <AccountCircleIcon fontSize="small" />
                         </ListItemIcon>
-                        Account & Billing
+                        My Courses
                     </MenuItem>
                     <Divider />
                     <MenuItem

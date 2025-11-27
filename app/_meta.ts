@@ -25,7 +25,7 @@ export default {
     courses: {
         display: "hidden",
     },
-    billing: {
+    "my-courses": {
         display: "hidden",
     },
     index: {

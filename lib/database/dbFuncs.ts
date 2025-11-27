@@ -251,9 +251,14 @@ export async function dbGetUserPurchasedCourses(userId: string) {
             userId: validUserId,
         },
         select: {
-            course: true,
+            course: {
+                include: {
+                    lessons: true,
+                },
+            },
         },
     });
+
     if (res && res.length > 0) {
         const courses = res.map((i) => i.course);
         return courses;

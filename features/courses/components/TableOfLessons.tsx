@@ -49,7 +49,7 @@ export function TableOfLessons({
                 Lessons
             </Heading>
 
-            <List disablePadding>
+            <List disablePadding dense>
                 {lessons.map((lesson, index) => {
                     const lessonUrl = `${links.courses}/${courseSlug}/${lesson.slug}`;
 
