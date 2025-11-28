@@ -127,7 +127,6 @@ blockquote {
     align-items: center;
     justify-content: center;
     position: relative;
-    margin: 1rem;
     border-radius: 2rem;
     overflow: hidden;
     cursor: default;

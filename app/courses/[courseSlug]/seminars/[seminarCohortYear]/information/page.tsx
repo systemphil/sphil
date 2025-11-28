@@ -40,7 +40,7 @@ export default async function SeminarCohortInformationPage({
     }
 
     const seminarCohort = await dbGetSeminarCohortByCourseYearAndUser({
-        year: parseInt(seminarCohortYear),
+        year: parseInt(seminarCohortYear, 10),
         courseId: course.id,
         userId: session.user.id,
     });

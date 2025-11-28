@@ -66,9 +66,7 @@ export async function TableOfSeminarCohorts({
                             seminars={seminarCohort.seminars}
                             courseSlug={course.slug}
                             seminarCohortYear={seminarCohort.year}
-                            hasSeminarCohortDetails={
-                                seminarCohort.details ? true : false
-                            }
+                            hasSeminarCohortDetails={!!seminarCohort.details}
                         />
                     </Box>
                 ))}

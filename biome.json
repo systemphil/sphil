@@ -6,7 +6,7 @@
         "useIgnoreFile": true
     },
     "files": {
-        "includes": ["**"],
+        "includes": ["**", "!!**/*.css"],
         "ignoreUnknown": false
     },
     "formatter": {
@@ -28,6 +28,11 @@
             "semicolons": "always",
             "quoteStyle": "double",
             "trailingCommas": "all"
+        }
+    },
+    "css": {
+        "parser": {
+            "tailwindDirectives": true
         }
     },
     "overrides": [

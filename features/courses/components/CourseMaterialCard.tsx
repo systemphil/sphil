@@ -106,6 +106,7 @@ const ButtonDeleteCross = () => {
             viewBox="0 0 24 24"
             stroke="currentColor"
         >
+            <title>Button Delete cross</title>
             <path
                 strokeLinecap="round"
                 strokeLinejoin="round"

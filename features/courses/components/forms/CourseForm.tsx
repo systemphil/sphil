@@ -97,7 +97,7 @@ export const CourseForm = ({ course }: { course?: Course }) => {
         e: React.ChangeEvent<HTMLInputElement>
     ) => {
         e.preventDefault();
-        const file = e.target && e.target.files && e.target.files[0];
+        const file = e.target?.files?.[0];
         if (!file) {
             toast.error("No file selected");
             return;

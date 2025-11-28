@@ -18,7 +18,9 @@ export function exclude<Obj, Key extends keyof Obj>(
     keys: Key[]
 ): Omit<Obj, Key> {
     const newObj = { ...obj };
-    keys.forEach((key) => delete newObj[key]);
+    keys.forEach((key) => {
+        delete newObj[key];
+    });
     return newObj;
 }
 
@@ -40,7 +42,7 @@ export function formatCurrency(amount: number) {
 }
 
 export function romanize(num: number) {
-    if (isNaN(num)) return NaN;
+    if (Number.isNaN(num)) return NaN;
     var digits = String(+num).split(""),
         key = [
             "",

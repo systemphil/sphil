@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import { minimatch } from "minimatch";
 import type { MetadataRoute } from "next";
 import { SITE_ROOT } from "lib/config/consts";
@@ -89,7 +89,7 @@ function shouldExcludeRoute(route: string): boolean {
         }
 
         // Prefix match (e.g., /admin matches /admin/*)
-        if (route.startsWith(pattern + "/")) return true;
+        if (route.startsWith(`${pattern}/`)) return true;
 
         return false;
     });

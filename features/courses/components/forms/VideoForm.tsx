@@ -97,19 +97,28 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
     const handleSelectedFileChange = (
         e: React.ChangeEvent<HTMLInputElement>
     ) => {
-        const file = e.target && e.target.files && e.target.files[0];
+        const file = e.target?.files?.[0];
         if (file) {
             setSelectedFile(file);
         }
     };
 
     const methods = useForm({
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        defaultValues: config.getDefaultValues(videoEntry as any, paramId),
+        defaultValues:
+            videoKind === "lesson"
+                ? videoConfig.lesson.getDefaultValues(
+                      videoEntry as Video | null,
+                      paramId
+                  )
+                : videoConfig.seminar.getDefaultValues(
+                      videoEntry as SeminarVideo | null,
+                      paramId
+                  ),
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const onSubmit: SubmitHandler<any> = async (data) => {
+    const onSubmit: SubmitHandler<
+        VideoFormValuesLesson | VideoFormValuesSeminar
+    > = async (data) => {
         try {
             // 0. Preliminary setup and check that there is a file.
             setHandlerLoading(true);
@@ -135,7 +144,7 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
                           fileName: filename,
                       };
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // biome-ignore lint/suspicious/noExplicitAny: <Fix when we overhaul this>
             const resp = await config.createSignedPostUrl(requestParams as any);
 
             if (resp?.error) {
@@ -335,9 +344,7 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
                     </Alert>
                 )}
                 <SubmitInput
-                    value={`${
-                        videoEntry && videoEntry.id ? "Update" : "Upload"
-                    } video`}
+                    value={`${videoEntry?.id ? "Update" : "Upload"} video`}
                     isLoading={handlerLoading}
                     isVerbose
                 />

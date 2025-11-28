@@ -98,7 +98,7 @@ export const darkTheme = createTheme(
             },
             MuiListItemButton: {
                 styleOverrides: {
-                    root: ({ theme }) => ({
+                    root: () => ({
                         transition: "background-color 125ms ease-in-out",
 
                         "&:hover": {

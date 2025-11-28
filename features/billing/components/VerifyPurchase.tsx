@@ -33,6 +33,7 @@ export const VerifyPurchase = ({
                             viewBox="0 0 24 24"
                             className="stroke-current shrink-0 w-6 h-6"
                         >
+                            <title>loading</title>
                             <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -58,6 +59,7 @@ export const VerifyPurchase = ({
                             fill="none"
                             viewBox="0 0 24 24"
                         >
+                            <title>error</title>
                             <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -90,6 +92,7 @@ export const VerifyPurchase = ({
                                 fill="none"
                                 viewBox="0 0 24 24"
                             >
+                                <title>success</title>
                                 <path
                                     strokeLinecap="round"
                                     strokeLinejoin="round"

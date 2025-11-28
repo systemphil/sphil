@@ -11,10 +11,7 @@ type Props = {
 };
 
 export const Checkbox = ({ name, label, options = {} }: Props) => {
-    const {
-        register,
-        formState: { errors },
-    } = useFormContext();
+    const { register } = useFormContext();
 
     return (
         <Field>

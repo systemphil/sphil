@@ -147,13 +147,9 @@ export default async function RootLayout({
             data-theme="fantasy"
         >
             <Head color={COLOR}>
-                <script
-                    type="application/ld+json"
-                    // eslint-disable-next-line @eslint-react/dom/no-dangerously-set-innerhtml
-                    dangerouslySetInnerHTML={{
-                        __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-                    }}
-                />
+                <script type="application/ld+json">
+                    {JSON.stringify(jsonLd).replace(/</g, "\\u003c")}
+                </script>
             </Head>
             <body>
                 <AppRouterCacheProvider options={{ enableCssLayer: true }}>
@@ -214,7 +210,7 @@ export default async function RootLayout({
     );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// biome-ignore lint/correctness/noUnusedVariables: <Planned to be used later>
 const Banner = () => {
     return (
         <NextraBanner storageKey="release_key" dismissible>

@@ -548,7 +548,6 @@ export const dbGetCompiledMdxBySlugs = async ({
     courseSlug,
     lessonSlug,
     lessonType,
-    partSlug,
 }: DBGetCompiledMdxBySlugsProps): Promise<string> => {
     const validCourseSlug = z.string().parse(courseSlug);
     const validLessonSlug = z.string().optional().parse(lessonSlug);
