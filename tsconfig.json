@@ -1,49 +1,38 @@
 {
-  "compilerOptions": {
-    "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "incremental": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
-    "moduleResolution": "bundler",
-    "baseUrl": "./",
-    "paths": {
-      "@app/*": [
-        "./app/*"
-      ],
-      "@/*": [
-        "./src/*"
-      ]
+    "compilerOptions": {
+        "target": "ES2017",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "strict": false,
+        "forceConsistentCasingInFileNames": true,
+        "noEmit": true,
+        "incremental": true,
+        "esModuleInterop": true,
+        "module": "esnext",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "jsx": "react-jsx",
+        "moduleResolution": "bundler",
+        "baseUrl": "./",
+        "paths": {
+            "@app/*": ["./app/*"],
+            "@/*": ["./src/*"]
+        },
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ],
+        "strictNullChecks": true
     },
-    "plugins": [
-      {
-        "name": "next"
-      }
+    "include": [
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        "./.next/types/**/*.ts",
+        ".next/types/**/*.ts",
+        ".next/dev/types/**/*.ts"
     ],
-    "strictNullChecks": true
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "./.next/types/**/*.ts",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    ".next"
-  ]
+    "exclude": ["node_modules", ".next"]
 }
