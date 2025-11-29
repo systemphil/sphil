@@ -16,6 +16,7 @@ import { EmbedTeacherProfile } from "features/editor/components/EmbedTeacherProf
 import { PointerHighlight } from "lib/components/ui/PointerHighlight";
 import { LatestNewsCard } from "lib/email/templates/components/LatestNewsCard";
 import { SubscribeToNewsletterForm } from "./SubscribeToNewsletter";
+import { FocusCards } from "lib/components/ui/FocusCards";
 
 export function SPhilLanding() {
     return (
@@ -29,6 +30,7 @@ export function SPhilLanding() {
                 <FollowerStudentHighlight />
                 <Community />
                 <NewsletterSignUp />
+                <ValueProposition />
                 <SymposiaHero />
                 <VisitCourses />
                 <Instructors />
@@ -217,6 +219,79 @@ function InfoCards() {
             </section>
         </FadeIn>
     );
+}
+
+function ValueProposition() {
+    const cards = [
+        {
+            title: (
+                <>
+                    Our courses provide a <b>structured</b>, step-by-step
+                    curriculum designed for <b>mastery</b>, not just exposure.
+                    This saves you dozens of hours of searching and vetting
+                    content. We offer a curated, guided tour through the text,
+                    not a mere survey or thematic selection.
+                </>
+            ),
+            alt: "structure",
+            src: "https://images.unsplash.com/photo-1518710843675-2540dd79065c?q=80&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        },
+        {
+            title: (
+                <>
+                    <b>
+                        Two things you can never get back: time and certainty.
+                    </b>{" "}
+                    Our instructors are experts in the subject and will bring
+                    you up to speed on the complex concepts and cut through the
+                    myriad of interpretations. We guarantee a vetted quality to
+                    our courses.
+                </>
+            ),
+            alt: "time and certainty",
+            src: "https://images.unsplash.com/photo-1600271772470-bd22a42787b3?q=80&w=3072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        },
+        {
+            title: (
+                <>
+                    In our seminars, the offer goes beyond mere information: we
+                    provide <b>access and accountability</b>. Weekly live
+                    interaction and commitment of the cohort cannot be
+                    replicated by pre-recorded videos. You engage with other
+                    passionate and curious people and together embark on a
+                    transformative intellectual journey.
+                </>
+            ),
+            alt: "access and accountability",
+            src: "https://images.unsplash.com/photo-1505142468610-359e7d316be0?q=80&w=3070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        },
+        {
+            title: (
+                <>
+                    For truly serious students, we offer tailored guidance and
+                    direct feedback. Skip months of frustration with
+                    personalized sessions that craft the content to your
+                    research needs and specific intellectual hurdles. Just like
+                    in the gym, a personal trainer can sharpen your mind and
+                    focus on the pain points.
+                </>
+            ),
+            alt: "personalized transformation",
+            src: "https://images.unsplash.com/photo-1486915309851-b0cc1f8a0084?q=80&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        },
+        {
+            title: <></>,
+            alt: "5",
+            src: "https://images.unsplash.com/photo-1507041957456-9c397ce39c97?q=80&w=3456&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        },
+        {
+            title: <></>,
+            alt: "6",
+            src: "https://assets.aceternity.com/the-first-rule.png",
+        },
+    ];
+
+    return <FocusCards cards={cards} />;
 }
 
 function Community() {

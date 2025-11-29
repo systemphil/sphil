@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "lib/components/navigation/ClientNextLink";
 import { Heading } from "lib/components/ui/Heading";
 import type { ModelName } from "lib/server/ctrl";
 import { actionDeleteModelEntry } from "../server/actions";

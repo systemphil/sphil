@@ -37,9 +37,6 @@ const nextConfig = withNextra({
     typescript: {
         ignoreBuildErrors: true, // Separate step
     },
-    eslint: {
-        ignoreDuringBuilds: true, // Seperate step
-    },
 });
 
 export default nextConfig;

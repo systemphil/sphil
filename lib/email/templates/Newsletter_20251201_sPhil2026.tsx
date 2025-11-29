@@ -17,14 +17,17 @@ function Content() {
             </EmailP>
 
             <EmailP>
-                As we continue our mission to Study the Great Texts, we are
-                thrilled to unveil four immersive, challenging, and rewarding
-                courses for the coming year. Our 2026 curriculum covers seminal
-                works from Ancient Greece through the Enlightenment and the
-                German Idealists, providing a rich, comprehensive intellectual
-                journey spanning the depths of reality, through the creative
-                potential of all living beings to the exuberant imaginative
-                genius of humanity.
+                The first year of running our first courses at sPhil is soon
+                behind us. We successfully launched two courses this year and
+                we'd like to thank all students that participated. As we
+                continue our mission to Study the Great Texts, we are thrilled
+                to unveil four immersive, challenging, and rewarding courses for
+                the coming year. Our 2026 curriculum covers seminal works from
+                Ancient Greece through the Enlightenment and the German
+                Idealists, providing a rich, comprehensive intellectual journey
+                spanning the depths of reality, through the creative potential
+                of all living beings to the exuberant imaginative genius of
+                humanity.
             </EmailP>
 
             <Img
@@ -59,7 +62,7 @@ function Content() {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>
+                        <td style={{ width: "200px" }}>
                             <strong>Hegel’s Mechanism</strong>
                         </td>
                         <td>8-weeks</td>

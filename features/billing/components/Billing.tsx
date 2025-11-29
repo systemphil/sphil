@@ -24,9 +24,6 @@ export function Billing({
                 </h1>
                 {purchasedCourses && purchasedCourses.length > 0 ? (
                     <>
-                        <p className="text-lg py-2 text-center">
-                            Here are your purchased courses
-                        </p>
                         <ul className="flex flex-start flex-wrap gap-4 py-4">
                             {purchasedCourses.map((course) => (
                                 <li key={course.id}>

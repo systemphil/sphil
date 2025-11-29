@@ -2,7 +2,7 @@
 
 import { Heading } from "lib/components/ui/Heading";
 import { useVerifyPurchase } from "../hooks/useVerifyPurchase";
-import Link from "next/link";
+import Link from "lib/components/navigation/ClientNextLink";
 import { Button } from "@mui/material";
 
 export const VerifyPurchase = ({

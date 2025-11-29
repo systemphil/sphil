@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "lib/components/navigation/ClientNextLink";
 import { redirect } from "next/navigation";
 import { Heading } from "lib/components/ui/Heading";
 import { CourseForm } from "features/courses/components/forms/CourseForm";
