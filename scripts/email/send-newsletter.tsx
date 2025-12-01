@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Newsletter_20250930_SchellingOpen } from "lib/email/templates/Newsletter_20250930_SchellingOpen";
+import { Newsletter_20251201_sPhil2026_Email } from "lib/email/templates/Newsletter_20251201_sPhil2026";
 import { Resend } from "resend";
 
 const prisma = new PrismaClient();
@@ -31,14 +31,16 @@ async function sendNewsletter() {
         //     },
         // ];
 
-        const subject = "Enrollment Open!";
+        const subject = "Courses coming out next year!";
 
         for (const { email, id } of subscribers) {
             const res = await resend.emails.send({
                 from: `sPhil Newsletter 🦉 <${senderEmail}>`,
                 to: email,
                 subject,
-                react: <Newsletter_20250930_SchellingOpen unsubscribeId={id} />,
+                react: (
+                    <Newsletter_20251201_sPhil2026_Email unsubscribeId={id} />
+                ),
             });
 
             if (res.error) {

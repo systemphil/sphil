@@ -71,15 +71,6 @@ function Content() {
                     <tr>
                         <td>
                             <strong>
-                                Plato’s <i>Gorgias</i>
-                            </strong>
-                        </td>
-                        <td>6-weeks</td>
-                        <td>Max Macken</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>
                                 Aristotle’s <i>On the Soul</i>
                             </strong>
                         </td>
@@ -94,6 +85,15 @@ function Content() {
                         </td>
                         <td>12-weeks</td>
                         <td>Kenneth Solberg</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>
+                                Plato’s <i>Gorgias</i>
+                            </strong>
+                        </td>
+                        <td>6-weeks</td>
+                        <td>Max Macken</td>
                     </tr>
                 </tbody>
             </table>
