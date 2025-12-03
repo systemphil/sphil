@@ -7,8 +7,6 @@ import { dbGetSeminarAndConnectedByYearAndUser } from "lib/database/dbFuncs";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 
-export const dynamic = "force-dynamic";
-
 export default async function SeminarFrontPageRoute({
     params,
 }: {

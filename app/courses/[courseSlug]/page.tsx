@@ -7,8 +7,6 @@ import { errorMessages } from "lib/config/errorMessages";
 import type { Metadata } from "next";
 import { dbGetCourseBySlug } from "lib/database/dbFuncs";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata({
     params,
 }: {

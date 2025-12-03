@@ -6,8 +6,6 @@ import { redirect } from "next/navigation";
 
 export const metadata = {};
 
-export const dynamic = "force-dynamic";
-
 export default async function MyCoursesPage() {
     const session = await auth();
 

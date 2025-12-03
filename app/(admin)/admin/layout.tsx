@@ -2,8 +2,6 @@ import { auth } from "lib/auth/authConfig";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-dynamic"; // Next.js flags that disables all caching of fetch requests and always invalidates routes on /admin/*
-
 export const metadata = {};
 /**
  * AdminLayout controls the access and UI for /admin/**

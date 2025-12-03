@@ -10,8 +10,6 @@ import {
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-export const dynamic = "force-dynamic";
-
 export const metadata = {};
 
 export default async function SeminarCohortInformationPage({
