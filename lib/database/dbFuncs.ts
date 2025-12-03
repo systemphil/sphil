@@ -18,7 +18,7 @@ import { prisma } from "./dbInit";
 import { exclude } from "lib/utils";
 import { mdxCompiler } from "lib/server/mdxCompiler";
 import { withAdmin, withUser } from "lib/auth/authFuncs";
-import { cacheKeys } from "lib/server/cache";
+import { cacheKeys } from "lib/config/cache";
 import { Text } from "lib/utils/textEncoding";
 import { stripeCreatePrice, stripeCreateProduct } from "lib/stripe/stripeFuncs";
 import { AUXILIARY_PRODUCTS_DEFAULTS } from "lib/config/auxiliaryProductDefaults";

@@ -15,7 +15,7 @@ import {
     dbReorderSeminars,
     dbUpsertLessonById,
 } from "lib/database/dbFuncs";
-import { cacheKeys } from "lib/server/cache";
+import { cacheKeys } from "lib/config/cache";
 import {
     ctrlCreateOrUpdateCourse,
     ctrlDeleteModelEntry,

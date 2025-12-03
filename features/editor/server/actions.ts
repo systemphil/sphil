@@ -2,7 +2,7 @@
 
 import { validateAdminAccess } from "lib/auth/authFuncs";
 import { dbUpdateMdxByModelId } from "lib/database/dbFuncs";
-import { cacheKeys } from "lib/server/cache";
+import { cacheKeys } from "lib/config/cache";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
 

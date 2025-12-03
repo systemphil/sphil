@@ -7,12 +7,18 @@ import { CourseCard } from "./CourseCard";
 import { Heading } from "lib/components/ui/Heading";
 import type { Course } from "@prisma/client";
 import { auth } from "lib/auth/authConfig";
+import { cacheKeys } from "lib/config/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 export async function CoursesDisplay({
     isAdmin = false,
 }: {
     isAdmin?: boolean;
 }) {
+    "use cache";
+    cacheTag(cacheKeys.allPublicCourses);
+    cacheLife("weeks");
+
     let courses: Course[] = [];
 
     if (isAdmin) {

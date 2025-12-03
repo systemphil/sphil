@@ -10,12 +10,18 @@ import { FadeIn } from "lib/components/animations/FadeIn";
 import { Back } from "lib/components/navigation/Back";
 import { TableOfSeminarCohorts } from "./TableOfSeminarCohorts";
 import { Suspense } from "react";
+import { cacheLife, cacheTag } from "next/cache";
+import { cacheKeys } from "lib/config/cache";
 
 const links = {
     courses: "/courses",
 };
 
 export async function CourseFrontPage({ slug }: { slug: string }) {
+    "use cache";
+    cacheTag(cacheKeys.allPublicCourses);
+    cacheLife("weeks");
+
     const course = await dbGetCourseBySlug(slug);
 
     if (!course) {

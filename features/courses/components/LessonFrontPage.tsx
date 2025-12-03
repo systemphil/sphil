@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { TableOfLessons } from "./TableOfLessons";
 import { MDXRenderer } from "lib/components/MDXRenderer";
 import { errorMessages } from "lib/config/errorMessages";
-import { cacheKeys } from "lib/server/cache";
+import { cacheKeys } from "lib/config/cache";
 import { dbGetLessonAndRelationsBySlug } from "lib/database/dbFuncs";
 import { Heading } from "lib/components/ui/Heading";
 import { VideoDataLoader } from "lib/components/VideoDataLoader";
