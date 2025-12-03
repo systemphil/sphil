@@ -4,7 +4,7 @@ import { dbCreateNewsletterEmail } from "lib/database/dbFuncs";
 import { z } from "zod";
 
 const emailSchema = z.object({
-    email: z.string().email("Invalid email address"),
+    email: z.email("Invalid email address"),
 });
 
 export type SubscriptionResponse = {

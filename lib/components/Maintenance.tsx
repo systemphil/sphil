@@ -6,14 +6,7 @@ import {
     InfoOutlined,
     WarningAmberOutlined,
 } from "@mui/icons-material";
-import {
-    cache,
-    CACHE_REVALIDATION_INTERVAL_MAINTENANCE,
-} from "lib/server/cache";
-import {
-    dbGetMaintenanceMessageGlobal,
-    dbGetMaintenanceMessageUser,
-} from "lib/database/dbFuncs";
+import { dbGetMaintenanceMessage } from "lib/database/dbFuncs";
 import { Heading } from "./ui/Heading";
 import { FadeIn } from "./animations/FadeIn";
 import { Card, CardContent } from "@mui/material";
@@ -25,25 +18,9 @@ export async function Maintenance({
     area: "global" | "user";
     componentToDisplayForBeta?: React.ReactNode | undefined;
 }) {
-    const getMaintenanceMsgGlobal = cache(
-        async () => {
-            return await dbGetMaintenanceMessageGlobal();
-        },
-        ["/maintenance_global"],
-        { revalidate: CACHE_REVALIDATION_INTERVAL_MAINTENANCE }
-    );
-    const getMaintenanceMsgUser = cache(
-        async () => {
-            return await dbGetMaintenanceMessageUser();
-        },
-        ["/maintenance_user"],
-        { revalidate: CACHE_REVALIDATION_INTERVAL_MAINTENANCE }
-    );
+    const { global, user } = await dbGetMaintenanceMessage();
 
-    const maintenance =
-        area === "global"
-            ? await getMaintenanceMsgGlobal()
-            : await getMaintenanceMsgUser();
+    const maintenance = area === "global" ? global : user;
 
     if (maintenance) {
         const title = getMaintenanceTitle(maintenance.severity);

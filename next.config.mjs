@@ -25,6 +25,7 @@ const nextConfig = withNextra({
             },
         ],
     },
+    cacheComponents: true,
     async redirects() {
         return [
             {
