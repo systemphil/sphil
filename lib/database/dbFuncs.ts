@@ -18,14 +18,11 @@ import { prisma } from "./dbInit";
 import { exclude } from "lib/utils";
 import { mdxCompiler } from "lib/server/mdxCompiler";
 import { withAdmin, withUser } from "lib/auth/authFuncs";
-import {
-    cache,
-    CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS,
-    cacheKeys,
-} from "lib/server/cache";
+import { cacheKeys } from "lib/server/cache";
 import { Text } from "lib/utils/textEncoding";
 import { stripeCreatePrice, stripeCreateProduct } from "lib/stripe/stripeFuncs";
 import { AUXILIARY_PRODUCTS_DEFAULTS } from "lib/config/auxiliaryProductDefaults";
+import { cacheLife, cacheTag } from "next/cache";
 
 /**
  * Calls the database to retrieve all courses.
@@ -54,18 +51,14 @@ export const dbGetAllCoursesByCreatorsOrTutors = (userId: string) =>
  * @cache `allPublicCourses`
  */
 export const dbGetAllPublishedCourses = async () => {
-    const getAllCourses = cache(
-        async () => {
-            return await prisma.course.findMany({
-                where: {
-                    published: true,
-                },
-            });
+    "use cache";
+    cacheTag(cacheKeys.allPublicCourses);
+    cacheLife("weeks");
+    return await prisma.course.findMany({
+        where: {
+            published: true,
         },
-        [cacheKeys.allPublicCourses],
-        { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
-    );
-    return await getAllCourses();
+    });
 };
 
 /**
@@ -107,8 +100,9 @@ export async function dbGetSeminarCohortsByCourseAndUser({
     courseId: string;
     userId: string;
 }) {
-    // const _task = cache(
-    //     async () => {
+    "use cache";
+    cacheTag(cacheKeys.allSeminars);
+    cacheLife("weeks");
     return await prisma.seminarCohort.findMany({
         where: {
             courseId,
@@ -123,11 +117,6 @@ export async function dbGetSeminarCohortsByCourseAndUser({
             details: true,
         },
     });
-    //     },
-    //     [cacheKeys.allSeminars, userId],
-    //     { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
-    // );
-    // return await _task();
 }
 
 export async function dbGetSeminarCohortByCourseYearAndUser({
@@ -139,8 +128,9 @@ export async function dbGetSeminarCohortByCourseYearAndUser({
     userId: string;
     year: number;
 }) {
-    // const _task = cache(
-    //     async () => {
+    "use cache";
+    cacheTag(cacheKeys.allSeminars);
+    cacheLife("weeks");
     return await prisma.seminarCohort.findFirst({
         where: {
             courseId,
@@ -162,11 +152,6 @@ export async function dbGetSeminarCohortByCourseYearAndUser({
             },
         },
     });
-    //     },
-    //     [cacheKeys.allSeminars, userId],
-    //     { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
-    // );
-    // return await _task();
 }
 
 export async function dbGetSeminarAndConnectedByYearAndUser({
@@ -216,6 +201,7 @@ export async function dbGetSeminarAndConnectedByYearAndUser({
         },
     });
 }
+
 /**
  * Calls the database to retrieve specific course by id identifier
  */
@@ -227,6 +213,7 @@ export const dbGetCourseById = async (id: string) => {
         },
     });
 };
+
 /**
  * Gets all the courses that the user has purchased. Returns an array of objects.
  */
@@ -248,6 +235,7 @@ export async function dbGetUserPurchasedCourses(userId: string) {
 
     return [];
 }
+
 /**
  * Gets user data by id. Returns an object.
  */
@@ -259,6 +247,7 @@ export async function dbGetUserData(userId: string) {
         },
     });
 }
+
 /**
  * Gets user data by id. Returns an object.
  */
@@ -299,6 +288,7 @@ export async function dbCreateCoursePurchase({
 
     return;
 }
+
 /**
  * Calls the database to retrieve specific course, its course details and lessons by id identifier.
  * @access ADMIN
@@ -341,6 +331,7 @@ export async function dbGetCourseAndDetailsAndLessonsById(id: string) {
     }
     return withAdmin(task);
 }
+
 /**
  * Calls the database to retrieve specific lesson and relations by id identifier.
  * Does not include fields with byte objects, only plain objects.
@@ -373,6 +364,7 @@ export const dbGetLessonAndRelationsById = async (id: string) => {
     }
     return withAdmin(task);
 };
+
 /**
  * Calls the database to retrieve specific lesson and relations by id identifier.
  * Comes back with Video entry, and LessonContent and LessonTranscript entries with mdx field as string,
@@ -475,6 +467,7 @@ const convertMdxToString = <T extends MdxModel>(
         mdx: mdxAsString,
     };
 };
+
 /**
  * Calls the database to retrieve mdx field by id across multiple models.
  * Converts binary content of found record to string for tRPC compatibility
@@ -519,6 +512,7 @@ export type DBGetCompiledMdxBySlugsProps = {
           lessonType?: never;
       }
 );
+
 /**
  * Get compiled MDX by Course slug and/or Lesson slug. If only Course slug is provided, the
  * function will attempt to find and retrieve the MDX of the CourseDetails that is
@@ -619,6 +613,7 @@ export const dbGetCompiledMdxBySlugs = async ({
         "Error occurred when attempting to find data models by slug(s)"
     );
 };
+
 /**
  * Calls the database to retrieve specific Video entry based on the ID of the Lesson it is related to.
  * Returns null when either Lesson or its related Video is not found.
@@ -717,6 +712,7 @@ export type DbUpsertCourseByIdProps = Omit<
     Course,
     "id" | "createdAt" | "updatedAt"
 > & { id?: string; creatorId: string };
+
 /**
  * Updates an existing course details by id as identifier or creates a new one if id is not provided.
  * @access ADMIN
@@ -837,6 +833,7 @@ export const dbUpsertCourseById = async ({
     }
     return withAdmin(task);
 };
+
 /**
  * Updates an existing lesson details by id as identifier or creates a new one if id is not provided.
  * @access ADMIN
@@ -910,6 +907,7 @@ export const dbUpsertLessonById = async ({
     }
     return withAdmin(task);
 };
+
 /**
  * Reorders lessons by their position in the input array.
  */
@@ -930,6 +928,7 @@ export const dbReorderLessons = async ({
     });
     return;
 };
+
 /**
  * Reorders seminars by their position in the input array.
  */
@@ -950,6 +949,7 @@ export const dbReorderSeminars = async ({
     });
     return;
 };
+
 /**
  * Updates an existing lessonContent details by id as identifier or creates a new one if id is not provided.
  * @access ADMIN
@@ -987,6 +987,7 @@ export const dbUpsertLessonContentById = async ({
     }
     return withAdmin(task);
 };
+
 /**
  * Updates an existing SeminarContent details by id as identifier or creates a new one if id is not provided.
  * @access ADMIN
@@ -1024,6 +1025,7 @@ export const dbUpsertSeminarContentById = async ({
     }
     return withAdmin(task);
 };
+
 /**
  * Updates an existing SeminarContent details by id as identifier or creates a new one if id is not provided.
  * @access ADMIN
@@ -1061,6 +1063,7 @@ export const dbUpsertSeminarTranscriptById = async ({
     }
     return withAdmin(task);
 };
+
 /**
  * Updates an existing LessonTranscript model by id as identifier or creates a new one if id is not provided.
  * Must have the id of the Lesson this LessonTranscript relates to.
@@ -1105,6 +1108,7 @@ export const dbUpsertLessonTranscriptById = async ({
     const resultWithoutTranscript = exclude(result, ["mdx"]);
     return resultWithoutTranscript;
 };
+
 /**
  * Updates an existing CourseDetails  model by id as identifier or creates a new one if id is not provided.
  * Must have the id of the Course this CourseDetails relates to.
@@ -1176,6 +1180,7 @@ export const dbUpsertSeminarCohortDetailsById = async ({
     }
     return withAdmin(task);
 };
+
 /**
  * Updates mdx field for an existing model by id as identifier.
  * @access ADMIN
@@ -1290,6 +1295,7 @@ export const dbUpdateMdxByModelId = async ({
     }
     return withAdmin(task);
 };
+
 /**
  * Updates Video details by id as identifier or creates a new one if id is not provided, in which case
  * the id of the lesson this video is related to must be provided.
@@ -1324,6 +1330,7 @@ export const dbUpsertVideoById = async ({
     }
     return withAdmin(task);
 };
+
 /**
  * Updates Video details by id as identifier or creates a new one if id is not provided, in which case
  * the id of the lesson this video is related to must be provided.
@@ -1358,6 +1365,7 @@ export const dbUpsertSeminarVideoById = async ({
     }
     return withAdmin(task);
 };
+
 /**
  * Deletes entry from the LessonTranscript model. Returns only id of deleted model.
  * @access ADMIN
@@ -1376,6 +1384,7 @@ export const dbDeleteLessonTranscriptById = async ({
     }
     return withAdmin(task);
 };
+
 /**
  * Deletes entry from the LessonContent model. Returns only id of deleted model.
  * @access ADMIN
@@ -1394,6 +1403,7 @@ export const dbDeleteLessonContentById = async ({
     }
     return withAdmin(task);
 };
+
 /**
  * Deletes entry from the LessonContent model. Returns only id of deleted model.
  * @access ADMIN
@@ -1412,6 +1422,7 @@ export const dbDeleteSeminarContentById = async ({
     }
     return withAdmin(task);
 };
+
 /**
  * Deletes entry from the LessonContent model. Returns only id of deleted model.
  * @access ADMIN
@@ -1430,6 +1441,7 @@ export const dbDeleteSeminarTranscriptById = async ({
     }
     return withAdmin(task);
 };
+
 /**
  * Deletes entry from the Video model. Returns only id of deleted model.
  * @note This function DOES NOT delete video from storage!
@@ -1499,6 +1511,7 @@ export const dbDeleteSeminarCohortDetailsById = async ({
     }
     return withAdmin(task);
 };
+
 /**
  * Deletes entry from the Lesson model (and all related models). Returns only id of deleted model.
  * @warning Does NOT delete video from storage. Consider using `ctrlDeleteVideo()` or `ctrlDeleteLesson()` instead.
@@ -1658,7 +1671,10 @@ export async function dbVerifyUserPurchase(userId: string, priceId: string) {
     return withUser(task);
 }
 
-export async function dbGetMaintenanceMessageGlobal() {
+async function dbGetMaintenanceMessageGlobal() {
+    "use cache";
+    cacheTag(cacheKeys.maintenanceGlobal);
+    cacheLife("weeks");
     return await prisma.maintenanceMessage.findFirst({
         where: {
             area: "global",
@@ -1667,13 +1683,23 @@ export async function dbGetMaintenanceMessageGlobal() {
     });
 }
 
-export async function dbGetMaintenanceMessageUser() {
+async function dbGetMaintenanceMessageUser() {
+    "use cache";
+    cacheTag(cacheKeys.maintenanceUser);
+    cacheLife("weeks");
     return await prisma.maintenanceMessage.findFirst({
         where: {
             area: "user",
             published: true,
         },
     });
+}
+
+export async function dbGetMaintenanceMessage() {
+    const global = await dbGetMaintenanceMessageGlobal();
+    const user = await dbGetMaintenanceMessageUser();
+
+    return { global, user };
 }
 
 export async function dbCreateNewsletterEmail({ email }: { email: string }) {
@@ -1889,8 +1915,9 @@ export async function dbGetSeminarCohortAndSeminarsById({
 }: {
     id: string;
 }) {
-    // const _task = cache(
-    //     async () => {
+    "use cache";
+    cacheTag(cacheKeys.allSeminars);
+    cacheLife("weeks");
     return prisma.seminarCohort.findUnique({
         where: {
             id,
@@ -1915,41 +1942,32 @@ export async function dbGetSeminarCohortAndSeminarsById({
             },
         },
     });
-    //     },
-    //     [cacheKeys.allSeminars],
-    //     { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
-    // );
-    // return await _task();
 }
 
 export async function dbGetSeminarAndConnectedById({ id }: { id: string }) {
-    const _task = cache(
-        async () => {
-            return await prisma.seminar.findUnique({
-                where: {
-                    id,
-                },
-                include: {
-                    content: true,
-                    transcript: true,
-                    video: true,
-                    seminarCohort: {
+    "use cache";
+    cacheTag(cacheKeys.allSeminars);
+    cacheLife("weeks");
+    return await prisma.seminar.findUnique({
+        where: {
+            id,
+        },
+        include: {
+            content: true,
+            transcript: true,
+            video: true,
+            seminarCohort: {
+                select: {
+                    year: true,
+                    course: {
                         select: {
-                            year: true,
-                            course: {
-                                select: {
-                                    name: true,
-                                },
-                            },
+                            name: true,
                         },
                     },
                 },
-            });
+            },
         },
-        [cacheKeys.allSeminars],
-        { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
-    );
-    return await _task();
+    });
 }
 
 export async function dbUpdateSeminarCohort({

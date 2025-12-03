@@ -12,7 +12,7 @@ export async function POST(req: Request) {
         try {
             await processTranscription(payload);
             revalidatePath("/(admin)/admin", "layout");
-            revalidateTag(cacheKeys.allPublicCourses);
+            revalidateTag(cacheKeys.allPublicCourses, "max");
         } catch (e) {
             console.error("Transcription failed:", e);
             EmailService.adminAlert({ message: e });
