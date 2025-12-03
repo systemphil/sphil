@@ -1,6 +1,11 @@
 FROM oven/bun:1.3.3 AS base
 WORKDIR /app
 
+# Install OpenSSL for Prisma
+RUN apt-get update -y && \
+    apt-get install -y openssl libssl3 && \
+    rm -rf /var/lib/apt/lists/*
+
 FROM base AS installer
 COPY prisma ./
 COPY package.json bun.lock ./
