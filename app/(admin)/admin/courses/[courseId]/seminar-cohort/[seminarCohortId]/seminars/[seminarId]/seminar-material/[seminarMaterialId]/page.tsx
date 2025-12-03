@@ -3,26 +3,15 @@ import {
     dbGetMdxByModelId,
     dbGetSeminarAndConnectedById,
 } from "lib/database/dbFuncs";
+import { Suspense } from "react";
 
-export const metadata = {};
-
-/**
- * See lessonMaterial path for explanation.
- */
-export default async function AdminSeminarMaterialEdit({
-    params,
+async function AdminSeminarMaterialEdit({
+    seminarId,
+    seminarMaterialId,
 }: {
-    params: Promise<{
-        courseId: string;
-        seminarId: string;
-        seminarMaterialId: string;
-    }>;
+    seminarId: string;
+    seminarMaterialId: string;
 }) {
-    const { seminarId, seminarMaterialId } = await params;
-    if (!seminarId || !seminarMaterialId) {
-        throw new Error("Missing seminarId or seminarMaterialId params");
-    }
-
     const material = await dbGetMdxByModelId(seminarMaterialId);
     const materialContainer = await dbGetSeminarAndConnectedById({
         id: seminarId,
@@ -40,5 +29,28 @@ export default async function AdminSeminarMaterialEdit({
             material={material}
             title={`Seminar ${materialContainer.order}`}
         />
+    );
+}
+
+export default async function AdminSeminarMaterialEditPage({
+    params,
+}: {
+    params: Promise<{
+        seminarId: string;
+        seminarMaterialId: string;
+    }>;
+}) {
+    const { seminarId, seminarMaterialId } = await params;
+    if (!seminarId || !seminarMaterialId) {
+        throw new Error("Missing seminarId or seminarMaterialId params");
+    }
+
+    return (
+        <Suspense>
+            <AdminSeminarMaterialEdit
+                seminarId={seminarId}
+                seminarMaterialId={seminarMaterialId}
+            />
+        </Suspense>
     );
 }
