@@ -52,7 +52,7 @@
         "framer-motion": "^12.23.12",
         "minimatch": "^10.0.3",
         "next": "16.0.5",
-        "next-auth": "^5.0.0-beta.25",
+        "next-auth": "^5.0.0-beta.30",
         "nextra": "4.6.0",
         "nextra-theme-docs": "4.6.0",
         "posthog-js": "^1.230.1",
@@ -61,7 +61,7 @@
         "react": "^19.1.1",
         "react-cookie-consent": "^9.0.0",
         "react-dom": "^19.1.1",
-        "react-email": "^4.2.8",
+        "react-email": "^5.0.5",
         "react-hook-form": "7.62.0",
         "react-hot-toast": "^2.4.1",
         "react-textarea-autosize": "^8.5.4",
@@ -85,6 +85,9 @@
         "baseline-browser-mapping": "^2.8.32",
         "dotenv-cli": "^10.0.0",
         "pagefind": "1.4.0"
+    },
+    "overrides": {
+        "glob": "^11.1.0"
     },
     "trustedDependencies": [
         "@prisma/client",
