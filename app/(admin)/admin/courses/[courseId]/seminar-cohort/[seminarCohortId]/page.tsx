@@ -12,7 +12,7 @@ import {
     dbGetCourseAndDetailsAndLessonsById,
     dbGetSeminarCohortAndSeminarsById,
 } from "lib/database/dbFuncs";
-import Link from "next/link";
+import Link from "lib/components/navigation/ClientNextLink";
 import { redirect } from "next/navigation";
 
 export default async function AdminSeminarCohortEdit({

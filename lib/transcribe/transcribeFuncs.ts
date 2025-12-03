@@ -1,4 +1,4 @@
-import { TranscribeParams } from "assemblyai";
+import type { TranscribeParams } from "assemblyai";
 import { transcribeClient } from "./initTranscribe";
 import { dbUpsertLessonTranscriptById } from "lib/database/dbFuncs";
 

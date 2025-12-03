@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import Link from "lib/components/navigation/ClientNextLink";
 import { Heading } from "lib/components/ui/Heading";
-import { ModelName } from "lib/server/ctrl";
+import type { ModelName } from "lib/server/ctrl";
 import { actionDeleteModelEntry } from "../server/actions";
 import toast from "react-hot-toast";
 import {
@@ -106,6 +106,7 @@ const ButtonDeleteCross = () => {
             viewBox="0 0 24 24"
             stroke="currentColor"
         >
+            <title>Button Delete cross</title>
             <path
                 strokeLinecap="round"
                 strokeLinejoin="round"

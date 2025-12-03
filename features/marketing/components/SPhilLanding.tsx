@@ -10,11 +10,13 @@ import { Button, Typography } from "@mui/material";
 import { InfoCard } from "./InfoCard";
 import { PageWrapper } from "lib/components/ui/PageWrapper";
 import { Reviews } from "./Reviews";
-import { SubscribeToNewsletter } from "./SubscribeToNewsletter";
 import { PolyRhythmicSpiral } from "lib/components/animations/PolyRhythmicSpiral";
 import { BackgroundBoxes } from "lib/components/animations/BackgroundBoxes";
 import { EmbedTeacherProfile } from "features/editor/components/EmbedTeacherProfile";
 import { PointerHighlight } from "lib/components/ui/PointerHighlight";
+import { LatestNewsCard } from "lib/email/templates/components/LatestNewsCard";
+import { SubscribeToNewsletterForm } from "./SubscribeToNewsletter";
+import { ValueProposition } from "./ValueProposition";
 
 export function SPhilLanding() {
     return (
@@ -28,6 +30,7 @@ export function SPhilLanding() {
                 <FollowerStudentHighlight />
                 <Community />
                 <NewsletterSignUp />
+                <ValuePropositionWrapped />
                 <SymposiaHero />
                 <VisitCourses />
                 <Instructors />
@@ -218,6 +221,25 @@ function InfoCards() {
     );
 }
 
+function ValuePropositionWrapped() {
+    return (
+        <>
+            <section>
+                <Heading as="h3" additionalClasses="max-w-lg">
+                    Learn about our{" "}
+                    <span className="dark:text-acid-green text-[#6b0072]">
+                        value proposition
+                    </span>
+                </Heading>
+                <p className="text-lg text-slate-500 dark:text-slate-300 py-2 text-center">
+                    Hover or click on the images below to learn more{" "}
+                </p>
+            </section>
+            <ValueProposition />
+        </>
+    );
+}
+
 function Community() {
     return (
         <section className="flex flex-col items-center relative">
@@ -267,7 +289,10 @@ function NewsletterSignUp() {
                 Sign up to receive updates on new courses, seminars, and other
                 events.
             </p>
-            <SubscribeToNewsletter />
+            <SubscribeToNewsletterForm />
+            <div className="mt-6">
+                <LatestNewsCard />
+            </div>
         </section>
     );
 }

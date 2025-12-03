@@ -9,8 +9,10 @@ export const clearCookies = () => {
                 d.join(".") +
                 " ;path=";
             const p = location.pathname.split("/");
-            document.cookie = cookieBase + "/";
+            // biome-ignore lint/suspicious/noDocumentCookie: <Skip>
+            document.cookie = `${cookieBase}/`;
             while (p.length > 0) {
+                // biome-ignore lint/suspicious/noDocumentCookie: <Skip>
                 document.cookie = cookieBase + p.join("/");
                 p.pop();
             }

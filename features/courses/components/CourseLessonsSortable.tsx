@@ -1,6 +1,6 @@
 "use client";
 
-import { Lesson } from "@prisma/client";
+import type { Lesson } from "@prisma/client";
 import { SortableItem, SortableList } from "lib/components/SortableList";
 import { CourseMaterialCard } from "./CourseMaterialCard";
 import { actionUpdateLessonOrder } from "../server/actions";

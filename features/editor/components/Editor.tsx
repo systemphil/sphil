@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { EditorProps } from "./EditorInternals";
+import type { EditorProps } from "./EditorInternals";
 
 const EditorComponent = dynamic(() => import("./EditorInternals"), {
     ssr: false,

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useState, memo } from "react";
+import type React from "react";
+import { useEffect, useRef, useState, memo } from "react";
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
 import { SchoolOutlined } from "@mui/icons-material";
@@ -59,7 +60,7 @@ export const TextRevealCard = ({
     }
     function touchMoveHandler(event: React.TouchEvent<HTMLDivElement>) {
         event.preventDefault();
-        const clientX = event.touches[0]!.clientX;
+        const clientX = event.touches[0]?.clientX;
         if (cardRef.current) {
             const relativeX = clientX - left;
             setWidthPercentage((relativeX / localWidth) * 100);
@@ -69,6 +70,7 @@ export const TextRevealCard = ({
     const rotateDeg = (widthPercentage - 50) * 0.1;
     return (
         <a href={url} target="_blank">
+            {/** biome-ignore lint/a11y/noStaticElementInteractions: <Leave as is> */}
             <div
                 onMouseEnter={mouseEnterHandler}
                 onMouseLeave={mouseLeaveHandler}
@@ -204,7 +206,10 @@ const Stars = () => {
         <div className="absolute inset-0">
             {starStyles.map((style, i) => (
                 <motion.span
-                    key={`star-${i}`}
+                    key={`star-${
+                        // biome-ignore lint/suspicious/noArrayIndexKey: <Leave as is>
+                        i
+                    }`}
                     initial={{
                         top: style.top,
                         left: style.left,

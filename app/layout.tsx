@@ -147,74 +147,75 @@ export default async function RootLayout({
             data-theme="fantasy"
         >
             <Head color={COLOR}>
-                <script
-                    type="application/ld+json"
-                    // eslint-disable-next-line @eslint-react/dom/no-dangerously-set-innerhtml
-                    dangerouslySetInnerHTML={{
-                        __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-                    }}
-                />
+                <script type="application/ld+json">
+                    {JSON.stringify(jsonLd).replace(/</g, "\\u003c")}
+                </script>
             </Head>
             <body>
-                <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-                    <Providers>
-                        <NextraLayout
-                            feedback={feedbackOptions}
-                            pageMap={await getPageMap()}
-                            docsRepositoryBase={DOCS_REPOSITORY_BASE}
-                            editLink={EDIT_LINK_DESCRIPTION}
-                            sidebar={{ defaultMenuCollapseLevel: 1 }}
-                            search={
-                                <Search placeholder="Search the Encyclopaedia…" />
-                            }
-                            // banner={<Banner />}
-                            navbar={
-                                <NextraNavbar
-                                    logoLink={false}
-                                    logo={<NavbarHeader />}
-                                    projectLink={PROJECT_LINK}
-                                >
-                                    <div className="flex justify-center items-center">
-                                        <ThemeSwitch
-                                            lite={true}
-                                            className="ml-0"
-                                        />
-                                        <div className="w-[70px] flex justify-center">
-                                            <MuiThemeProvider>
-                                                <UserMenu />
-                                            </MuiThemeProvider>
+                <Suspense>
+                    <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+                        <Providers>
+                            <NextraLayout
+                                feedback={feedbackOptions}
+                                pageMap={await getPageMap()}
+                                docsRepositoryBase={DOCS_REPOSITORY_BASE}
+                                editLink={EDIT_LINK_DESCRIPTION}
+                                sidebar={{ defaultMenuCollapseLevel: 1 }}
+                                search={
+                                    <Search placeholder="Search the Encyclopaedia…" />
+                                }
+                                // banner={<Banner />}
+                                navbar={
+                                    <NextraNavbar
+                                        logoLink={false}
+                                        logo={<NavbarHeader />}
+                                        projectLink={PROJECT_LINK}
+                                    >
+                                        <div className="flex justify-center items-center">
+                                            <ThemeSwitch
+                                                lite={true}
+                                                className="ml-0"
+                                            />
+                                            <div className="w-[70px] flex justify-center">
+                                                <MuiThemeProvider>
+                                                    <UserMenu />
+                                                </MuiThemeProvider>
+                                            </div>
                                         </div>
-                                    </div>
-                                </NextraNavbar>
-                            }
-                            footer={
-                                <div className="relative" key="footer-key-123">
+                                    </NextraNavbar>
+                                }
+                                footer={
                                     <div
-                                        data-name="footer-flair"
-                                        className="absolute h-20 w-full -top-[80px] bg-linear-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
-                                    />
-                                    <NextraFooter className="flex-col items-center md:items-start relative">
-                                        <Footer />
-                                    </NextraFooter>
-                                </div>
-                            }
-                            toc={toc}
-                        >
-                            <MuiThemeProvider>
-                                <ArticleWrapper>{children}</ArticleWrapper>
-                            </MuiThemeProvider>
-                        </NextraLayout>
-                    </Providers>
-                    <Suspense>
-                        <ImagePreloader />
-                    </Suspense>
-                </AppRouterCacheProvider>
+                                        className="relative"
+                                        key="footer-key-123"
+                                    >
+                                        <div
+                                            data-name="footer-flair"
+                                            className="absolute h-20 w-full -top-[80px] bg-linear-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
+                                        />
+                                        <NextraFooter className="flex-col items-center md:items-start relative">
+                                            <Footer />
+                                        </NextraFooter>
+                                    </div>
+                                }
+                                toc={toc}
+                            >
+                                <MuiThemeProvider>
+                                    <ArticleWrapper>{children}</ArticleWrapper>
+                                </MuiThemeProvider>
+                            </NextraLayout>
+                        </Providers>
+                        <Suspense>
+                            <ImagePreloader />
+                        </Suspense>
+                    </AppRouterCacheProvider>
+                </Suspense>
             </body>
         </html>
     );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// biome-ignore lint/correctness/noUnusedVariables: <Planned to be used later>
 const Banner = () => {
     return (
         <NextraBanner storageKey="release_key" dismissible>

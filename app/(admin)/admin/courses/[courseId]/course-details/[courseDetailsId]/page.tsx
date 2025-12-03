@@ -5,22 +5,15 @@ import {
     dbGetMdxByModelId,
 } from "lib/database/dbFuncs";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
-export const metadata = {};
-/**
- * Fetches data for CourseDetails and renders the MDX Editor to the UI.
- */
-export default async function AdminLessonMaterialEdit({
-    params,
+async function AdminLessonMaterialEdit({
+    courseId,
+    courseDetailsId,
 }: {
-    params: Promise<{ courseId: string; courseDetailsId: string }>;
+    courseId: string;
+    courseDetailsId: string;
 }) {
-    const { courseId, courseDetailsId } = await params;
-
-    if (typeof courseDetailsId !== "string") {
-        return redirect(`/?error=${errorMessages.missingParams}`);
-    }
-
     const editorMaterial = await dbGetMdxByModelId(courseDetailsId);
     const course = await dbGetCourseAndDetailsAndLessonsById(courseId);
 
@@ -32,4 +25,25 @@ export default async function AdminLessonMaterialEdit({
     }
 
     return <Editor material={editorMaterial} title={course.name} />;
+}
+
+export default async function AdminLessonMaterialEditPage({
+    params,
+}: {
+    params: Promise<{ courseId: string; courseDetailsId: string }>;
+}) {
+    const { courseId, courseDetailsId } = await params;
+
+    if (typeof courseDetailsId !== "string") {
+        return redirect(`/?error=${errorMessages.missingParams}`);
+    }
+
+    return (
+        <Suspense>
+            <AdminLessonMaterialEdit
+                courseDetailsId={courseDetailsId}
+                courseId={courseId}
+            />
+        </Suspense>
+    );
 }

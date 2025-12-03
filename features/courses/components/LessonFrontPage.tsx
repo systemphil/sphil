@@ -2,11 +2,7 @@ import { redirect } from "next/navigation";
 import { TableOfLessons } from "./TableOfLessons";
 import { MDXRenderer } from "lib/components/MDXRenderer";
 import { errorMessages } from "lib/config/errorMessages";
-import {
-    cache,
-    CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS,
-    cacheKeys,
-} from "lib/server/cache";
+import { cacheKeys } from "lib/config/cache";
 import { dbGetLessonAndRelationsBySlug } from "lib/database/dbFuncs";
 import { Heading } from "lib/components/ui/Heading";
 import { VideoDataLoader } from "lib/components/VideoDataLoader";
@@ -14,16 +10,14 @@ import { Suspense } from "react";
 import { Loading } from "lib/components/animations/Loading";
 import { Paragraph } from "lib/components/ui/Paragraph";
 import { Back } from "lib/components/navigation/Back";
+import { cacheLife, cacheTag } from "next/cache";
 
 export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
-    const getLessonAndRelationsBySlug = cache(
-        async (slug: string) => {
-            return await dbGetLessonAndRelationsBySlug(slug);
-        },
-        [cacheKeys.allPublicCourses, lessonSlug],
-        { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
-    );
-    const lessonData = await getLessonAndRelationsBySlug(lessonSlug);
+    "use cache";
+    cacheTag(cacheKeys.allPublicCourses);
+    cacheLife("weeks");
+    const lessonData = await dbGetLessonAndRelationsBySlug(lessonSlug);
+
     if (!lessonData) {
         return redirect(`/courses?error=${errorMessages.lessonNotFound}`);
     }

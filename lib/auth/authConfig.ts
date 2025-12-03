@@ -1,12 +1,16 @@
-import NextAuth, { Account, Session, UserWithRole } from "next-auth";
+import NextAuth, {
+    type Account,
+    type Session,
+    type UserWithRole,
+} from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import Resend from "next-auth/providers/resend";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "lib/database/dbInit";
-import { type DefaultSession } from "next-auth";
-import { type JWT } from "next-auth/jwt";
-import { type Role, User } from "@prisma/client";
+import type { DefaultSession } from "next-auth";
+import type { JWT } from "next-auth/jwt";
+import type { Role, User } from "@prisma/client";
 import type { AdapterUser } from "@auth/core/adapters";
 import { stripeCreateCustomer } from "lib/stripe/stripeFuncs";
 import { dbUpdateUserStripeCustomerId } from "lib/database/dbFuncs";
@@ -36,6 +40,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
              * Override createUser with a round-trip to create
              * stripe customer and return.
              */
+
+            // biome-ignore lint/style/noNonNullAssertion: <Will be replaced by new auth>
             const createdUser = await PrismaAdapter(prisma).createUser!(user);
 
             const customer = await stripeCreateCustomer({
@@ -48,6 +54,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 stripeCustomerId: customer.id,
             });
 
+            // biome-ignore lint/style/noNonNullAssertion: <Will be replaced by new auth>
             const updatedUser = await PrismaAdapter(prisma).getUser!(
                 createdUser.id
             );

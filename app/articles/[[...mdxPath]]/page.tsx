@@ -1,8 +1,6 @@
-/* eslint-disable react-hooks/rules-of-hooks -- false positive, useMDXComponents/useTOC are not react hooks */
-
 import { DESCRIPTION, OG_IMAGES, TITLE } from "lib/config/consts";
 import { KEYWORDS } from "lib/config/keywords";
-import { $NextraMetadata } from "nextra";
+import type { $NextraMetadata } from "nextra";
 import { useMDXComponents } from "nextra-theme-docs";
 import { generateStaticParamsFor, importPage } from "nextra/pages";
 
@@ -58,14 +56,22 @@ export async function generateMetadata(props: {
 
     if (title) {
         enhancedMetadata.title = title;
-        enhancedMetadata.twitter!.title = title;
-        enhancedMetadata.openGraph!.title = title;
+        if (enhancedMetadata.twitter) {
+            enhancedMetadata.twitter.title = title;
+        }
+        if (enhancedMetadata.openGraph) {
+            enhancedMetadata.openGraph.title = title;
+        }
     }
 
     if (description) {
         enhancedMetadata.description = description as string;
-        enhancedMetadata.twitter!.description = description as string;
-        enhancedMetadata.openGraph!.description = description as string;
+        if (enhancedMetadata.twitter) {
+            enhancedMetadata.twitter.description = description as string;
+        }
+        if (enhancedMetadata.openGraph) {
+            enhancedMetadata.openGraph.description = description as string;
+        }
     }
 
     if (

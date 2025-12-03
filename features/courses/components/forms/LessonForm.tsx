@@ -6,7 +6,7 @@ import type { Course, Lesson } from "@prisma/client";
 import { TextInput } from "./TextInput";
 import { TextAreaInput } from "./TextAreaInput";
 import { SubmitInput } from "./SubmitInput";
-import { dbGetLessonAndRelationsById } from "lib/database/dbFuncs";
+import type { dbGetLessonAndRelationsById } from "lib/database/dbFuncs";
 import { useState } from "react";
 import { actionUpsertLesson } from "features/courses/server/actions";
 import toast from "react-hot-toast";

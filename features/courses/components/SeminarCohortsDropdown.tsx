@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, MouseEvent } from "react";
-import { Seminar } from "@prisma/client";
+import { useState, type MouseEvent } from "react";
+import type { Seminar } from "@prisma/client";
 import { Heading } from "lib/components/ui/Heading";
 import { romanize } from "lib/utils";
 import Link from "next/link";
 import { Button, Menu, MenuItem, Box, Divider } from "@mui/material";
 import { People as PeopleIcon, Info as InfoIcon } from "@mui/icons-material";
-import { dbGetSeminarCohortsByCourseAndUser } from "lib/database/dbFuncs";
+import type { dbGetSeminarCohortsByCourseAndUser } from "lib/database/dbFuncs";
 
 const links = {
     courses: "/courses",

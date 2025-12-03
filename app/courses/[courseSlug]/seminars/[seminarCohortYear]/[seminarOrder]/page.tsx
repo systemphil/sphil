@@ -7,8 +7,6 @@ import { dbGetSeminarAndConnectedByYearAndUser } from "lib/database/dbFuncs";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 
-export const dynamic = "force-dynamic";
-
 export default async function SeminarFrontPageRoute({
     params,
 }: {
@@ -31,9 +29,9 @@ export default async function SeminarFrontPageRoute({
     }
 
     const seminar = await dbGetSeminarAndConnectedByYearAndUser({
-        seminarOrder: parseInt(seminarOrder),
+        seminarOrder: parseInt(seminarOrder, 10),
         userId: session.user.id,
-        year: parseInt(seminarCohortYear),
+        year: parseInt(seminarCohortYear, 10),
         courseSlug,
     });
 

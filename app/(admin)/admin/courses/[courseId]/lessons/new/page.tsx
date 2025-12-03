@@ -7,7 +7,7 @@ export const metadata = {};
 export default async function NewLesson({
     params,
 }: {
-    params: { courseId: string };
+    params: Promise<{ courseId: string }>;
 }) {
     const { courseId } = await params;
     return (

@@ -6,26 +6,17 @@ import {
     dbGetSeminarCohortAndSeminarsById,
 } from "lib/database/dbFuncs";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
-export const metadata = {};
-/**
- * Fetches data for CourseDetails and renders the MDX Editor to the UI.
- */
-export default async function AdminSeminarCohortMaterialEdit({
-    params,
+async function AdminSeminarCohortMaterialEdit({
+    courseId,
+    seminarCohortDetailsId,
+    seminarCohortId,
 }: {
-    params: Promise<{
-        courseId: string;
-        seminarCohortDetailsId: string;
-        seminarCohortId: string;
-    }>;
+    courseId: string;
+    seminarCohortDetailsId: string;
+    seminarCohortId: string;
 }) {
-    const { courseId, seminarCohortDetailsId, seminarCohortId } = await params;
-
-    if (!seminarCohortDetailsId || !courseId || !seminarCohortId) {
-        return redirect(`/?error=${errorMessages.missingParams}`);
-    }
-
     const editorMaterial = await dbGetMdxByModelId(seminarCohortDetailsId);
     const seminarCohort = await dbGetSeminarCohortAndSeminarsById({
         id: seminarCohortId,
@@ -43,9 +34,40 @@ export default async function AdminSeminarCohortMaterialEdit({
     }
 
     return (
-        <Editor
-            material={editorMaterial}
-            title={`${course.name} ${seminarCohort.year}`}
-        />
+        <Suspense>
+            <Editor
+                material={editorMaterial}
+                title={`${course.name} ${seminarCohort.year}`}
+            />
+        </Suspense>
+    );
+}
+
+/**
+ * Fetches data for CourseDetails and renders the MDX Editor to the UI.
+ */
+export default async function AdminSeminarCohortMaterialEditPage({
+    params,
+}: {
+    params: Promise<{
+        courseId: string;
+        seminarCohortDetailsId: string;
+        seminarCohortId: string;
+    }>;
+}) {
+    const { courseId, seminarCohortDetailsId, seminarCohortId } = await params;
+
+    if (!seminarCohortDetailsId || !courseId || !seminarCohortId) {
+        return redirect(`/?error=${errorMessages.missingParams}`);
+    }
+
+    return (
+        <Suspense>
+            <AdminSeminarCohortMaterialEdit
+                courseId={courseId}
+                seminarCohortDetailsId={seminarCohortDetailsId}
+                seminarCohortId={seminarCohortId}
+            />
+        </Suspense>
     );
 }

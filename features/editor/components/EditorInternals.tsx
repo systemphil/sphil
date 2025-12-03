@@ -8,25 +8,23 @@ import {
     BlockTypeSelect,
     BoldItalicUnderlineToggles,
     Button,
-    ButtonOrDropdownButton,
     ChangeAdmonitionType,
     ChangeCodeMirrorLanguage,
     CodeToggle,
     ConditionalContents,
     CreateLink,
     DiffSourceToggleWrapper,
-    EditorInFocus,
+    type EditorInFocus,
     GenericJsxEditor,
     InsertAdmonition,
     InsertCodeBlock,
-    InsertFrontmatter,
     InsertImage,
     InsertTable,
     InsertThematicBreak,
-    JsxComponentDescriptor,
+    type JsxComponentDescriptor,
     ListsToggle,
     MDXEditor,
-    MDXEditorMethods,
+    type MDXEditorMethods,
     Separator,
     ShowSandpackInfo,
     TooltipWrap,
@@ -49,7 +47,7 @@ import {
     toolbarPlugin,
 } from "@mdxeditor/editor";
 import toast from "react-hot-toast";
-import { dbGetMdxByModelId } from "lib/database/dbFuncs";
+import type { dbGetMdxByModelId } from "lib/database/dbFuncs";
 import { Heading } from "lib/components/ui/Heading";
 import { Loading } from "lib/components/animations/Loading";
 import { actionUploadImage } from "lib/server/actions";

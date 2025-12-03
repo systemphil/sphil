@@ -18,14 +18,14 @@ export default {
         display: "children",
     },
     _newsletter: {
-        title: "Newsletter",
+        title: "News",
         type: "page",
         href: "/newsletter",
     },
     courses: {
         display: "hidden",
     },
-    billing: {
+    "my-courses": {
         display: "hidden",
     },
     index: {

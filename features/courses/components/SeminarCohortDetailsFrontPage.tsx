@@ -1,5 +1,5 @@
 import { MDXRenderer } from "lib/components/MDXRenderer";
-import { dbGetSeminarCohortByCourseYearAndUser } from "lib/database/dbFuncs";
+import type { dbGetSeminarCohortByCourseYearAndUser } from "lib/database/dbFuncs";
 import { Heading } from "lib/components/ui/Heading";
 import { Paragraph } from "lib/components/ui/Paragraph";
 import { Back } from "lib/components/navigation/Back";

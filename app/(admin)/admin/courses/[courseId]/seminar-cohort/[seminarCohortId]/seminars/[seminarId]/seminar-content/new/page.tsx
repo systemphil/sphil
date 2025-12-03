@@ -27,7 +27,7 @@ export default async function AdminSeminarContentNew({
 
     const seminar = await dbGetSeminarAndConnectedById({ id: seminarId });
 
-    if (seminar && seminar.content && seminar.content.id) {
+    if (seminar?.content?.id) {
         redirect(
             `/admin/courses/${courseId}/seminar-cohort/${seminarCohortId}/seminars/${seminarId}/seminar-material/${seminar.content.id}`
         );
@@ -38,7 +38,7 @@ export default async function AdminSeminarContentNew({
     };
 
     const newLessonContent = await dbUpsertSeminarContentById(newDetails);
-    if (newLessonContent && newLessonContent.id) {
+    if (newLessonContent?.id) {
         redirect(
             `/admin/courses/${courseId}/seminar-cohort/${seminarCohortId}/seminars/${seminarId}/seminar-material/${newLessonContent.id}`
         );

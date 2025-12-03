@@ -5,12 +5,10 @@ import { Suspense } from "react";
 
 export const metadata = {};
 
-export const dynamic = "force-dynamic";
-
 export default async function PublishedCourses({
     searchParams,
 }: {
-    searchParams: { p: string; s: string };
+    searchParams: Promise<{ p: string; s: string }>;
 }) {
     const { p: purchasePriceId, s: slug } = await searchParams;
     if (!purchasePriceId || !slug) {

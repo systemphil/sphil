@@ -1,6 +1,6 @@
 import { Heading } from "@react-email/components";
 import { OrderInformation } from "./components/OrderInformation";
-import { Role, User } from "@prisma/client";
+import type { Role, User } from "@prisma/client";
 import { UserInformation } from "./components/UserInformation";
 import { EmailBaseLayout } from "./components/EmailBaseLayout";
 

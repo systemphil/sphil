@@ -3,7 +3,7 @@
 import { Heading } from "lib/components/ui/Heading";
 import { Paragraph } from "lib/components/ui/Paragraph";
 import { Cards } from "nextra/components";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import BookIcon from "@mui/icons-material/Book";

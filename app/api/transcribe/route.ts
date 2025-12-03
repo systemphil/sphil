@@ -1,5 +1,5 @@
 import { EmailService } from "lib/email/EmailService";
-import { cacheKeys } from "lib/server/cache";
+import { cacheKeys } from "lib/config/cache";
 import { processTranscription } from "lib/transcribe/transcribeFuncs";
 import { revalidatePath, revalidateTag } from "next/cache";
 
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
         try {
             await processTranscription(payload);
             revalidatePath("/(admin)/admin", "layout");
-            revalidateTag(cacheKeys.allPublicCourses);
+            revalidateTag(cacheKeys.allPublicCourses, "max");
         } catch (e) {
             console.error("Transcription failed:", e);
             EmailService.adminAlert({ message: e });

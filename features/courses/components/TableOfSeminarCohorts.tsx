@@ -1,4 +1,4 @@
-import { Seminar } from "@prisma/client";
+import type { Seminar } from "@prisma/client";
 import { auth } from "lib/auth/authConfig";
 import { Heading } from "lib/components/ui/Heading";
 import {
@@ -66,9 +66,7 @@ export async function TableOfSeminarCohorts({
                             seminars={seminarCohort.seminars}
                             courseSlug={course.slug}
                             seminarCohortYear={seminarCohort.year}
-                            hasSeminarCohortDetails={
-                                seminarCohort.details ? true : false
-                            }
+                            hasSeminarCohortDetails={!!seminarCohort.details}
                         />
                     </Box>
                 ))}

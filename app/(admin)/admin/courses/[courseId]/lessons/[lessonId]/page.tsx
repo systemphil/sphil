@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "lib/components/navigation/ClientNextLink";
 import {
     dbGetLessonAndRelationsById,
     dbGetVideoByLessonId,
@@ -8,19 +8,15 @@ import { LessonForm } from "features/courses/components/forms/LessonForm";
 import { CourseMaterialCard } from "features/courses/components/CourseMaterialCard";
 import { VideoForm } from "features/courses/components/forms/VideoForm";
 import { Button } from "@mui/material";
+import { Suspense } from "react";
 
-export const metadata = {};
-
-export default async function AdminLessonEdit({
-    params,
+async function AdminLessonEdit({
+    courseId,
+    lessonId,
 }: {
-    params: Promise<{ courseId: string; lessonId: string }>;
+    courseId: string;
+    lessonId: string;
 }) {
-    const { lessonId, courseId } = await params;
-    if (typeof lessonId !== "string" || typeof courseId !== "string") {
-        throw new Error("missing course or lesson id");
-    }
-
     const lesson = await dbGetLessonAndRelationsById(lessonId);
 
     if (!lesson) {
@@ -91,5 +87,22 @@ export default async function AdminLessonEdit({
                 </div>
             </div>
         </div>
+    );
+}
+
+export default async function AdminLessonEditPage({
+    params,
+}: {
+    params: Promise<{ courseId: string; lessonId: string }>;
+}) {
+    const { lessonId, courseId } = await params;
+    if (typeof lessonId !== "string" || typeof courseId !== "string") {
+        throw new Error("missing course or lesson id");
+    }
+
+    return (
+        <Suspense>
+            <AdminLessonEdit courseId={courseId} lessonId={lessonId} />
+        </Suspense>
     );
 }

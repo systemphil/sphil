@@ -10,8 +10,6 @@ import {
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-export const dynamic = "force-dynamic";
-
 export const metadata = {};
 
 export default async function SeminarCohortInformationPage({
@@ -40,7 +38,7 @@ export default async function SeminarCohortInformationPage({
     }
 
     const seminarCohort = await dbGetSeminarCohortByCourseYearAndUser({
-        year: parseInt(seminarCohortYear),
+        year: parseInt(seminarCohortYear, 10),
         courseId: course.id,
         userId: session.user.id,
     });

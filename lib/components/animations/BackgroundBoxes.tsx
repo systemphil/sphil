@@ -34,8 +34,10 @@ const BoxesCore = ({ className, ...rest }: { className?: string }) => {
         >
             {rows.map((_, i) => (
                 <motion.div
-                    // eslint-disable-next-line @eslint-react/no-array-index-key
-                    key={`row` + i}
+                    key={`row${
+                        // biome-ignore lint/suspicious/noArrayIndexKey: <Unsure>
+                        i
+                    }`}
                     className="relative h-8 w-16 border-l border-slate-200 dark:border-slate-800/75"
                 >
                     {cols.map((_, j) => (
@@ -47,8 +49,10 @@ const BoxesCore = ({ className, ...rest }: { className?: string }) => {
                             animate={{
                                 transition: { duration: 2 },
                             }}
-                            // eslint-disable-next-line @eslint-react/no-array-index-key
-                            key={`col` + j}
+                            key={`col${
+                                // biome-ignore lint/suspicious/noArrayIndexKey: <Unsure>
+                                j
+                            }`}
                             className="relative h-8 w-16 border-t border-r border-slate-200 dark:border-slate-800/75"
                         >
                             {j % 2 === 0 && i % 2 === 0 ? (
@@ -60,6 +64,7 @@ const BoxesCore = ({ className, ...rest }: { className?: string }) => {
                                     stroke="currentColor"
                                     className="pointer-events-none absolute -top-[14px] -left-[22px] h-6 w-10 stroke-[1px] text-slate-200 dark:text-slate-800/75"
                                 >
+                                    <title>Pointer</title>
                                     <path
                                         strokeLinecap="round"
                                         strokeLinejoin="round"

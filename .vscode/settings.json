@@ -28,7 +28,6 @@
             "strings": "off"
         }
     },
-    "biome.enabled": false,
     "todo-tree.filtering.excludeGlobs": [
         "**/node_modules/**",
         "**/*.min.js",
@@ -37,5 +36,6 @@
     ],
     "tailwindCSS.experimental.classRegex": [
         ["className\\s*:\\s*['\"]([^'\"]*)['\"]"]
-    ]
+    ],
+    "biome.requireConfiguration": true
 }

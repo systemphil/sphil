@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 
-import { env } from "process";
+import { env } from "node:process";
 
-const LOG_ACTIVE = env.PRISMA_DEBUG === "true" ? true : false;
+const LOG_ACTIVE = env.PRISMA_DEBUG === "true";
 
 const globalForPrisma = globalThis as unknown as {
     prisma: PrismaClient | undefined;

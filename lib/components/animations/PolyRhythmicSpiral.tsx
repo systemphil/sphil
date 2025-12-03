@@ -63,7 +63,7 @@ export const PolyRhythmicSpiral = () => {
         const pen = paper.getContext("2d");
 
         const settings = {
-            startTime: new Date().getTime(), // This can be in the future
+            startTime: Date.now(), // This can be in the future
             duration: 900, // Total time for all dots to realign at the starting point
             maxCycles: Math.max(COLORS.length, 100), // Must be above colors.length or else...
             soundEnabled: false, // User still must interact with screen first
@@ -189,7 +189,7 @@ export const PolyRhythmicSpiral = () => {
             paper.width = paper.clientWidth;
             paper.height = paper.clientHeight;
 
-            const currentTime = new Date().getTime(),
+            const currentTime = Date.now(),
                 elapsedTime = (currentTime - settings.startTime) / 1000;
 
             const length = Math.min(paper.width, paper.height) * 0.9,

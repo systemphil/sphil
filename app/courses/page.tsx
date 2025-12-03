@@ -1,10 +1,11 @@
 import { CoursesDisplay } from "features/courses/components/CoursesDisplay";
+import { ValuePropositionCollapsable } from "features/marketing/components/ValuePropositionCollapsable";
 import { FadeIn } from "lib/components/animations/FadeIn";
 import { Loading } from "lib/components/animations/Loading";
 import { Heading } from "lib/components/ui/Heading";
 import { PageWrapper } from "lib/components/ui/PageWrapper";
 import { dbGetAllPublishedCourses } from "lib/database/dbFuncs";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { Suspense } from "react";
 
 const title = "sPhil Courses";
@@ -41,6 +42,8 @@ export default async function CoursesPage() {
             <div className="my-16">
                 <Heading>Join the Symposia</Heading>
             </div>
+
+            <ValuePropositionCollapsable />
 
             <FadeIn>
                 <Suspense fallback={<Loading.RingLg />}>

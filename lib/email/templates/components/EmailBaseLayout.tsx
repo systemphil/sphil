@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import {
     Body,
     Container,
@@ -27,10 +27,10 @@ export function EmailBaseLayout({
             <Tailwind>
                 <Head />
                 <Body className="font-sans bg-white">
-                    <Container className="max-w-xl">
+                    <Container className="max-w-xl px-4">
                         <Section>
                             <Img
-                                src="https://storage.googleapis.com/sphil-prod-images/images/sphil_owl.png"
+                                src="https://storage.googleapis.com/sphil-static-assets/sphil_owl.png"
                                 alt="sphil_owl"
                                 width="200"
                                 height="200"

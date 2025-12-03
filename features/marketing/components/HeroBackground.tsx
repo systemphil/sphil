@@ -9,6 +9,7 @@ export function HeroBackground() {
         typeof window !== "undefined" ? localStorage.theme : "light"
     );
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <Leave as is>
     useEffect(() => {
         /**
          * No arguments needed as the checker will itself check for the relevant property
@@ -23,7 +24,7 @@ export function HeroBackground() {
         };
         /**
          * Get the root document node since that is where the relevant properties we need
-         * to check if darkmode is on are kept.
+         * to check if dark mode is on are kept.
          */
         const targetObservable = document.documentElement;
         const config = {
@@ -34,7 +35,7 @@ export function HeroBackground() {
          * For the callback function we check whether there is a change in the relevant type and attributeName.
          * We then call the checker but do not need to pass it any values.
          */
-        const callback: MutationCallback = (mutationList, observer) => {
+        const callback: MutationCallback = (mutationList) => {
             for (const mutation of mutationList) {
                 if (
                     mutation.type === "attributes" &&

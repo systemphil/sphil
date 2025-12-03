@@ -6,13 +6,8 @@ import { EmailA, EmailH1, EmailP, EmailUl } from "./components/EmailHtml";
 
 function Content() {
     return (
-        <Section className="newsletter-body">
-            <EmailH1
-                className="text-2xl font-bold text-gray-900"
-                style={{ textAlign: "center" }}
-            >
-                A Philosophical Pilgrimage Awaits
-            </EmailH1>
+        <Section>
+            <EmailH1>A Philosophical Pilgrimage Awaits</EmailH1>
 
             <EmailP>
                 We&apos;ve been hard at work crafting this course, and
@@ -21,6 +16,7 @@ function Content() {
                 couldn&apos;t be happier with what we have put together. So
                 without further ado:
             </EmailP>
+
             <EmailP>
                 <strong>Enrollment is now open for The Quality of Being</strong>{" "}
                 (part 1)—an in-depth course designed to guide you through one of
@@ -31,6 +27,7 @@ function Content() {
                 rigorous discussions that will challenge and expand your
                 understanding of thought and reality itself.
             </EmailP>
+
             <EmailP>
                 We will be examining closely Hegel&apos;s method of
                 presuppositionless thinking and interrogate the development of

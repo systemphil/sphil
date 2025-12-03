@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormContext, RegisterOptions } from "react-hook-form";
+import { useFormContext, type RegisterOptions } from "react-hook-form";
 import { Field } from "./Field";
 import { Label } from "./Label";
 
@@ -11,10 +11,7 @@ type Props = {
 };
 
 export const Checkbox = ({ name, label, options = {} }: Props) => {
-    const {
-        register,
-        formState: { errors },
-    } = useFormContext();
+    const { register } = useFormContext();
 
     return (
         <Field>

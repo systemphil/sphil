@@ -25,6 +25,7 @@ const nextConfig = withNextra({
             },
         ],
     },
+    cacheComponents: true,
     async redirects() {
         return [
             {
@@ -33,6 +34,9 @@ const nextConfig = withNextra({
                 permanent: true,
             },
         ];
+    },
+    typescript: {
+        ignoreBuildErrors: true, // Separate step
     },
 });
 

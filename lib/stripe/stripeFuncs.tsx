@@ -4,7 +4,7 @@ import {
     dbEnrollUserInSeminarCohort,
     dbCreateCoursePurchase,
 } from "lib/database/dbFuncs";
-import { PriceTier } from "lib/server/ctrl";
+import type { PriceTier } from "lib/server/ctrl";
 import { STRIPE_FALLBACKS } from "lib/config/stripeFallbacks";
 import { EmailService } from "lib/email/EmailService";
 

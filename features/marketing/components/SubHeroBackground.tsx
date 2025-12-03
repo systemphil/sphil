@@ -40,6 +40,7 @@ export const SubHeroBackground = ({
             stringLength = 4000;
         }
         const chars =
+            // cspell:disable-next-line
             "abcdefghiklmnopqrstyxzøæåABCDEFGHIKLMNOPQRSTYXZØÆÅ01233456789";
         const randomChar = () =>
             chars[Math.floor(Math.random() * (chars.length - 1))];

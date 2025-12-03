@@ -4,10 +4,8 @@ import { PageWrapper } from "lib/components/ui/PageWrapper";
 import { Loading } from "lib/components/animations/Loading";
 import { CourseFrontPage } from "features/courses/components/CourseFrontPage";
 import { errorMessages } from "lib/config/errorMessages";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { dbGetCourseBySlug } from "lib/database/dbFuncs";
-
-export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
     params,

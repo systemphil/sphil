@@ -27,12 +27,12 @@ export const SubdirectoryLanding = ({
                                 </Paragraph>
                             ) : null}
                             <Cards.Card
-                                icon={" 📄 " as any}
+                                icon={<span>📄</span>}
                                 title="Guides"
                                 href={`/articles/${subdirectory}/guides`}
                             />
                             <Cards.Card
-                                icon={" 📄 " as any}
+                                icon={<span>📄</span>}
                                 title="Reference"
                                 href={`/articles/${subdirectory}/reference`}
                             />

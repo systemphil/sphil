@@ -1,4 +1,4 @@
-import { SeminarVideo, Video } from "@prisma/client";
+import type { SeminarVideo, Video } from "@prisma/client";
 import { auth } from "lib/auth/authConfig";
 import { bucketDeleteVideoFile } from "lib/bucket/bucketFuncs";
 import {
@@ -25,7 +25,7 @@ import {
     dbUpdateSeminarCohort,
     dbUpdateUserStripeCustomerId,
     dbUpsertCourseById,
-    DbUpsertCourseByIdProps,
+    type DbUpsertCourseByIdProps,
 } from "lib/database/dbFuncs";
 import {
     stripeArchivePrice,
@@ -116,7 +116,7 @@ async function ctrlDeleteLesson(id: string) {
     const validId = z.string().parse(id);
     const lesson = await dbGetLessonAndRelationsById(validId);
 
-    if (lesson && lesson.video) {
+    if (lesson?.video) {
         const videoArgs = {
             id: lesson.video.id,
             directory: true,
@@ -135,7 +135,7 @@ async function ctrlDeleteSeminar(id: string) {
     const validId = z.string().parse(id);
     const seminar = await dbGetSeminarAndConnectedById({ id: validId });
 
-    if (seminar && seminar.video) {
+    if (seminar?.video) {
         const videoArgs = {
             id: seminar.video.id,
             directory: true,
@@ -688,7 +688,7 @@ export type PriceTier = "base" | "seminar" | "dialogue";
 
 export async function ctrlCreateCheckout(slug: string, priceTier: PriceTier) {
     const COURSE_DEADLINE_WITH_GRACE_PERIOD = new Date(
-        new Date().getTime() + 5 * 60 * 1000
+        Date.now() + 5 * 60 * 1000
     );
 
     const session = await auth();

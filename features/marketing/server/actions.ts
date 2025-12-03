@@ -4,7 +4,7 @@ import { dbCreateNewsletterEmail } from "lib/database/dbFuncs";
 import { z } from "zod";
 
 const emailSchema = z.object({
-    email: z.string().email("Invalid email address"),
+    email: z.email("Invalid email address"),
 });
 
 export type SubscriptionResponse = {
@@ -31,7 +31,7 @@ export async function actionSubscribeToNewsletter(
             success: true,
             message: "Successfully subscribed!",
         };
-    } catch (error) {
+    } catch {
         return {
             success: false,
             message: "Email may already be subscribed",

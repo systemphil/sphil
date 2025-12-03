@@ -1,5 +1,5 @@
 import { MDXRenderer } from "lib/components/MDXRenderer";
-import { dbGetSeminarAndConnectedByYearAndUser } from "lib/database/dbFuncs";
+import type { dbGetSeminarAndConnectedByYearAndUser } from "lib/database/dbFuncs";
 import { Heading } from "lib/components/ui/Heading";
 import { VideoDataLoader } from "lib/components/VideoDataLoader";
 import { Suspense } from "react";

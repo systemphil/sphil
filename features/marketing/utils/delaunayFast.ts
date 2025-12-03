@@ -4,19 +4,21 @@
  * TODO fix types. currently everything here uses "any"
  */
 
+/* cSpell:disable */
+
 var EPSILON = 1.0 / 1048576.0;
 
-function supertriangle(vertices: any) {
+function supertriangle(vertices: number[][]) {
     var xmin = Number.POSITIVE_INFINITY,
         ymin = Number.POSITIVE_INFINITY,
         xmax = Number.NEGATIVE_INFINITY,
         ymax = Number.NEGATIVE_INFINITY,
-        i,
-        dx,
-        dy,
-        dmax,
-        xmid,
-        ymid;
+        i: number,
+        dx: number,
+        dy: number,
+        dmax: number,
+        xmid: number,
+        ymid: number;
 
     for (i = vertices.length; i--; ) {
         if (vertices[i][0] < xmin) xmin = vertices[i][0];
@@ -38,7 +40,7 @@ function supertriangle(vertices: any) {
     ];
 }
 
-function circumcircle(vertices: any, i: any, j: any, k: any) {
+function circumcircle(vertices: number[][], i: number, j: number, k: number) {
     var x1 = vertices[i][0],
         y1 = vertices[i][1],
         x2 = vertices[j][0],
@@ -47,16 +49,16 @@ function circumcircle(vertices: any, i: any, j: any, k: any) {
         y3 = vertices[k][1],
         fabsy1y2 = Math.abs(y1 - y2),
         fabsy2y3 = Math.abs(y2 - y3),
-        xc,
-        yc,
-        m1,
-        m2,
-        mx1,
-        mx2,
-        my1,
-        my2,
-        dx,
-        dy;
+        xc: number,
+        yc: number,
+        m1: number,
+        m2: number,
+        mx1: number,
+        mx2: number,
+        my1: number,
+        my2: number,
+        dx: number,
+        dy: number;
 
     /* Check for coincident points */
     if (fabsy1y2 < EPSILON && fabsy2y3 < EPSILON)
@@ -91,8 +93,8 @@ function circumcircle(vertices: any, i: any, j: any, k: any) {
     return { i: i, j: j, k: k, x: xc, y: yc, r: dx * dx + dy * dy };
 }
 
-function dedup(edges: any) {
-    var i, j, a, b, m, n;
+function dedup(edges: number[]) {
+    var i: number, j: number, a: number, b: number, m: number, n: number;
 
     for (j = edges.length; j; ) {
         b = edges[--j];
@@ -112,20 +114,28 @@ function dedup(edges: any) {
 }
 
 export const Delaunay = {
-    triangulate: function (vertices: any, key?: any) {
+    triangulate: (vertices: number[][], key?: number | string) => {
         var n = vertices.length,
-            i,
-            j,
-            indices,
-            st,
-            open,
-            closed,
-            edges,
-            dx,
-            dy,
-            a,
-            b,
-            c;
+            i: number,
+            j: number,
+            indices: number[],
+            st: number[][],
+            open: {
+                i: number;
+                j: number;
+                k: number;
+                x: number;
+                y: number;
+                r: number;
+            }[],
+            // biome-ignore lint/suspicious/noExplicitAny: <Unsure>
+            closed: any[],
+            edges: number[],
+            dx: number,
+            dy: number,
+            a: number,
+            b: number,
+            c: number;
 
         /* Bail if there aren't enough vertices to form any triangles. */
         if (n < 3) return [];
@@ -144,7 +154,7 @@ export const Delaunay = {
 
         for (i = n; i--; ) indices[i] = i;
 
-        indices.sort(function (i, j) {
+        indices.sort((i: number, j: number) => {
             var diff = vertices[j][0] - vertices[i][0];
             return diff !== 0 ? diff : i - j;
         });
@@ -220,7 +230,7 @@ export const Delaunay = {
         /* Yay, we're done! */
         return open;
     },
-    contains: function (tri: number[][], p: number[]) {
+    contains: (tri: number[][], p: number[]) => {
         /* Bounding box test first, for quick rejections. */
         if (
             (p[0] < tri[0][0] && p[0] < tri[1][0] && p[0] < tri[2][0]) ||

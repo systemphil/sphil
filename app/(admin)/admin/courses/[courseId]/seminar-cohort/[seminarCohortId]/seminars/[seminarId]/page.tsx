@@ -4,7 +4,7 @@ import { VideoForm } from "features/courses/components/forms/VideoForm";
 import { Heading } from "lib/components/ui/Heading";
 import { errorMessages } from "lib/config/errorMessages";
 import { dbGetSeminarAndConnectedById } from "lib/database/dbFuncs";
-import Link from "next/link";
+import Link from "lib/components/navigation/ClientNextLink";
 import { redirect } from "next/navigation";
 
 export default async function AdminSeminarEdit({
