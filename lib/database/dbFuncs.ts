@@ -79,9 +79,11 @@ export const dbGetAllPublishedCourses = async () => {
  * @cached
  */
 export const dbGetCourseBySlug = async (slug: string) => {
+    "use cache";
+    cacheTag(cacheKeys.allPublicCourses);
+    cacheLife("weeks");
+
     const validSlug = z.string().parse(slug);
-    // const getCourseCached = cache(
-    //     async () => {
     return await prisma.course.findUnique({
         where: {
             slug: validSlug,
@@ -99,11 +101,6 @@ export const dbGetCourseBySlug = async (slug: string) => {
             },
         },
     });
-    // },
-    // [cacheKeys.allPublicCourses, validSlug],
-    // { revalidate: CACHE_REVALIDATION_INTERVAL_COURSES_AND_LESSONS }
-    // );
-    // return await getCourseCached();
 };
 
 export async function dbGetSeminarCohortsByCourseAndUser({
