@@ -3,22 +3,22 @@ import Link from "next/link";
 import Image from "next/image";
 import { Heading } from "lib/components/ui/Heading";
 import { GlowBoundary } from "lib/components/animations/GlowBoundary";
-import { auth } from "lib/auth/authConfig";
 import { CourseCardDeleteButton } from "./CourseCardDeleteButton";
 
 type CourseCardProps = {
     course: Course;
     isAdmin?: boolean;
+    isSudo?: boolean;
 };
 
-export async function CourseCard({ course, isAdmin = false }: CourseCardProps) {
+export async function CourseCard({
+    course,
+    isAdmin = false,
+    isSudo = false,
+}: CourseCardProps) {
     const href = isAdmin
         ? `/admin/courses/${course.id}`
         : `/courses/${course.slug}`;
-
-    const session = await auth();
-
-    const isSudo = session?.user.role === "SUPERADMIN";
 
     return (
         <GlowBoundary>

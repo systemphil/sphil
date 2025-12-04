@@ -30,10 +30,17 @@ export async function CoursesDisplayAdmin() {
         );
     }
 
+    const isSudo = session?.user.role === "SUPERADMIN";
+
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:px-6 mb-12 md:mb-32">
             {courses.map((course) => (
-                <CourseCard key={course.id} course={course} isAdmin={true} />
+                <CourseCard
+                    key={course.id}
+                    course={course}
+                    isAdmin={true}
+                    isSudo={isSudo}
+                />
             ))}
         </div>
     );
