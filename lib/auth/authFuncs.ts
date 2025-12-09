@@ -74,7 +74,7 @@ export const withUser = async <T>(
     return await retrieveFunc();
 };
 
-export function determineCourseAccess(
+export function determineAdminCourseAccess(
     session: Session,
     course: NonNullable<
         Awaited<ReturnType<typeof dbGetCourseAndDetailsAndLessonsById>>
