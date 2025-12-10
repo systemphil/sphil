@@ -17,7 +17,10 @@ export default async function MyCoursesPage() {
 
     return (
         <PageWrapper>
-            <Billing purchasedCourses={purchasedCourses} />
+            <Billing
+                purchasedCourses={purchasedCourses}
+                userId={session.user.id}
+            />
         </PageWrapper>
     );
 }

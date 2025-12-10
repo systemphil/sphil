@@ -36,6 +36,15 @@ export const validateAdminAccess = async (): Promise<boolean> => {
     return false;
 };
 
+export const getUserSession = async (): Promise<Session | null> => {
+    const session = await auth();
+
+    if (!session?.user) {
+        return null;
+    }
+    return session;
+};
+
 export const requireUserAuthOrThrow = async (): Promise<void> => {
     const session = await auth();
 

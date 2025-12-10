@@ -1,28 +1,30 @@
 "use server";
 
 import { auth } from "lib/auth/authConfig";
-import { validateAdminAccess } from "lib/auth/authFuncs";
+import { getUserSession, validateAdminAccess } from "lib/auth/authFuncs";
 import {
     bucketDeleteVideoFile,
     bucketGenerateReadSignedUrl,
     bucketGenerateSignedUploadUrl,
 } from "lib/bucket/bucketFuncs";
 import {
+    dbCreateOrDeleteUserProgress,
     dbCreateSeminar,
     dbCreateSeminarCohort,
+    dbDeleteUserProgressForCourse,
     dbGetTranscriptIdByLessonId,
     dbReorderLessons,
     dbReorderSeminars,
     dbUpsertLessonById,
 } from "lib/database/dbFuncs";
-import { cacheKeys } from "lib/config/cache";
+import { cacheKeys } from "lib/config/cacheKeys";
 import {
     ctrlCreateOrUpdateCourse,
     ctrlDeleteModelEntry,
     ctrlUpdateSeminarCohortPrices,
     type ModelName,
 } from "lib/server/ctrl";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag, updateTag } from "next/cache";
 import { z } from "zod";
 
 const upsertCourseSchema = z.object({
@@ -185,6 +187,7 @@ const createSignedReadUrlSchema = z.object({
 });
 type ActionCreateSignedReadUrlInput = z.infer<typeof createSignedReadUrlSchema>;
 
+// TODO add guard
 export async function actionCreateSignedReadUrl(
     input: ActionCreateSignedReadUrlInput
 ) {
@@ -405,4 +408,75 @@ export async function actionCreateTranscription(
         error: false,
         message: "Transcription process triggered",
     };
+}
+
+const actionToggleLessonCompletionSchema = z.object({
+    lessonId: z.string().min(1).max(120),
+    courseId: z.string().min(1).max(120),
+});
+
+export async function actionToggleLessonCompletion(
+    input: z.infer<typeof actionToggleLessonCompletionSchema>
+) {
+    try {
+        const parsed = actionToggleLessonCompletionSchema.safeParse(input);
+        if (!parsed.success) {
+            return { error: true, message: parsed.error.message };
+        }
+
+        const { lessonId, courseId } = input;
+
+        const session = await getUserSession();
+        if (!session) {
+            return { error: true, message: "Unauthenticated" };
+        }
+
+        const userId = session.user.id;
+
+        await dbCreateOrDeleteUserProgress({
+            lessonId,
+            userId: session.user.id,
+        });
+
+        updateTag(cacheKeys.keys.userProgressLesson({ userId, lessonId }));
+        updateTag(cacheKeys.keys.userProgressCourse({ userId, courseId }));
+
+        return { error: false, message: "User progress updated" };
+    } catch (e) {
+        return { error: true, message: e };
+    }
+}
+
+const actionCourseProgressResetSchema = z.object({
+    courseId: z.string().min(1).max(120),
+});
+
+export async function actionCourseProgressReset(
+    input: z.infer<typeof actionCourseProgressResetSchema>
+) {
+    try {
+        const parsed = actionCourseProgressResetSchema.safeParse(input);
+        if (!parsed.success) {
+            return { error: true, message: parsed.error.message };
+        }
+
+        const { courseId } = input;
+
+        const session = await getUserSession();
+        if (!session) {
+            return { error: true, message: "Unauthenticated" };
+        }
+
+        const userId = session.user.id;
+
+        await dbDeleteUserProgressForCourse({
+            courseId,
+            userId: session.user.id,
+        });
+        updateTag(cacheKeys.keys.userProgressCourse({ userId, courseId }));
+
+        return { error: false, message: "User progress updated" };
+    } catch (e) {
+        return { error: true, message: e };
+    }
 }
