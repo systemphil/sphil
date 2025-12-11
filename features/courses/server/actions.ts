@@ -179,10 +179,8 @@ export const actionDeleteModelEntry = adminProcedure
         return { id };
     });
 
-const reorderModelsSchema = z.array(z.string());
-
 export const actionUpdateLessonOrder = adminProcedure
-    .input(reorderModelsSchema)
+    .input(z.array(z.string()))
     .action(async ({ input }) => {
         await dbReorderLessons({ orderedLessonIds: input });
 
@@ -192,7 +190,7 @@ export const actionUpdateLessonOrder = adminProcedure
     });
 
 export const actionUpdateSeminarOrder = adminProcedure
-    .input(reorderModelsSchema)
+    .input(z.array(z.string()))
     .action(async ({ input }) => {
         await dbReorderSeminars({ orderedIds: input });
 
