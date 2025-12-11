@@ -1,7 +1,5 @@
 "use server";
 
-import { auth } from "lib/auth/authConfig";
-import { getUserSession, validateAdminAccess } from "lib/auth/authFuncs";
 import {
     bucketDeleteVideoFile,
     bucketGenerateReadSignedUrl,
@@ -26,457 +24,286 @@ import {
 } from "lib/server/ctrl";
 import { revalidatePath, revalidateTag, updateTag } from "next/cache";
 import { z } from "zod";
+import {
+    adminProcedure,
+    protectedProcedure,
+} from "lib/server/actionProcedures";
 
-const upsertCourseSchema = z.object({
-    id: z.string().optional(),
-    name: z.string(),
-    slug: z.string().toLowerCase(),
-    description: z.string(),
-    basePrice: z.number().positive(),
-    seminarPrice: z.number().positive(),
-    dialoguePrice: z.number().positive(),
-    imageUrl: z.string().url().nullable(),
-    author: z.string().nullable(),
-    published: z.boolean(),
-    baseAvailability: z.date(),
-    seminarAvailability: z.date(),
-    dialogueAvailability: z.date(),
-    infoboxTitle: z.string().nullable(),
-    infoboxDescription: z.string().nullable(),
-});
-type ActionUpsertCourseInput = z.infer<typeof upsertCourseSchema>;
+export const actionUpsertCourse = adminProcedure
+    .input(
+        z.object({
+            id: z.string().optional(),
+            name: z.string(),
+            slug: z.string().toLowerCase(),
+            description: z.string(),
+            basePrice: z.number().positive(),
+            seminarPrice: z.number().positive(),
+            dialoguePrice: z.number().positive(),
+            imageUrl: z.url().nullable(),
+            author: z.string().nullable(),
+            published: z.boolean(),
+            baseAvailability: z.date(),
+            seminarAvailability: z.date(),
+            dialogueAvailability: z.date(),
+            infoboxTitle: z.string().nullable(),
+            infoboxDescription: z.string().nullable(),
+        })
+    )
+    .action(async ({ ctx, input }) => {
+        const data = await ctrlCreateOrUpdateCourse({
+            ...input,
+            creatorId: ctx.user.id,
+        });
+        revalidatePath("/(admin)/admin", "layout");
+        revalidateTag(cacheKeys.allPublicCourses, "max");
+        return { ...data };
+    });
 
-export async function actionUpsertCourse(input: ActionUpsertCourseInput) {
-    const isAdmin = await validateAdminAccess();
-    if (!isAdmin) {
-        return { error: "Unauthorized" };
-    }
-    const parsedInput = upsertCourseSchema.safeParse(input);
+export const actionUpdateSeminarCohort = adminProcedure
+    .input(
+        z.object({
+            id: z.string(),
+            seminarOnlyPrice: z.number().positive(),
+            seminarUpgradePrice: z.number().positive(),
+            seminarLink: z.string().nullish(),
+        })
+    )
+    .action(async ({ input }) => {
+        const data = await ctrlUpdateSeminarCohortPrices(input);
+        revalidatePath("/(admin)/admin", "layout");
+        revalidateTag(cacheKeys.allSeminars, "max");
 
-    if (!parsedInput.success) {
-        return { error: `Bad request ${parsedInput.error.message}` };
-    }
+        return { ...data };
+    });
 
-    const session = await auth();
-    const creatorId = session?.user.id;
+export type ActionUpdateSeminarCohortInput = Parameters<
+    typeof actionUpdateSeminarCohort
+>[0];
 
-    if (!creatorId) {
-        throw new Error("Failed to retrieve creatorId from session user id");
-    }
+export const actionUpsertLesson = adminProcedure
+    .input(
+        z.object({
+            id: z.string().optional(),
+            name: z.string(),
+            slug: z.string().toLowerCase(),
+            description: z.string(),
+            partId: z.string().optional().nullish(),
+            courseId: z.string(),
+        })
+    )
+    .action(async ({ input }) => {
+        const data = await dbUpsertLessonById(input);
+        revalidatePath("/(admin)/admin", "layout");
+        revalidateTag(cacheKeys.allPublicCourses, "max");
+        return { ...data };
+    });
 
-    const _input = {
-        ...input,
-        creatorId,
-    };
+export const actionCreateSignedPostUrl = adminProcedure
+    .input(
+        z.object({
+            id: z.string().optional(),
+            lessonId: z.string(),
+            fileName: z.string(),
+        })
+    )
+    .action(async ({ input }) => {
+        const data = await bucketGenerateSignedUploadUrl(input);
+        revalidatePath("/(admin)/admin", "layout");
+        revalidateTag(cacheKeys.allPublicCourses, "max");
+        return { ...data };
+    });
 
-    const data = await ctrlCreateOrUpdateCourse(_input);
-    revalidatePath("/(admin)/admin", "layout");
-    revalidateTag(cacheKeys.allPublicCourses, "max");
-    return { data };
-}
+export const actionCreateSignedPostUrlSeminar = adminProcedure
+    .input(
+        z.object({
+            id: z.string().optional(),
+            seminarId: z.string(),
+            fileName: z.string(),
+        })
+    )
+    .action(async ({ input }) => {
+        const data = await bucketGenerateSignedUploadUrl(input);
+        revalidatePath("/(admin)/admin", "layout");
+        revalidateTag(cacheKeys.allPublicCourses, "max");
+        return { ...data };
+    });
 
-const updateSeminarCohortSchema = z.object({
-    id: z.string(),
-    seminarOnlyPrice: z.number().positive(),
-    seminarUpgradePrice: z.number().positive(),
-    seminarLink: z.string().nullish(),
-});
-export type ActionUpdateSeminarCohortInput = z.infer<
-    typeof updateSeminarCohortSchema
->;
+export const actionCreateSignedReadUrl = protectedProcedure
+    .input(
+        z.object({
+            id: z.string(),
+            fileName: z.string(),
+        })
+    )
+    .action(async ({ input }) => {
+        const url = await bucketGenerateReadSignedUrl(input);
+        return { url };
+    });
 
-export async function actionUpdateSeminarCohort(
-    input: ActionUpdateSeminarCohortInput
-) {
-    const isAdmin = await validateAdminAccess();
-    if (!isAdmin) {
-        return { error: "Unauthorized" };
-    }
-    const parsedInput = updateSeminarCohortSchema.safeParse(input);
+export const actionDeleteVideoFile = adminProcedure
+    .input(
+        z.object({
+            id: z.string(),
+            fileName: z.string(),
+        })
+    )
+    .action(async ({ input }) => {
+        await bucketDeleteVideoFile(input);
+        return "Successfully deleted";
+    });
 
-    if (!parsedInput.success) {
-        return { error: `Bad request ${parsedInput.error.message}` };
-    }
-
-    const data = await ctrlUpdateSeminarCohortPrices(input);
-    revalidatePath("/(admin)/admin", "layout");
-    revalidateTag(cacheKeys.allSeminars, "max");
-
-    return { data };
-}
-
-const upsertLessonSchema = z.object({
-    id: z.string().optional(),
-    name: z.string(),
-    slug: z.string().toLowerCase(),
-    description: z.string(),
-    partId: z.string().optional().nullish(),
-    courseId: z.string(),
-});
-type ActionUpsertLessonInput = z.infer<typeof upsertLessonSchema>;
-
-export async function actionUpsertLesson(input: ActionUpsertLessonInput) {
-    const isAdmin = await validateAdminAccess();
-    if (!isAdmin) {
-        return { error: "Unauthorized" };
-    }
-    const parsedInput = upsertLessonSchema.safeParse(input);
-
-    if (!parsedInput.success) {
-        return { error: `Bad request ${parsedInput.error.message}` };
-    }
-    const data = await dbUpsertLessonById(input);
-    revalidatePath("/(admin)/admin", "layout");
-    revalidateTag(cacheKeys.allPublicCourses, "max");
-    return { data };
-}
-
-const createSignedPostUrlSchema = z.object({
-    id: z.string().optional(),
-    lessonId: z.string(),
-    fileName: z.string(),
-});
-type ActionCreateSignedPostUrlInput = z.infer<typeof createSignedPostUrlSchema>;
-
-export async function actionCreateSignedPostUrl(
-    input: ActionCreateSignedPostUrlInput
-) {
-    const isAdmin = await validateAdminAccess();
-    if (!isAdmin) {
-        return { error: "Unauthorized" };
-    }
-    const parsedInput = createSignedPostUrlSchema.safeParse(input);
-
-    if (!parsedInput.success) {
-        return { error: `Bad request ${parsedInput.error.message}` };
-    }
-    const data = await bucketGenerateSignedUploadUrl(input);
-    revalidatePath("/(admin)/admin", "layout");
-    revalidateTag(cacheKeys.allPublicCourses, "max");
-    return { data };
-}
-
-const createSignedPostUrlSeminarSchema = z.object({
-    id: z.string().optional(),
-    seminarId: z.string(),
-    fileName: z.string(),
-});
-
-export async function actionCreateSignedPostUrlSeminar(
-    input: z.infer<typeof createSignedPostUrlSeminarSchema>
-) {
-    const isAdmin = await validateAdminAccess();
-    if (!isAdmin) {
-        return { error: "Unauthorized" };
-    }
-    const parsedInput = createSignedPostUrlSeminarSchema.safeParse(input);
-
-    if (!parsedInput.success) {
-        return { error: `Bad request ${parsedInput.error.message}` };
-    }
-
-    const data = await bucketGenerateSignedUploadUrl(input);
-    revalidatePath("/(admin)/admin", "layout");
-    revalidateTag(cacheKeys.allPublicCourses, "max");
-    return { data };
-}
-
-const createSignedReadUrlSchema = z.object({
-    id: z.string(),
-    fileName: z.string(),
-});
-type ActionCreateSignedReadUrlInput = z.infer<typeof createSignedReadUrlSchema>;
-
-// TODO add guard
-export async function actionCreateSignedReadUrl(
-    input: ActionCreateSignedReadUrlInput
-) {
-    const parsedInput = createSignedReadUrlSchema.safeParse(input);
-
-    if (!parsedInput.success) {
-        return { error: `Bad request ${parsedInput.error.message}` };
-    }
-    const data = await bucketGenerateReadSignedUrl(input);
-    return { data };
-}
-
-const deleteVideoFileSchema = z.object({
-    id: z.string(),
-    fileName: z.string(),
-});
-type ActionDeleteVideoFileInput = z.infer<typeof deleteVideoFileSchema>;
-
-export async function actionDeleteVideoFile(input: ActionDeleteVideoFileInput) {
-    const isAdmin = await validateAdminAccess();
-    if (!isAdmin) {
-        return { error: "Unauthorized" };
-    }
-    const parsedInput = deleteVideoFileSchema.safeParse(input);
-
-    if (!parsedInput.success) {
-        return { error: `Bad request ${parsedInput.error.message}` };
-    }
-    const data = await bucketDeleteVideoFile(input);
-    return { data };
-}
-
-const deleteModelEntrySchema = z.object({
-    id: z.string(),
-    modelName: z.enum([
-        "LessonTranscript",
-        "LessonContent",
-        "Video",
-        "CourseDetails",
-        "Lesson",
-        "Course",
-        "SeminarTranscript",
-        "SeminarContent",
-        "SeminarVideo",
-        "Seminar",
-        "SeminarCohortDetails",
-        "UNSUPPORTED",
-    ]) satisfies z.ZodType<ModelName>,
-});
-type ActionDeleteModelEntryInput = z.infer<typeof deleteModelEntrySchema>;
-
-export async function actionDeleteModelEntry(
-    input: ActionDeleteModelEntryInput
-) {
-    const isAdmin = await validateAdminAccess();
-    if (!isAdmin) {
-        return { error: "Unauthorized" };
-    }
-    const parsedInput = deleteModelEntrySchema.safeParse(input);
-    if (!parsedInput.success) {
-        return { error: `Bad request ${parsedInput.error.message}` };
-    }
-    const data = await ctrlDeleteModelEntry(input);
-    revalidatePath("/(admin)/admin", "layout");
-    revalidateTag(cacheKeys.allPublicCourses, "max");
-    return { data };
-}
+export const actionDeleteModelEntry = adminProcedure
+    .input(
+        z.object({
+            id: z.string(),
+            modelName: z.enum([
+                "LessonTranscript",
+                "LessonContent",
+                "Video",
+                "CourseDetails",
+                "Lesson",
+                "Course",
+                "SeminarTranscript",
+                "SeminarContent",
+                "SeminarVideo",
+                "Seminar",
+                "SeminarCohortDetails",
+                "UNSUPPORTED",
+            ]) satisfies z.ZodType<ModelName>,
+        })
+    )
+    .action(async ({ input }) => {
+        const { id } = await ctrlDeleteModelEntry(input);
+        revalidatePath("/(admin)/admin", "layout");
+        revalidateTag(cacheKeys.allPublicCourses, "max");
+        return { id };
+    });
 
 const reorderModelsSchema = z.array(z.string());
 
-export async function actionUpdateLessonOrder(
-    input: z.infer<typeof reorderModelsSchema>
-) {
-    const isAdmin = await validateAdminAccess();
-    if (!isAdmin) {
-        return { error: true, message: "Unauthorized" };
-    }
-    const parsedInput = reorderModelsSchema.safeParse(input);
-    if (!parsedInput.success) {
-        return {
-            error: true,
-            message: `Bad request ${parsedInput.error.message}`,
-        };
-    }
+export const actionUpdateLessonOrder = adminProcedure
+    .input(reorderModelsSchema)
+    .action(async ({ input }) => {
+        await dbReorderLessons({ orderedLessonIds: input });
 
-    await dbReorderLessons({ orderedLessonIds: input });
-
-    revalidatePath("/(admin)/admin", "layout");
-    revalidateTag(cacheKeys.allPublicCourses, "max");
-    return { error: false, message: "Successfully reordered your lessons" };
-}
-
-export async function actionUpdateSeminarOrder(
-    input: z.infer<typeof reorderModelsSchema>
-) {
-    const isAdmin = await validateAdminAccess();
-    if (!isAdmin) {
-        return { error: true, message: "Unauthorized" };
-    }
-    const parsedInput = reorderModelsSchema.safeParse(input);
-    if (!parsedInput.success) {
-        return {
-            error: true,
-            message: `Bad request ${parsedInput.error.message}`,
-        };
-    }
-
-    await dbReorderSeminars({ orderedIds: input });
-
-    revalidatePath("/(admin)/admin", "layout");
-    revalidateTag(cacheKeys.allSeminars, "max");
-    return { error: false, message: "Successfully reordered your seminars" };
-}
-
-const actionCreateSeminarSchema = z.object({
-    seminarCohortId: z.string(),
-});
-
-export async function actionCreateSeminar(
-    input: z.infer<typeof actionCreateSeminarSchema>
-) {
-    const isAdmin = await validateAdminAccess();
-    if (!isAdmin) {
-        return { error: true, message: "Unauthorized" };
-    }
-    const parsedInput = actionCreateSeminarSchema.safeParse(input);
-    if (!parsedInput.success) {
-        return {
-            error: true,
-            message: `Bad request ${parsedInput.error.message}`,
-        };
-    }
-
-    const newSeminar = await dbCreateSeminar(input);
-
-    revalidatePath("/(admin)/admin", "layout");
-    revalidateTag(cacheKeys.allSeminars, "max");
-    return {
-        error: false,
-        message: "Successfully created",
-        data: {
-            seminarId: newSeminar.id,
-        },
-    };
-}
-
-const actionCreateSeminarCohortSchema = z.object({
-    courseId: z.string(),
-    currentYear: z.number().min(2024).max(2100),
-});
-
-export async function actionCreateSeminarCohort(
-    input: z.infer<typeof actionCreateSeminarCohortSchema>
-) {
-    const isAdmin = await validateAdminAccess();
-    if (!isAdmin) {
-        return { error: true, message: "Unauthorized" };
-    }
-    const parsedInput = actionCreateSeminarCohortSchema.safeParse(input);
-    if (!parsedInput.success) {
-        return {
-            error: true,
-            message: `Bad request ${parsedInput.error.message}`,
-        };
-    }
-
-    const newSeminar = await dbCreateSeminarCohort(input);
-
-    revalidatePath("/(admin)/admin", "layout");
-    revalidateTag(cacheKeys.allSeminars, "max");
-    return {
-        error: false,
-        message: "Successfully created",
-        data: {
-            seminarId: newSeminar.id,
-        },
-    };
-}
-
-const actionCreateTranscriptionSchema = z.object({
-    parentId: z.string(),
-    fileUrl: z.string(),
-});
-
-export async function actionCreateTranscription(
-    input: z.infer<typeof actionCreateTranscriptionSchema>
-) {
-    const isAdmin = await validateAdminAccess();
-    if (!isAdmin) {
-        return { error: true, message: "Unauthorized" };
-    }
-
-    const parsed = actionCreateTranscriptionSchema.safeParse(input);
-    if (!parsed.success) {
-        return { error: true, message: parsed.error.message };
-    }
-
-    const existingTranscriptEntry = await dbGetTranscriptIdByLessonId({
-        lessonId: input.parentId,
+        revalidatePath("/(admin)/admin", "layout");
+        revalidateTag(cacheKeys.allPublicCourses, "max");
+        return "Successfully reordered your lessons";
     });
 
-    const payload = {
-        transcriptId: existingTranscriptEntry?.id ?? null,
-        ...input,
-    };
+export const actionUpdateSeminarOrder = adminProcedure
+    .input(reorderModelsSchema)
+    .action(async ({ input }) => {
+        await dbReorderSeminars({ orderedIds: input });
 
-    // Trigger background processing completely outside render
-    fetch(`${process.env.NEXT_PUBLIC_SITE_ROOT}/api/transcribe`, {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: {
-            "Content-Type": "application/json",
-            "x-internal-key": `${process.env.TRANSCRIBE_API_KEY}`,
-        },
+        revalidatePath("/(admin)/admin", "layout");
+        revalidateTag(cacheKeys.allSeminars, "max");
+        return "Successfully reordered your seminars";
     });
 
-    return {
-        error: false,
-        message: "Transcription process triggered",
-    };
-}
+export const actionCreateSeminar = adminProcedure
+    .input(
+        z.object({
+            seminarCohortId: z.string(),
+        })
+    )
+    .action(async ({ input }) => {
+        const newSeminar = await dbCreateSeminar(input);
 
-const actionToggleLessonCompletionSchema = z.object({
-    lessonId: z.string().min(1).max(120),
-    courseId: z.string().min(1).max(120),
-});
+        revalidatePath("/(admin)/admin", "layout");
+        revalidateTag(cacheKeys.allSeminars, "max");
+        return {
+            seminarId: newSeminar.id,
+        };
+    });
 
-export async function actionToggleLessonCompletion(
-    input: z.infer<typeof actionToggleLessonCompletionSchema>
-) {
-    try {
-        const parsed = actionToggleLessonCompletionSchema.safeParse(input);
-        if (!parsed.success) {
-            return { error: true, message: parsed.error.message };
-        }
+export const actionCreateSeminarCohort = adminProcedure
+    .input(
+        z.object({
+            courseId: z.string(),
+            currentYear: z.number().min(2024).max(2100),
+        })
+    )
+    .action(async ({ input }) => {
+        const newSeminar = await dbCreateSeminarCohort(input);
 
+        revalidatePath("/(admin)/admin", "layout");
+        revalidateTag(cacheKeys.allSeminars, "max");
+        return {
+            seminarId: newSeminar.id,
+        };
+    });
+
+export const actionCreateTranscription = adminProcedure
+    .input(
+        z.object({
+            parentId: z.string(),
+            fileUrl: z.string(),
+        })
+    )
+    .action(async ({ input }) => {
+        const existingTranscriptEntry = await dbGetTranscriptIdByLessonId({
+            lessonId: input.parentId,
+        });
+
+        const payload = {
+            transcriptId: existingTranscriptEntry?.id ?? null,
+            ...input,
+        };
+
+        // Trigger background processing completely outside render
+        fetch(`${process.env.NEXT_PUBLIC_SITE_ROOT}/api/transcribe`, {
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers: {
+                "Content-Type": "application/json",
+                "x-internal-key": `${process.env.TRANSCRIBE_API_KEY}`,
+            },
+        });
+
+        return "Transcription process triggered";
+    });
+
+export const actionToggleLessonCompletion = protectedProcedure
+    .input(
+        z.object({
+            lessonId: z.string().min(1).max(120),
+            courseId: z.string().min(1).max(120),
+        })
+    )
+    .action(async ({ input, ctx }) => {
         const { lessonId, courseId } = input;
-
-        const session = await getUserSession();
-        if (!session) {
-            return { error: true, message: "Unauthenticated" };
-        }
-
-        const userId = session.user.id;
+        const { user } = ctx;
 
         await dbCreateOrDeleteUserProgress({
             lessonId,
-            userId: session.user.id,
+            userId: user.id,
         });
 
-        updateTag(cacheKeys.keys.userProgressLesson({ userId, lessonId }));
-        updateTag(cacheKeys.keys.userProgressCourse({ userId, courseId }));
+        updateTag(
+            cacheKeys.keys.userProgressLesson({ userId: user.id, lessonId })
+        );
+        updateTag(
+            cacheKeys.keys.userProgressCourse({ userId: user.id, courseId })
+        );
 
-        return { error: false, message: "User progress updated" };
-    } catch (e) {
-        return { error: true, message: e };
-    }
-}
+        return "User progress updated";
+    });
 
-const actionCourseProgressResetSchema = z.object({
-    courseId: z.string().min(1).max(120),
-});
-
-export async function actionCourseProgressReset(
-    input: z.infer<typeof actionCourseProgressResetSchema>
-) {
-    try {
-        const parsed = actionCourseProgressResetSchema.safeParse(input);
-        if (!parsed.success) {
-            return { error: true, message: parsed.error.message };
-        }
-
-        const { courseId } = input;
-
-        const session = await getUserSession();
-        if (!session) {
-            return { error: true, message: "Unauthenticated" };
-        }
-
-        const userId = session.user.id;
-
+export const actionCourseProgressReset = protectedProcedure
+    .input(z.object({ courseId: z.string().min(1).max(120) }))
+    .action(async ({ input, ctx }) => {
         await dbDeleteUserProgressForCourse({
-            courseId,
-            userId: session.user.id,
+            courseId: input.courseId,
+            userId: ctx.user.id,
         });
-        updateTag(cacheKeys.keys.userProgressCourse({ userId, courseId }));
 
-        return { error: false, message: "User progress updated" };
-    } catch (e) {
-        return { error: true, message: e };
-    }
-}
+        updateTag(
+            cacheKeys.keys.userProgressCourse({
+                userId: ctx.user.id,
+                courseId: input.courseId,
+            })
+        );
+
+        return "Reset successful";
+    });
