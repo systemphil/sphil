@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export type ActionState<T> =
-    | { error: true; message: string; data?: null }
-    | { error: false; message: string; data: T };
+    | { error: true; message: string; data: null }
+    | { error: false; message: string; data: T | null };
 
 class ActionBuilder<
     TContext = Record<string, unknown>,
@@ -76,7 +76,7 @@ class ActionBuilder<
                 return {
                     error: false,
                     message: "Success",
-                    data: result,
+                    data: result ?? null,
                 };
             } catch (e) {
                 let errorMessage = "Unknown error";
