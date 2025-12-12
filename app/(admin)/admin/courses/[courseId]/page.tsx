@@ -8,7 +8,7 @@ import { errorMessages } from "lib/config/errorMessages";
 import { CourseLessonsSortable } from "features/courses/components/CourseLessonsSortable";
 import { Alert, Button } from "@mui/material";
 import { auth } from "lib/auth/authConfig";
-import { determineCourseAccess } from "lib/auth/authFuncs";
+import { determineAdminCourseAccess } from "lib/auth/authFuncs";
 import { CreateNewSeminarCohortBtn } from "features/courses/components/CreateNewSeminarCohortBtn";
 
 export const metadata = {};
@@ -35,7 +35,7 @@ export default async function AdminCourseEdit({
         redirect(`/?error=${errorMessages.courseNotFound}`);
     }
 
-    const { courseAccess, seminarAccess } = determineCourseAccess(
+    const { courseAccess, seminarAccess } = determineAdminCourseAccess(
         session,
         course
     );

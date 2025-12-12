@@ -1,40 +1,25 @@
 "use server";
 
 import { dbCreateNewsletterEmail } from "lib/database/dbFuncs";
+import { publicProcedure } from "lib/server/actionProcedures";
 import { z } from "zod";
 
-const emailSchema = z.object({
-    email: z.email("Invalid email address"),
-});
+export type SubscriptionResponse = Awaited<
+    ReturnType<typeof actionSubscribeToNewsletter>
+>;
 
-export type SubscriptionResponse = {
-    success: boolean;
-    message: string;
-};
+export const actionSubscribeToNewsletter = publicProcedure
+    .input(
+        z.object({
+            email: z.email("Invalid email address"),
+        })
+    )
+    .action(async ({ input }) => {
+        try {
+            await dbCreateNewsletterEmail({ email: input.email });
 
-export async function actionSubscribeToNewsletter(
-    email: string
-): Promise<SubscriptionResponse> {
-    try {
-        const parsedInput = emailSchema.safeParse({ email });
-
-        if (!parsedInput.success) {
-            return {
-                success: false,
-                message: "Invalid email address",
-            };
+            return "Successfully subscribed!";
+        } catch {
+            throw new Error("Email may already be subscribed");
         }
-
-        await dbCreateNewsletterEmail({ email });
-
-        return {
-            success: true,
-            message: "Successfully subscribed!",
-        };
-    } catch {
-        return {
-            success: false,
-            message: "Email may already be subscribed",
-        };
-    }
-}
+    });

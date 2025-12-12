@@ -18,7 +18,7 @@ import { prisma } from "./dbInit";
 import { exclude } from "lib/utils";
 import { mdxCompiler } from "lib/server/mdxCompiler";
 import { withAdmin, withUser } from "lib/auth/authFuncs";
-import { cacheKeys } from "lib/config/cache";
+import { cacheKeys } from "lib/config/cacheKeys";
 import { Text } from "lib/utils/textEncoding";
 import { stripeCreatePrice, stripeCreateProduct } from "lib/stripe/stripeFuncs";
 import { AUXILIARY_PRODUCTS_DEFAULTS } from "lib/config/auxiliaryProductDefaults";
@@ -2035,6 +2035,150 @@ export async function dbGetTranscriptIdByLessonId({
         },
         select: {
             id: true,
+        },
+    });
+}
+
+export async function dbGetUserProgressForCourse({
+    courseId,
+    userId,
+}: {
+    courseId: string;
+    userId: string;
+}) {
+    const course = await prisma.course.findUnique({
+        where: {
+            id: courseId,
+        },
+        select: {
+            lessons: {
+                select: {
+                    id: true,
+                },
+            },
+        },
+    });
+
+    if (!course) {
+        throw new Error(`Expected course, got ${course}`);
+    }
+
+    const lessonIds = course.lessons.map((lesson) => lesson.id);
+
+    if (lessonIds.length === 0) {
+        return {
+            totalLessons: lessonIds.length,
+            userProgress: [],
+        };
+    }
+
+    const userProgress = await prisma.userLessonProgress.findMany({
+        where: {
+            userId: userId,
+            lessonId: {
+                in: lessonIds,
+            },
+        },
+        select: {
+            lessonId: true,
+            completedAt: true,
+        },
+    });
+
+    return {
+        totalLessons: lessonIds.length,
+        userProgress,
+    };
+}
+
+export async function dbGetUserProgress({
+    lessonId,
+    userId,
+}: {
+    lessonId: string;
+    userId: string;
+}) {
+    return await prisma.userLessonProgress.findUnique({
+        where: {
+            userId_lessonId: {
+                lessonId,
+                userId,
+            },
+        },
+    });
+}
+
+export async function dbCreateOrDeleteUserProgress({
+    userId,
+    lessonId,
+}: {
+    userId: string;
+    lessonId: string;
+}) {
+    const exists = await prisma.userLessonProgress.findUnique({
+        where: {
+            userId_lessonId: {
+                lessonId,
+                userId,
+            },
+        },
+    });
+
+    if (exists) {
+        return await prisma.userLessonProgress.delete({
+            where: {
+                userId_lessonId: {
+                    lessonId,
+                    userId,
+                },
+            },
+        });
+    }
+
+    return await prisma.userLessonProgress.create({
+        data: {
+            lessonId,
+            userId,
+        },
+    });
+}
+
+export async function dbDeleteUserProgressForCourse({
+    courseId,
+    userId,
+}: {
+    courseId: string;
+    userId: string;
+}) {
+    const course = await prisma.course.findUnique({
+        where: {
+            id: courseId,
+        },
+        select: {
+            lessons: {
+                select: {
+                    id: true,
+                },
+            },
+        },
+    });
+
+    if (!course) {
+        throw new Error(`Expected course, got ${course}`);
+    }
+
+    const lessonIds = course.lessons.map((lesson) => lesson.id);
+
+    if (lessonIds.length === 0) {
+        return;
+    }
+
+    return await prisma.userLessonProgress.deleteMany({
+        where: {
+            userId: userId,
+            lessonId: {
+                in: lessonIds,
+            },
         },
     });
 }

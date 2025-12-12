@@ -5,7 +5,7 @@ import { SeminarCohortForm } from "features/courses/components/forms/SeminarCoho
 import { SeminarCreateNewButton } from "features/courses/components/SeminarCreateNewButton";
 import { SeminarParticipantsTable } from "features/courses/components/tables/SeminarParticipantsTable";
 import { auth } from "lib/auth/authConfig";
-import { determineCourseAccess } from "lib/auth/authFuncs";
+import { determineAdminCourseAccess } from "lib/auth/authFuncs";
 import { Heading } from "lib/components/ui/Heading";
 import { errorMessages } from "lib/config/errorMessages";
 import {
@@ -48,7 +48,7 @@ export default async function AdminSeminarCohortEdit({
         redirect(`/?error=${errorMessages.courseNotFound}`);
     }
 
-    const { courseAccess, seminarAccess } = determineCourseAccess(
+    const { courseAccess, seminarAccess } = determineAdminCourseAccess(
         session,
         course
     );

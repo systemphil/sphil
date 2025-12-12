@@ -36,6 +36,15 @@ export const validateAdminAccess = async (): Promise<boolean> => {
     return false;
 };
 
+export const getUserSession = async (): Promise<Session | null> => {
+    const session = await auth();
+
+    if (!session?.user) {
+        return null;
+    }
+    return session;
+};
+
 export const requireUserAuthOrThrow = async (): Promise<void> => {
     const session = await auth();
 
@@ -74,7 +83,7 @@ export const withUser = async <T>(
     return await retrieveFunc();
 };
 
-export function determineCourseAccess(
+export function determineAdminCourseAccess(
     session: Session,
     course: NonNullable<
         Awaited<ReturnType<typeof dbGetCourseAndDetailsAndLessonsById>>

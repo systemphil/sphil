@@ -42,7 +42,6 @@ export function TableOfLessons({
         <Paper
             elevation={2}
             sx={{
-                mt: 2,
                 py: { xs: 2, md: 3 },
                 maxWidth: 320,
             }}

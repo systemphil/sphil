@@ -32,11 +32,13 @@ export const SubscribeToNewsletterForm = ({
 
         startTransition(async () => {
             try {
-                const result = await actionSubscribeToNewsletter(data.email);
+                const result = await actionSubscribeToNewsletter({
+                    email: data.email,
+                });
 
-                if (result.success) {
+                if (result.error === false) {
                     setStatus("success");
-                    toast.success(result.message);
+                    toast.success(result.data);
                 } else {
                     setStatus("error");
                     toast.error(result.message);

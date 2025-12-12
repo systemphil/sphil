@@ -225,7 +225,7 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
                     console.error("Error retrieving URL: ", resp.error);
                 } else {
                     const actionRes = await actionCreateTranscription({
-                        fileUrl: resp.data,
+                        fileUrl: resp.data.url,
                         parentId: paramId,
                     });
 
@@ -276,7 +276,7 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
                     setError(true);
                     toast.error("Oops! No video preview available");
                 } else {
-                    setPreviewUrl(resp.data);
+                    setPreviewUrl(resp.data.url);
                 }
                 isCalledRef.current = false;
             }
