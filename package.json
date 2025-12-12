@@ -32,7 +32,7 @@
         "@emotion/react": "^11.13.0",
         "@emotion/server": "^11.11.0",
         "@emotion/styled": "^11.13.0",
-        "@google-cloud/storage": "^7.13.0",
+        "@google-cloud/storage": "^7.18.0",
         "@mdxeditor/editor": "3.14.0",
         "@mui/icons-material": "^7.3.2",
         "@mui/material": "^7.3.2",
@@ -51,7 +51,7 @@
         "dayjs": "^1.11.13",
         "framer-motion": "^12.23.12",
         "minimatch": "^10.0.3",
-        "next": "16.0.7",
+        "next": "16.0.10",
         "next-auth": "^5.0.0-beta.30",
         "nextra": "4.6.0",
         "nextra-theme-docs": "4.6.0",
@@ -88,8 +88,10 @@
     },
     "overrides": {
         "glob": "^11.1.0",
-        "next": "16.0.7",
-        "mdast-util-to-hast": "13.2.1"
+        "next": "16.0.10",
+        "mdast-util-to-hast": "13.2.1",
+        "jws": "4.0.1",
+        "js-yaml": "4.1.1"
     },
     "trustedDependencies": [
         "@prisma/client",
