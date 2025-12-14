@@ -27,9 +27,6 @@ export const cacheKeys = {
         seminarCohortsByCourseSlug: ({ courseSlug }: { courseSlug: string }) =>
             `seminarCohorts:${courseSlug}`,
 
-        // seminar: ({ seminarId }: { seminarId: string }) =>
-        //     `seminar:${seminarId}`,
-
         seminarsAll: "seminarsAll",
 
         userProgressUser: ({ userId }: { userId: string }) =>
