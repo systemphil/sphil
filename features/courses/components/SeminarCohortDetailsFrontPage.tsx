@@ -1,5 +1,5 @@
 import { MDXRenderer } from "lib/components/MDXRenderer";
-import type { dbGetSeminarCohortByCourseYearAndUser } from "lib/database/dbFuncs";
+import type { dbGetSeminarCohortDataCache } from "lib/database/dbFuncs";
 import { Heading } from "lib/components/ui/Heading";
 import { Paragraph } from "lib/components/ui/Paragraph";
 import { Back } from "lib/components/navigation/Back";
@@ -9,7 +9,7 @@ export async function SeminarCohortDetailsFrontPage({
     seminarCohort,
 }: {
     seminarCohort: NonNullable<
-        Awaited<ReturnType<typeof dbGetSeminarCohortByCourseYearAndUser>>
+        Awaited<ReturnType<typeof dbGetSeminarCohortDataCache>>
     >;
 }) {
     const md = "md:grid md:grid-cols-4 md:items-start";

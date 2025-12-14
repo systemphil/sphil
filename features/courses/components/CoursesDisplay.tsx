@@ -1,4 +1,4 @@
-import { dbGetAllPublishedCourses } from "lib/database/dbFuncs";
+import { dbGetAllPublishedCoursesDataCache } from "lib/database/dbFuncs";
 import { CourseCard } from "./CourseCard";
 import { Heading } from "lib/components/ui/Heading";
 import { cacheLife, cacheTag } from "next/cache";
@@ -6,10 +6,10 @@ import { cacheKeys } from "lib/config/cacheKeys";
 
 export async function CoursesDisplay() {
     "use cache";
-    cacheTag(cacheKeys.allPublicCourses);
+    cacheTag(...cacheKeys.tagPublicCourses());
     cacheLife("weeks");
 
-    const courses = await dbGetAllPublishedCourses();
+    const courses = await dbGetAllPublishedCoursesDataCache();
 
     if (courses.length === 0) {
         return (

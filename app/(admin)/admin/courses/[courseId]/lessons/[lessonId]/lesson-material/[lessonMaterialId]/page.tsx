@@ -40,5 +40,11 @@ export default async function AdminLessonMaterialEdit({
         throw new Error("Lesson not found");
     }
 
-    return <Editor material={lessonMaterial} title={lesson.name} />;
+    return (
+        <Editor
+            material={lessonMaterial}
+            title={lesson.name}
+            courseSlug={lesson.course.slug}
+        />
+    );
 }

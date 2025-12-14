@@ -38,6 +38,7 @@ async function AdminSeminarCohortMaterialEdit({
             <Editor
                 material={editorMaterial}
                 title={`${course.name} ${seminarCohort.year}`}
+                courseSlug={course.slug}
             />
         </Suspense>
     );

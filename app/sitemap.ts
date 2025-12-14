@@ -3,7 +3,7 @@ import path from "node:path";
 import { minimatch } from "minimatch";
 import type { MetadataRoute } from "next";
 import { SITE_ROOT } from "lib/config/consts";
-import { dbGetAllPublishedCourses } from "lib/database/dbFuncs";
+import { dbGetAllPublishedCoursesDataCache } from "lib/database/dbFuncs";
 import { generateStaticParamsFor } from "nextra/pages";
 
 const siteConfig = {
@@ -189,7 +189,7 @@ async function getDynamicRoutes(): Promise<string[]> {
 
     try {
         // Fetch courses from your database
-        const courses = await dbGetAllPublishedCourses();
+        const courses = await dbGetAllPublishedCoursesDataCache();
 
         for (const course of courses) {
             routes.push(`/courses/${course.slug}`);

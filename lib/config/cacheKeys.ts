@@ -6,7 +6,31 @@ export const cacheKeys = {
      * Root keys for manual revalidation
      */
     keys: {
-        EVERYTHING: () => EVERYTHING,
+        EVERYTHING,
+
+        publicCourses: "publicCourses",
+
+        course: ({ courseSlug }: { courseSlug: string }) =>
+            `course:${courseSlug}`,
+
+        courseForLessons: ({ courseSlug }: { courseSlug: string }) =>
+            `courseForLesson:${courseSlug}`,
+
+        lesson: ({
+            courseSlug,
+            lessonSlug,
+        }: {
+            courseSlug: string;
+            lessonSlug: string;
+        }) => `lesson:${courseSlug}:${lessonSlug}`,
+
+        seminarCohortsByCourseSlug: ({ courseSlug }: { courseSlug: string }) =>
+            `seminarCohorts:${courseSlug}`,
+
+        // seminar: ({ seminarId }: { seminarId: string }) =>
+        //     `seminar:${seminarId}`,
+
+        seminarsAll: "seminarsAll",
 
         userProgressUser: ({ userId }: { userId: string }) =>
             `${userProgress}:${userId}`,
@@ -28,9 +52,31 @@ export const cacheKeys = {
         }) => `${userProgress}:${userId}:lesson:${lessonId}`,
     },
 
-    allPublicCourses: "allPublicCourses",
-    allSeminars: "allSeminars",
-    allUserProgress: "allUserProgress",
+    tagPublicCourses: () => [EVERYTHING, cacheKeys.keys.publicCourses],
+
+    tagCourse: ({ courseSlug }: { courseSlug: string }) => [
+        EVERYTHING,
+        cacheKeys.keys.publicCourses,
+        cacheKeys.keys.course({ courseSlug }),
+    ],
+
+    tagLesson: ({
+        lessonSlug,
+        courseSlug,
+    }: {
+        lessonSlug: string;
+        courseSlug: string;
+    }) => [
+        EVERYTHING,
+        cacheKeys.keys.courseForLessons({ courseSlug }),
+        cacheKeys.keys.lesson({ courseSlug, lessonSlug }),
+    ],
+
+    tagSeminarCohortsByCourseSlug: ({ courseSlug }: { courseSlug: string }) => [
+        EVERYTHING,
+        cacheKeys.keys.seminarsAll,
+        cacheKeys.keys.seminarCohortsByCourseSlug({ courseSlug }),
+    ],
 
     tagUserProgress: ({
         userId,

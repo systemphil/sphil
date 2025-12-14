@@ -37,7 +37,11 @@ export default async function LessonFrontPageRoute({
 
     return (
         <Suspense fallback={<Loading.RingFullPage />}>
-            <LessonFrontPage lessonSlug={lessonSlug} userId={session.user.id} />
+            <LessonFrontPage
+                lessonSlug={lessonSlug}
+                userId={session.user.id}
+                courseSlug={courseSlug}
+            />
         </Suspense>
     );
 }

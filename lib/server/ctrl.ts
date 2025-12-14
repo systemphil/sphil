@@ -15,7 +15,7 @@ import {
     dbDeleteVideoById,
     dbGetCourseAndDetailsAndLessonsById,
     dbGetCourseById,
-    dbGetCourseBySlug,
+    dbGetCourseDataCache,
     dbGetLessonAndRelationsById,
     dbGetOrCreateProductAux,
     dbGetSeminarAndConnectedById,
@@ -710,7 +710,7 @@ export async function ctrlCreateCheckout(slug: string, priceTier: PriceTier) {
         });
     }
 
-    const course = await dbGetCourseBySlug(slug);
+    const course = await dbGetCourseDataCache(slug);
     if (!course) throw new Error("Course not found");
 
     // Verify on the backend the course is still available for purchase

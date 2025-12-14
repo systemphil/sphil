@@ -2,29 +2,26 @@ import { redirect } from "next/navigation";
 import { TableOfLessons } from "./TableOfLessons";
 import { MDXRenderer } from "lib/components/MDXRenderer";
 import { errorMessages } from "lib/config/errorMessages";
-import { cacheKeys } from "lib/config/cacheKeys";
-import { dbGetLessonAndRelationsBySlug } from "lib/database/dbFuncs";
+import { dbGetLessonDataCache } from "lib/database/dbFuncs";
 import { Heading } from "lib/components/ui/Heading";
 import { VideoDataLoader } from "lib/components/VideoDataLoader";
 import { Suspense } from "react";
 import { Loading } from "lib/components/animations/Loading";
 import { Paragraph } from "lib/components/ui/Paragraph";
 import { Back } from "lib/components/navigation/Back";
-import { cacheLife, cacheTag } from "next/cache";
 import { LessonCompletionButton } from "./LessonCompleteButton";
 import { CourseProgressBar } from "./CourseProgressBar";
 
 export async function LessonFrontPage({
     lessonSlug,
+    courseSlug,
     userId,
 }: {
+    courseSlug: string;
     lessonSlug: string;
     userId: string;
 }) {
-    "use cache";
-    cacheTag(cacheKeys.allPublicCourses);
-    cacheLife("weeks");
-    const lessonData = await dbGetLessonAndRelationsBySlug(lessonSlug);
+    const lessonData = await dbGetLessonDataCache({ courseSlug, lessonSlug });
 
     if (!lessonData) {
         return redirect(`/courses?error=${errorMessages.lessonNotFound}`);

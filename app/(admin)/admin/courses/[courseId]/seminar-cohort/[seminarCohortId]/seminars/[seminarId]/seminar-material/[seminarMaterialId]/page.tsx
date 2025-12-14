@@ -28,6 +28,7 @@ async function AdminSeminarMaterialEdit({
         <Editor
             material={material}
             title={`Seminar ${materialContainer.order}`}
+            courseSlug={materialContainer.seminarCohort.course.slug}
         />
     );
 }
@@ -42,7 +43,7 @@ export default async function AdminSeminarMaterialEditPage({
 }) {
     const { seminarId, seminarMaterialId } = await params;
     if (!seminarId || !seminarMaterialId) {
-        throw new Error("Missing seminarId or seminarMaterialId params");
+        throw new Error("Missing seminarId or seminarMaterialId  params");
     }
 
     return (

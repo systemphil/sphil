@@ -4,13 +4,11 @@ import { Loading } from "lib/components/animations/Loading";
 import { AuthViews } from "lib/components/auth/AuthViews";
 import { errorMessages } from "lib/config/errorMessages";
 import {
-    dbGetCourseBySlug,
-    dbGetSeminarCohortByCourseYearAndUser,
+    dbGetCourseDataCache,
+    dbGetSeminarCohortDataCache,
 } from "lib/database/dbFuncs";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-
-export const metadata = {};
 
 export default async function SeminarCohortInformationPage({
     params,
@@ -32,13 +30,14 @@ export default async function SeminarCohortInformationPage({
         return <AuthViews.MustBeLoggedIn />;
     }
 
-    const course = await dbGetCourseBySlug(courseSlug);
+    const course = await dbGetCourseDataCache(courseSlug);
     if (!course) {
         return redirect(`/?error=${errorMessages.courseNotFound}`);
     }
 
-    const seminarCohort = await dbGetSeminarCohortByCourseYearAndUser({
+    const seminarCohort = await dbGetSeminarCohortDataCache({
         year: parseInt(seminarCohortYear, 10),
+        courseSlug,
         courseId: course.id,
         userId: session.user.id,
     });

@@ -60,10 +60,11 @@ export const dbGetAllCoursesByCreatorsOrTutors = (userId: string) =>
  * Calls the database to retrieve all published courses.
  * @cache `allPublicCourses`
  */
-export const dbGetAllPublishedCourses = async () => {
+export const dbGetAllPublishedCoursesDataCache = async () => {
     "use cache";
-    cacheTag(cacheKeys.allPublicCourses);
+    cacheTag(...cacheKeys.tagPublicCourses());
     cacheLife("weeks");
+
     return await prisma.course.findMany({
         where: {
             published: true,
@@ -78,9 +79,9 @@ export const dbGetAllPublishedCourses = async () => {
  * Calls the database to retrieve specific course by slug identifier
  * @cached
  */
-export const dbGetCourseBySlug = async (slug: string) => {
+export const dbGetCourseDataCache = async (slug: string) => {
     "use cache";
-    cacheTag(cacheKeys.allPublicCourses);
+    cacheTag(...cacheKeys.tagCourse({ courseSlug: slug }));
     cacheLife("weeks");
 
     const validSlug = z.string().parse(slug);
@@ -103,16 +104,19 @@ export const dbGetCourseBySlug = async (slug: string) => {
     });
 };
 
-export async function dbGetSeminarCohortsByCourseAndUser({
+export async function dbGetSeminarCohortsDataCache({
+    courseSlug,
     courseId,
     userId,
 }: {
+    courseSlug: string;
     courseId: string;
     userId: string;
 }) {
     "use cache";
-    cacheTag(cacheKeys.allSeminars);
-    cacheLife("weeks");
+    cacheTag(...cacheKeys.tagSeminarCohortsByCourseSlug({ courseSlug }));
+    cacheLife("days");
+
     return await prisma.seminarCohort.findMany({
         where: {
             courseId,
@@ -129,18 +133,21 @@ export async function dbGetSeminarCohortsByCourseAndUser({
     });
 }
 
-export async function dbGetSeminarCohortByCourseYearAndUser({
+export async function dbGetSeminarCohortDataCache({
+    courseSlug,
     courseId,
     userId,
     year,
 }: {
+    courseSlug: string;
     courseId: string;
     userId: string;
     year: number;
 }) {
     "use cache";
-    cacheTag(cacheKeys.allSeminars);
+    cacheTag(...cacheKeys.tagSeminarCohortsByCourseSlug({ courseSlug }));
     cacheLife("weeks");
+
     return await prisma.seminarCohort.findFirst({
         where: {
             courseId,
@@ -164,7 +171,7 @@ export async function dbGetSeminarCohortByCourseYearAndUser({
     });
 }
 
-export async function dbGetSeminarAndConnectedByYearAndUser({
+export async function dbGetSeminarDataCache({
     seminarOrder,
     year,
     userId,
@@ -175,6 +182,10 @@ export async function dbGetSeminarAndConnectedByYearAndUser({
     userId: string;
     courseSlug: string;
 }) {
+    "use cache";
+    cacheTag(...cacheKeys.tagSeminarCohortsByCourseSlug({ courseSlug }));
+    cacheLife("weeks");
+
     return await prisma.seminar.findFirst({
         where: {
             seminarCohort: {
@@ -373,11 +384,32 @@ export const dbGetLessonAndRelationsById = async (id: string) => {
                         lessonId: true,
                     },
                 },
+                course: {
+                    select: {
+                        slug: true,
+                    },
+                },
                 video: true,
             },
         });
     }
     return withAdmin(task);
+};
+
+export const dbGetCourseAndLessonSlugsByLessonId = async (id: string) => {
+    return await prisma.lesson.findUniqueOrThrow({
+        where: {
+            id,
+        },
+        select: {
+            slug: true,
+            course: {
+                select: {
+                    slug: true,
+                },
+            },
+        },
+    });
 };
 
 /**
@@ -386,11 +418,23 @@ export const dbGetLessonAndRelationsById = async (id: string) => {
  * as well as the name and slug of the course the lesson is attached to.
  * @note To be used for LessonFrontPage
  */
-export const dbGetLessonAndRelationsBySlug = async (slug: string) => {
-    const validSlug = z.string().parse(slug);
+export const dbGetLessonDataCache = async ({
+    lessonSlug,
+    courseSlug,
+}: {
+    lessonSlug: string;
+    courseSlug: string;
+}) => {
+    "use cache";
+    cacheTag(...cacheKeys.tagLesson({ courseSlug, lessonSlug }));
+    cacheLife("weeks");
+
     return await prisma.lesson.findFirst({
         where: {
-            slug: validSlug,
+            slug: lessonSlug,
+            course: {
+                slug: courseSlug,
+            },
         },
         include: {
             part: true,
@@ -899,8 +943,16 @@ export const dbUpsertLessonById = async ({
                     description: validDescription,
                     partId: validPartId,
                 },
+                include: {
+                    course: {
+                        select: {
+                            slug: true,
+                        },
+                    },
+                },
             });
         }
+
         const allLessons = await prisma.lesson.findMany({
             select: {
                 id: true,
@@ -916,6 +968,13 @@ export const dbUpsertLessonById = async ({
                 courseId: validCourseId,
                 partId: validPartId,
                 order: totalLessonsPlusOne,
+            },
+            include: {
+                course: {
+                    select: {
+                        slug: true,
+                    },
+                },
             },
         });
     }
@@ -1921,6 +1980,13 @@ export async function dbCreateSeminarCohort({
             year: currentYear,
             course: { connect: { id: courseId } },
         },
+        include: {
+            course: {
+                select: {
+                    slug: true,
+                },
+            },
+        },
     });
 }
 
@@ -1929,9 +1995,6 @@ export async function dbGetSeminarCohortAndSeminarsById({
 }: {
     id: string;
 }) {
-    "use cache";
-    cacheTag(cacheKeys.allSeminars);
-    cacheLife("weeks");
     return prisma.seminarCohort.findUnique({
         where: {
             id,
@@ -1959,9 +2022,6 @@ export async function dbGetSeminarCohortAndSeminarsById({
 }
 
 export async function dbGetSeminarAndConnectedById({ id }: { id: string }) {
-    "use cache";
-    cacheTag(cacheKeys.allSeminars);
-    cacheLife("weeks");
     return await prisma.seminar.findUnique({
         where: {
             id,
@@ -1976,6 +2036,7 @@ export async function dbGetSeminarAndConnectedById({ id }: { id: string }) {
                     course: {
                         select: {
                             name: true,
+                            slug: true,
                         },
                     },
                 },
@@ -1998,6 +2059,13 @@ export async function dbUpdateSeminarCohort({
         data: {
             ...data,
         },
+        include: {
+            course: {
+                select: {
+                    slug: true,
+                },
+            },
+        },
     });
 }
 
@@ -2018,6 +2086,17 @@ export async function dbCreateSeminar({
             seminarCohort: {
                 connect: {
                     id: seminarCohortId,
+                },
+            },
+        },
+        include: {
+            seminarCohort: {
+                select: {
+                    course: {
+                        select: {
+                            slug: true,
+                        },
+                    },
                 },
             },
         },
@@ -2179,6 +2258,48 @@ export async function dbDeleteUserProgressForCourse({
             lessonId: {
                 in: lessonIds,
             },
+        },
+    });
+}
+
+export async function dbGetLessonSlugById({ id }: { id: string }) {
+    return await prisma.lesson.findUniqueOrThrow({
+        where: {
+            id,
+        },
+        select: {
+            slug: true,
+        },
+    });
+}
+
+export async function dbGetCourseAndLessonSlugByLessonId({
+    id,
+}: {
+    id: string;
+}) {
+    return await prisma.lesson.findUnique({
+        where: {
+            id,
+        },
+        select: {
+            slug: true,
+            course: {
+                select: {
+                    slug: true,
+                },
+            },
+        },
+    });
+}
+
+export async function dbCourseSlugByCourseIdOrThrow({ id }: { id: string }) {
+    return await prisma.course.findUniqueOrThrow({
+        where: {
+            id,
+        },
+        select: {
+            slug: true,
         },
     });
 }

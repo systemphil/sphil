@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import { dbGetCourseBySlug } from "lib/database/dbFuncs";
+import { dbGetCourseDataCache } from "lib/database/dbFuncs";
 import { MDXRenderer } from "lib/components/MDXRenderer";
 import { CourseEnroll } from "./CourseEnroll";
 import { errorMessages } from "lib/config/errorMessages";
@@ -16,7 +16,7 @@ const links = {
 };
 
 export async function CourseFrontPage({ slug }: { slug: string }) {
-    const course = await dbGetCourseBySlug(slug);
+    const course = await dbGetCourseDataCache(slug);
 
     if (!course) {
         return redirect(`/courses?error=${errorMessages.courseNotFound}`);

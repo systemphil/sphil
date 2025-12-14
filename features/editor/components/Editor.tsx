@@ -7,6 +7,6 @@ const EditorComponent = dynamic(() => import("./EditorInternals"), {
     ssr: false,
 });
 
-export default function Editor({ material, title }: EditorProps) {
-    return <EditorComponent material={material} title={title} />;
+export default function Editor(props: EditorProps) {
+    return <EditorComponent {...props} />;
 }

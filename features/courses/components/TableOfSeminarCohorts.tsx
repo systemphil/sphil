@@ -2,8 +2,8 @@ import type { Seminar } from "@prisma/client";
 import { auth } from "lib/auth/authConfig";
 import { Heading } from "lib/components/ui/Heading";
 import {
-    dbGetCourseBySlug,
-    dbGetSeminarCohortsByCourseAndUser,
+    dbGetCourseDataCache,
+    dbGetSeminarCohortsDataCache,
 } from "lib/database/dbFuncs";
 import { romanize } from "lib/utils";
 import Link from "next/link";
@@ -30,14 +30,15 @@ export async function TableOfSeminarCohorts({
         return null;
     }
 
-    const course = await dbGetCourseBySlug(courseSlug);
+    const course = await dbGetCourseDataCache(courseSlug);
 
     if (!course) {
         console.error("SeminarCohort table expected course data");
         return null;
     }
 
-    const seminarCohorts = await dbGetSeminarCohortsByCourseAndUser({
+    const seminarCohorts = await dbGetSeminarCohortsDataCache({
+        courseSlug,
         courseId: course.id,
         userId: session.user.id,
     });

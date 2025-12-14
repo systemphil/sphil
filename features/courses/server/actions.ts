@@ -10,6 +10,8 @@ import {
     dbCreateSeminar,
     dbCreateSeminarCohort,
     dbDeleteUserProgressForCourse,
+    dbGetCourseAndLessonSlugsByLessonId,
+    dbGetLessonSlugById,
     dbGetTranscriptIdByLessonId,
     dbReorderLessons,
     dbReorderSeminars,
@@ -54,8 +56,14 @@ export const actionUpsertCourse = adminProcedure
             ...input,
             creatorId: ctx.user.id,
         });
+
         revalidatePath("/(admin)/admin", "layout");
-        revalidateTag(cacheKeys.allPublicCourses, "max");
+
+        if (input.id) {
+            updateTag(cacheKeys.keys.course({ courseSlug: input.slug }));
+        }
+
+        updateTag(cacheKeys.keys.publicCourses);
         return { ...data };
     });
 
@@ -71,7 +79,11 @@ export const actionUpdateSeminarCohort = adminProcedure
     .action(async ({ input }) => {
         const data = await ctrlUpdateSeminarCohortPrices(input);
         revalidatePath("/(admin)/admin", "layout");
-        revalidateTag(cacheKeys.allSeminars, "max");
+        updateTag(
+            cacheKeys.keys.seminarCohortsByCourseSlug({
+                courseSlug: data.course.slug,
+            })
+        );
 
         return { ...data };
     });
@@ -94,7 +106,17 @@ export const actionUpsertLesson = adminProcedure
     .action(async ({ input }) => {
         const data = await dbUpsertLessonById(input);
         revalidatePath("/(admin)/admin", "layout");
-        revalidateTag(cacheKeys.allPublicCourses, "max");
+
+        if (input.id) {
+            updateTag(
+                cacheKeys.keys.lesson({
+                    lessonSlug: input.slug,
+                    courseSlug: data.course.slug,
+                })
+            );
+        }
+        updateTag(cacheKeys.keys.course({ courseSlug: data.course.slug }));
+
         return { ...data };
     });
 
@@ -108,8 +130,16 @@ export const actionCreateSignedPostUrl = adminProcedure
     )
     .action(async ({ input }) => {
         const data = await bucketGenerateSignedUploadUrl(input);
+        const lessonData = await dbGetCourseAndLessonSlugsByLessonId(
+            input.lessonId
+        );
         revalidatePath("/(admin)/admin", "layout");
-        revalidateTag(cacheKeys.allPublicCourses, "max");
+        updateTag(
+            cacheKeys.keys.lesson({
+                courseSlug: lessonData.course.slug,
+                lessonSlug: lessonData.slug,
+            })
+        );
         return { ...data };
     });
 
@@ -124,7 +154,6 @@ export const actionCreateSignedPostUrlSeminar = adminProcedure
     .action(async ({ input }) => {
         const data = await bucketGenerateSignedUploadUrl(input);
         revalidatePath("/(admin)/admin", "layout");
-        revalidateTag(cacheKeys.allPublicCourses, "max");
         return { ...data };
     });
 
@@ -175,7 +204,7 @@ export const actionDeleteModelEntry = adminProcedure
     .action(async ({ input }) => {
         const { id } = await ctrlDeleteModelEntry(input);
         revalidatePath("/(admin)/admin", "layout");
-        revalidateTag(cacheKeys.allPublicCourses, "max");
+        revalidateTag(cacheKeys.keys.EVERYTHING, "max");
         return { id };
     });
 
@@ -185,7 +214,7 @@ export const actionUpdateLessonOrder = adminProcedure
         await dbReorderLessons({ orderedLessonIds: input });
 
         revalidatePath("/(admin)/admin", "layout");
-        revalidateTag(cacheKeys.allPublicCourses, "max");
+        revalidateTag(cacheKeys.keys.EVERYTHING, "max");
         return "Successfully reordered your lessons";
     });
 
@@ -195,7 +224,7 @@ export const actionUpdateSeminarOrder = adminProcedure
         await dbReorderSeminars({ orderedIds: input });
 
         revalidatePath("/(admin)/admin", "layout");
-        revalidateTag(cacheKeys.allSeminars, "max");
+        revalidateTag(cacheKeys.keys.seminarsAll, "max");
         return "Successfully reordered your seminars";
     });
 
@@ -209,7 +238,11 @@ export const actionCreateSeminar = adminProcedure
         const newSeminar = await dbCreateSeminar(input);
 
         revalidatePath("/(admin)/admin", "layout");
-        revalidateTag(cacheKeys.allSeminars, "max");
+        updateTag(
+            cacheKeys.keys.seminarCohortsByCourseSlug({
+                courseSlug: newSeminar.seminarCohort.course.slug,
+            })
+        );
         return {
             seminarId: newSeminar.id,
         };
@@ -226,11 +259,21 @@ export const actionCreateSeminarCohort = adminProcedure
         const newSeminar = await dbCreateSeminarCohort(input);
 
         revalidatePath("/(admin)/admin", "layout");
-        revalidateTag(cacheKeys.allSeminars, "max");
+        updateTag(
+            cacheKeys.keys.seminarCohortsByCourseSlug({
+                courseSlug: newSeminar.course.slug,
+            })
+        );
         return {
             seminarId: newSeminar.id,
         };
     });
+
+export type ApiTranscriptionPayload = {
+    parentId: string;
+    fileUrl: string;
+    transcriptId: string | null;
+};
 
 export const actionCreateTranscription = adminProcedure
     .input(
@@ -247,7 +290,7 @@ export const actionCreateTranscription = adminProcedure
         const payload = {
             transcriptId: existingTranscriptEntry?.id ?? null,
             ...input,
-        };
+        } satisfies ApiTranscriptionPayload;
 
         // Trigger background processing completely outside render
         fetch(`${process.env.NEXT_PUBLIC_SITE_ROOT}/api/transcribe`, {
@@ -304,4 +347,39 @@ export const actionCourseProgressReset = protectedProcedure
         );
 
         return "Reset successful";
+    });
+
+export const actionUpdateSeminarCohortCache = adminProcedure
+    .input(
+        z.object({
+            courseSlug: z.string().min(1).max(120),
+        })
+    )
+    .action(async ({ input }) => {
+        updateTag(
+            cacheKeys.keys.seminarCohortsByCourseSlug({
+                courseSlug: input.courseSlug,
+            })
+        );
+
+        return "Cache updated";
+    });
+
+export const actionUpdateLessonCache = adminProcedure
+    .input(
+        z.object({
+            courseSlug: z.string().min(1).max(120),
+            lessonId: z.string().min(1).max(120),
+        })
+    )
+    .action(async ({ input }) => {
+        const lesson = await dbGetLessonSlugById({ id: input.lessonId });
+        updateTag(
+            cacheKeys.keys.lesson({
+                lessonSlug: lesson.slug,
+                courseSlug: input.courseSlug,
+            })
+        );
+
+        return "Cache updated";
     });

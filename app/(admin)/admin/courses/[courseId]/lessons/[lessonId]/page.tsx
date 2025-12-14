@@ -59,7 +59,11 @@ async function AdminLessonEdit({
                 <div>
                     <Heading as="h4">Lesson Video</Heading>
                     <div className="flex flex-col justify-center items-center">
-                        <VideoForm videoEntry={video} videoKind="lesson" />
+                        <VideoForm
+                            videoEntry={video}
+                            videoKind="lesson"
+                            courseSlug={lesson.course.slug}
+                        />
                     </div>
                 </div>
 
