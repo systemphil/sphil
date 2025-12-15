@@ -31,7 +31,7 @@ export function SPhilLanding() {
                 <Community />
                 <NewsletterSignUp />
                 <ValuePropositionWrapped />
-                <SymposiaHero />
+                <CoursesHero />
                 <VisitCourses />
                 <Instructors />
                 <Refunds />
@@ -297,7 +297,7 @@ function NewsletterSignUp() {
     );
 }
 
-function SymposiaHero() {
+function CoursesHero() {
     return (
         <div className="h-[45rem] -my-36 md:my-6 w-full  flex flex-col items-center justify-center overflow-hidden rounded-md ">
             <div className="absolute overflow-hidden -translate-y-5">

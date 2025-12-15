@@ -1,4 +1,4 @@
-import { dbGetAllPublishedCourses } from "lib/database/dbFuncs";
+import { dbGetAllPublishedCoursesDataCache } from "lib/database/dbFuncs";
 import Image from "next/image";
 
 /**
@@ -9,7 +9,7 @@ import Image from "next/image";
  * So we preload them to speed things up.
  */
 export async function ImagePreloader() {
-    const courses = await dbGetAllPublishedCourses();
+    const courses = await dbGetAllPublishedCoursesDataCache();
 
     if (courses.length === 0) {
         return null;

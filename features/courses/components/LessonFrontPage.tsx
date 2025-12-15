@@ -2,21 +2,26 @@ import { redirect } from "next/navigation";
 import { TableOfLessons } from "./TableOfLessons";
 import { MDXRenderer } from "lib/components/MDXRenderer";
 import { errorMessages } from "lib/config/errorMessages";
-import { cacheKeys } from "lib/config/cache";
-import { dbGetLessonAndRelationsBySlug } from "lib/database/dbFuncs";
+import { dbGetLessonDataCache } from "lib/database/dbFuncs";
 import { Heading } from "lib/components/ui/Heading";
 import { VideoDataLoader } from "lib/components/VideoDataLoader";
 import { Suspense } from "react";
 import { Loading } from "lib/components/animations/Loading";
 import { Paragraph } from "lib/components/ui/Paragraph";
 import { Back } from "lib/components/navigation/Back";
-import { cacheLife, cacheTag } from "next/cache";
+import { LessonCompletionButton } from "./LessonCompleteButton";
+import { CourseProgressBar } from "./CourseProgressBar";
 
-export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
-    "use cache";
-    cacheTag(cacheKeys.allPublicCourses);
-    cacheLife("weeks");
-    const lessonData = await dbGetLessonAndRelationsBySlug(lessonSlug);
+export async function LessonFrontPage({
+    lessonSlug,
+    courseSlug,
+    userId,
+}: {
+    courseSlug: string;
+    lessonSlug: string;
+    userId: string;
+}) {
+    const lessonData = await dbGetLessonDataCache({ courseSlug, lessonSlug });
 
     if (!lessonData) {
         return redirect(`/courses?error=${errorMessages.lessonNotFound}`);
@@ -52,15 +57,35 @@ export async function LessonFrontPage({ lessonSlug }: { lessonSlug: string }) {
             </div>
             <div className="md:col-span-1 md:p-2 md:order-1 flex justify-end w-full">
                 <div className="lg:fixed w-full md:max-w-[175px] 2xl:max-w-[300px] lg:pr-2 my-2">
-                    <div className="flex md:flex-col justify-evenly flex-wrap md:flex-nowrap">
+                    <div className="flex md:flex-col justify-evenly flex-wrap md:flex-nowrap gap-8">
                         <Back
                             href={`/courses/${lessonData.course.slug}`}
                             text={`Back to course page`}
                         />
+
                         <TableOfLessons
                             lessons={lessonData.course.lessons}
                             courseSlug={lessonData.course.slug}
                         />
+
+                        <div className="px-14">
+                            <Suspense fallback={<div className="h-[36.5px]" />}>
+                                <CourseProgressBar
+                                    courseId={lessonData.courseId}
+                                    userId={userId}
+                                    courseSlug={courseSlug}
+                                />
+                            </Suspense>
+                        </div>
+
+                        <Suspense fallback={<div className="h-[36.5px]" />}>
+                            <LessonCompletionButton
+                                courseId={lessonData.courseId}
+                                lessonId={lessonData.id}
+                                userId={userId}
+                                courseSlug={courseSlug}
+                            />
+                        </Suspense>
                     </div>
                 </div>
             </div>

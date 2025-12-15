@@ -8,8 +8,6 @@ import { dbGetUserPurchasedCourses } from "lib/database/dbFuncs";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-export const metadata = {};
-
 export default async function LessonFrontPageRoute({
     params,
 }: {
@@ -39,7 +37,11 @@ export default async function LessonFrontPageRoute({
 
     return (
         <Suspense fallback={<Loading.RingFullPage />}>
-            <LessonFrontPage lessonSlug={lessonSlug} />
+            <LessonFrontPage
+                lessonSlug={lessonSlug}
+                userId={session.user.id}
+                courseSlug={courseSlug}
+            />
         </Suspense>
     );
 }

@@ -5,7 +5,7 @@ import { Loading } from "lib/components/animations/Loading";
 import { CourseFrontPage } from "features/courses/components/CourseFrontPage";
 import { errorMessages } from "lib/config/errorMessages";
 import type { Metadata } from "next";
-import { dbGetCourseBySlug } from "lib/database/dbFuncs";
+import { dbGetCourseDataCache } from "lib/database/dbFuncs";
 
 export async function generateMetadata({
     params,
@@ -13,7 +13,7 @@ export async function generateMetadata({
     params: Promise<{ courseSlug: string }>;
 }): Promise<Metadata> {
     const { courseSlug: slug } = await params;
-    const course = await dbGetCourseBySlug(slug);
+    const course = await dbGetCourseDataCache(slug);
 
     if (!course) {
         return {

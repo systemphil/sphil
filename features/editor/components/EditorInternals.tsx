@@ -64,6 +64,7 @@ const EditorContext = createContext(false);
 export type EditorProps = {
     material: Awaited<ReturnType<typeof dbGetMdxByModelId>>;
     title: string;
+    courseSlug: string;
 };
 /**
  * MDX Editor that allows live, rich text editing of markdown files on the client.
@@ -71,7 +72,11 @@ export type EditorProps = {
  * that useRef hook properly is passed down to the function.
  * @param props includes MDX string and title string
  */
-export default function EditorInternals({ material, title }: EditorProps) {
+export default function EditorInternals({
+    material,
+    title,
+    courseSlug,
+}: EditorProps) {
     const editorRef = React.useRef<MDXEditorMethods>(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -108,6 +113,7 @@ export default function EditorInternals({ material, title }: EditorProps) {
         const resp = await actionUpdateMdxModelById({
             id: material.id,
             content: markdownValue,
+            courseSlug,
         });
         if (resp.error) {
             toast.error(`Error saving ${resp.error}`);

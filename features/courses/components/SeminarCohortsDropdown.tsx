@@ -7,16 +7,14 @@ import { romanize } from "lib/utils";
 import Link from "next/link";
 import { Button, Menu, MenuItem, Box, Divider } from "@mui/material";
 import { People as PeopleIcon, Info as InfoIcon } from "@mui/icons-material";
-import type { dbGetSeminarCohortsByCourseAndUser } from "lib/database/dbFuncs";
+import type { dbGetSeminarCohortsDataCache } from "lib/database/dbFuncs";
 
 const links = {
     courses: "/courses",
 };
 
 interface SeminarCohortsDropdownProps {
-    seminarCohorts: Awaited<
-        ReturnType<typeof dbGetSeminarCohortsByCourseAndUser>
-    >;
+    seminarCohorts: Awaited<ReturnType<typeof dbGetSeminarCohortsDataCache>>;
     courseSlug: string;
 }
 
@@ -43,7 +41,7 @@ function CohortDropdownButton({
     courseSlug,
 }: {
     seminarCohort: Awaited<
-        ReturnType<typeof dbGetSeminarCohortsByCourseAndUser>
+        ReturnType<typeof dbGetSeminarCohortsDataCache>
     >[number];
     courseSlug: string;
 }) {

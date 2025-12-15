@@ -15,6 +15,8 @@ import {
     actionCreateSignedReadUrl,
     actionCreateTranscription,
     actionDeleteVideoFile,
+    actionUpdateLessonCache,
+    actionUpdateSeminarCohortCache,
 } from "features/courses/server/actions";
 import { Alert } from "@mui/material";
 
@@ -31,8 +33,12 @@ type VideoFormValuesSeminar = Omit<
     FileInput;
 
 type VideoFormInput =
-    | { videoEntry: Video | null; videoKind: "lesson" }
-    | { videoEntry: SeminarVideo | null; videoKind: "seminar" };
+    | { videoEntry: Video | null; videoKind: "lesson"; courseSlug: string }
+    | {
+          videoEntry: SeminarVideo | null;
+          videoKind: "seminar";
+          courseSlug: string;
+      };
 
 /**
  * Configuration for different video types. Since Prisma does not support
@@ -77,7 +83,11 @@ const videoConfig = {
  * the same filename will automatically replace the old file on the storage.
  * @route Intended for the /admin route where the lessonId or seminarId parameter is exposed.
  */
-export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
+export const VideoForm = ({
+    videoEntry,
+    videoKind,
+    courseSlug,
+}: VideoFormInput) => {
     const [error, setError] = useState<boolean>(false);
     const [selectedFile, setSelectedFile] = useState<File>();
     const [handlerLoading, setHandlerLoading] = useState<boolean>(false);
@@ -225,7 +235,7 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
                     console.error("Error retrieving URL: ", resp.error);
                 } else {
                     const actionRes = await actionCreateTranscription({
-                        fileUrl: resp.data,
+                        fileUrl: resp.data.url,
                         parentId: paramId,
                     });
 
@@ -239,6 +249,17 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
                         );
                     }
                 }
+            }
+
+            // Finally, update serve cache
+            if (videoKind === "lesson" && videoEntry?.lessonId) {
+                await actionUpdateLessonCache({
+                    courseSlug,
+                    lessonId: videoEntry.lessonId,
+                });
+            }
+            if (videoKind === "seminar") {
+                await actionUpdateSeminarCohortCache({ courseSlug });
             }
         } catch (error) {
             toast.error("Oops! Something went wrong");
@@ -276,7 +297,7 @@ export const VideoForm = ({ videoEntry, videoKind }: VideoFormInput) => {
                     setError(true);
                     toast.error("Oops! No video preview available");
                 } else {
-                    setPreviewUrl(resp.data);
+                    setPreviewUrl(resp.data.url);
                 }
                 isCalledRef.current = false;
             }

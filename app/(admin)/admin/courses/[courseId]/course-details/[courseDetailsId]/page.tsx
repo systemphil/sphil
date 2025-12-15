@@ -24,7 +24,13 @@ async function AdminLessonMaterialEdit({
         return redirect(`/admin?error=${errorMessages.courseNotFound}`);
     }
 
-    return <Editor material={editorMaterial} title={course.name} />;
+    return (
+        <Editor
+            material={editorMaterial}
+            title={course.name}
+            courseSlug={course.slug}
+        />
+    );
 }
 
 export default async function AdminLessonMaterialEditPage({

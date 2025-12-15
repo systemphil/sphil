@@ -1,5 +1,5 @@
 import { MDXRenderer } from "lib/components/MDXRenderer";
-import type { dbGetSeminarAndConnectedByYearAndUser } from "lib/database/dbFuncs";
+import type { dbGetSeminarDataCache } from "lib/database/dbFuncs";
 import { Heading } from "lib/components/ui/Heading";
 import { VideoDataLoader } from "lib/components/VideoDataLoader";
 import { Suspense } from "react";
@@ -11,9 +11,7 @@ import { TableOfSeminarCohorts } from "./TableOfSeminarCohorts";
 export async function SeminarFrontPage({
     seminar,
 }: {
-    seminar: NonNullable<
-        Awaited<ReturnType<typeof dbGetSeminarAndConnectedByYearAndUser>>
-    >;
+    seminar: NonNullable<Awaited<ReturnType<typeof dbGetSeminarDataCache>>>;
 }) {
     const md = "md:grid md:grid-cols-4 md:items-start";
     const lg = "lg:grid-cols-6";

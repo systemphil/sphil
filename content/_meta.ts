@@ -44,7 +44,7 @@ export default {
             typesetting: "article",
         },
     },
-    "terms-symposia": {
+    "terms-courses": {
         title: "Terms of Use",
         display: "hidden",
         type: "page",

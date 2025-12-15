@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { LogoOwl } from "../LogoOwl";
 import { LogoAnimated } from "../LogoAnimated";
-import { SymposiaCard } from "../SymposiaCard";
+import { CoursesMarketingCard } from "../CoursesMarketingCard";
 import { SocialIcon } from "../icons/SocialIcon";
 import { resetCookieConsentValue } from "react-cookie-consent";
 import { cn } from "lib/utils";
@@ -59,7 +59,7 @@ function FooterContent() {
                 name: "Discussion",
                 href: "https://github.com/systemphil/sphil/discussions",
             },
-            { name: "Symposia", href: "/symposia" },
+            { name: "Courses", href: "/courses" },
             { name: "Acknowledgements", href: "/articles/acknowledgements" },
             { name: "Newsletter", href: "/newsletter" },
         ],
@@ -85,7 +85,7 @@ function FooterContent() {
             { name: "Terms of Use", href: "/articles/terms" },
             {
                 name: "Terms for Online Courses",
-                href: "/articles/terms-symposia",
+                href: "/articles/terms-courses",
             },
         ],
         support: [
@@ -277,7 +277,7 @@ function FooterContent() {
                     </div>
 
                     <div className="visible xl:hidden">
-                        <SymposiaCard />
+                        <CoursesMarketingCard />
                     </div>
                 </div>
             </div>

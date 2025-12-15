@@ -48,11 +48,11 @@ async function sendEmails() {
             process.exit(1);
         }
 
-        const subject = "Symposia Seminar Reminder 🔔";
+        const subject = "sPhil Seminar Reminder 🔔";
 
         for (const email of emails) {
             const res = await resend.emails.send({
-                from: `sPhil Symposia Seminars 🏺 <${senderEmail}>`,
+                from: `sPhil Seminars 🏺 <${senderEmail}>`,
                 to: email,
                 subject,
                 react: <SeminarReminder seminarLink={seminarLink} />,

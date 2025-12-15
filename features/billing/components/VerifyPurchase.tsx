@@ -24,7 +24,7 @@ export const VerifyPurchase = ({
             <div className="pt-4">
                 {loading && (
                     <Alert severity="info">
-                        <AlertTitle>loading</AlertTitle>
+                        <AlertTitle>Loading</AlertTitle>
                         <span>
                             Please wait while your purchase is being
                             confirmed...
@@ -34,7 +34,7 @@ export const VerifyPurchase = ({
                 )}
                 {error && (
                     <Alert severity="error">
-                        <AlertTitle>loading</AlertTitle>
+                        <AlertTitle>Error</AlertTitle>
                         <span>
                             There was an error in confirming your purchase. 😖
                             Please contact support{" "}
@@ -51,8 +51,15 @@ export const VerifyPurchase = ({
                 {!loading && success && (
                     <>
                         <Alert severity="success">
-                            <AlertTitle>loading</AlertTitle>
-                            <span>Thank you for your purchase! 🙏</span>
+                            <AlertTitle>Success</AlertTitle>
+                            <span>
+                                Thank you for your purchase! 🙏 The course has
+                                been added to{" "}
+                                <Link href="/my-courses" className="underline">
+                                    My courses
+                                </Link>{" "}
+                                or go directly via the button below.
+                            </span>
                         </Alert>
                         <div className="flex justify-center m-10">
                             <Button

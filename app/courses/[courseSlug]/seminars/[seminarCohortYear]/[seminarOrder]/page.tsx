@@ -3,7 +3,7 @@ import { auth } from "lib/auth/authConfig";
 import { Loading } from "lib/components/animations/Loading";
 import { AuthViews } from "lib/components/auth/AuthViews";
 import { errorMessages } from "lib/config/errorMessages";
-import { dbGetSeminarAndConnectedByYearAndUser } from "lib/database/dbFuncs";
+import { dbGetSeminarDataCache } from "lib/database/dbFuncs";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 
@@ -28,7 +28,7 @@ export default async function SeminarFrontPageRoute({
         return <AuthViews.MustBeLoggedIn />;
     }
 
-    const seminar = await dbGetSeminarAndConnectedByYearAndUser({
+    const seminar = await dbGetSeminarDataCache({
         seminarOrder: parseInt(seminarOrder, 10),
         userId: session.user.id,
         year: parseInt(seminarCohortYear, 10),

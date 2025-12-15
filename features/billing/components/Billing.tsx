@@ -1,4 +1,6 @@
 import { Alert, Button, Typography } from "@mui/material";
+import { CourseProgressBar } from "features/courses/components/CourseProgressBar";
+import { CourseProgressResetButton } from "features/courses/components/CourseProgressResetButton";
 import { TableOfLessons } from "features/courses/components/TableOfLessons";
 import { TableOfSeminarCohorts } from "features/courses/components/TableOfSeminarCohorts";
 import { Loading } from "lib/components/animations/Loading";
@@ -10,8 +12,10 @@ import { Suspense } from "react";
 
 export function Billing({
     purchasedCourses,
+    userId,
 }: {
     purchasedCourses: Awaited<ReturnType<typeof dbGetUserPurchasedCourses>>;
+    userId: string;
 }) {
     return (
         <>
@@ -75,13 +79,23 @@ export function Billing({
                                                 </div>
                                             </div>
 
-                                            <div className="w-full sm:w-[200px]">
+                                            <div className="w-full sm:w-[200px] flex gap-6 flex-col">
                                                 <h3 className="text-xl font-bold leading-tight tracking-tight text-gray-900 dark:text-gray-100">
                                                     {course.name}
                                                 </h3>
                                                 <div className="prose-sm dark:prose-invert text-gray-600 dark:text-gray-400 mt-2">
                                                     {course.description}
                                                 </div>
+                                                <Suspense>
+                                                    <CourseProgressBar
+                                                        courseId={course.id}
+                                                        userId={userId}
+                                                        courseSlug={course.slug}
+                                                    />
+                                                </Suspense>
+                                                <CourseProgressResetButton
+                                                    courseId={course.id}
+                                                />
                                             </div>
                                         </div>
                                     </CardShell>

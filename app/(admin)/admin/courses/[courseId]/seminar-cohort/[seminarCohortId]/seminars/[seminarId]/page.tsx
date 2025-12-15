@@ -43,6 +43,7 @@ export default async function AdminSeminarEdit({
                         <VideoForm
                             videoEntry={seminar.video}
                             videoKind="seminar"
+                            courseSlug={seminar.seminarCohort.course.slug}
                         />
                     </div>
                 </div>

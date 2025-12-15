@@ -15,8 +15,8 @@ export function SeminarReminder({ seminarLink }: { seminarLink: string }) {
                 </h1>
 
                 <p className="text-gray-600 my-4">
-                    Reminder that the sPhil Symposia seminar starts in 1 hour.
-                    Join via the link below
+                    Reminder that the sPhil seminar starts in 1 hour. Join via
+                    the link below
                 </p>
 
                 <ul className="text-gray-600 my-4">

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { auth } from "lib/auth/authConfig";
 import {
-    dbGetCourseBySlug,
+    dbGetCourseDataCache,
     dbGetUserPurchasedCourses,
 } from "lib/database/dbFuncs";
 import { Heading } from "lib/components/ui/Heading";
@@ -27,7 +27,7 @@ const DIALOGUE_TIER_TEXT =
     "Dialogue tier includes base and seminar tier as well as weekly 1:1 sessions with the teacher, valid only for the season in which your course is held. Limited slots.";
 
 export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
-    const course = await dbGetCourseBySlug(slug);
+    const course = await dbGetCourseDataCache(slug);
     if (!course) {
         return <div className="d-badge d-badge-error">n/a</div>;
     }
@@ -183,7 +183,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                 7-Day Money-Back Guarantee
             </p>
             <Link
-                href="/articles/terms-symposia"
+                href="/articles/terms-courses"
                 className="text-center text-sm text-slate-500 underline hover:text-slate-600 dark:hover:text-slate-300 transition duration-300"
             >
                 Terms Apply
