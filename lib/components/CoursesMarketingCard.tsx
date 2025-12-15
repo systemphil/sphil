@@ -7,7 +7,7 @@ import {
     TextRevealCard,
 } from "./TextRevealCard";
 
-export function SymposiaCard() {
+export function CoursesMarketingCard() {
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -23,14 +23,15 @@ export function SymposiaCard() {
         <TextRevealCard
             text="Learn"
             revealText="Master"
-            url="https://sphil.xyz/symposia"
+            url="https://sphil.xyz/courses"
             className="bg-linear-to-b from-indigo-400 from-50%  to-pink-400 to-90% dark:from-purple-950 dark:to-purple-800"
         >
             <TextRevealCardTitle>
                 &nbsp;Searching for Extra Guidance?
             </TextRevealCardTitle>
             <TextRevealCardDescription>
-                Visit Symposia to find detailed courses on a variety of topics.
+                Visit our Courses to find step-by-step guidance on a variety of
+                topics.
             </TextRevealCardDescription>
         </TextRevealCard>
     );

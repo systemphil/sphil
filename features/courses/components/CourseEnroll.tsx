@@ -183,7 +183,7 @@ export async function CourseEnroll({ slug }: CourseEnrollButtonProps) {
                 7-Day Money-Back Guarantee
             </p>
             <Link
-                href="/articles/terms-symposia"
+                href="/articles/terms-courses"
                 className="text-center text-sm text-slate-500 underline hover:text-slate-600 dark:hover:text-slate-300 transition duration-300"
             >
                 Terms Apply

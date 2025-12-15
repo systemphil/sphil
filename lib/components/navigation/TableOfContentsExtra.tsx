@@ -1,10 +1,10 @@
-import { SymposiaCard } from "../SymposiaCard";
+import { CoursesMarketingCard } from "../CoursesMarketingCard";
 
 export function TableOfContentsExtra() {
     return (
         <>
             <LinkToDiscussion />
-            <SymposiaCard />
+            <CoursesMarketingCard />
         </>
     );
 }

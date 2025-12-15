@@ -26,7 +26,7 @@ export function Newsletter_20250930_SchellingOpen({
                 <p className="text-gray-500 my-4 text-center text-xl">
                     ⚜️{" "}
                     <Link
-                        href="https://sphil.xyz/symposia/courses/schelling-freedom-essay"
+                        href="https://sphil.xyz/courses/schelling-freedom-essay"
                         target="_blank"
                         rel="noreferrer noopener"
                         className="underline"
@@ -103,7 +103,7 @@ export function Newsletter_20250930_SchellingOpen({
                 <p className="text-gray-500 my-4 text-center text-xl">
                     ✨{" "}
                     <Link
-                        href="https://sphil.xyz/symposia/courses/schelling-freedom-essay"
+                        href="https://sphil.xyz/courses/schelling-freedom-essay"
                         target="_blank"
                         rel="noreferrer noopener"
                         className="underline"

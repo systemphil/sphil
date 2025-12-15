@@ -40,7 +40,7 @@ async function sendEmails() {
 
         for (const email of emails) {
             const res = await resend.emails.send({
-                from: `sPhil Symposia Seminars 🏺 <${senderEmail}>`,
+                from: `sPhil Courses Seminars 🏺 <${senderEmail}>`,
                 to: email,
                 subject,
                 react: <SeminarsSLQB1 seminarLink={seminarLink} />,

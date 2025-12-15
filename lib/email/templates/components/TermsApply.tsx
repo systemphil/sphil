@@ -5,12 +5,12 @@ export function TermsApply() {
         <Section>
             <p className="text-center">
                 <a
-                    href="https://sphil.xyz/articles/terms-symposia"
+                    href="https://sphil.xyz/articles/terms-courses"
                     className="text-gray-500 underlined my-4 text-sm "
                     target="_blank"
                     rel="noreferrer noopener"
                 >
-                    Terms of Use for Online Courses at Symposia
+                    Terms of Use for Online Courses at sPhil
                 </a>
             </p>
         </Section>
