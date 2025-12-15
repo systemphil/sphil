@@ -6,12 +6,16 @@ import { cacheLife, cacheTag } from "next/cache";
 export async function CourseProgressBar({
     courseId,
     userId,
+    courseSlug,
 }: {
     courseId: string;
     userId: string;
+    courseSlug: string;
 }) {
     "use cache";
-    cacheTag(cacheKeys.keys.userProgressCourse({ userId, courseId }));
+    cacheTag(
+        ...cacheKeys.tagUserCourseProgress({ userId, courseId, courseSlug })
+    );
     cacheLife("weeks");
 
     const { totalLessons, userProgress } = await dbGetUserProgressForCourse({

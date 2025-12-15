@@ -75,16 +75,34 @@ export const cacheKeys = {
         cacheKeys.keys.seminarCohortsByCourseSlug({ courseSlug }),
     ],
 
+    tagUserCourseProgress: ({
+        userId,
+        courseId,
+        courseSlug,
+    }: {
+        courseSlug: string;
+        userId: string;
+        courseId: string;
+    }) => [
+        EVERYTHING,
+        cacheKeys.keys.course({ courseSlug }),
+        cacheKeys.keys.userProgressUser({ userId }),
+        cacheKeys.keys.userProgressCourse({ userId, courseId }),
+    ],
+
     tagUserProgress: ({
         userId,
         courseId,
         lessonId,
+        courseSlug,
     }: {
+        courseSlug: string;
         userId: string;
         courseId: string;
         lessonId: string;
     }) => [
         EVERYTHING,
+        cacheKeys.keys.course({ courseSlug }),
         cacheKeys.keys.userProgressUser({ userId }),
         cacheKeys.keys.userProgressCourse({ userId, courseId }),
         cacheKeys.keys.userProgressLesson({ userId, lessonId }),

@@ -90,6 +90,7 @@ export function Billing({
                                                     <CourseProgressBar
                                                         courseId={course.id}
                                                         userId={userId}
+                                                        courseSlug={course.slug}
                                                     />
                                                 </Suspense>
                                                 <CourseProgressResetButton

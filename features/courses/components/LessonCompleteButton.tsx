@@ -6,14 +6,18 @@ import { LessonCompletionButtonClient } from "./LessonCompleteButton.client";
 export async function LessonCompletionButton({
     lessonId,
     courseId,
+    courseSlug,
     userId,
 }: {
     lessonId: string;
     courseId: string;
+    courseSlug: string;
     userId: string;
 }) {
     "use cache";
-    cacheTag(...cacheKeys.tagUserProgress({ userId, lessonId, courseId }));
+    cacheTag(
+        ...cacheKeys.tagUserProgress({ userId, lessonId, courseId, courseSlug })
+    );
     cacheLife("weeks");
 
     const userProgress = await dbGetUserProgress({

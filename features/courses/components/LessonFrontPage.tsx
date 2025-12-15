@@ -73,6 +73,7 @@ export async function LessonFrontPage({
                                 <CourseProgressBar
                                     courseId={lessonData.courseId}
                                     userId={userId}
+                                    courseSlug={courseSlug}
                                 />
                             </Suspense>
                         </div>
@@ -82,6 +83,7 @@ export async function LessonFrontPage({
                                 courseId={lessonData.courseId}
                                 lessonId={lessonData.id}
                                 userId={userId}
+                                courseSlug={courseSlug}
                             />
                         </Suspense>
                     </div>
