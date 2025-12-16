@@ -1,7 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 
 export function FadeIn({
     children,
@@ -16,11 +15,6 @@ export function FadeIn({
     delay?: number;
     viewTriggerOffset?: boolean;
 }) {
-    const ref = useRef(null);
-    const inView = useInView(ref, {
-        once: true,
-        margin: viewTriggerOffset ? "-128px" : "0px",
-    });
     const fadeUpVariants = {
         initial: {
             opacity: 0,
@@ -34,11 +28,14 @@ export function FadeIn({
 
     return (
         <motion.div
-            ref={ref}
-            animate={inView ? "animate" : "initial"}
+            initial="initial"
+            whileInView="animate"
+            viewport={{
+                once: true,
+                margin: viewTriggerOffset ? "-128px" : "0px",
+            }}
             variants={fadeUpVariants}
             className={className}
-            initial={false}
             transition={{
                 duration: 1,
                 delay: delay || 0,
