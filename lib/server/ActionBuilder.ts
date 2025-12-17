@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export type ActionState<T> =
+type ActionState<T> =
     | { error: true; message: string; data: null }
     | { error: false; message: string; data: T | null };
 
