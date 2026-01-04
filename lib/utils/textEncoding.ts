@@ -1,5 +1,5 @@
 export class Text {
-    public static Encode(input: string): Uint8Array<ArrayBufferLike> {
+    public static Encode(input: string): Uint8Array<ArrayBuffer> {
         const encoder = new TextEncoder();
         return encoder.encode(input);
     }
