@@ -9,6 +9,7 @@ RUN apt-get update -y && \
     rm -rf /var/lib/apt/lists/*
 
 FROM base AS installer
+COPY prisma ./
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 RUN pnpm run db:regen
