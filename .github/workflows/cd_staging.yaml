@@ -115,18 +115,13 @@ jobs:
           --index-link-prefix-rewrite "content:/articles"
 
       - name: GCP Auth
-        uses: "google-github-actions/auth@v2"
+        uses: "google-github-actions/auth@v3"
         with:
           credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
 
-      - name: Set up Cloud SDK
-        uses: "google-github-actions/setup-gcloud@v2"
-        with:
-          install_components: beta
-
       - name: Docker Auth
         id: docker-auth
-        uses: "docker/login-action@v1"
+        uses: "docker/login-action@v3"
         with:
           username: _json_key
           password: "${{ secrets.GOOGLE_CREDENTIALS }}"

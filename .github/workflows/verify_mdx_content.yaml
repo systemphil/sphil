@@ -9,37 +9,35 @@ jobs:
   verification:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Revive Prepyrus
+        uses: actions/cache/restore@v4
+        id: prepyrus-cache-restore
+        with:
+          path: target/release/prepyrus_runner
+          key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus_runner/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus_runner/src/**') }}
 
-    - name: Revive Prepyrus
-      uses: actions/cache/restore@v4
-      id: prepyrus-cache-restore
-      with:
-        path: target/release/prepyrus_runner
-        key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus_runner/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus_runner/src/**') }}
+      - name: Install Rust
+        if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
+        uses: actions-rust-lang/setup-rust-toolchain@v1
 
-    - name: Install Rust
-      if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
-      uses: actions-rust-lang/setup-rust-toolchain@v1
+      - name: Install dependencies
+        if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
+        run: cargo build --release --package prepyrus_runner
 
-    - name: Install dependencies
-      if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
-      run: cargo build --release --package prepyrus_runner
+      - name: Run prepyrus script in verification mode
+        id: prepyrus-run
+        run: target/release/prepyrus_runner --bib-file absolute_bibliography.bib --target-path content --mode verify
 
-    - name: Run prepyrus script in verification mode
-      id: prepyrus-run
-      run: target/release/prepyrus_runner --bib-file absolute_bibliography.bib --target-path content --mode verify
-
-    - name: Save Prepyrus to cache
-      id: prepyrus-cache-save
-      if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v4
-      with:
-        path: target/release/prepyrus_runner
-        key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus_runner/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus_runner/src/**') }}
-
+      - name: Save Prepyrus to cache
+        id: prepyrus-cache-save
+        if: steps.prepyrus-cache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: target/release/prepyrus_runner
+          key: ${{ runner.os }}-cargo-${{ hashFiles('scripts/prepyrus_runner/Cargo.lock') }}-${{ hashFiles('scripts/prepyrus_runner/src/**') }}
 # To include multiple paths for the cache:
 # path: |
 #   ~/.cargo/bin/
