@@ -26,7 +26,7 @@ jobs:
         run: cargo build --release --package prepyrus_runner
 
       - name: Run prepyrus script in VERIFY mode
-        run: target/release/prepyrus_runner --bib-file absolute_bibliography.bib --target-path content --mode verify
+        run: target/release/prepyrus_runner --bib-file .bib --target-path content --mode verify
 
       - name: Upload prepyrus for next job
         uses: actions/upload-artifact@v4
@@ -107,7 +107,7 @@ jobs:
       - name: Run prepyrus in PROCESS mode
         run: |
           target/release/prepyrus_runner/prepyrus_runner \
-          --bib-file absolute_bibliography.bib \
+          --bib-file .bib \
           --target-path content \
           --mode process \
           --generate-index-to-file content/encyclopaedia-index/index.mdx \
