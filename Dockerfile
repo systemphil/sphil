@@ -11,6 +11,7 @@ RUN apt-get update -y && \
 FROM base AS installer
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
+RUN pnpm run db:regen
 
 FROM base AS builder
 COPY --from=installer /app/node_modules ./node_modules
