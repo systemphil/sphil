@@ -3,7 +3,6 @@ import remarkGfm from "remark-gfm";
 import remarkDirective from "remark-directive";
 import { visit } from "unist-util-visit";
 /* cspell:disable-next-line */
-import type { Root } from "mdast";
 import rehypeExternalLinks from "rehype-external-links";
 
 /**
@@ -52,7 +51,8 @@ const ADMONITION_TYPES = ["note", "tip", "danger", "info", "caution"];
  * here when the new versions are out. See: https://github.com/orgs/mdx-js/discussions/2355#discussioncomment-7139230
  */
 function admonitionPlugin() {
-    return (tree: Root) => {
+    // biome-ignore lint/suspicious/noExplicitAny: <Old mdast package is deprecated, where we first used `Root` type from. Remark contains it but does not export it.>
+    return (tree: any) => {
         visit(tree, (node) => {
             if (
                 node.type === "containerDirective" ||
@@ -95,12 +95,10 @@ function admonitionPlugin() {
                         };
                     }
 
-                    // @ts-expect-error // FIXME mismatched type
                     node.type = "paragraph";
                     node.data = {
                         ...node.data,
                         hName: tagName,
-                        // @ts-expect-error // FIXME mismatched type
                         hProperties: node.attributes,
                     };
 
@@ -114,7 +112,6 @@ function admonitionPlugin() {
                                     className: ["_nestedEditor_uazmk_963"],
                                 },
                             },
-                            // @ts-expect-error // FIXME mismatched type
                             children: node.children,
                         },
                     ];

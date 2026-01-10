@@ -10,9 +10,9 @@ bibliography automatically.
 ## How Check If Your Reference Already Exists
 
 Inspect the
-[bibliography file](https://github.com/systemphil/sphil/blob/main/absolute_bibliography.bib)
-and hit `Ctrl` + `F` to search the text. If your reference is there, then you
-are all good to go.
+[bibliography file](https://github.com/systemphil/sphil/blob/main/.bib) and hit
+`Ctrl` + `F` to search the text. If your reference is there, then you are all
+good to go.
 
 ## How to Add A New Entry To The Central Bibliography
 
@@ -27,8 +27,8 @@ the "Create Citation" button and selecting "BibTex".
   (even Google Books get it wrong). Consult the source book for the correct
   details.
 - Paste the BibTex citation into the
-  [bibliography file](https://github.com/systemphil/sphil/blob/main/absolute_bibliography.bib)
-  in your pull request or working branch, and commit the changes.
+  [bibliography file](https://github.com/systemphil/sphil/blob/main/.bib) in
+  your pull request or working branch, and commit the changes.
 
 That should be everything! It is super simple and effective
 

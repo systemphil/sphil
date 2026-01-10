@@ -5,33 +5,36 @@ on:
   pull_request:
     branches: [main]
 
-permissions: 
+permissions:
   contents: read
 
 jobs:
   formatting:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
 
-    - name: Setup Bun
-      uses: oven-sh/setup-bun@v2
-      with:
-          bun-version: 1.2.21
-    
-    # This installs all dependencies, but if we use "bun install -g prettier", 
-    # then prettier won't pick up the project's .prettierrc file.
-    - name: Install dependencies
-      run: bun install --frozen-lockfile 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: "pnpm"
 
-    - name: Check formatting
-      run: |
-        bun run prettier:check
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-    - name: Fail if formatting check failed
-      if: failure()
-      run: |
-        echo "Formatting check failed. Please format your code according to the project's Prettier configuration."
-        exit 1
+      - name: Check formatting
+        run: |
+          pnpm run prettier:check
+
+      - name: Fail if formatting check failed
+        if: failure()
+        run: |
+          echo "Formatting check failed. Please format your code according to the project's Prettier configuration."
+          exit 1

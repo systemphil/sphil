@@ -1,15 +1,23 @@
 "use client";
 
 import { run } from "@mdx-js/mdx";
-import { Fragment, useEffect, useState } from "react";
+import { type ComponentType, Fragment, useEffect, useState } from "react";
 import * as runtime from "react/jsx-runtime";
-import type { MDXModule } from "mdx/types";
 import type { MDXCompilerReturnType } from "lib/server/mdxCompiler";
 import { Loading } from "./animations/Loading";
 import { EmbedTeacherProfile } from "features/editor/components/EmbedTeacherProfile";
 import { EmbedYT } from "./ui/EmbedYT";
 
 /* cSpell:disable */
+
+interface MDXModule {
+    default: ComponentType<{
+        // biome-ignore lint/suspicious/noExplicitAny: <Mdx custom>
+        components?: Record<string, ComponentType<any>>;
+    }>;
+    // biome-ignore lint/suspicious/noExplicitAny: <Mdx custom>
+    [key: string]: any;
+}
 
 /**
  * Renders MDX content to the UI. Requires compiled MDX string. TailwindCSS formatting applied through prose using tailwindcss/typography.
@@ -53,7 +61,6 @@ export const MDXRenderer = ({
                             >
                                 <Content
                                     components={{
-                                        // eslint-disable-next-line @eslint-react/no-nested-component-definitions
                                         EmbedTeacherProfile(props) {
                                             return (
                                                 <EmbedTeacherProfile
@@ -61,7 +68,6 @@ export const MDXRenderer = ({
                                                 />
                                             );
                                         },
-                                        // eslint-disable-next-line @eslint-react/no-nested-component-definitions
                                         EmbedYT(props) {
                                             return <EmbedYT {...props} />;
                                         },

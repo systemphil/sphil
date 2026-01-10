@@ -43,5 +43,11 @@
         "title": "Teacher",
         "text": "Filip is an excellent philosophy teacher. Our discussion on Kant's Critique of Judgment (the 3rd Critique) was remarkably clarifying. I was surprised by how much the conversation helped make the complex text clearer. I realized I had been reading unproductively, often getting too focused on minor points. Filip's guidance provided the necessary shift in focus, allowing me to finally grasp the central arguments and what is at stake. Highly recommended!",
         "img_url": "/static/images/people/tim.jpg"
+    },
+    {
+        "name": "Eliot Davis",
+        "title": "Student",
+        "text": "Filip is an engaging teacher with an extremely thorough understanding of the material he teaches. He effectively fosters real connections between the students of his courses, who have varying philosophical backgrounds and life experiences, bringing them together in the study of philosophy. He welcomed and encouraged me as a high school student with minimal background in philosophy. His passion is contagious; when I had the pleasure of taking a course with Filip, I couldn't help but be excited to read Hegel!",
+        "img_url": "/static/images/people/eliot.png"
     }
 ]
