@@ -37,9 +37,9 @@ function Content() {
 
             <EmailP>
                 In the meantime, we hope to see you at the{" "}
-                <i>Hegel And Newton</i>
-                workshop that Ahilleas will be hosting on the 18th of February
-                2026 at 19:00 (GMT). The event is free and open to everyone!{" "}
+                <i>Hegel And Newton</i> workshop that Ahilleas will be hosting
+                on the 18th of January 2026 at 19:00 (GMT). The event is free
+                and open to everyone!{" "}
                 <EmailA href="https://us06web.zoom.us/j/86844193613?pwd=bhQzjSs6aapctNO4id2jiA9aCqhkOM.1">
                     Zoom link here
                 </EmailA>
