@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Newsletter_20251201_sPhil2026_Email } from "lib/email/templates/Newsletter_20251201_sPhil2026";
+import { Newsletter_20260115_HegelMechanism_Email } from "lib/email/templates/Newsletter_20260115_HegelMechanism";
 import { Resend } from "resend";
 
 const prisma = new PrismaClient();
@@ -31,7 +31,7 @@ async function sendNewsletter() {
         //     },
         // ];
 
-        const subject = "Courses coming out next year!";
+        const subject = "Communiqué Scholasticus";
 
         for (const { email, id } of subscribers) {
             const res = await resend.emails.send({
@@ -39,7 +39,9 @@ async function sendNewsletter() {
                 to: email,
                 subject,
                 react: (
-                    <Newsletter_20251201_sPhil2026_Email unsubscribeId={id} />
+                    <Newsletter_20260115_HegelMechanism_Email
+                        unsubscribeId={id}
+                    />
                 ),
             });
 
