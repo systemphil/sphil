@@ -22,7 +22,7 @@ export async function generateMetadata({
         };
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sphil.zyx";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sphil.xyz";
     const canonicalUrl = `${siteUrl}/courses/${slug}`;
 
     const imageUrl = course.imageUrl || null;

@@ -6,7 +6,7 @@ import {
     Navbar as NextraNavbar,
     ThemeSwitch,
 } from "nextra-theme-docs";
-import { Banner as NextraBanner, Head, Search } from "nextra/components";
+import { Banner as NextraBanner, Search } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import { UserMenu } from "lib/components/navigation/UserMenu";
 import { Footer } from "lib/components/navigation/Footer";
@@ -24,7 +24,6 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { Roboto } from "next/font/google";
 import { cn } from "lib/utils";
 import {
-    COLOR,
     DESCRIPTION,
     DOCS_REPOSITORY_BASE,
     EDIT_LINK_DESCRIPTION,
@@ -146,11 +145,11 @@ export default async function RootLayout({
             className={cn("nextra-scrollbar", roboto.variable)}
             data-theme="fantasy"
         >
-            <Head color={COLOR}>
+            <head>
                 <script type="application/ld+json">
                     {JSON.stringify(jsonLd).replace(/</g, "\\u003c")}
                 </script>
-            </Head>
+            </head>
             <body>
                 <Suspense>
                     <AppRouterCacheProvider options={{ enableCssLayer: true }}>
