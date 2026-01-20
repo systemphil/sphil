@@ -5,25 +5,22 @@ export default function robots(): MetadataRoute.Robots {
         process.env.NEXT_PUBLIC_SITE_ROOT === "https://sphil.xyz";
 
     if (!isProduction) {
-        // Dev or staging: block everything
         return {
             rules: [
                 {
                     userAgent: "*",
-                    disallow: ["/"], // disallow all crawling
+                    disallow: ["/"],
                 },
             ],
-            // no sitemap
         };
     }
 
-    // Production
     return {
         rules: [
             {
                 userAgent: "*",
-                allow: ["/", "/courses$"],
-                disallow: ["/api/", "/courses/", "/admin/"],
+                allow: ["/"],
+                disallow: ["/api/", "/admin/"],
             },
         ],
         sitemap: `${process.env.NEXT_PUBLIC_SITE_ROOT}/sitemap.xml`,
