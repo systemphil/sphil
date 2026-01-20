@@ -146,9 +146,13 @@ export default async function RootLayout({
             data-theme="fantasy"
         >
             <head>
-                <script type="application/ld+json">
-                    {JSON.stringify(jsonLd).replace(/</g, "\\u003c")}
-                </script>
+                <script
+                    type="application/ld+json"
+                    // biome-ignore lint/security/noDangerouslySetInnerHtml: <Controlled>
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+                    }}
+                />
             </head>
             <body>
                 <Suspense>
