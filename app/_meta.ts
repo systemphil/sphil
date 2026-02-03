@@ -22,6 +22,11 @@ export default {
         type: "page",
         href: "/newsletter",
     },
+    _about: {
+        title: "About Us",
+        type: "page",
+        href: "/about-us",
+    },
     courses: {
         display: "hidden",
     },
@@ -44,6 +49,9 @@ export default {
         display: "hidden",
     },
     test: {
+        display: "hidden",
+    },
+    "about-us": {
         display: "hidden",
     },
 };
