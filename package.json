@@ -52,7 +52,7 @@
         "clsx": "^2.1.1",
         "dayjs": "^1.11.13",
         "framer-motion": "^12.23.12",
-        "minimatch": "^10.0.3",
+        "minimatch": "^10.1.2",
         "next": "16.1.6",
         "next-auth": "^5.0.0-beta.30",
         "nextra": "4.6.1",
