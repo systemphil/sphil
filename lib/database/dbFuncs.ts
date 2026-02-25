@@ -324,6 +324,14 @@ export async function dbUpdateUserReferralInfo({
     });
 }
 
+export async function dbClearExpiredCoupon({ userId }: { userId: string }) {
+    const validUserId = z.string().parse(userId);
+    return await prisma.user.update({
+        where: { id: validUserId },
+        data: { couponId: null },
+    });
+}
+
 export async function dbCreateCoursePurchase({
     userId,
     courseId,

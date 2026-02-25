@@ -23,6 +23,7 @@ import {
     dbGetUserData,
     dbGetVideoFileNameByVideoId,
     dbUpdateSeminarCohort,
+    dbClearExpiredCoupon,
     dbUpdateUserStripeCustomerId,
     dbUpsertCourseById,
     type DbUpsertCourseByIdProps,
@@ -757,6 +758,16 @@ export async function ctrlCreateCheckout(slug: string, priceTier: PriceTier) {
     if (!userData.stripeCustomerId)
         throw new Error("User does not have a stripeCustomerId");
 
+    let couponId = userData.couponId;
+    if (couponId && userData.referredAt) {
+        const twelveMonthsAgo = new Date();
+        twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
+        if (userData.referredAt < twelveMonthsAgo) {
+            couponId = null;
+            await dbClearExpiredCoupon({ userId: userData.id });
+        }
+    }
+
     const checkout = await stripeCreateCheckoutSession({
         customerId: userData.stripeCustomerId,
         userId: userData.id,
@@ -774,7 +785,7 @@ export async function ctrlCreateCheckout(slug: string, priceTier: PriceTier) {
         description: course.description,
         priceTier,
         customerEmail: userData.email,
-        couponId: userData.couponId,
+        couponId,
     });
 
     return { url: checkout.url };
