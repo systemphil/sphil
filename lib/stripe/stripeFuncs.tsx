@@ -136,6 +136,7 @@ type StripeCreateCheckoutSessionProps = {
     description: string;
     priceTier: PriceTier;
     customerEmail: string;
+    referralId?: string | null;
 };
 
 export type StripeCheckoutSessionMetadata = {
@@ -162,6 +163,7 @@ export async function stripeCreateCheckoutSession({
     description,
     priceTier,
     customerEmail,
+    referralId,
 }: StripeCreateCheckoutSessionProps) {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_ROOT;
     if (!baseUrl) throw new Error("Base URL is not defined");
@@ -193,10 +195,9 @@ export async function stripeCreateCheckoutSession({
             courseLink: `${baseUrl}/courses/${slug}`,
             priceTier,
             customerEmail,
+            ...(referralId ? { rewardful_referral: referralId } : {}),
         },
-    } satisfies Stripe.Checkout.SessionCreateParams & {
-        metadata: StripeCheckoutSessionMetadata;
-    };
+    } satisfies Stripe.Checkout.SessionCreateParams;
 
     const stripeSession = await stripe.checkout.sessions.create(params);
 

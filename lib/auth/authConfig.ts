@@ -12,8 +12,12 @@ import type { DefaultSession } from "next-auth";
 import type { JWT } from "next-auth/jwt";
 import type { Role, User } from "@prisma/client";
 import type { AdapterUser } from "@auth/core/adapters";
+import { cookies } from "next/headers";
 import { stripeCreateCustomer } from "lib/stripe/stripeFuncs";
-import { dbUpdateUserStripeCustomerId } from "lib/database/dbFuncs";
+import {
+    dbUpdateUserStripeCustomerId,
+    dbUpdateUserReferralInfo,
+} from "lib/database/dbFuncs";
 
 const isProduction = process.env.NODE_ENV === "production";
 declare module "next-auth" {
@@ -53,6 +57,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 userId: createdUser.id,
                 stripeCustomerId: customer.id,
             });
+
+            try {
+                const cookieStore = await cookies();
+                const referralCookie = cookieStore.get("rwl_referral");
+                if (referralCookie) {
+                    const referral = JSON.parse(
+                        decodeURIComponent(referralCookie.value)
+                    );
+                    await dbUpdateUserReferralInfo({
+                        userId: createdUser.id,
+                        referralId: referral.referralId,
+                        couponId: referral.couponId,
+                        referralSource: referral.source,
+                        referredAt: referral.referredAt
+                            ? new Date(referral.referredAt)
+                            : null,
+                    });
+                }
+            } catch (e) {
+                console.error("Failed to save referral info:", e);
+            }
 
             // biome-ignore lint/style/noNonNullAssertion: <Will be replaced by new auth>
             const updatedUser = await PrismaAdapter(prisma).getUser!(

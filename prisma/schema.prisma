@@ -55,6 +55,11 @@ model User {
     stripeCustomerId String?   @unique
     image            String?
     role             Role      @default(BASIC)
+    // Referral tracking (Rewardful)
+    referralId       String?
+    couponId         String?
+    referralSource   String?
+    referredAt       DateTime?
 
     // Internal relations
     accounts         Account[]

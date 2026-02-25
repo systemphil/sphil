@@ -774,6 +774,7 @@ export async function ctrlCreateCheckout(slug: string, priceTier: PriceTier) {
         description: course.description,
         priceTier,
         customerEmail: userData.email,
+        referralId: userData.referralId,
     });
 
     return { url: checkout.url };

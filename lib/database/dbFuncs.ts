@@ -296,6 +296,34 @@ export async function dbUpdateUserStripeCustomerId({
     });
 }
 
+export async function dbUpdateUserReferralInfo({
+    userId,
+    referralId,
+    couponId,
+    referralSource,
+    referredAt,
+}: {
+    userId: string;
+    referralId: string;
+    couponId?: string | null;
+    referralSource?: string | null;
+    referredAt?: Date | null;
+}) {
+    const validUserId = z.string().parse(userId);
+    const validReferralId = z.string().parse(referralId);
+    return await prisma.user.update({
+        where: {
+            id: validUserId,
+        },
+        data: {
+            referralId: validReferralId,
+            couponId: couponId ?? null,
+            referralSource: referralSource ?? null,
+            referredAt: referredAt ?? null,
+        },
+    });
+}
+
 export async function dbCreateCoursePurchase({
     userId,
     courseId,

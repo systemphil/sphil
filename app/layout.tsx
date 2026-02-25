@@ -33,6 +33,7 @@ import {
     TITLE,
 } from "lib/config/consts";
 import { KEYWORDS } from "lib/config/keywords";
+import Script from "next/script";
 
 export const metadata: Metadata = {
     title: {
@@ -213,6 +214,14 @@ export default async function RootLayout({
                         </Suspense>
                     </AppRouterCacheProvider>
                 </Suspense>
+
+                <Script
+                    src="https://r.wdfl.co/rw.js"
+                    data-rewardful="5979d9"
+                ></Script>
+                <Script id="rewardful-queue" strategy="beforeInteractive">
+                    {`(function(w,r){w._rwq=r;w[r]=w[r]||function(){(w[r].q=w[r].q||[]).push(arguments)}})(window,'rewardful');`}
+                </Script>
             </body>
         </html>
     );
