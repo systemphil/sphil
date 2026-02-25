@@ -136,7 +136,7 @@ type StripeCreateCheckoutSessionProps = {
     description: string;
     priceTier: PriceTier;
     customerEmail: string;
-    referralId?: string | null;
+    couponId?: string | null;
 };
 
 export type StripeCheckoutSessionMetadata = {
@@ -163,7 +163,7 @@ export async function stripeCreateCheckoutSession({
     description,
     priceTier,
     customerEmail,
-    referralId,
+    couponId,
 }: StripeCreateCheckoutSessionProps) {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_ROOT;
     if (!baseUrl) throw new Error("Base URL is not defined");
@@ -183,7 +183,9 @@ export async function stripeCreateCheckoutSession({
             purchase.price.split("_")[1]
         }&s=${slug}`,
         cancel_url: `${baseUrl}/courses/${slug}?canceled=true`,
-        allow_promotion_codes: true,
+        ...(couponId
+            ? { discounts: [{ coupon: couponId }] }
+            : { allow_promotion_codes: true }),
         metadata: {
             stripeCustomerId: customerId,
             userId: userId,
@@ -195,7 +197,6 @@ export async function stripeCreateCheckoutSession({
             courseLink: `${baseUrl}/courses/${slug}`,
             priceTier,
             customerEmail,
-            ...(referralId ? { rewardful_referral: referralId } : {}),
         },
     } satisfies Stripe.Checkout.SessionCreateParams;
 
@@ -212,10 +213,12 @@ export async function stripeCreateCustomer({
     email,
     userId,
     name = undefined,
+    referralId,
 }: {
     email: string;
     userId: string;
     name?: string;
+    referralId?: string;
 }) {
     const stripe = getStripe();
     const customer = await stripe.customers.create({
@@ -223,6 +226,7 @@ export async function stripeCreateCustomer({
         email: email,
         metadata: {
             userId: userId,
+            referral: referralId ?? null,
         },
     });
     return customer;

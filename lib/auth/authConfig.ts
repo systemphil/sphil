@@ -48,9 +48,29 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             // biome-ignore lint/style/noNonNullAssertion: <Will be replaced by new auth>
             const createdUser = await PrismaAdapter(prisma).createUser!(user);
 
+            let referral: {
+                referralId: string;
+                couponId?: string | null;
+                source?: string | null;
+                referredAt?: string | null;
+            } | null = null;
+
+            try {
+                const cookieStore = await cookies();
+                const referralCookie = cookieStore.get("rwl_referral");
+                if (referralCookie) {
+                    referral = JSON.parse(
+                        decodeURIComponent(referralCookie.value)
+                    );
+                }
+            } catch (e) {
+                console.error("Failed to read referral cookie:", e);
+            }
+
             const customer = await stripeCreateCustomer({
                 email: createdUser.email,
                 userId: createdUser.id,
+                referralId: referral?.referralId,
             });
 
             await dbUpdateUserStripeCustomerId({
@@ -58,13 +78,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 stripeCustomerId: customer.id,
             });
 
-            try {
-                const cookieStore = await cookies();
-                const referralCookie = cookieStore.get("rwl_referral");
-                if (referralCookie) {
-                    const referral = JSON.parse(
-                        decodeURIComponent(referralCookie.value)
-                    );
+            if (referral) {
+                try {
                     await dbUpdateUserReferralInfo({
                         userId: createdUser.id,
                         referralId: referral.referralId,
@@ -74,9 +89,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                             ? new Date(referral.referredAt)
                             : null,
                     });
+                } catch (e) {
+                    console.error("Failed to save referral info:", e);
                 }
-            } catch (e) {
-                console.error("Failed to save referral info:", e);
             }
 
             // biome-ignore lint/style/noNonNullAssertion: <Will be replaced by new auth>
