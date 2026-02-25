@@ -1,0 +1,99 @@
+# sPhil — Encyclopaedia & Encyclopaedia of Philosophy
+
+> sPhil (sphil.xyz) is an educational philosophy platform offering rigorous courses on humanity's greatest philosophical and literary texts alongside a free, open-source encyclopaedia of philosophy. Founded by Filip Niklas, PhD and Ahilleas Rokni, PhD (University of Warwick), sPhil makes transformative philosophical study and education accessible beyond academic walls.
+
+sPhil has two pillars: paid handcrafted courses with pre-recorded lectures and live seminars led by expert instructors and a free open encyclopaedia where anyone can contribute scholarly philosophical content. The platform emphasises depth over breadth, primary text engagement, and scholarly rigour delivered in accessible language.
+
+The encyclopaedia is built on open-source principles. All encyclopaedia content is licensed under CC-BY-NC-SA 4.0 and contributions are made via GitHub pull requests. The codebase is licensed under Apache 2.0.
+
+## Courses
+
+sPhil courses are structured, step-by-step curricula designed for mastery. They feature video lessons, seminars, and guided instruction from scholars with doctoral-level expertise.
+
+- [Course Catalogue](https://sphil.xyz/courses): Browse all available courses
+- [Hegel's Science of Logic: The Quality of Being Part 1](https://sphil.xyz/courses): Detailed study of the opening categories of Hegel's Science of Logic
+- [Hegel and the Mechanistic Worldview](https://sphil.xyz/courses): Examining Hegel's critique of mechanism
+- [Schelling's Freedom Essay](https://sphil.xyz/courses): Study of Schelling's essay on freedom, system, and ground
+- [The Soul of Aristotle: From Life to Logic](https://sphil.xyz/courses): Exploration of Aristotle's text On the Soul
+
+## Encyclopaedia
+
+The encyclopaedia is a free, open resource organised into two tiers: **Guides** (accessible introductory articles) and **Reference** (detailed scholarly examinations with overview and development articles).
+
+- [Encyclopaedia Home](https://sphil.xyz/articles): Main encyclopaedia landing page
+- [Encyclopaedia Index](https://sphil.xyz/encyclopaedia-index): Full alphabetical index of all entries
+
+### Hegel
+
+The most extensive section, covering Hegel's Science of Logic in detail.
+
+- [Hegel Overview](https://sphil.xyz/hegel): Landing page for all Hegel content
+- [Hegel Guides](https://sphil.xyz/hegel/guides): Introductory articles on Hegel's philosophy
+- [Presuppositionless Thinking](https://sphil.xyz/hegel/guides/presuppositionless-thinking): Guide to Hegel's method of beginning without presuppositions
+- [General Division of the Logic](https://sphil.xyz/hegel/guides/general-division-of-the-logic): Guide to the structural divisions of the Science of Logic
+- [Science of Logic Introduction](https://sphil.xyz/hegel/guides/science-of-logic-introduction): Guide to the introduction of the Science of Logic
+- [Hegel Reference](https://sphil.xyz/hegel/reference): Detailed reference articles on Hegel's logical categories
+- [Being](https://sphil.xyz/hegel/reference/being/overview): The category of pure Being
+- [Nothing](https://sphil.xyz/hegel/reference/nothing/overview): The category of Nothing and its relation to Being
+- [Becoming](https://sphil.xyz/hegel/reference/becoming/overview): The unity of Being and Nothing
+- [Existence (Dasein)](https://sphil.xyz/hegel/reference/existence/overview): Determinate Being
+- [Quality](https://sphil.xyz/hegel/reference/quality/overview): The determinateness of Being
+- [Something](https://sphil.xyz/hegel/reference/something/overview): The category of Something
+- [Something and Other](https://sphil.xyz/hegel/reference/something-and-other/overview): The dialectical relation of Something and Other
+- [Determination](https://sphil.xyz/hegel/reference/determination/overview): The category of Determination
+- [Constitution](https://sphil.xyz/hegel/reference/constitution/overview): The category of Constitution
+- [Limit](https://sphil.xyz/hegel/reference/limit/overview): The category of Limit
+- [Mechanical Object](https://sphil.xyz/hegel/reference/mechanical-object/first-paragraph): Hegel's analysis of the Mechanical Object
+- [Mechanical Process](https://sphil.xyz/hegel/reference/mechanical-process/the-formal-mechanical-process/section-one): The Formal Mechanical Process
+
+### Kant
+
+- [Kant Overview](https://sphil.xyz/kant): Landing page for Kant content
+- [Kant Guides](https://sphil.xyz/kant/guides): Introductory articles on Kant's philosophy
+- [Kant Reference](https://sphil.xyz/kant/reference): Reference articles on Kant's concepts
+
+### Spinoza
+
+- [Spinoza Overview](https://sphil.xyz/spinoza): Landing page for Spinoza content
+- [Spinoza Guides](https://sphil.xyz/spinoza/guides): Introductory articles on Spinoza's philosophy
+- [Spinoza Reference](https://sphil.xyz/spinoza/reference): Reference articles on Spinoza's concepts
+
+## Teaching Philosophy
+
+sPhil's instruction follows five core principles:
+
+1. **Text First** — Primary sources centre all instruction; secondary literature supplements but never replaces direct engagement with the text.
+2. **Depth Over Breadth** — Deep comprehension of fewer texts is valued over shallow coverage of many.
+3. **Active Engagement** — Students read, think critically, and form their own interpretations rather than passively absorb summaries.
+4. **Scholarly Rigour with Accessibility** — High academic standards communicated in clear, approachable language.
+5. **Lifelong Learning** — The platform is a companion in an ongoing pursuit of wisdom, not a one-time credential.
+
+## Contributing
+
+sPhil welcomes contributions to both encyclopaedia content and the codebase. Philosophical contributions follow a GitHub-based workflow using MDX (Markdown with JSX) and are reviewed for scholarly quality.
+
+- [Contributing Guide](https://sphil.xyz/contributing): How to contribute to sPhil
+- [Methodology](https://sphil.xyz/contributing/methodology): Encyclopaedia methodology and content standards
+- [Formatting Guide](https://sphil.xyz/contributing/formatting): MDX formatting conventions for articles
+- [GitHub Workflow](https://sphil.xyz/contributing/github): Step-by-step GitHub contribution workflow
+- [Code of Conduct](https://sphil.xyz/contributing/code-of-conduct): Community standards and expectations
+- [Local Development](https://sphil.xyz/contributing/local-development): Setting up a local development environment
+
+## About
+
+- [About Us](https://sphil.xyz/about-us): Mission, team, and teaching philosophy
+- [GitHub Repository](https://github.com/systemphil/sphil): Open-source codebase (Apache 2.0)
+- [GitHub Discussions](https://github.com/systemphil/sphil/discussions): Community discussion forum
+
+## Contact
+
+- Email: service@systemphil.com
+- Discord: systemphil
+- Twitter: [@sphildotxyz](https://twitter.com/sphildotxyz)
+
+## Optional
+
+- [Terms of Service](https://sphil.xyz/terms): Platform terms of service
+- [Course Terms](https://sphil.xyz/terms-courses): Course-specific terms and conditions
+- [Privacy Policy](https://sphil.xyz/privacy): Privacy policy
+- [Acknowledgements](https://sphil.xyz/acknowledgements): Credits and acknowledgements
