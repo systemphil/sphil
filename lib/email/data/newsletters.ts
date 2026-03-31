@@ -2,8 +2,15 @@ import { Newsletter_20250406_HegelSLQB1_Announcement_Web } from "../templates/Ne
 import { Newsletter_20250926_SchellingAnnouncement_Web } from "../templates/Newsletter_20250926_SchellingAnnouncement";
 import { Newsletter_20251201_sPhil2026_Web } from "../templates/Newsletter_20251201_sPhil2026";
 import { Newsletter_20260115_HegelMechanism_Web } from "../templates/Newsletter_20260115_HegelMechanism";
+import { Newsletter_20260331_AristotleSoul_Web } from "../templates/Newsletter_20260331_AristotleSoul";
 
 export const NEWSLETTERS = [
+    {
+        id: "sphil-2026-03-31",
+        title: "The Soul of Aristotle",
+        subtitle: "March 31, 2025",
+        component: Newsletter_20260331_AristotleSoul_Web,
+    },
     {
         id: "sphil-2026-01-15",
         title: "Hegel and the Mechanistic Worldview",
