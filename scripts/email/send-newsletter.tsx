@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Newsletter_20260115_HegelMechanism_Email } from "lib/email/templates/Newsletter_20260115_HegelMechanism";
+import { Newsletter_20260331_AristotleSoul_Email } from "lib/email/templates/Newsletter_20260331_AristotleSoul";
 import { Resend } from "resend";
 
 const prisma = new PrismaClient();
@@ -39,7 +39,7 @@ async function sendNewsletter() {
                 to: email,
                 subject,
                 react: (
-                    <Newsletter_20260115_HegelMechanism_Email
+                    <Newsletter_20260331_AristotleSoul_Email
                         unsubscribeId={id}
                     />
                 ),
