@@ -1,7 +1,12 @@
 import { InfoCard } from "features/marketing/components/InfoCard";
 import { CardTeamMember } from "lib/components/CardTeamProfile";
 
-export const SUPPORTED_TEACHER_PROFILES = ["filip", "ahilleas", "christopher"];
+export const SUPPORTED_TEACHER_PROFILES = [
+    "filip",
+    "ahilleas",
+    "christopher",
+    "max",
+];
 
 type EmbedTEacherProfileProps = {
     children?: React.ReactNode;
