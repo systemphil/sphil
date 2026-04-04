@@ -219,6 +219,42 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
         );
     };
 
+    const renderMax = (title?: string) => {
+        const _title = title ? title : "Instructor";
+        const text = (
+            <>
+                Max graduated in 2021 from Trinity College Dublin, where he
+                studied Kant, Heidegger, Plato and analytical philosophy.
+                However, his passion for philosophy began in 2015, and he has
+                since honed his philosophical pursuits far beyond the classroom,
+                writing essays and facilitating discussion. Today he studies to
+                become a psychotherapist, with an interest in communication
+                studies and literature.
+            </>
+        );
+
+        if (infoCard) {
+            return (
+                <InfoCard
+                    title={_title}
+                    text={text}
+                    maskType="squircle"
+                    imgUrl="/images/team/max.png"
+                />
+            );
+        }
+
+        return (
+            <CardTeamMember
+                name="Max Macken"
+                title={title ? title : "Teacher"}
+                image="/images/team/max.png"
+            >
+                {text}
+            </CardTeamMember>
+        );
+    };
+
     return (
         <section
             style={{ width: "100%", maxWidth: maxWidth }}
@@ -237,6 +273,7 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
                 {teacher === "filip" && renderFilip(title)}
                 {teacher === "ahilleas" && renderAhilleas(title)}
                 {teacher === "christopher" && renderChristopher(title)}
+                {teacher === "max" && renderMax(title)}
             </div>
         </section>
     );
