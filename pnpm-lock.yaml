@@ -197,6 +197,9 @@ importers:
       '@svgr/webpack':
         specifier: ^8.1.0
         version: 8.1.0(typescript@5.9.3)
+      '@types/node':
+        specifier: 25.6.0
+        version: 25.6.0
       baseline-browser-mapping:
         specifier: ^2.10.21
         version: 2.10.21

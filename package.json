@@ -88,6 +88,7 @@
         "@biomejs/biome": "2.3.8",
         "@react-email/preview-server": "^5.2.10",
         "@svgr/webpack": "^8.1.0",
+        "@types/node": "25.6.0",
         "baseline-browser-mapping": "^2.10.21",
         "dotenv-cli": "^10.0.0",
         "pagefind": "1.4.0"

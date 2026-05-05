@@ -3,8 +3,15 @@ import { Newsletter_20250926_SchellingAnnouncement_Web } from "../templates/News
 import { Newsletter_20251201_sPhil2026_Web } from "../templates/Newsletter_20251201_sPhil2026";
 import { Newsletter_20260115_HegelMechanism_Web } from "../templates/Newsletter_20260115_HegelMechanism";
 import { Newsletter_20260331_AristotleSoul_Web } from "../templates/Newsletter_20260331_AristotleSoul";
+import { Newsletter_20260504_HegelMechanismConclusion_Web } from "../templates/Newsletter_20260504_HegelMechanismConclusion";
 
 export const NEWSLETTERS = [
+    {
+        id: "sphil-2026-05-04",
+        title: "The Essential Relation: Free and Open Reading Group",
+        subtitle: "May 4, 2026",
+        component: Newsletter_20260504_HegelMechanismConclusion_Web,
+    },
     {
         id: "sphil-2026-03-31",
         title: "The Soul of Aristotle",
