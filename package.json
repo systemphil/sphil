@@ -109,16 +109,5 @@
         "sharp",
         "core-js"
     ],
-    "pnpm": {
-        "onlyBuiltDependencies": [
-            "@prisma/client",
-            "@prisma/engines",
-            "prisma",
-            "esbuild",
-            "sharp",
-            "core-js",
-            "es5-ext",
-            "protobufjs"
-        ]
-    }
+    "packageManager": "pnpm@10.29.2"
 }

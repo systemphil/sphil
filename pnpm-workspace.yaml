@@ -2,6 +2,7 @@ onlyBuiltDependencies:
   - '@prisma/client'
   - '@prisma/engines'
   - core-js
+  - es5-ext
   - esbuild
   - prisma
   - protobufjs
