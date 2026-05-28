@@ -67,7 +67,7 @@ function Content() {
                 There will be a limited number of spots for the reading group,
                 and priority will be given to subscribers of the sPhil
                 newsletter. The reading group will commence on{" "}
-                <b>Sunday the 7th of June 2026 at 20:00 GMT</b>. Please register
+                <b>Sunday the 14th of June 2026 at 20:00 GMT</b>. Please register
                 your interest to join the group by the{" "}
                 <b>30th of May 2026</b> by emailing{" "}
                 <EmailA href="mailto:service@systemphil.com">
