@@ -1,11 +1,4 @@
-import {
-    Button,
-    Column,
-    Img,
-    Row,
-    Section,
-    Text,
-} from "@react-email/components";
+import { Button, Column, Img, Row, Section, Text } from "react-email";
 import { formatCurrency } from "lib/utils";
 
 type OrderInformationProps = {

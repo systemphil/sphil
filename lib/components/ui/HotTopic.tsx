@@ -1,5 +1,5 @@
-import { Callout } from "nextra/components";
-import { Link } from "nextra-theme-docs";
+import { Callout } from "../mdx/Callout";
+import { Link } from "../mdx/Link";
 
 /**
  * Use with a link to a specific GitHub discussion thread.

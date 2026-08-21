@@ -1,4 +1,4 @@
-import { Link, Section } from "@react-email/components";
+import { Link, Section } from "react-email";
 import { EmailBaseLayout } from "./components/EmailBaseLayout";
 
 export function SeminarReminder({ seminarLink }: { seminarLink: string }) {

@@ -1,6 +1,6 @@
 export default {
-    articles: {
-        title: "General",
+    index: {
+        title: "Overview",
         type: "page",
         display: "children",
         theme: {

@@ -1,13 +1,8 @@
-"use client";
-
-import { useConfig } from "nextra-theme-docs";
 import { CreativeCommonsLogo } from "./icons/CreativeCommonsLogo";
 
-export const License = () => {
-    const { normalizePagesResult } = useConfig();
-    const frontMatter = normalizePagesResult?.activePath?.at(-1)?.frontMatter;
-
-    if (frontMatter && frontMatter.isArticle === true) {
+/** Rendered at the foot of articles whose frontmatter sets `isArticle: true`. */
+export const License = ({ isArticle }: { isArticle: boolean }) => {
+    if (isArticle) {
         return (
             <div className="has-tooltip">
                 <div className="flex justify-center -translate-y-20">

@@ -1,15 +1,16 @@
 "use client";
 
 import { ThemeProvider } from "@mui/material";
-import { useTheme as useNextraTheme } from "nextra-theme-docs";
+import { useTheme } from "next-themes";
 import { useMemo, useState, useEffect } from "react";
 import { darkTheme, lightTheme } from "./theme";
 
 /**
- * ⚠️ Must be nested within Nextra layout since it depends on the light/dark mode from it.
+ * ⚠️ Must be nested within the `next-themes` provider in the root layout,
+ * since it mirrors its light/dark mode into MUI.
  */
 export function MuiThemeProvider({ children }: { children: React.ReactNode }) {
-    const { theme, resolvedTheme } = useNextraTheme();
+    const { theme, resolvedTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {

@@ -1,16 +1,24 @@
+import { notFound } from "next/navigation";
+import { ArticleShell } from "lib/components/docs/ArticleShell";
 import { DESCRIPTION, OG_IMAGES, TITLE } from "lib/config/consts";
 import { KEYWORDS } from "lib/config/keywords";
-import type { $NextraMetadata } from "nextra";
-import { useMDXComponents } from "nextra-theme-docs";
-import { generateStaticParamsFor, importPage } from "nextra/pages";
+import { loadArticle } from "lib/content/compile";
+import { getAllSlugs, routeForSlug } from "lib/content/files";
+import {
+    findPath,
+    getBreadcrumb,
+    getSidebarNodes,
+    getTheme,
+} from "lib/content/tree";
+import type { Metadata } from "next";
 
-export const generateStaticParams = generateStaticParamsFor("mdxPath");
-
-type CustomMarkdownContentMetadata = $NextraMetadata & {
-    seoTitle?: string | null | undefined;
-    keywords?: string[] | null | undefined;
-    description?: string | null | undefined;
-};
+/**
+ * Every content slug is prerendered. `dynamicParams` cannot be set alongside
+ * `cacheComponents`, so unknown paths fall through to `notFound()` below.
+ */
+export function generateStaticParams() {
+    return getAllSlugs().map((mdxPath) => ({ mdxPath }));
+}
 
 function mergeKeywords(article?: string[] | null): string[] {
     const incoming = (article ?? []).concat(KEYWORDS ?? []);
@@ -29,30 +37,34 @@ function mergeKeywords(article?: string[] | null): string[] {
 }
 
 export async function generateMetadata(props: {
-    params: Promise<{ mdxPath: string[] }>;
-}) {
+    params: Promise<{ mdxPath?: string[] }>;
+}): Promise<Metadata> {
     const params = await props.params;
-    const articleMetadata = (await importPage(params.mdxPath))
-        .metadata as CustomMarkdownContentMetadata;
+    const article = await loadArticle(params.mdxPath ?? []);
+    if (!article) {
+        // Unknown slug: the page below calls `notFound()`.
+        return { title: "Page Not Found" };
+    }
+    const articleMetadata = article.frontmatter;
 
-    const enhancedMetadata: $NextraMetadata = {
+    const enhancedMetadata: Metadata = {
         ...articleMetadata,
         twitter: {
-            ...(articleMetadata?.twitter || {}),
+            ...(articleMetadata.twitter || {}),
             title: "",
             description: "",
             images: OG_IMAGES,
         },
         openGraph: {
-            ...(articleMetadata?.openGraph || {}),
+            ...(articleMetadata.openGraph || {}),
             title: "",
             description: "",
             images: OG_IMAGES,
         },
     };
 
-    const title = articleMetadata?.seoTitle || articleMetadata?.title || TITLE;
-    const description = articleMetadata?.description || DESCRIPTION;
+    const title = articleMetadata.seoTitle || articleMetadata.title || TITLE;
+    const description = articleMetadata.description || DESCRIPTION;
 
     if (title) {
         enhancedMetadata.title = title;
@@ -86,20 +98,23 @@ export async function generateMetadata(props: {
 }
 
 export default async function Page(props: {
-    params: Promise<{ mdxPath: string[] }>;
+    params: Promise<{ mdxPath?: string[] }>;
 }) {
-    const params = await props.params;
-    const {
-        default: MDXContent,
-        toc,
-        metadata,
-        sourceCode,
-    } = await importPage(params.mdxPath);
-    const Wrapper = useMDXComponents().wrapper;
+    const { mdxPath = [] } = await props.params;
+    const article = await loadArticle(mdxPath);
+
+    if (!article) {
+        notFound();
+    }
+
+    const activePath = findPath(routeForSlug(mdxPath));
 
     return (
-        <Wrapper toc={toc} metadata={metadata} sourceCode={sourceCode}>
-            <MDXContent {...props} params={params} />
-        </Wrapper>
+        <ArticleShell
+            article={article}
+            theme={getTheme(activePath)}
+            sidebarNodes={getSidebarNodes(activePath)}
+            breadcrumb={getBreadcrumb(activePath)}
+        />
     );
 }

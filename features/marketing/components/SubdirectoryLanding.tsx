@@ -1,7 +1,7 @@
 "use client";
 
 import { Heading } from "lib/components/ui/Heading";
-import { Cards } from "nextra/components";
+import { Cards } from "lib/components/mdx/Cards";
 import { SubHeroBackground } from "./SubHeroBackground";
 import { Paragraph } from "lib/components/ui/Paragraph";
 

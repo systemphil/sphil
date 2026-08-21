@@ -1,6 +1,6 @@
 /* cSpell:disable */
 
-import { Img, Link, Section } from "@react-email/components";
+import { Img, Link, Section } from "react-email";
 
 export const VideoLink = ({ text, ytUrl }: { text: string; ytUrl: string }) => {
     /**

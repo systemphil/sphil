@@ -1,4 +1,4 @@
-import { Img, Section } from "@react-email/components";
+import { Img, Section } from "react-email";
 import { EmailBaseLayout } from "./components/EmailBaseLayout";
 import { NewsletterWebLayout } from "./components/NewsLetterWebLayout";
 import { UnsubscribeNewsletter } from "./components/UnsubscribeNewsletter";

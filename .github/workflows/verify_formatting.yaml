@@ -2,8 +2,8 @@ name: Verify formatting 🎨
 
 on:
   workflow_dispatch:
-  pull_request:
-    branches: [main]
+  # pull_request: DISABLED
+  #   branches: [main]
 
 permissions:
   contents: read

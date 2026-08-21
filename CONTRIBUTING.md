@@ -10,10 +10,10 @@ workings of the web application and help you set up your own local development.
 
 ## Overview
 
-sPhil is a monolithic web app that uses Nextra.js to build its MDX contents and
-Next.js to bundle and run the server. React.js is used both on the frontend and
-backend, with Next's server actions to primarily handle client-server
-communication.
+sPhil is a monolithic web app built on Next.js, with an in-house MDX pipeline
+(`lib/content/`) that compiles the files under `/content` into the
+Encyclopaedia. React.js is used both on the frontend and backend, with Next's
+server actions to primarily handle client-server communication.
 
 Besides these and many other libraries, the code is structured according to
 "feature based folder" paradigm to improve long-term maintainability and
@@ -97,9 +97,11 @@ and what they need from the shared lib.
   implement code, but it comes with end-to-end type safety and is more
   performant. Where high interactivity is required, we will consider the
   traditional approach.
-- Nextra.js is used to generate HTML out of the MDX files from the `/content`
-  folder as well as handle routing and a majority of the styling. Additionally,
-  we use DaisyUI, TailwindCSS and MUI but try to keep it in style with Nextra's.
+- The MDX files under the `/content` folder are compiled to HTML by our own
+  pipeline in `lib/content/`, which also builds the page tree from the
+  `_meta.{ts,tsx}` files and feeds the docs shell in `lib/components/docs/`. The
+  components that MDX files may use without importing them live in
+  `lib/components/mdx/`. Additionally, we use DaisyUI, TailwindCSS and MUI.
   Ideally, we'd want less dependencies in the UI department, but we're open to
   new ideas.
 - Prisma is used to interface with the database and to provide up-to-date type

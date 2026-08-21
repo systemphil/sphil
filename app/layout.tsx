@@ -1,20 +1,11 @@
 import type { Metadata } from "next";
-import {
-    Footer as NextraFooter,
-    Layout as NextraLayout,
-    Link as NextraLink,
-    Navbar as NextraNavbar,
-    ThemeSwitch,
-} from "nextra-theme-docs";
-import { Banner as NextraBanner, Search } from "nextra/components";
-import { getPageMap } from "nextra/page-map";
-import { UserMenu } from "lib/components/navigation/UserMenu";
-import { Footer } from "lib/components/navigation/Footer";
-import { NavbarHeader } from "lib/components/navigation/NavbarHeader";
-import { TableOfContentsExtra } from "lib/components/navigation/TableOfContentsExtra";
-import { ArticleWrapper } from "lib/components/ui/ArticleWrapper";
+import { ThemeProvider } from "next-themes";
+import { SiteFooter } from "lib/components/docs/Footer";
+import { MobileNavProvider } from "lib/components/docs/MobileNavContext";
+import { Navbar } from "lib/components/docs/Navbar";
+import { MobileNav } from "lib/components/docs/MobileNav";
+import { getPageTree } from "lib/content/tree";
 import { Providers } from "lib/components/context/Providers";
-import "nextra-theme-docs/style.css";
 import "@mdxeditor/editor/style.css";
 import "./globals.css";
 import { Suspense } from "react";
@@ -23,15 +14,7 @@ import { MuiThemeProvider } from "lib/style/MuiThemeProvider";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { Roboto } from "next/font/google";
 import { cn } from "lib/utils";
-import {
-    DESCRIPTION,
-    DOCS_REPOSITORY_BASE,
-    EDIT_LINK_DESCRIPTION,
-    OG_IMAGES,
-    PROJECT_LINK,
-    SITE_ROOT,
-    TITLE,
-} from "lib/config/consts";
+import { DESCRIPTION, OG_IMAGES, SITE_ROOT, TITLE } from "lib/config/consts";
 import { KEYWORDS } from "lib/config/keywords";
 import Script from "next/script";
 
@@ -126,24 +109,12 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const toc: {
-        float?: boolean;
-        backToTop?: React.ReactNode;
-        extraContent?: React.ReactNode;
-        title?: React.ReactNode;
-    } = {
-        extraContent: <TableOfContentsExtra />,
-    };
-    const feedbackOptions = {
-        content: null, // disables the feedback link to github issues
-    };
-
     return (
         <html
             lang="en"
             dir="ltr"
             suppressHydrationWarning
-            className={cn("nextra-scrollbar", roboto.variable)}
+            className={cn("docs-scrollbar", roboto.variable)}
             data-theme="fantasy"
         >
             <head>
@@ -159,55 +130,21 @@ export default async function RootLayout({
                 <Suspense>
                     <AppRouterCacheProvider options={{ enableCssLayer: true }}>
                         <Providers>
-                            <NextraLayout
-                                feedback={feedbackOptions}
-                                pageMap={await getPageMap()}
-                                docsRepositoryBase={DOCS_REPOSITORY_BASE}
-                                editLink={EDIT_LINK_DESCRIPTION}
-                                sidebar={{ defaultMenuCollapseLevel: 1 }}
-                                search={
-                                    <Search placeholder="Search the Encyclopaedia…" />
-                                }
-                                // banner={<Banner />}
-                                navbar={
-                                    <NextraNavbar
-                                        logoLink={false}
-                                        logo={<NavbarHeader />}
-                                        projectLink={PROJECT_LINK}
-                                    >
-                                        <div className="flex justify-center items-center">
-                                            <ThemeSwitch
-                                                lite={true}
-                                                className="ml-0"
-                                            />
-                                            <div className="w-[70px] flex justify-center">
-                                                <MuiThemeProvider>
-                                                    <UserMenu />
-                                                </MuiThemeProvider>
-                                            </div>
-                                        </div>
-                                    </NextraNavbar>
-                                }
-                                footer={
-                                    <div
-                                        className="relative"
-                                        key="footer-key-123"
-                                    >
-                                        <div
-                                            data-name="footer-flair"
-                                            className="absolute h-20 w-full -top-[80px] bg-linear-to-t from-[#fff6f6] to-transparent dark:from-[#10b981] pointer-events-none opacity-10 z-10"
-                                        />
-                                        <NextraFooter className="flex-col items-center md:items-start relative">
-                                            <Footer />
-                                        </NextraFooter>
-                                    </div>
-                                }
-                                toc={toc}
+                            <ThemeProvider
+                                attribute="class"
+                                defaultTheme="system"
+                                storageKey="theme"
+                                disableTransitionOnChange
                             >
-                                <MuiThemeProvider>
-                                    <ArticleWrapper>{children}</ArticleWrapper>
-                                </MuiThemeProvider>
-                            </NextraLayout>
+                                <MobileNavProvider>
+                                    <Navbar />
+                                    <MobileNav nodes={getPageTree()} />
+                                    <MuiThemeProvider>
+                                        {children}
+                                    </MuiThemeProvider>
+                                    <SiteFooter />
+                                </MobileNavProvider>
+                            </ThemeProvider>
                         </Providers>
                         <Suspense>
                             <ImagePreloader />
@@ -226,17 +163,3 @@ export default async function RootLayout({
         </html>
     );
 }
-
-// biome-ignore lint/correctness/noUnusedVariables: <Planned to be used later>
-const Banner = () => {
-    return (
-        <NextraBanner storageKey="release_key" dismissible>
-            <div className='before:content-["🎉_"]'>
-                BannerText{" "}
-                <NextraLink href="#" className='after:content-["_→"]'>
-                    Read more
-                </NextraLink>
-            </div>
-        </NextraBanner>
-    );
-};

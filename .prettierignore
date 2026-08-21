@@ -3,3 +3,4 @@
 cspell.json
 *.bib
 PULL_REQUEST_TEMPLATE.md
+lib/content/meta.generated.ts
