@@ -8,7 +8,7 @@ import {
     Preview,
     Section,
     Tailwind,
-} from "@react-email/components";
+} from "react-email";
 import { imgCenterStyle } from "../emailUtils";
 import { ContactSupport } from "./ContactSupport";
 

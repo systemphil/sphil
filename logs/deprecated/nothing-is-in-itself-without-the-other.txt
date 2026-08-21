@@ -37,8 +37,6 @@ contrast to Kant, who famously distinguishes things in themselves from the way
 the appear (or are experienced by human beings, i.e. from the way things in
 themselves are _for_ us).
 
-import { Callout } from "nextra/components";
-
 <Callout>
     This article builds on the
     [development](/articles/hegel/reference/something-and-other/development) of

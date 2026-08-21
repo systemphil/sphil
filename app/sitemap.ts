@@ -4,7 +4,7 @@ import { minimatch } from "minimatch";
 import type { MetadataRoute } from "next";
 import { SITE_ROOT } from "lib/config/consts";
 import { dbGetAllPublishedCoursesDataCache } from "lib/database/dbFuncs";
-import { generateStaticParamsFor } from "nextra/pages";
+import { getAllSlugs, routeForSlug } from "lib/content/files";
 
 const siteConfig = {
     baseUrl: SITE_ROOT,
@@ -53,28 +53,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 }
 
 async function getArticleRoutes(): Promise<string[]> {
-    try {
-        // Get the static params generator from Nextra
-        const generateParams = generateStaticParamsFor("mdxPath");
-
-        // Call it to get all the article paths
-        const params = await generateParams();
-
-        // Convert the params to routes
-        const routes = params.map((param) => {
-            // mdxPath is an array of path segments
-            const pathSegments = Array.isArray(param.mdxPath)
-                ? param.mdxPath
-                : [param.mdxPath];
-            return `/articles/${pathSegments.join("/")}`;
-        });
-
-        console.info("Article routes from Nextra:", routes);
-        return routes;
-    } catch (error) {
-        console.error("Error generating article routes:", error);
-        return [];
-    }
+    const routes = getAllSlugs().map(routeForSlug);
+    console.info("Article routes from content walker:", routes);
+    return routes;
 }
 
 // Check if a route should be excluded based on patterns

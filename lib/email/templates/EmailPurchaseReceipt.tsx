@@ -1,4 +1,4 @@
-import { Link, Section } from "@react-email/components";
+import { Link, Section } from "react-email";
 import { OrderInformation } from "./components/OrderInformation";
 import { TermsApply } from "./components/TermsApply";
 import { EmailBaseLayout } from "./components/EmailBaseLayout";

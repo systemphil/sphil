@@ -49,7 +49,157 @@
     }
 }
 
-/* Override Nextra all-italicizing on blockquote */
+/* ==========================================================================
+   Docs shell — replaces nextra-theme-docs/style.css
+   ========================================================================== */
+
+html {
+    --docs-navbar-height: 64px;
+    --docs-content-width: 90rem;
+    font-feature-settings:
+        "rlig" 1,
+        "calt" 1,
+        "ss01" 1;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html:not(:has(*:focus)) {
+    scroll-padding-top: var(--docs-navbar-height);
+}
+
+.docs-border {
+    border-color: var(--color-gray-200);
+}
+.dark .docs-border {
+    border-color: var(--color-neutral-800);
+}
+
+.docs-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-gutter: stable;
+}
+
+.docs-mask {
+    mask-image:
+        linear-gradient(to bottom, transparent, #000 20px, transparent 100%),
+        linear-gradient(to top, transparent, #000 20px, transparent 100%);
+}
+
+.docs-focus:focus-visible {
+    outline: 2px solid var(--color-gray-400);
+    outline-offset: 1px;
+}
+.dark .docs-focus:focus-visible {
+    outline-color: var(--color-neutral-600);
+}
+
+/* Legal pages (`typesetting: "article"`) read as prose rather than docs. */
+.docs-typesetting-article {
+    font-size: 1rem;
+    line-height: 1.75;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Heading permalinks */
+:hover > .subheading-anchor {
+    @apply opacity-100;
+}
+
+.subheading-anchor {
+    @apply ms-1 opacity-0 transition;
+}
+.subheading-anchor:focus,
+:target > .subheading-anchor {
+    @apply opacity-100;
+}
+.subheading-anchor::after {
+    @apply content-["#"] px-1 text-gray-600;
+}
+.dark .subheading-anchor::after {
+    @apply text-neutral-400;
+}
+.subheading-anchor:hover {
+    text-decoration-line: none;
+}
+
+/* Code blocks — shiki dual themes emitted by rehype-pretty-code */
+.docs-code span {
+    @apply bg-(--shiki-light-bg) text-(--shiki-light);
+}
+.dark .docs-code span {
+    @apply bg-(--shiki-dark-bg) text-(--shiki-dark);
+}
+
+code.docs-code {
+    box-decoration-break: slice;
+    font-feature-settings:
+        "rlig" 1,
+        "calt" 1,
+        "ss01" 1;
+    @apply text-sm;
+}
+
+:not(pre) > code.docs-code {
+    @apply p-[.12em_.25em] rounded-[.375em];
+    @apply border border-black/[0.04] bg-black/[0.03] break-words text-[.9em];
+}
+.dark :not(pre) > code.docs-code {
+    @apply border-white/10 bg-white/10;
+}
+
+pre code.docs-code {
+    @apply grid;
+    counter-reset: line;
+}
+
+pre code.docs-code > span {
+    @apply px-4;
+}
+
+/* Cards */
+.docs-cards {
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(max(250px, calc((100% - 1rem * 2) / var(--rows))), 1fr)
+    );
+}
+
+.docs-card img {
+    @apply select-none;
+}
+.docs-card > span > svg {
+    @apply w-6 h-auto transition text-black/50 shrink-0;
+}
+.dark .docs-card > span > svg {
+    @apply text-white/50;
+}
+.docs-card:hover > span > svg {
+    @apply text-current!;
+}
+.docs-card p {
+    @apply mt-2;
+}
+
+/* GFM task lists / footnotes */
+.contains-task-list {
+    margin-top: 1.25em;
+}
+.contains-task-list input[type="checkbox"] {
+    margin-inline-end: calc(var(--spacing) * 1);
+}
+.footnotes a[data-footnote-backref] {
+    font-family: initial;
+}
+
+/* Blockquotes are not italicised */
 blockquote {
     @apply not-italic;
 }

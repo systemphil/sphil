@@ -1,12 +1,4 @@
-import {
-    Column,
-    Img,
-    Row,
-    Section,
-    Text,
-    Button,
-    Link,
-} from "@react-email/components";
+import { Column, Img, Row, Section, Text, Button, Link } from "react-email";
 import type { Product } from "lib/stripe/stripeFuncs";
 import { TermsApply } from "./components/TermsApply";
 import { EmailBaseLayout } from "./components/EmailBaseLayout";

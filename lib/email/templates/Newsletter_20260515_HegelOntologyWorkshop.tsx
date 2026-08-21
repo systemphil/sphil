@@ -1,13 +1,8 @@
-import { Section } from "@react-email/components";
+import { Section } from "react-email";
 import { EmailBaseLayout } from "./components/EmailBaseLayout";
 import { NewsletterWebLayout } from "./components/NewsLetterWebLayout";
 import { UnsubscribeNewsletter } from "./components/UnsubscribeNewsletter";
-import {
-    EmailA,
-    EmailH1,
-    EmailP,
-    EmailUl,
-} from "./components/EmailHtml";
+import { EmailA, EmailH1, EmailP, EmailUl } from "./components/EmailHtml";
 
 const preview = `Hegel's Ontology: The First In-Person sPhil Workshop`;
 
@@ -27,8 +22,8 @@ function Content() {
 
             <EmailP>
                 The workshop will focus on the all-important question of how to
-                understand Hegel’s philosophical project as an ontology. Some
-                of the topics that we will be considering include, but are not
+                understand Hegel’s philosophical project as an ontology. Some of
+                the topics that we will be considering include, but are not
                 limited to:
             </EmailP>
 
@@ -38,7 +33,9 @@ function Content() {
                     Are these categories just for us or do they form part of
                     reality?
                 </li>
-                <li>What does it mean for a category to form part of reality?</li>
+                <li>
+                    What does it mean for a category to form part of reality?
+                </li>
                 <li>Does a category exist?</li>
                 <li>If yes, what does it mean for a category to exist?</li>
                 <li>
@@ -46,8 +43,8 @@ function Content() {
                     can causally interact, so in what sense can they exist?
                 </li>
                 <li>
-                    Is the existence of a category different to the existence
-                    of an object?
+                    Is the existence of a category different to the existence of
+                    an object?
                 </li>
             </EmailUl>
 
@@ -60,8 +57,8 @@ function Content() {
                 discussion on these topics. As such, there will be brief talks
                 by Ahilleas and Filip, before opening up to a general
                 round-table discussion. Participants are welcome to prepare
-                their own presentations for the workshop — please let us know
-                if you would like to present something.
+                their own presentations for the workshop — please let us know if
+                you would like to present something.
             </EmailP>
 
             <EmailP>
