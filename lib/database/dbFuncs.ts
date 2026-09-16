@@ -347,6 +347,31 @@ export const dbGetUsersPaginated = ({
                     role: true,
                     emailVerified: true,
                     createdAt: true,
+                    purchases: {
+                        select: {
+                            createdAt: true,
+                            source: true,
+                            grantedBy: { select: { name: true, email: true } },
+                            course: { select: { id: true, name: true } },
+                        },
+                        orderBy: { createdAt: "asc" },
+                    },
+                    // Seminar enrolment is a cohort membership, not a CoursePurchase row.
+                    seminarCohorts: {
+                        select: {
+                            id: true,
+                            year: true,
+                            course: { select: { name: true } },
+                        },
+                        orderBy: { year: "desc" },
+                    },
+                    seminarCohortGrants: {
+                        select: {
+                            seminarCohortId: true,
+                            createdAt: true,
+                            grantedBy: { select: { name: true, email: true } },
+                        },
+                    },
                 },
                 orderBy: {
                     [validSortField]: validSortDirection,
@@ -474,6 +499,7 @@ export async function dbCreateCoursePurchase({
         data: {
             user: { connect: { id: validUserId } },
             course: { connect: { id: courseId } },
+            source: "STRIPE",
         },
     });
 
@@ -2090,16 +2116,18 @@ export async function dbEnrollUserInSeminarCohort({
     }
 
     // Avoid adding the user twice
-    await prisma.seminarCohort.update({
+    const { course } = await prisma.seminarCohort.update({
         where: { id: cohort.id },
         data: {
             participants: {
                 connect: { id: userId },
             },
         },
+        // Callers need the slug to invalidate cached seminar access.
+        select: { course: { select: { slug: true } } },
     });
 
-    return cohort;
+    return { ...cohort, courseSlug: course.slug };
 }
 
 export async function dbCreateSeminarCohort({
@@ -2765,5 +2793,208 @@ export const dbSetAdminDocumentArchived = ({
                 },
                 select: { id: true, archivedAt: true },
             });
+        });
+    });
+
+/**
+ * Calls the database to retrieve the courses and seminar cohorts that can be
+ * granted to users by hand.
+ * @access SUPERADMIN
+ */
+export const dbGetGrantOptions = () =>
+    withSuperAdmin(async () => {
+        const [courses, seminarCohorts] = await Promise.all([
+            prisma.course.findMany({
+                select: { id: true, name: true },
+                orderBy: { name: "asc" },
+            }),
+            prisma.seminarCohort.findMany({
+                select: {
+                    id: true,
+                    year: true,
+                    course: { select: { name: true } },
+                },
+                orderBy: [{ year: "desc" }, { course: { name: "asc" } }],
+            }),
+        ]);
+
+        return { courses, seminarCohorts };
+    });
+
+/**
+ * Calls the database to give a user a course without payment. Recorded as a
+ * MANUAL purchase so it stays distinguishable from Stripe purchases.
+ * @access SUPERADMIN
+ */
+export const dbGrantCourse = ({
+    userId,
+    courseId,
+    grantedById,
+}: {
+    userId: User["id"];
+    courseId: Course["id"];
+    grantedById: User["id"];
+}) =>
+    withSuperAdmin(async () => {
+        const validUserId = z.string().parse(userId);
+        const validCourseId = z.string().parse(courseId);
+        const validGrantedById = z.string().parse(grantedById);
+
+        const existing = await prisma.coursePurchase.findUnique({
+            where: {
+                courseId_userId: { courseId: validCourseId, userId: validUserId },
+            },
+            select: { source: true },
+        });
+
+        if (existing) {
+            throw new Error(
+                existing.source === "STRIPE"
+                    ? "This user has already purchased this course."
+                    : "This course has already been granted to this user."
+            );
+        }
+
+        return prisma.coursePurchase.create({
+            data: {
+                userId: validUserId,
+                courseId: validCourseId,
+                source: "MANUAL",
+                grantedById: validGrantedById,
+            },
+            select: { courseId: true, userId: true },
+        });
+    });
+
+/**
+ * Calls the database to revoke a manually granted course. Stripe purchases
+ * are refused: removing them would not refund anything and belongs in Stripe.
+ * @access SUPERADMIN
+ */
+export const dbRevokeCourseGrant = ({
+    userId,
+    courseId,
+}: {
+    userId: User["id"];
+    courseId: Course["id"];
+}) =>
+    withSuperAdmin(async () => {
+        const validUserId = z.string().parse(userId);
+        const validCourseId = z.string().parse(courseId);
+
+        const { count } = await prisma.coursePurchase.deleteMany({
+            where: {
+                userId: validUserId,
+                courseId: validCourseId,
+                source: "MANUAL",
+            },
+        });
+
+        if (count === 0) {
+            throw new Error(
+                "Only manually granted courses can be removed. Paid purchases are handled in Stripe."
+            );
+        }
+
+        return { courseId: validCourseId, userId: validUserId };
+    });
+
+/**
+ * Calls the database to add a user to a seminar cohort without payment, and
+ * records the grant so it can be told apart from paid enrolment and revoked.
+ * @access SUPERADMIN
+ */
+export const dbGrantSeminarCohort = ({
+    userId,
+    seminarCohortId,
+    grantedById,
+}: {
+    userId: User["id"];
+    seminarCohortId: SeminarCohort["id"];
+    grantedById: User["id"];
+}) =>
+    withSuperAdmin(() => {
+        const validUserId = z.string().parse(userId);
+        const validCohortId = z.string().parse(seminarCohortId);
+        const validGrantedById = z.string().parse(grantedById);
+
+        return prisma.$transaction(async (tx) => {
+            const alreadyParticipant = await tx.seminarCohort.count({
+                where: {
+                    id: validCohortId,
+                    participants: { some: { id: validUserId } },
+                },
+            });
+
+            if (alreadyParticipant > 0) {
+                throw new Error("This user is already in this seminar cohort.");
+            }
+
+            await tx.seminarCohort.update({
+                where: { id: validCohortId },
+                data: { participants: { connect: { id: validUserId } } },
+            });
+
+            const grant = await tx.seminarCohortGrant.create({
+                data: {
+                    seminarCohortId: validCohortId,
+                    userId: validUserId,
+                    grantedById: validGrantedById,
+                },
+                select: {
+                    seminarCohortId: true,
+                    userId: true,
+                    // Callers need the slug to invalidate cached seminar access.
+                    seminarCohort: { select: { course: { select: { slug: true } } } },
+                },
+            });
+
+            return {
+                seminarCohortId: grant.seminarCohortId,
+                userId: grant.userId,
+                courseSlug: grant.seminarCohort.course.slug,
+            };
+        });
+    });
+
+/**
+ * Calls the database to remove a manually added user from a seminar cohort.
+ * Paid enrolments (no grant record) are refused.
+ * @access SUPERADMIN
+ */
+export const dbRevokeSeminarCohortGrant = ({
+    userId,
+    seminarCohortId,
+}: {
+    userId: User["id"];
+    seminarCohortId: SeminarCohort["id"];
+}) =>
+    withSuperAdmin(() => {
+        const validUserId = z.string().parse(userId);
+        const validCohortId = z.string().parse(seminarCohortId);
+
+        return prisma.$transaction(async (tx) => {
+            const { count } = await tx.seminarCohortGrant.deleteMany({
+                where: { seminarCohortId: validCohortId, userId: validUserId },
+            });
+
+            if (count === 0) {
+                throw new Error(
+                    "Only manually added seminar participants can be removed. Paid enrolments are handled in Stripe."
+                );
+            }
+
+            const cohort = await tx.seminarCohort.update({
+                where: { id: validCohortId },
+                data: { participants: { disconnect: { id: validUserId } } },
+                // Callers need the slug to invalidate cached seminar access.
+                select: { course: { select: { slug: true } } },
+            });
+
+            return {
+                seminarCohortId: validCohortId,
+                userId: validUserId,
+                courseSlug: cohort.course.slug,
+            };
         });
     });

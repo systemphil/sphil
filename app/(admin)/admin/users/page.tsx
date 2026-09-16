@@ -4,6 +4,7 @@ import { auth } from "lib/auth/authConfig";
 import { Heading } from "lib/components/ui/Heading";
 import { PageWrapper } from "lib/components/ui/PageWrapper";
 import {
+    dbGetGrantOptions,
     dbGetUsersPaginated,
     USERS_SORTABLE_FIELDS,
     type UsersSortField,
@@ -58,18 +59,19 @@ export default async function AdminUsersPage({
     const sortField = isSortField(params.sort) ? params.sort : "createdAt";
     const sortDirection = params.dir === "asc" ? "asc" : "desc";
 
-    const {
-        users,
-        total,
-        page: currentPage,
-        pageSize: currentPageSize,
-    } = await dbGetUsersPaginated({
-        search: search || undefined,
-        page,
-        pageSize,
-        sortField,
-        sortDirection,
-    });
+    const [
+        { users, total, page: currentPage, pageSize: currentPageSize },
+        grantOptions,
+    ] = await Promise.all([
+        dbGetUsersPaginated({
+            search: search || undefined,
+            page,
+            pageSize,
+            sortField,
+            sortDirection,
+        }),
+        dbGetGrantOptions(),
+    ]);
 
     return (
         <PageWrapper className="py-6 gap-6">
@@ -84,6 +86,7 @@ export default async function AdminUsersPage({
                     sortDirection={sortDirection}
                     search={search}
                     currentUserId={session.user.id}
+                    grantOptions={grantOptions}
                 />
             </Box>
         </PageWrapper>

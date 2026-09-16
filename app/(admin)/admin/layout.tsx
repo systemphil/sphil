@@ -1,6 +1,7 @@
 import { auth } from "lib/auth/authConfig";
 import { AdminNav } from "lib/components/navigation/AdminNav";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 
 export const metadata = {};
 
@@ -21,6 +22,14 @@ export default async function AdminLayout({
 }: {
     children: React.ReactNode;
 }) {
+    /**
+     * NextAuth reads the current time (to check session expiry) after reading
+     * headers, which Cache Components flags during prerendering. Marking the
+     * segment as per-request first makes that time read legitimate, and covers
+     * every /admin/** page below (e.g. relative "edited ago" times).
+     * @see https://nextjs.org/docs/messages/blocking-prerender-current-time
+     */
+    await connection();
     const session = await auth();
 
     if (

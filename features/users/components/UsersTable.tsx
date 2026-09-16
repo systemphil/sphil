@@ -12,12 +12,13 @@ import {
     type GridSortModel,
     useGridApiContext,
 } from "@mui/x-data-grid";
-import type { Role } from "@prisma/client";
+import type { PurchaseSource, Role } from "@prisma/client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import type { UsersSortField } from "lib/database/dbFuncs";
 import { actionUpdateUserRole } from "../server/actions";
+import { PurchasesCell } from "./PurchasesCell";
 
 export type ManagedUser = {
     id: string;
@@ -26,6 +27,30 @@ export type ManagedUser = {
     role: Role;
     emailVerified: Date | null;
     createdAt: Date;
+    purchases: {
+        createdAt: Date;
+        source: PurchaseSource;
+        grantedBy: GrantPerson;
+        course: { id: string; name: string };
+    }[];
+    seminarCohorts: {
+        id: string;
+        year: number;
+        course: { name: string };
+    }[];
+    /** Present only for cohorts the user was added to by hand. */
+    seminarCohortGrants: {
+        seminarCohortId: string;
+        createdAt: Date;
+        grantedBy: GrantPerson;
+    }[];
+};
+
+type GrantPerson = { name: string | null; email: string } | null;
+
+export type GrantOptions = {
+    courses: { id: string; name: string }[];
+    seminarCohorts: { id: string; year: number; course: { name: string } }[];
 };
 
 const ROLES: Role[] = ["BASIC", "ADMIN", "SUPERADMIN"];
@@ -89,6 +114,7 @@ export function UsersTable({
     sortDirection,
     search,
     currentUserId,
+    grantOptions,
 }: {
     users: ManagedUser[];
     total: number;
@@ -98,6 +124,7 @@ export function UsersTable({
     sortDirection: "asc" | "desc";
     search: string;
     currentUserId: string;
+    grantOptions: GrantOptions;
 }) {
     const router = useRouter();
     const pathname = usePathname();
@@ -239,6 +266,16 @@ export function UsersTable({
             headerName: "Joined",
             width: 130,
             valueFormatter: (value: Date) => value.toLocaleDateString(),
+        },
+        {
+            field: "purchases",
+            headerName: "Purchases",
+            flex: 1,
+            minWidth: 170,
+            sortable: false,
+            renderCell: (params) => (
+                <PurchasesCell user={params.row} options={grantOptions} />
+            ),
         },
         {
             field: "role",

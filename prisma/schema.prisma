@@ -72,8 +72,11 @@ model User {
     documentsEdited   AdminDocument[]      @relation("AdminDocumentLastEditor")
 
     // Commercial relations
-    purchases      CoursePurchase[]
-    seminarCohorts SeminarCohort[]  @relation("SeminarCohortParticipants")
+    purchases            CoursePurchase[]     @relation("CoursePurchaseUser")
+    purchasesGranted     CoursePurchase[]     @relation("CoursePurchaseGrantedBy")
+    seminarCohorts       SeminarCohort[]      @relation("SeminarCohortParticipants")
+    seminarCohortGrants  SeminarCohortGrant[] @relation("SeminarCohortGrantUser")
+    seminarGrantsGranted SeminarCohortGrant[] @relation("SeminarCohortGrantGrantedBy")
 
     createdAt DateTime  @default(now())
     updatedAt DateTime? @updatedAt
@@ -147,7 +150,8 @@ model SeminarCohort {
     seminars Seminar[]
 
     // Commercial relations
-    participants User[] @relation("SeminarCohortParticipants")
+    participants User[]               @relation("SeminarCohortParticipants")
+    grants       SeminarCohortGrant[]
 
     notes     String?
     createdAt DateTime @default(now())
@@ -332,11 +336,21 @@ model StripeEvent {
     pending_webhooks Int
 }
 
+enum PurchaseSource {
+    STRIPE
+    MANUAL
+}
+
 model CoursePurchase {
     course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
     courseId String
-    user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user     User   @relation("CoursePurchaseUser", fields: [userId], references: [id], onDelete: Cascade)
     userId   String
+
+    /// MANUAL rows were granted by an admin without payment and may be revoked.
+    source      PurchaseSource @default(STRIPE)
+    grantedBy   User?          @relation("CoursePurchaseGrantedBy", fields: [grantedById], references: [id], onDelete: SetNull)
+    grantedById String?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -456,4 +470,22 @@ model AdminDocument {
 
     @@index([updatedAt])
     @@index([archivedAt])
+}
+
+/// Marks a seminar cohort participant as added manually by an admin (no
+/// payment). The participation itself is still the implicit
+/// SeminarCohortParticipants relation; this row only records who granted it
+/// and makes it revocable.
+model SeminarCohortGrant {
+    seminarCohort   SeminarCohort @relation(fields: [seminarCohortId], references: [id], onDelete: Cascade)
+    seminarCohortId String
+    user            User          @relation("SeminarCohortGrantUser", fields: [userId], references: [id], onDelete: Cascade)
+    userId          String
+    grantedBy       User?         @relation("SeminarCohortGrantGrantedBy", fields: [grantedById], references: [id], onDelete: SetNull)
+    grantedById     String?
+
+    createdAt DateTime @default(now())
+
+    @@id([seminarCohortId, userId])
+    @@index([userId])
 }

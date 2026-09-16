@@ -1,3 +1,4 @@
+import { revalidateTag } from "next/cache";
 import type Stripe from "stripe";
 import { getStripe } from "./stripeInit";
 import {
@@ -5,6 +6,7 @@ import {
     dbCreateCoursePurchase,
 } from "lib/database/dbFuncs";
 import type { PriceTier } from "lib/server/ctrl";
+import { cacheKeys } from "lib/config/cacheKeys";
 import { STRIPE_FALLBACKS } from "lib/config/stripeFallbacks";
 import { EmailService } from "lib/email/EmailService";
 
@@ -274,6 +276,35 @@ export async function handleSessionCompleted(
         courseId: sessionMetadata.courseId,
     });
 
+    const includesSeminar =
+        sessionMetadata.priceTier === "seminar" ||
+        sessionMetadata.priceTier === "dialogue";
+
+    /**
+     * Grant everything that was paid for before any email is attempted, so a
+     * failed send or missing email address can't leave a paying customer
+     * without their seminar place.
+     */
+    if (includesSeminar) {
+        const cohort = await dbEnrollUserInSeminarCohort({
+            courseId: sessionMetadata.courseId,
+            userId: sessionMetadata.userId,
+        });
+
+        /**
+         * Seminar pages read participation through "use cache" functions, so a
+         * buyer who viewed them before paying would keep seeing "no access".
+         * `expire: 0` drops the entry outright rather than serving it stale once
+         * more; `updateTag` is unavailable here since this runs in a route handler.
+         */
+        revalidateTag(
+            cacheKeys.keys.seminarCohortsByCourseSlug({
+                courseSlug: cohort.courseSlug,
+            }),
+            { expire: 0 }
+        );
+    }
+
     const customerEmail = sessionMetadata.customerEmail;
     if (!customerEmail) {
         const message = `❌ No customer email found in session metadata. Session id ${event.data.object.id}`;
@@ -301,19 +332,11 @@ export async function handleSessionCompleted(
         product,
     });
 
-    if (
-        sessionMetadata.priceTier === "seminar" ||
-        sessionMetadata.priceTier === "dialogue"
-    ) {
+    if (includesSeminar) {
         await EmailService.sendSeminarEmail({
             sessionMetadata,
             customerEmail,
             product,
-        });
-
-        await dbEnrollUserInSeminarCohort({
-            courseId: sessionMetadata.courseId,
-            userId: sessionMetadata.userId,
         });
     }
 
