@@ -20,3 +20,11 @@ export const adminProcedure = protectedProcedure.use(async ({ user }) => {
 
     throw new Error("Forbidden");
 });
+
+export const superAdminProcedure = protectedProcedure.use(async ({ user }) => {
+    if (user.role === "SUPERADMIN") {
+        return {};
+    }
+
+    throw new Error("Forbidden");
+});

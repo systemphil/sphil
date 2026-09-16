@@ -7,17 +7,19 @@ import type {
     LessonTranscript,
     MdxCategory,
     ProductsAuxiliary,
+    Role,
     Seminar,
     SeminarCohort,
     SeminarContent,
     SeminarTranscript,
     SeminarVideo,
+    User,
     Video,
 } from "@prisma/client";
 import { prisma } from "./dbInit";
 import { exclude } from "lib/utils";
 import { mdxCompiler } from "lib/server/mdxCompiler";
-import { withAdmin, withUser } from "lib/auth/authFuncs";
+import { withAdmin, withSuperAdmin, withUser } from "lib/auth/authFuncs";
 import { cacheKeys } from "lib/config/cacheKeys";
 import { Text } from "lib/utils/textEncoding";
 import { stripeCreatePrice, stripeCreateProduct } from "lib/stripe/stripeFuncs";
@@ -261,6 +263,127 @@ export async function dbGetUserPurchasedCourses(userId: string) {
 
     return [];
 }
+
+export const USERS_PAGE_SIZE = 25;
+
+/**
+ * Columns the user grid is allowed to sort on. Constrained to an allow-list so
+ * a crafted query param can never reach `orderBy` as an arbitrary field.
+ */
+export const USERS_SORTABLE_FIELDS = [
+    "name",
+    "email",
+    "role",
+    "createdAt",
+] as const;
+
+export type UsersSortField = (typeof USERS_SORTABLE_FIELDS)[number];
+
+/**
+ * Calls the database to retrieve a page of users, optionally narrowed by a
+ * case-insensitive match on name or email.
+ * @access SUPERADMIN
+ */
+export const dbGetUsersPaginated = ({
+    search,
+    page,
+    pageSize = USERS_PAGE_SIZE,
+    sortField = "createdAt",
+    sortDirection = "desc",
+}: {
+    search?: string;
+    page: number;
+    pageSize?: number;
+    sortField?: UsersSortField;
+    sortDirection?: "asc" | "desc";
+}) =>
+    withSuperAdmin(async () => {
+        const validSearch = z.string().trim().optional().parse(search);
+        const validPage = z.number().int().min(1).parse(page);
+        const validPageSize = z
+            .number()
+            .int()
+            .min(1)
+            .max(100)
+            .parse(pageSize);
+        const validSortField = z.enum(USERS_SORTABLE_FIELDS).parse(sortField);
+        const validSortDirection = z
+            .enum(["asc", "desc"])
+            .parse(sortDirection);
+
+        const where = validSearch
+            ? {
+                  OR: [
+                      {
+                          name: {
+                              contains: validSearch,
+                              mode: "insensitive" as const,
+                          },
+                      },
+                      {
+                          email: {
+                              contains: validSearch,
+                              mode: "insensitive" as const,
+                          },
+                      },
+                  ],
+              }
+            : {};
+
+        const [users, total] = await Promise.all([
+            prisma.user.findMany({
+                where,
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    image: true,
+                    role: true,
+                    emailVerified: true,
+                    createdAt: true,
+                },
+                orderBy: {
+                    [validSortField]: validSortDirection,
+                },
+                skip: (validPage - 1) * validPageSize,
+                take: validPageSize,
+            }),
+            prisma.user.count({ where }),
+        ]);
+
+        return { users, total, page: validPage, pageSize: validPageSize };
+    });
+
+/**
+ * Calls the database to change a user's role.
+ * @access SUPERADMIN
+ */
+export const dbUpdateUserRole = ({
+    userId,
+    role,
+}: {
+    userId: User["id"];
+    role: Role;
+}) =>
+    withSuperAdmin(() => {
+        const validUserId = z.string().parse(userId);
+        const validRole = z.enum(["BASIC", "ADMIN", "SUPERADMIN"]).parse(role);
+
+        return prisma.user.update({
+            where: {
+                id: validUserId,
+            },
+            data: {
+                role: validRole,
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+            },
+        });
+    });
 
 /**
  * Gets user data by id. Returns an object.

@@ -24,6 +24,28 @@ export const validateAdminOrThrow = async (): Promise<void> => {
     }
 };
 
+/**
+ * Checks the user's authentication session for super admin ("sudo") access.
+ *
+ * Unlike {@link validateAdminOrThrow}, a regular "ADMIN" is *not* sufficient.
+ *
+ * @throws {UnauthorizedError} If the user is not authenticated or is not a SUPERADMIN.
+ * @async
+ */
+export const validateSuperAdminOrThrow = async (): Promise<void> => {
+    const session = await auth();
+
+    if (!session || session.user.role !== "SUPERADMIN") {
+        throw new UnauthorizedError();
+    }
+};
+
+export const validateSuperAdminAccess = async (): Promise<boolean> => {
+    const session = await auth();
+
+    return session?.user.role === "SUPERADMIN";
+};
+
 export const validateAdminAccess = async (): Promise<boolean> => {
     const session = await auth();
 
@@ -68,6 +90,18 @@ export const withAdmin = async <T>(
     retrieveFunc: () => Promise<T>
 ): Promise<T> => {
     await validateAdminOrThrow();
+    return await retrieveFunc();
+};
+
+/**
+ * Super admin check wrapper with exception handling. Use by inputting the intended function as an argument to this one.
+ * @param retrieveFunc
+ * @returns void if successful, throws error if not
+ */
+export const withSuperAdmin = async <T>(
+    retrieveFunc: () => Promise<T>
+): Promise<T> => {
+    await validateSuperAdminOrThrow();
     return await retrieveFunc();
 };
 

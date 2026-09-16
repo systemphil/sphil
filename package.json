@@ -43,6 +43,7 @@
         "@mui/icons-material": "^7.3.11",
         "@mui/material": "^7.3.11",
         "@mui/material-nextjs": "^7.3.10",
+        "@mui/x-data-grid": "^9.13.0",
         "@mui/x-date-pickers": "^8.29.3",
         "@prisma/client": "^6.19.3",
         "@tailwindcss/postcss": "^4.3.3",
