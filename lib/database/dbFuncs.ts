@@ -6,6 +6,7 @@ import type {
     LessonContent,
     LessonTranscript,
     MdxCategory,
+    Prisma,
     ProductsAuxiliary,
     Role,
     Seminar,
@@ -17,6 +18,11 @@ import type {
     Video,
 } from "@prisma/client";
 import { prisma } from "./dbInit";
+import type {
+    PlanningAssignee,
+    PlanningItem,
+    PlanningItemInput,
+} from "features/planning/types";
 import { exclude } from "lib/utils";
 import { mdxCompiler } from "lib/server/mdxCompiler";
 import { withAdmin, withSuperAdmin, withUser } from "lib/auth/authFuncs";
@@ -2462,3 +2468,302 @@ export async function dbCourseSlugByCourseIdOrThrow({ id }: { id: string }) {
         },
     });
 }
+
+/** A `YYYY-MM-DD` day as the UTC-midnight Date a `@db.Date` column expects. */
+const dayToDbDate = (day: string) => new Date(`${day}T00:00:00.000Z`);
+
+const planningItemSelect = {
+    id: true,
+    title: true,
+    description: true,
+    startDate: true,
+    endDate: true,
+    status: true,
+    color: true,
+    assigneeId: true,
+    createdAt: true,
+    updatedAt: true,
+} as const;
+
+/**
+ * Serialises a planning item row for client components: `@db.Date` columns
+ * come back as UTC midnight, so the ISO date part is the stored day.
+ */
+const toPlanningItem = (
+    row: Prisma.PlanningItemGetPayload<{ select: typeof planningItemSelect }>
+): PlanningItem => ({
+    ...row,
+    startDate: row.startDate.toISOString().slice(0, 10),
+    endDate: row.endDate.toISOString().slice(0, 10),
+    createdAt: row.createdAt.toISOString(),
+    updatedAt: row.updatedAt.toISOString(),
+});
+
+/**
+ * Calls the database to retrieve every planning item, ordered by start date.
+ * @access ADMIN
+ */
+export const dbGetPlanningItems = () =>
+    withAdmin(async () => {
+        const rows = await prisma.planningItem.findMany({
+            select: planningItemSelect,
+            orderBy: [
+                { startDate: "asc" },
+                { endDate: "asc" },
+                { createdAt: "asc" },
+            ],
+        });
+
+        return rows.map(toPlanningItem);
+    });
+
+/**
+ * Calls the database to create a planning item.
+ * @access ADMIN
+ */
+export const dbCreatePlanningItem = (data: PlanningItemInput) =>
+    withAdmin(async () => {
+        const row = await prisma.planningItem.create({
+            data: {
+                ...data,
+                startDate: dayToDbDate(data.startDate),
+                endDate: dayToDbDate(data.endDate),
+            },
+            select: planningItemSelect,
+        });
+
+        return toPlanningItem(row);
+    });
+
+/**
+ * Calls the database to update a planning item. Date order is checked against
+ * the merged result, since a partial update may change only one end.
+ * @access ADMIN
+ */
+export const dbUpdatePlanningItem = ({
+    id,
+    data,
+}: {
+    id: PlanningItem["id"];
+    data: Partial<PlanningItemInput>;
+}) =>
+    withAdmin(() => {
+        const validId = z.string().parse(id);
+
+        return prisma.$transaction(async (tx) => {
+            const row = await tx.planningItem.update({
+                where: { id: validId },
+                data: {
+                    ...data,
+                    startDate: data.startDate
+                        ? dayToDbDate(data.startDate)
+                        : undefined,
+                    endDate: data.endDate ? dayToDbDate(data.endDate) : undefined,
+                },
+                select: planningItemSelect,
+            });
+
+            // Throwing rolls the update back.
+            if (row.endDate < row.startDate) {
+                throw new Error("End date cannot be before start date");
+            }
+
+            return toPlanningItem(row);
+        });
+    });
+
+/**
+ * Calls the database to delete a planning item.
+ * @access ADMIN
+ */
+export const dbDeletePlanningItem = ({ id }: { id: PlanningItem["id"] }) =>
+    withAdmin(() => {
+        const validId = z.string().parse(id);
+
+        return prisma.planningItem.delete({
+            where: { id: validId },
+            select: { id: true },
+        });
+    });
+
+/**
+ * Calls the database to retrieve the users a planning item can be assigned to.
+ * @access ADMIN
+ */
+export const dbGetPlanningAssignees = (): Promise<PlanningAssignee[]> =>
+    withAdmin(() =>
+        prisma.user.findMany({
+            where: {
+                role: { in: ["ADMIN", "SUPERADMIN"] },
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                image: true,
+            },
+            orderBy: { name: "asc" },
+        })
+    );
+
+const adminDocumentUserSelect = {
+    select: { id: true, name: true, email: true },
+} as const;
+
+/**
+ * Calls the database to retrieve admin documents, most recently edited first,
+ * optionally narrowed by a case-insensitive title match. Returns active
+ * documents unless `archived` is set. Content is omitted.
+ * @access ADMIN
+ */
+export const dbGetAdminDocuments = ({
+    search,
+    archived = false,
+}: {
+    search?: string;
+    archived?: boolean;
+} = {}) =>
+    withAdmin(() => {
+        const validSearch = z.string().trim().optional().parse(search);
+        const validArchived = z.boolean().parse(archived);
+
+        return prisma.adminDocument.findMany({
+            where: {
+                archivedAt: validArchived ? { not: null } : null,
+                ...(validSearch && {
+                    title: {
+                        contains: validSearch,
+                        mode: "insensitive",
+                    },
+                }),
+            },
+            select: {
+                id: true,
+                title: true,
+                archivedAt: true,
+                createdAt: true,
+                updatedAt: true,
+                author: adminDocumentUserSelect,
+                lastEditor: adminDocumentUserSelect,
+            },
+            orderBy: { updatedAt: "desc" },
+        });
+    });
+
+/**
+ * Calls the database to retrieve one admin document with its content.
+ * @access ADMIN
+ */
+export const dbGetAdminDocumentById = ({ id }: { id: string }) =>
+    withAdmin(() => {
+        const validId = z.string().parse(id);
+
+        return prisma.adminDocument.findUnique({
+            where: { id: validId },
+            select: {
+                id: true,
+                title: true,
+                content: true,
+                archivedAt: true,
+                createdAt: true,
+                updatedAt: true,
+                author: adminDocumentUserSelect,
+                lastEditor: adminDocumentUserSelect,
+            },
+        });
+    });
+
+/**
+ * Calls the database to create an empty admin document.
+ * @access ADMIN
+ */
+export const dbCreateAdminDocument = ({
+    title,
+    authorId,
+}: {
+    title: string;
+    authorId: User["id"];
+}) =>
+    withAdmin(() => {
+        const validTitle = z.string().trim().min(1).parse(title);
+        const validAuthorId = z.string().parse(authorId);
+
+        return prisma.adminDocument.create({
+            data: {
+                title: validTitle,
+                authorId: validAuthorId,
+                lastEditorId: validAuthorId,
+            },
+            select: { id: true },
+        });
+    });
+
+/**
+ * Calls the database to update an admin document's title and/or content.
+ * @access ADMIN
+ */
+export const dbUpdateAdminDocument = ({
+    id,
+    title,
+    content,
+    editorId,
+}: {
+    id: string;
+    title?: string;
+    content?: string;
+    editorId: User["id"];
+}) =>
+    withAdmin(() => {
+        const validId = z.string().parse(id);
+        const validTitle = z.string().trim().min(1).optional().parse(title);
+        const validContent = z.string().optional().parse(content);
+        const validEditorId = z.string().parse(editorId);
+
+        return prisma.adminDocument.update({
+            where: { id: validId },
+            data: {
+                title: validTitle,
+                content: validContent,
+                lastEditorId: validEditorId,
+            },
+            select: {
+                id: true,
+                title: true,
+                updatedAt: true,
+                lastEditor: adminDocumentUserSelect,
+            },
+        });
+    });
+
+/**
+ * Calls the database to archive or restore an admin document. Archiving is
+ * not an edit, so `updatedAt` is carried over rather than bumped.
+ * @access ADMIN
+ */
+export const dbSetAdminDocumentArchived = ({
+    id,
+    archived,
+}: {
+    id: string;
+    archived: boolean;
+}) =>
+    withAdmin(() => {
+        const validId = z.string().parse(id);
+        const validArchived = z.boolean().parse(archived);
+
+        return prisma.$transaction(async (tx) => {
+            const { updatedAt } = await tx.adminDocument.findUniqueOrThrow({
+                where: { id: validId },
+                select: { updatedAt: true },
+            });
+
+            return tx.adminDocument.update({
+                where: { id: validId },
+                data: {
+                    archivedAt: validArchived ? new Date() : null,
+                    updatedAt,
+                },
+                select: { id: true, archivedAt: true },
+            });
+        });
+    });

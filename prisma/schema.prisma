@@ -62,11 +62,14 @@ model User {
     referredAt       DateTime?
 
     // Internal relations
-    accounts         Account[]
-    sessions         Session[]
-    coursesCreated   Course[]             @relation("CourseCreators")
-    coursesAssisted  Course[]             @relation("CourseAssistants")
-    lessonsCompleted UserLessonProgress[]
+    accounts          Account[]
+    sessions          Session[]
+    coursesCreated    Course[]             @relation("CourseCreators")
+    coursesAssisted   Course[]             @relation("CourseAssistants")
+    lessonsCompleted  UserLessonProgress[]
+    planningAssigned  PlanningItem[]       @relation("PlanningItemAssignee")
+    documentsAuthored AdminDocument[]      @relation("AdminDocumentAuthor")
+    documentsEdited   AdminDocument[]      @relation("AdminDocumentLastEditor")
 
     // Commercial relations
     purchases      CoursePurchase[]
@@ -392,4 +395,65 @@ model NewsletterEmail {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+enum PlanningItemStatus {
+    PLANNED
+    IN_PROGRESS
+    BLOCKED
+    DONE
+}
+
+enum PlanningItemColor {
+    GRAY
+    RED
+    ORANGE
+    YELLOW
+    GREEN
+    BLUE
+    PURPLE
+    PINK
+}
+
+/// An admin-only item on the /admin/planning timeline.
+/// Dates are calendar days with no time or zone; `endDate` is inclusive.
+model PlanningItem {
+    id          String             @id @default(cuid())
+    title       String
+    description String             @default("")
+    startDate   DateTime           @db.Date
+    endDate     DateTime           @db.Date
+    status      PlanningItemStatus @default(PLANNED)
+    color       PlanningItemColor  @default(BLUE)
+
+    assigneeId String?
+    assignee   User?   @relation("PlanningItemAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([startDate])
+    @@index([assigneeId])
+}
+
+/// An internal, admin-only markdown document edited with the MDX editor.
+/// Never compiled or shown to learners. Documents are archived, never deleted.
+model AdminDocument {
+    id      String @id @default(cuid())
+    title   String
+    content String @default("")
+
+    authorId     String?
+    author       User?   @relation("AdminDocumentAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+    lastEditorId String?
+    lastEditor   User?   @relation("AdminDocumentLastEditor", fields: [lastEditorId], references: [id], onDelete: SetNull)
+
+    /// Set when archived; null means active.
+    archivedAt DateTime?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([updatedAt])
+    @@index([archivedAt])
 }

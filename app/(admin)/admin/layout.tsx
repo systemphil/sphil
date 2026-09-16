@@ -1,5 +1,5 @@
 import { auth } from "lib/auth/authConfig";
-import Link from "next/link";
+import { AdminNav } from "lib/components/navigation/AdminNav";
 import { notFound } from "next/navigation";
 
 export const metadata = {};
@@ -30,18 +30,10 @@ export default async function AdminLayout({
         return notFound();
     }
 
-    const isSudo = session.user.role === "SUPERADMIN";
-
     return (
         <section data-pagefind-ignore>
-            <div className="w-full bg-purple-200 z-1 fixed shadow-sm flex justify-center items-center py-1 gap-3">
-                <span className="text-purple-300">ADMIN AREA</span>
-                <Link href="/admin">Main</Link>
-                <Link href="/admin/mng">Management</Link>
-                {isSudo && <Link href="/admin/users">Users</Link>}
-                <span className="text-purple-300">ADMIN AREA</span>
-            </div>
-            <div className="pt-12">{children}</div>
+            <AdminNav role={session.user.role} />
+            {children}
         </section>
     );
 }
