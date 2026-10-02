@@ -82,7 +82,7 @@ async function snapshotUrl(base: string, url: string): Promise<PageSnapshot> {
     };
 }
 
-const APP_URLS = ["/", "/courses", "/newsletter", "/about-us", "/team"];
+const APP_URLS = ["/", "/courses", "/newsletter", "/about-us"];
 
 async function snapshot(base: string, extraUrls: string[] = []) {
     const urls = [

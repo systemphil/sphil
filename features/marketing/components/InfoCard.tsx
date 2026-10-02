@@ -14,6 +14,7 @@ type InfoCardProps = {
     urlDescription?: string;
     url?: string;
     headingSize?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+    className?: string;
 };
 
 export async function InfoCard({
@@ -24,15 +25,16 @@ export async function InfoCard({
     urlDescription,
     url,
     headingSize = "h5",
+    className,
 }: InfoCardProps) {
     return (
-        <CardShell>
+        <CardShell className={className}>
             <Box display="flex" alignItems="center" justifyContent="center">
                 {imgUrl && (
                     <figure className="mt-4">
                         <Image
                             className={cn(
-                                "custom-mask",
+                                "custom-mask size-[200px] object-cover",
                                 maskType === "diamond" && "custom-mask-diamond",
                                 maskType === "triangle" &&
                                     "custom-mask-triangle",

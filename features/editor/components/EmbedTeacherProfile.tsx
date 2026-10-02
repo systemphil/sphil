@@ -105,6 +105,7 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
                     title={_title}
                     text={text}
                     maskType="squircle"
+                    className="flex-1"
                     imgUrl="/static/images/people/filip.jpg"
                 />
             );
@@ -161,6 +162,7 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
                     title={_title}
                     text={text}
                     maskType="squircle"
+                    className="flex-1"
                     imgUrl="/static/images/people/ahilleas.jpg"
                 />
             );
@@ -208,6 +210,7 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
                     title={_title}
                     text={text}
                     maskType="squircle"
+                    className="flex-1"
                     imgUrl="/images/team/christopher.png"
                 />
             );
@@ -244,6 +247,7 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
                     title={_title}
                     text={text}
                     maskType="squircle"
+                    className="flex-1"
                     imgUrl="/images/team/max.png"
                 />
             );
@@ -262,11 +266,20 @@ export const EmbedTeacherProfile = (props: EmbedTEacherProfileProps) => {
 
     return (
         <section
-            style={{ width: "100%", maxWidth: maxWidth }}
+            style={{
+                width: "100%",
+                maxWidth: maxWidth,
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+            }}
             aria-label="Teacher profile"
         >
             <div
                 style={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
                     position: "relative",
                     width: "100%",
                     overflow: "hidden",

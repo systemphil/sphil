@@ -265,6 +265,13 @@ function MeetTheFounders() {
                 <FadeIn delay={0.3}>
                     <EmbedTeacherProfile
                         infoCard
+                        teacherInput="max:Max Macken, BA — Instructor"
+                        altText
+                    />
+                </FadeIn>
+                <FadeIn delay={0.4}>
+                    <EmbedTeacherProfile
+                        infoCard
                         teacherInput="christopher:Christopher Satoor, PhD Candidate — Instructor"
                         altText
                     />

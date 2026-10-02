@@ -30,6 +30,12 @@ const nextConfig = {
     async redirects() {
         return [
             {
+                // The team page was folded into About Us
+                source: "/team",
+                destination: "/about-us",
+                permanent: true,
+            },
+            {
                 source: "/symposia/courses/:slug*",
                 destination: "/courses/:slug*",
                 permanent: true,

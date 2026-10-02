@@ -17,6 +17,9 @@ import { PointerHighlight } from "lib/components/ui/PointerHighlight";
 import { LatestNewsCard } from "lib/email/templates/components/LatestNewsCard";
 import { SubscribeToNewsletterForm } from "./SubscribeToNewsletter";
 import { ValueProposition } from "./ValueProposition";
+import { CourseCard } from "features/courses/components/CourseCard";
+import { dbGetAllPublishedCoursesDataCache } from "lib/database/dbFuncs";
+import { Suspense } from "react";
 
 export function SPhilLanding() {
     return (
@@ -226,10 +229,7 @@ function ValuePropositionWrapped() {
         <>
             <section>
                 <Heading as="h3" additionalClasses="max-w-lg">
-                    Learn about our{" "}
-                    <span className="dark:text-acid-green text-[#6b0072]">
-                        value proposition
-                    </span>
+                    Why study with us?
                 </Heading>
                 <p className="text-lg text-slate-500 dark:text-slate-300 py-2 text-center">
                     Six objections a sceptic might raise, and our replies. Select one to read the answer.
@@ -346,10 +346,30 @@ function VisitCourses() {
                 Engage in discourses that stretch across empires, generations,
                 and time.
             </p>
+            <Suspense fallback={null}>
+                <LatestCourses />
+            </Suspense>
             <Link href="/courses">
-                <Button variant="contained">See our courses</Button>
+                <Button variant="contained">See all courses</Button>
             </Link>
         </section>
+    );
+}
+
+async function LatestCourses() {
+    const courses = await dbGetAllPublishedCoursesDataCache();
+
+    // A lone card looks like an orphan; only show the pair
+    if (courses.length < 2) {
+        return null;
+    }
+
+    return (
+        <div className="relative grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl mb-8">
+            {courses.slice(0, 2).map((course) => (
+                <CourseCard key={course.id} course={course} />
+            ))}
+        </div>
     );
 }
 
@@ -358,7 +378,7 @@ function Instructors() {
         <section className="flex flex-col items-center">
             <Heading as="h3" additionalClasses="max-w-lg">
                 Meet the{" "}
-                <span className="dark:text-acid-green text-[#6b0072]s">
+                <span className="dark:text-acid-green text-[#6b0072]">
                     instructors
                 </span>
             </Heading>
@@ -375,6 +395,11 @@ function Instructors() {
                 <EmbedTeacherProfile
                     infoCard
                     teacherInput="ahilleas:Ahilleas Rokni, PhD"
+                    altText
+                />
+                <EmbedTeacherProfile
+                    infoCard
+                    teacherInput="max:Max Macken, BA"
                     altText
                 />
                 <EmbedTeacherProfile

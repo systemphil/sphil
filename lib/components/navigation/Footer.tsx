@@ -72,7 +72,7 @@ function FooterContent() {
             { name: "Reference", href: "/articles/kant/reference" },
         ],
         company: [
-            { name: "Team", href: "/team" },
+            { name: "About Us", href: "/about-us" },
             { name: "Contributing", href: "/articles/contributing" },
             { name: "Methodology", href: "/articles/contributing/methodology" },
             {
