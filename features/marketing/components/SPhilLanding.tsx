@@ -232,7 +232,7 @@ function ValuePropositionWrapped() {
                     </span>
                 </Heading>
                 <p className="text-lg text-slate-500 dark:text-slate-300 py-2 text-center">
-                    Hover or click on the images below to learn more{" "}
+                    Six objections a sceptic might raise, and our replies. Select one to read the answer.
                 </p>
             </section>
             <ValueProposition />

@@ -23,7 +23,7 @@ export function ValuePropositionCollapsable() {
                     variant="outlined"
                     endIcon={open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                 >
-                    {open ? "Close details" : "Learn more"}
+                    {open ? "Close" : "Why study with us?"}
                 </Button>
             </Box>
 
