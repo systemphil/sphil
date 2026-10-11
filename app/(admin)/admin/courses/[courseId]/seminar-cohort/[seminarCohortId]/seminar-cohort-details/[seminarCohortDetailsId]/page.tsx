@@ -8,6 +8,13 @@ import {
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
+/**
+ * Admin-gated and reads per-request data, so there is no static shell to
+ * validate. `instant = false` on the admin layout does not cover descendants.
+ * @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/instant
+ */
+export const instant = false;
+
 async function AdminSeminarCohortMaterialEdit({
     courseId,
     seminarCohortDetailsId,

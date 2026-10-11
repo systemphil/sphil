@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { Button } from "@mui/material";
 import { CourseMaterialCard } from "features/courses/components/CourseMaterialCard";
 import { CourseSeminarsSortable } from "features/courses/components/CourseSeminarsSortable";
@@ -15,6 +16,13 @@ import {
 import Link from "lib/components/navigation/ClientNextLink";
 import { redirect } from "next/navigation";
 
+/**
+ * Admin-gated and reads per-request data, so there is no static shell to
+ * validate. `instant = false` on the admin layout does not cover descendants.
+ * @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/instant
+ */
+export const instant = false;
+
 export default async function AdminSeminarCohortEdit({
     params,
 }: {
@@ -28,6 +36,9 @@ export default async function AdminSeminarCohortEdit({
         redirect(`/?error=${errorMessages.missingParams}`);
     }
 
+    // auth() reads the current time; mark the render as per-request first.
+    // @see https://nextjs.org/docs/messages/blocking-prerender-current-time
+    await connection();
     const session = await auth();
 
     if (!session) {
@@ -54,36 +65,38 @@ export default async function AdminSeminarCohortEdit({
     );
 
     return (
-        <div className="grid md:grid-cols-2 p-4">
-            <div>
+        <div className="container mx-auto my-6 px-4">
+            <div className="mb-8">
                 <Heading as="h2">
-                    Seminar Cohort {seminarCohortAndSeminars.year}{" "}
+                    Seminar Cohort {seminarCohortAndSeminars.year}
                 </Heading>
-                <div className="px-10">
-                    <Heading as="h4">
-                        {seminarCohortAndSeminars.course.name}
-                    </Heading>
-                </div>
+                <p className="text-center text-lg text-gray-600 dark:text-gray-300">
+                    {seminarCohortAndSeminars.course.name}
+                </p>
+            </div>
 
+            <div className="grid gap-12 lg:grid-cols-2 items-start">
                 {courseAccess && (
-                    <>
-                        <SeminarCohortForm
-                            seminarCohort={seminarCohortAndSeminars}
-                        />
+                    <div className="flex flex-col gap-10">
+                        <section>
+                            <Heading as="h4">Cohort Settings</Heading>
+                            <SeminarCohortForm
+                                seminarCohort={seminarCohortAndSeminars}
+                            />
+                        </section>
 
-                        <div className="pr-10 pt-6">
+                        <section>
+                            <Heading as="h4">Participants</Heading>
                             <SeminarParticipantsTable
                                 users={seminarCohortAndSeminars.participants}
                             />
-                        </div>
-                    </>
+                        </section>
+                    </div>
                 )}
-            </div>
 
-            <div className="flex flex-col gap-6">
-                <div>
+                <div className="flex flex-col gap-10">
                     {courseAccess && (
-                        <div>
+                        <section>
                             <Heading as="h4">Seminar Cohort Details</Heading>
                             {seminarCohortAndSeminars.details ? (
                                 <CourseMaterialCard
@@ -93,7 +106,8 @@ export default async function AdminSeminarCohortEdit({
                                     modelName="SeminarCohortDetails"
                                 />
                             ) : (
-                                <div className="flex items-center justify-center mb-6">
+                                <div className="flex flex-col gap-2 items-center">
+                                    <p>No details.</p>
                                     <Button
                                         variant="contained"
                                         LinkComponent={Link}
@@ -103,36 +117,28 @@ export default async function AdminSeminarCohortEdit({
                                     </Button>
                                 </div>
                             )}
-                        </div>
+                        </section>
                     )}
 
                     {seminarAccess && (
-                        <>
-                            <div>
-                                <Heading as="h4">Seminars</Heading>
-                                {seminarCohortAndSeminars.seminars.length >
-                                0 ? (
-                                    <CourseSeminarsSortable
-                                        courseId={courseId}
-                                        seminarCohortId={seminarCohortId}
-                                        seminars={
-                                            seminarCohortAndSeminars.seminars
-                                        }
-                                    />
-                                ) : (
-                                    <div className="flex justify-center py-2">
-                                        <p>None yet.</p>
-                                    </div>
-                                )}
-                            </div>
-
+                        <section className="flex flex-col gap-4">
+                            <Heading as="h4">Seminars</Heading>
+                            {seminarCohortAndSeminars.seminars.length > 0 ? (
+                                <CourseSeminarsSortable
+                                    courseId={courseId}
+                                    seminarCohortId={seminarCohortId}
+                                    seminars={seminarCohortAndSeminars.seminars}
+                                />
+                            ) : (
+                                <p className="text-center">None yet.</p>
+                            )}
                             <div className="flex justify-center">
                                 <SeminarCreateNewButton
                                     courseId={courseId}
                                     seminarCohortId={seminarCohortId}
                                 />
                             </div>
-                        </>
+                        </section>
                     )}
                 </div>
             </div>

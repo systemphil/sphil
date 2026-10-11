@@ -368,20 +368,22 @@ export const VideoForm = ({
     return (
         <FormProvider {...methods}>
             <form
-                className="flex flex-col max-w-lg border-dotted border-2 border-slate-500 p-4 rounded-md min-h-[400px] justify-between"
+                className="flex flex-col w-full max-w-3xl mx-auto gap-2 border-dotted border-2 border-slate-500 p-4 rounded-md"
                 onSubmit={methods.handleSubmit(onSubmit)}
                 method="put"
                 encType="multipart/form-data"
             >
-                <div className="min-h-[270px]">
-                    {previewUrl && videoEntry && (
-                        <VideoViewer
-                            videoUrl={previewUrl}
-                            fileName={videoEntry.fileName}
-                            videoId={videoEntry.id}
-                        />
-                    )}
-                </div>
+                {videoEntry && (
+                    <div className="aspect-video w-full">
+                        {previewUrl && (
+                            <VideoViewer
+                                videoUrl={previewUrl}
+                                fileName={videoEntry.fileName}
+                                videoId={videoEntry.id}
+                            />
+                        )}
+                    </div>
+                )}
                 <VideoFileInput
                     label="File*"
                     name="fileInput"
@@ -404,28 +406,26 @@ export const VideoForm = ({
                         )}
                     </div>
                 )}
-                <div className="w-full mb-4 h-12">
-                    {handlerLoading && uploadProgress > 0 ? (
-                        <>
-                            <div className="flex justify-between mb-1">
-                                <span className="text-sm font-medium">
-                                    Uploading...
-                                </span>
-                                <span className="text-sm font-medium">
-                                    {uploadProgress}%
-                                </span>
-                            </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2.5">
-                                <div
-                                    className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
-                                    style={{ width: `${uploadProgress}%` }}
-                                ></div>
-                            </div>
-                        </>
-                    ) : null}
-                </div>
+                {handlerLoading && uploadProgress > 0 && (
+                    <div className="w-full">
+                        <div className="flex justify-between mb-1">
+                            <span className="text-sm font-medium">
+                                Uploading...
+                            </span>
+                            <span className="text-sm font-medium">
+                                {uploadProgress}%
+                            </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2.5">
+                            <div
+                                className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                                style={{ width: `${uploadProgress}%` }}
+                            ></div>
+                        </div>
+                    </div>
+                )}
                 {videoKind === "lesson" && (
-                    <Alert severity="warning" sx={{ m: 1 }}>
+                    <Alert severity="warning">
                         Lessons will automatically be transcribed by the server
                         within a few minutes and{" "}
                         <b>will overwrite any existing transcript</b>. Be sure
@@ -440,7 +440,7 @@ export const VideoForm = ({
                 />
             </form>
             {videoKind === "lesson" && videoEntry && (
-                <div className="flex flex-col items-start max-w-lg mt-2">
+                <div className="flex flex-col items-start w-full max-w-3xl mx-auto mt-3">
                     <Button
                         variant="outlined"
                         onClick={() => setIsRetryDialogOpen(true)}

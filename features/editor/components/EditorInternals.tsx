@@ -43,7 +43,7 @@ export default function EditorInternals({
     };
 
     return (
-        <div className="p-4">
+        <div className="mx-auto max-w-5xl p-4">
             <Heading as="h5">
                 Editing {material.mdxCategory.toLowerCase()} of &quot;
                 <span className="italic">{title}</span>&nbsp;&quot;

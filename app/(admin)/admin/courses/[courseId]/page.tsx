@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import Link from "lib/components/navigation/ClientNextLink";
 import { redirect } from "next/navigation";
 import { Heading } from "lib/components/ui/Heading";
@@ -11,6 +12,13 @@ import { auth } from "lib/auth/authConfig";
 import { determineAdminCourseAccess } from "lib/auth/authFuncs";
 import { CreateNewSeminarCohortBtn } from "features/courses/components/CreateNewSeminarCohortBtn";
 
+/**
+ * Admin-gated and reads per-request data, so there is no static shell to
+ * validate. `instant = false` on the admin layout does not cover descendants.
+ * @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/instant
+ */
+export const instant = false;
+
 export const metadata = {};
 
 export default async function AdminCourseEdit({
@@ -23,6 +31,9 @@ export default async function AdminCourseEdit({
         redirect(`/?error=${errorMessages.missingParams}`);
     }
 
+    // auth() reads the current time; mark the render as per-request first.
+    // @see https://nextjs.org/docs/messages/blocking-prerender-current-time
+    await connection();
     const session = await auth();
 
     if (!session) {

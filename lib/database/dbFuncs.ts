@@ -306,16 +306,9 @@ export const dbGetUsersPaginated = ({
     withSuperAdmin(async () => {
         const validSearch = z.string().trim().optional().parse(search);
         const validPage = z.number().int().min(1).parse(page);
-        const validPageSize = z
-            .number()
-            .int()
-            .min(1)
-            .max(100)
-            .parse(pageSize);
+        const validPageSize = z.number().int().min(1).max(100).parse(pageSize);
         const validSortField = z.enum(USERS_SORTABLE_FIELDS).parse(sortField);
-        const validSortDirection = z
-            .enum(["asc", "desc"])
-            .parse(sortDirection);
+        const validSortDirection = z.enum(["asc", "desc"]).parse(sortDirection);
 
         const where = validSearch
             ? {
@@ -2585,7 +2578,9 @@ export const dbUpdatePlanningItem = ({
                     startDate: data.startDate
                         ? dayToDbDate(data.startDate)
                         : undefined,
-                    endDate: data.endDate ? dayToDbDate(data.endDate) : undefined,
+                    endDate: data.endDate
+                        ? dayToDbDate(data.endDate)
+                        : undefined,
                 },
                 select: planningItemSelect,
             });
@@ -2841,7 +2836,10 @@ export const dbGrantCourse = ({
 
         const existing = await prisma.coursePurchase.findUnique({
             where: {
-                courseId_userId: { courseId: validCourseId, userId: validUserId },
+                courseId_userId: {
+                    courseId: validCourseId,
+                    userId: validUserId,
+                },
             },
             select: { source: true },
         });
@@ -2944,7 +2942,9 @@ export const dbGrantSeminarCohort = ({
                     seminarCohortId: true,
                     userId: true,
                     // Callers need the slug to invalidate cached seminar access.
-                    seminarCohort: { select: { course: { select: { slug: true } } } },
+                    seminarCohort: {
+                        select: { course: { select: { slug: true } } },
+                    },
                 },
             });
 
@@ -2997,3 +2997,66 @@ export const dbRevokeSeminarCohortGrant = ({
             };
         });
     });
+
+/**
+ * Fetches only the display names needed to build admin course breadcrumbs.
+ * Each level is optional so pages can request just the levels they sit under.
+ * `materialId` is checked against the transcript tables to label editor pages.
+ */
+export async function dbGetAdminCourseBreadcrumbNames({
+    courseId,
+    lessonId,
+    seminarCohortId,
+    seminarId,
+    materialId,
+}: {
+    courseId: string;
+    lessonId?: string;
+    seminarCohortId?: string;
+    seminarId?: string;
+    materialId?: string;
+}) {
+    const [course, lesson, seminarCohort, seminar, transcript] =
+        await Promise.all([
+            prisma.course.findUnique({
+                where: { id: courseId },
+                select: { name: true },
+            }),
+            lessonId
+                ? prisma.lesson.findUnique({
+                      where: { id: lessonId },
+                      select: { name: true },
+                  })
+                : null,
+            seminarCohortId
+                ? prisma.seminarCohort.findUnique({
+                      where: { id: seminarCohortId },
+                      select: { year: true },
+                  })
+                : null,
+            seminarId
+                ? prisma.seminar.findUnique({
+                      where: { id: seminarId },
+                      select: { order: true },
+                  })
+                : null,
+            materialId
+                ? seminarId
+                    ? prisma.seminarTranscript.findUnique({
+                          where: { id: materialId },
+                          select: { id: true },
+                      })
+                    : prisma.lessonTranscript.findUnique({
+                          where: { id: materialId },
+                          select: { id: true },
+                      })
+                : null,
+        ]);
+    return {
+        course,
+        lesson,
+        seminarCohort,
+        seminar,
+        isTranscript: !!transcript,
+    };
+}
