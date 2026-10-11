@@ -15,6 +15,7 @@
         "lint": "biome lint",
         "ct": "tsc --pretty --noEmit",
         "cd:dev": "gh workflow run cd_dev.yaml --ref $(git rev-parse --abbrev-ref HEAD)",
+        "cd:prod": "gh workflow run cd_prod.yaml --ref main",
         "prettier:check": "npx prettier --check .",
         "postbuild": "pagefind --site .next/standalone/.next/server/app --output-path public/_pagefind",
         "stripe:listen": "stripe listen --forward-to 127.0.0.1:3000/api/stripe-webhook",
