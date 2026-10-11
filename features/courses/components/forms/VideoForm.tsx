@@ -6,6 +6,7 @@ import type { SeminarVideo, Video } from "@prisma/client";
 import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { sleep } from "lib/utils";
+import { MAX_VIDEO_UPLOAD_BYTES } from "lib/config/consts";
 import { VideoViewer } from "lib/components/VideoViewer";
 import { VideoFileInput } from "./VideoFileInput";
 import { SubmitInput } from "./SubmitInput";
@@ -119,6 +120,11 @@ export const VideoForm = ({
         const file = e.target?.files?.[0];
         if (file) {
             setSelectedFile(file);
+            if (file.size > MAX_VIDEO_UPLOAD_BYTES) {
+                toast.error(
+                    `Video is ${formatGB(file.size)}, which exceeds the 2 GB limit.`
+                );
+            }
         }
     };
 
@@ -206,6 +212,12 @@ export const VideoForm = ({
 
             // 1. Retrieving file details, requesting signed post url for storage and performing checks.
             const file = data.fileInput[0];
+            if (file.size > MAX_VIDEO_UPLOAD_BYTES) {
+                toast.error(
+                    `Video is ${formatGB(file.size)}, which exceeds the 2 GB limit. Please compress it and try again.`
+                );
+                return;
+            }
             const filename = encodeURIComponent(file.name);
 
             const requestParams =
@@ -214,11 +226,13 @@ export const VideoForm = ({
                           id: videoEntry?.id || undefined,
                           lessonId: paramId,
                           fileName: filename,
+                          fileSize: file.size,
                       }
                     : {
                           id: videoEntry?.id || undefined,
                           seminarId: paramId,
                           fileName: filename,
+                          fileSize: file.size,
                       };
 
             // biome-ignore lint/suspicious/noExplicitAny: <Fix when we overhaul this>
@@ -378,7 +392,16 @@ export const VideoForm = ({
                 />
                 {selectedFile && (
                     <div>
-                        <p>Selected File: {selectedFile.name}</p>
+                        <p>
+                            Selected File: {selectedFile.name} (
+                            {formatGB(selectedFile.size)})
+                        </p>
+                        {selectedFile.size > MAX_VIDEO_UPLOAD_BYTES && (
+                            <p className="text-red-600 text-sm">
+                                Exceeds the 2 GB upload limit. Please compress
+                                the video before uploading.
+                            </p>
+                        )}
                     </div>
                 )}
                 <div className="w-full mb-4 h-12">
@@ -469,3 +492,5 @@ export const VideoForm = ({
         </FormProvider>
     );
 };
+
+const formatGB = (bytes: number) => `${(bytes / 1024 ** 3).toFixed(2)} GB`;

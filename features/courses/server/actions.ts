@@ -18,6 +18,7 @@ import {
     dbUpsertLessonById,
 } from "lib/database/dbFuncs";
 import { cacheKeys } from "lib/config/cacheKeys";
+import { MAX_VIDEO_UPLOAD_BYTES } from "lib/config/consts";
 import {
     ctrlCreateOrUpdateCourse,
     ctrlDeleteModelEntry,
@@ -126,9 +127,14 @@ export const actionCreateSignedPostUrl = adminProcedure
             id: z.string().optional(),
             lessonId: z.string(),
             fileName: z.string(),
+            fileSize: z
+                .number()
+                .int()
+                .positive()
+                .max(MAX_VIDEO_UPLOAD_BYTES, "Video exceeds the 2 GB upload limit"),
         })
     )
-    .action(async ({ input }) => {
+    .action(async ({ input: { fileSize: _fileSize, ...input } }) => {
         const data = await bucketGenerateSignedUploadUrl(input);
         const lessonData = await dbGetCourseAndLessonSlugsByLessonId(
             input.lessonId
@@ -149,9 +155,14 @@ export const actionCreateSignedPostUrlSeminar = adminProcedure
             id: z.string().optional(),
             seminarId: z.string(),
             fileName: z.string(),
+            fileSize: z
+                .number()
+                .int()
+                .positive()
+                .max(MAX_VIDEO_UPLOAD_BYTES, "Video exceeds the 2 GB upload limit"),
         })
     )
-    .action(async ({ input }) => {
+    .action(async ({ input: { fileSize: _fileSize, ...input } }) => {
         const data = await bucketGenerateSignedUploadUrl(input);
         revalidatePath("/(admin)/admin", "layout");
         return { ...data };

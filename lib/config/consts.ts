@@ -41,3 +41,6 @@ export const OG_IMAGES = [
         type: "image/avif",
     },
 ];
+
+/** Upload cap for lesson/seminar videos. Keeps files streamable and well under the transcription service's size limit. */
+export const MAX_VIDEO_UPLOAD_BYTES = 2 * 1024 ** 3; // 2 GB

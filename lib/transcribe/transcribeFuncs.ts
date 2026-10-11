@@ -45,6 +45,19 @@ export async function processTranscription({
 const MAX_ATTEMPTS = 4;
 const BASE_DELAY_MS = 5_000;
 
+/**
+ * AssemblyAI error messages describing a problem with the file itself. Retrying these
+ * can never succeed, so we fail immediately instead of burning attempts.
+ */
+const PERMANENT_ERROR_PATTERNS = [
+    /max_content_length/i,
+    /does not appear to contain audio/i,
+    /unsupported/i,
+    /transcoding failed/i,
+];
+
+class PermanentTranscriptionError extends Error {}
+
 async function transcribeWithRetry(params: TranscribeParams): Promise<Transcript> {
     let lastError: unknown;
 
@@ -52,11 +65,19 @@ async function transcribeWithRetry(params: TranscribeParams): Promise<Transcript
         try {
             const ts = await transcribeClient.transcripts.transcribe(params);
             if (ts.status === "completed") return ts;
-            throw new Error(
-                `Transcript ${ts.id} ended with status '${ts.status}': ${ts.error ?? "no error message"}`
-            );
+            const message = `Transcript ${ts.id} ended with status '${ts.status}': ${ts.error ?? "no error message"}`;
+            if (PERMANENT_ERROR_PATTERNS.some((p) => p.test(ts.error ?? ""))) {
+                throw new PermanentTranscriptionError(message);
+            }
+            throw new Error(message);
         } catch (e) {
             lastError = e;
+            if (e instanceof PermanentTranscriptionError) {
+                throw new Error(
+                    `Transcription failed on attempt ${attempt} with a non-retryable error`,
+                    { cause: e }
+                );
+            }
             if (attempt === MAX_ATTEMPTS) break;
             const delay = BASE_DELAY_MS * 2 ** (attempt - 1) * (0.5 + Math.random());
             console.warn(
