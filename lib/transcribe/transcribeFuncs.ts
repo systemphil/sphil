@@ -67,7 +67,9 @@ async function transcribeWithRetry(params: TranscribeParams): Promise<Transcript
         }
     }
 
-    throw lastError;
+    throw new Error(`Transcription failed after ${MAX_ATTEMPTS} attempts`, {
+        cause: lastError,
+    });
 }
 
 function toTimestamp(ms: number): string {

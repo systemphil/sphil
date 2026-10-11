@@ -18,7 +18,13 @@ import {
     actionUpdateLessonCache,
     actionUpdateSeminarCohortCache,
 } from "features/courses/server/actions";
-import { Alert } from "@mui/material";
+import {
+    Alert,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+} from "@mui/material";
 
 type FileInput = {
     fileInput: FileList | undefined;
@@ -96,6 +102,9 @@ export const VideoForm = ({
     const isCalledRef = useRef(false);
     const params = useParams();
     const [uploadProgress, setUploadProgress] = useState<number>(0);
+    const [transcriptionRetrying, setTranscriptionRetrying] =
+        useState<boolean>(false);
+    const [isRetryDialogOpen, setIsRetryDialogOpen] = useState(false);
 
     const config = videoConfig[videoKind];
     const paramId = params[config.paramKey];
@@ -125,6 +134,64 @@ export const VideoForm = ({
                       paramId
                   ),
     });
+
+    /**
+     * Requests a signed read url for the video and kicks off server-side transcription.
+     * Used after a successful lesson upload and by the manual retry button.
+     */
+    const triggerTranscription = async ({
+        id,
+        fileName,
+    }: {
+        id: string;
+        fileName: string;
+    }) => {
+        const resp = await actionCreateSignedReadUrl({ id, fileName });
+        if (resp?.error || !resp.data) {
+            toast.error(
+                "Oops! Unable to get video url for transcription processing"
+            );
+            console.error("Error retrieving URL: ", resp.error);
+            return false;
+        }
+
+        const actionRes = await actionCreateTranscription({
+            fileUrl: resp.data.url,
+            parentId: paramId,
+        });
+
+        if (actionRes.error) {
+            toast.error("Oops! Error during transcription trigger request");
+            console.error(
+                "Error during transcription trigger request ",
+                actionRes.message
+            );
+            return false;
+        }
+        return true;
+    };
+
+    const handleRetryTranscription = async () => {
+        if (!videoEntry) return;
+        setTranscriptionRetrying(true);
+        try {
+            const ok = await triggerTranscription({
+                id: videoEntry.id,
+                fileName: videoEntry.fileName,
+            });
+            if (ok) {
+                toast.success(
+                    "Transcription restarted. It may take a few minutes."
+                );
+            }
+        } catch (e) {
+            toast.error("Oops! Something went wrong");
+            console.error(e);
+        } finally {
+            setTranscriptionRetrying(false);
+            setIsRetryDialogOpen(false);
+        }
+    };
 
     const onSubmit: SubmitHandler<
         VideoFormValuesLesson | VideoFormValuesSeminar
@@ -224,31 +291,10 @@ export const VideoForm = ({
             await sleep(1000);
 
             if (videoKind === "lesson" && paramId) {
-                const resp = await actionCreateSignedReadUrl({
+                await triggerTranscription({
                     id: videoEntryId,
                     fileName: filename,
                 });
-                if (resp?.error || !resp.data) {
-                    toast.error(
-                        "Oops! Unable to get video url for transcription processing"
-                    );
-                    console.error("Error retrieving URL: ", resp.error);
-                } else {
-                    const actionRes = await actionCreateTranscription({
-                        fileUrl: resp.data.url,
-                        parentId: paramId,
-                    });
-
-                    if (actionRes.error) {
-                        toast.error(
-                            "Oops! Error during transcription trigger request"
-                        );
-                        console.error(
-                            "Error during transcription trigger request ",
-                            actionRes.message
-                        );
-                    }
-                }
             }
 
             // Finally, update serve cache
@@ -370,6 +416,56 @@ export const VideoForm = ({
                     isVerbose
                 />
             </form>
+            {videoKind === "lesson" && videoEntry && (
+                <div className="flex flex-col items-start max-w-lg mt-2">
+                    <Button
+                        variant="outlined"
+                        onClick={() => setIsRetryDialogOpen(true)}
+                        disabled={transcriptionRetrying || handlerLoading}
+                    >
+                        Retry transcription
+                    </Button>
+                    <p className="text-sm mt-1 opacity-70">
+                        Re-runs transcription on the current video and
+                        overwrites any existing transcript.
+                    </p>
+                    <Dialog
+                        open={isRetryDialogOpen}
+                        onClose={() =>
+                            !transcriptionRetrying &&
+                            setIsRetryDialogOpen(false)
+                        }
+                        disableScrollLock
+                    >
+                        <DialogContent>
+                            Are you sure you want to re-run transcription for
+                            this video?
+                        </DialogContent>
+                        <Alert severity="warning">
+                            This <b>will overwrite any existing transcript</b>,
+                            including manual edits.
+                        </Alert>
+                        <DialogActions>
+                            <Button
+                                disabled={transcriptionRetrying}
+                                onClick={() => setIsRetryDialogOpen(false)}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="warning"
+                                disabled={transcriptionRetrying}
+                                onClick={handleRetryTranscription}
+                            >
+                                {transcriptionRetrying
+                                    ? "Starting..."
+                                    : "Retry transcription"}
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
+            )}
         </FormProvider>
     );
 };

@@ -30,11 +30,37 @@ export async function POST(req: Request) {
             }
         } catch (e) {
             console.error("Transcription failed:", e);
-            EmailService.adminAlert({ message: e });
+            try {
+                await EmailService.adminAlert({
+                    message: formatTranscriptionFailure(payload, e),
+                });
+            } catch (emailError) {
+                console.error("Failed to send transcription alert:", emailError);
+            }
         }
 
         return new Response("OK");
     } else {
         return new Response(null, { status: 403 });
     }
+}
+
+function formatTranscriptionFailure(
+    payload: ApiTranscriptionPayload,
+    e: unknown
+): string {
+    const describe = (err: unknown) =>
+        err instanceof Error ? (err.stack ?? err.message) : String(err);
+    const cause = e instanceof Error && e.cause ? describe(e.cause) : null;
+
+    return [
+        `❌ Transcription failed for lesson ${payload.parentId}`,
+        `Transcript ID: ${payload.transcriptId ?? "none (new)"}`,
+        `File URL: ${payload.fileUrl.split("?")[0]}`,
+        "",
+        `Error: ${describe(e)}`,
+        ...(cause ? ["", `Last attempt error: ${cause}`] : []),
+        "",
+        "Use the 'Retry transcription' button on the lesson's admin page to try again.",
+    ].join("\n");
 }
