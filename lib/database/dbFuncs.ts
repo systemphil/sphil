@@ -1967,27 +1967,26 @@ export async function dbGetMaintenanceMessage() {
 }
 
 export async function dbCreateNewsletterEmail({ email }: { email: string }) {
-    return await prisma.newsletterEmail.create({
-        data: {
-            email,
-        },
+    return await prisma.newsletterEmail.upsert({
+        where: { email },
+        create: { email },
+        update: { subscribed: true },
     });
 }
 
-export async function dbDeleteNewsletterEmailIfExists({ id }: { id: string }) {
-    const newsletter = await prisma.newsletterEmail.findFirst({
-        where: {
-            id,
-        },
+/**
+ * Marks the newsletter entry as unsubscribed rather than deleting it, so that
+ * the send script can tell opted-out emails apart from users who were never on the list.
+ */
+export async function dbUnsubscribeNewsletterEmailIfExists({
+    id,
+}: {
+    id: string;
+}) {
+    await prisma.newsletterEmail.updateMany({
+        where: { id },
+        data: { subscribed: false },
     });
-
-    if (newsletter) {
-        await prisma.newsletterEmail.delete({
-            where: {
-                id,
-            },
-        });
-    }
 }
 
 export async function dbVerifyVideoToUserId({

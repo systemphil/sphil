@@ -4,8 +4,15 @@ import { Newsletter_20251201_sPhil2026_Web } from "../templates/Newsletter_20251
 import { Newsletter_20260115_HegelMechanism_Web } from "../templates/Newsletter_20260115_HegelMechanism";
 import { Newsletter_20260331_AristotleSoul_Web } from "../templates/Newsletter_20260331_AristotleSoul";
 import { Newsletter_20260504_HegelMechanismConclusion_Web } from "../templates/Newsletter_20260504_HegelMechanismConclusion";
+import { Newsletter_20261011_PlatoGorgias_Web } from "../templates/Newsletter_20261011_PlatoGorgias";
 
 export const NEWSLETTERS = [
+    {
+        id: "sphil-2026-10-11",
+        title: "Plato's Gorgias",
+        subtitle: "October 11, 2026",
+        component: Newsletter_20261011_PlatoGorgias_Web,
+    },
     {
         id: "sphil-2026-05-04",
         title: "The Essential Relation: Free and Open Reading Group",

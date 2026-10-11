@@ -1,6 +1,6 @@
 import { Paragraph } from "lib/components/ui/Paragraph";
 import { ScreenWrapper } from "lib/components/ui/ScreenWrapper";
-import { dbDeleteNewsletterEmailIfExists } from "lib/database/dbFuncs";
+import { dbUnsubscribeNewsletterEmailIfExists } from "lib/database/dbFuncs";
 import Link from "next/link";
 import { z } from "zod";
 
@@ -11,7 +11,7 @@ export default async function NewsletterDeletePage({
 }) {
     const { newsletterId } = await params;
 
-    await deleteNewsletter(newsletterId);
+    await unsubscribeNewsletter(newsletterId);
 
     return (
         <ScreenWrapper className="flex flex-col justify-start md:justify-center items-center pt-6">
@@ -25,12 +25,12 @@ export default async function NewsletterDeletePage({
     );
 }
 
-async function deleteNewsletter(id: string) {
+async function unsubscribeNewsletter(id: string) {
     try {
         const validatedId = z.string().parse(id);
-        await dbDeleteNewsletterEmailIfExists({ id: validatedId });
-        console.info("Email removed from newsletter");
+        await dbUnsubscribeNewsletterEmailIfExists({ id: validatedId });
+        console.info("Email unsubscribed from newsletter");
     } catch (e) {
-        console.error("Failed to delete newsletter email", e);
+        console.error("Failed to unsubscribe newsletter email", e);
     }
 }
