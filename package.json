@@ -81,7 +81,7 @@
         "remark-gfm": "^4.0.1",
         "remark-smartypants": "^3.0.3",
         "resend": "^6.27.0",
-        "sharp": "^0.35.4",
+        "sharp": "^0.35.5",
         "shiki": "^4.4.3",
         "stripe": "^18.5.0",
         "tailwind-merge": "^3.6.0",
