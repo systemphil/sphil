@@ -113,5 +113,5 @@
         "sharp",
         "core-js"
     ],
-    "packageManager": "pnpm@11.22.0"
+    "packageManager": "pnpm@12.11.2"
 }
